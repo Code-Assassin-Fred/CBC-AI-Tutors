@@ -1,6 +1,6 @@
-import HeroSection from "@/components/HeroSection";
-import Fields from "@/components/Fields";
-import Footer from "@/components/Footer";
+import HeroSection from "@/components/Landing/HeroSection";
+import Fields from "@/components/Landing/Fields";
+import Footer from "@/components/Landing/Footer";
 
 export default function Home() {
   return (
