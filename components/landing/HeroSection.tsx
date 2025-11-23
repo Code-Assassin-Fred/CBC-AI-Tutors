@@ -39,9 +39,8 @@ export default function HeroSection() {
             </h1>
 
             <p className="text-slate-300 text-base md:text-lg leading-relaxed max-w-xl">
-              Master CBC and British curricula with personalized AI lessons.
-              From students seeking structured guidance to professionals
-              upskilling and teachers creating engaging content — adaptive
+              Master CBC curricula with personalized AI lessons.
+              From students seeking structured guidance to teachers creating engaging content — adaptive
               learning for everyone.
             </p>
 
