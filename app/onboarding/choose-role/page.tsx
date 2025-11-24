@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAuthUser, useAuthActions } from '@/lib/hooks';
@@ -33,6 +33,7 @@ const ROLE_OPTIONS: RoleOption[] = [
   },
 ];
 
+// CBC only – removed all other roles
 const ROLE_REDIRECT: Record<UserRole, string> = {
   'cbc-student': '/onboarding/student',
   'cbc-teacher': '/onboarding/teacher',
@@ -101,7 +102,7 @@ export default function ChooseRolePage() {
         <div className="rounded-2xl border border-red-200 bg-red-50 p-8 max-w-xl text-center">
           <h1 className="text-2xl font-semibold text-red-600 mb-4">We ran into an issue</h1>
           <p className="text-gray-600">
-            We couldn't load your profile information. Please retry in a few moments.
+            We couldn&apos;t load your profile information. Please retry in a few moments.
           </p>
         </div>
       </div>

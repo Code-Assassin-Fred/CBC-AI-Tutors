@@ -15,47 +15,23 @@ type StudentFormValues = {
   linkedInstitution?: string;
 };
 
+// CBC ONLY
 const CURRICULA: { value: CurriculumType; label: string; description: string }[] = [
   {
     value: 'CBC',
     label: 'CBC (Competency-Based Curriculum)',
     description: "Kenya's current curriculum focusing on competency development",
   },
-  {
-    value: 'British',
-    label: 'British Curriculum',
-    description: 'International curriculum with IGCSE and A-Level pathways',
-  },
-  {
-    value: 'Adaptive',
-    label: 'Adaptive Learning',
-    description: 'AI-powered personalised curriculum that adapts to your pace',
-  },
 ];
 
+// CBC ONLY
 const CURRICULUM_GUIDES: Record<CurriculumType, string[]> = {
   CBC: [
     'Master all CBC competencies with AI-powered guidance',
-    'Prepare for KCPE and KCSE examinations',
-    'Access interactive lessons aligned with Kenyan curriculum',
+    'Prepare for CBC assessments and national exams',
+    'Access interactive lessons aligned with the Kenyan curriculum',
     'Track your progress across all learning areas',
     'Get personalized homework help and tutoring',
-    'Use our immersive classroom enhanced with AI',
-  ],
-  British: [
-    'Excel in IGCSE and A-Level examinations',
-    'Access comprehensive British curriculum resources',
-    'Prepare for university applications and entrance exams',
-    'Get support across all subject areas',
-    'Practice with past papers and exam techniques',
-    'Use our immersive classroom enhanced with AI',
-  ],
-  Adaptive: [
-    'Learn at your own pace with AI-adapted content',
-    'Explore subjects beyond traditional curricula',
-    'Get personalized learning paths based on your interests',
-    'Master concepts through interactive experiences',
-    'Track your growth with intelligent analytics',
     'Use our immersive classroom enhanced with AI',
   ],
 };
@@ -67,7 +43,7 @@ export default function StudentOnboardingPage() {
   const { loading: actionLoading, setError: setGlobalError } = useAuthActions();
   const { isLoading: guardLoading } = useOnboardingProtection();
 
-  // We only support CBC students now; institution-specific onboarding was removed.
+  // CBC ONLY system → institution onboarding removed
   const isInstitutionStudent = false;
 
   const form = useFormState<StudentFormValues>({
@@ -134,24 +110,14 @@ export default function StudentOnboardingPage() {
     form.setSubmitting(true);
 
     try {
-      let response;
-      if (isInstitutionStudent) {
-        response = await onboardInstitutionStudent(user.uid, {
-          name: form.values.name.trim(),
-          curriculum: form.values.curriculum as CurriculumType,
-          grade: 'Default',
-          goal: 'Learn and grow with AI assistance',
-        });
-      } else {
-        response = await onboardIndividualStudent(user.uid, {
-          name: form.values.name.trim(),
-          age: 15,
-          curriculum: form.values.curriculum as CurriculumType,
-          grade: 'Default',
-          goal: 'Learn and grow with AI assistance',
-          preferredMode: 'AI Autopilot',
-        });
-      }
+      const response = await onboardIndividualStudent(user.uid, {
+        name: form.values.name.trim(),
+        age: 15,
+        curriculum: form.values.curriculum as CurriculumType,
+        grade: 'Default',
+        goal: 'Learn and grow with AI assistance',
+        preferredMode: 'AI Autopilot',
+      });
 
       if (!response.success) {
         throw new Error(response.message ?? 'Failed to complete onboarding');
@@ -180,19 +146,6 @@ export default function StudentOnboardingPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-6">
               What is your name?
             </h1>
-
-            {isInstitutionStudent && form.values.linkedInstitution && (
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Institution
-                </label>
-                <input
-                  value={form.values.linkedInstitution}
-                  disabled
-                  className="w-full rounded-xl border-2 border-gray-300 bg-gray-100 px-4 py-3 text-gray-900"
-                />
-              </div>
-            )}
 
             <div className="mb-8">
               <input
@@ -269,7 +222,7 @@ export default function StudentOnboardingPage() {
         {step === 3 && (
           <>
             <h1 className="text-4xl font-bold text-gray-900 mb-6">
-              What you can do with {form.values.curriculum} curriculum
+              What you can do with the CBC curriculum
             </h1>
 
             <p className="text-lg text-gray-600 mb-8">
