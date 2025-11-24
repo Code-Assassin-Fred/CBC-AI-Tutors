@@ -1,20 +1,14 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const BackToRoleSelection = () => {
-  const router = useRouter();
-
-  const handleBack = () => {
-    router.push('/onboarding/choose-role');
-  };
-
   return (
-    <button
-      onClick={handleBack}
-      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+    <Link
+      href="/onboarding/choose-role"
+      className="text-blue-500 hover:underline"
     >
       Back to Role Selection
-    </button>
+    </Link>
   );
 };
 
