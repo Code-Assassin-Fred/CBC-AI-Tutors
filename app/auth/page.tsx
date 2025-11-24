@@ -4,8 +4,16 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FcGoogle } from 'react-icons/fc';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithPopup,
+  sendPasswordResetEmail,
+  GoogleAuthProvider,
+} from 'firebase/auth';
 
-import { authService } from '@/lib/auth';
+import { auth } from '@/lib/firebase';
 import { useFormState } from '@/lib/hooks';
 import { useAuthPageRedirect } from '@/hooks/useRoleRedirect';
 
@@ -103,7 +111,7 @@ export default function AuthPage() {
 
     setLoading(true);
     try {
-      await authService.signInWithEmail(loginForm.values.email, loginForm.values.password);
+      await signInWithEmailAndPassword(auth, loginForm.values.email, loginForm.values.password);
       router.replace('/onboarding/choose-role');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to sign in';
@@ -120,13 +128,14 @@ export default function AuthPage() {
 
     setLoading(true);
     try {
-      const credential = await authService.createAccountWithEmail(
+      const credential = await createUserWithEmailAndPassword(
+        auth,
         signupForm.values.email,
         signupForm.values.password,
       );
 
       if (credential.user) {
-        await authService.updateUserProfile({ displayName: signupForm.values.displayName.trim() });
+        await updateProfile(credential.user, { displayName: signupForm.values.displayName.trim() });
       }
 
       router.replace('/onboarding/choose-role');
@@ -142,7 +151,7 @@ export default function AuthPage() {
     setError(null);
     setLoading(true);
     try {
-      await authService.signInWithGoogle();
+      await signInWithPopup(auth, new GoogleAuthProvider());
       router.replace('/onboarding/choose-role');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Google sign-in failed';
@@ -161,7 +170,7 @@ export default function AuthPage() {
     }
 
     try {
-      await authService.resetPassword(email);
+      await sendPasswordResetEmail(auth, email);
       setError('Password reset email sent. Please check your inbox.');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to send reset email';
@@ -172,10 +181,16 @@ export default function AuthPage() {
   const toggleMode = () => {
     setMode((prev) => (prev === 'login' ? 'signup' : 'login'));
     setError(null);
-    loginForm.reset();
-    signupForm.reset();
+    resetForm(loginForm);
+    resetForm(signupForm);
     setShowPassword(false);
     setShowConfirmPassword(false);
+  };
+
+  const resetForm = (form: typeof loginForm | typeof signupForm) => {
+    Object.keys(form.values).forEach((key) => {
+      form.setValue(key as keyof typeof form.values, '');
+    });
   };
 
   if (redirecting) {
