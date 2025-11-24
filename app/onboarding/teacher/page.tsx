@@ -2,18 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthUser, useAuthActions, useFormState } from '@/lib/hooks';
-import { useOnboarding } from '@/lib/context/OnboardingContext';
-import { setTeacherProfile } from '@/lib/api';
-import { useOnboardingProtection } from '@/hooks/useRoleRedirect';
 import BackToRoleSelection from '@/components/shared/BackToRoleSelection';
+import { useAuth } from '@/lib/context/AuthContext';
+import { useOnboardingProtection } from '@/hooks/useRoleRedirect';
 
-// Update TeacherFormValues to include 'api' for error handling
 type TeacherFormValues = {
   name: string;
   subject: string;
   school: string;
-  api?: string; // Added 'api' for error handling
+  api?: string;
 };
 
 const TEACHER_FEATURES = [
@@ -29,9 +26,7 @@ const TEACHER_FEATURES = [
 
 export default function TeacherOnboardingPage() {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuthUser();
-  const { setIsLoading } = useOnboarding();
-  const { loading: actionLoading, setError: setGlobalError } = useAuthActions();
+  const { user, setOnboardingComplete, loading: authLoading } = useAuth();
   const { isLoading: guardLoading } = useOnboardingProtection();
 
   const form = useFormState<TeacherFormValues>({
@@ -41,9 +36,7 @@ export default function TeacherOnboardingPage() {
   });
 
   const [step, setStep] = useState(1);
-  const totalSteps = 3;
-
-  // Add a state variable to track submission status
+  const totalSteps = 2;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -52,17 +45,8 @@ export default function TeacherOnboardingPage() {
     }
   }, [authLoading, guardLoading, user, router]);
 
-  if (authLoading || guardLoading || !user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="h-10 w-10 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500" />
-      </div>
-    );
-  }
-
   const validateStep = (currentStep: number) => {
     form.clearErrors();
-
     if (currentStep === 1) {
       let valid = true;
       if (!form.values.name.trim()) {
@@ -79,25 +63,20 @@ export default function TeacherOnboardingPage() {
       }
       return valid;
     }
-
     return true;
   };
 
   const handleNext = () => {
-    if (validateStep(step)) {
-      setStep((prev) => Math.min(prev + 1, totalSteps));
-    }
+    if (validateStep(step)) setStep((prev) => Math.min(prev + 1, totalSteps));
   };
 
-  const handlePrev = () => {
-    setStep((prev) => Math.max(1, prev - 1));
-  };
+  const handlePrev = () => setStep((prev) => Math.max(prev - 1, 1));
 
   const handleSubmit = async () => {
     if (!user) return;
 
-    setIsLoading(true);
     setIsSubmitting(true);
+    form.setError('api', undefined);
 
     try {
       const response = await setTeacherProfile(user.uid, {
@@ -112,20 +91,30 @@ export default function TeacherOnboardingPage() {
         throw new Error(response.message ?? 'Failed to complete onboarding');
       }
 
-      router.replace('/dashboard/teacher/cbc');
+      // Update onboarding completion
+      setOnboardingComplete(true);
+
+      // Redirect to teacher dashboard
+      router.replace('/dashboard/teacher');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to complete onboarding';
       form.setError('api', message);
-      setGlobalError(message);
     } finally {
-      setIsLoading(false);
       setIsSubmitting(false);
     }
   };
 
+  if (authLoading || guardLoading || !user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-between bg-white px-8 lg:px-16 py-8">
-      {/* Left Section - Form */}
+      {/* Left Section */}
       <div className="w-full max-w-2xl">
         {step === 1 && (
           <>
@@ -135,10 +124,10 @@ export default function TeacherOnboardingPage() {
                 <input
                   value={form.values.name}
                   onChange={(e) => form.setValue('name', e.target.value)}
+                  placeholder="Full Name"
                   className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     form.errors.name ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
                   }`}
-                  placeholder="Full Name"
                 />
                 {form.errors.name && <p className="mt-1 text-sm text-red-600">{form.errors.name}</p>}
               </div>
@@ -146,10 +135,10 @@ export default function TeacherOnboardingPage() {
                 <input
                   value={form.values.subject}
                   onChange={(e) => form.setValue('subject', e.target.value)}
+                  placeholder="Subject you teach"
                   className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     form.errors.subject ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
                   }`}
-                  placeholder="Subject you teach (e.g., Mathematics, English)"
                 />
                 {form.errors.subject && <p className="mt-1 text-sm text-red-600">{form.errors.subject}</p>}
               </div>
@@ -157,10 +146,10 @@ export default function TeacherOnboardingPage() {
                 <input
                   value={form.values.school}
                   onChange={(e) => form.setValue('school', e.target.value)}
+                  placeholder="School / Institution"
                   className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     form.errors.school ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
                   }`}
-                  placeholder="School / Institution"
                 />
                 {form.errors.school && <p className="mt-1 text-sm text-red-600">{form.errors.school}</p>}
               </div>
@@ -171,9 +160,6 @@ export default function TeacherOnboardingPage() {
         {step === 2 && (
           <>
             <h1 className="text-3xl font-bold text-gray-900 mb-5">Teacher features at a glance</h1>
-            <p className="text-lg text-gray-600 mb-8">
-              Everything you need to create engaging lessons and manage your classroom effectively.
-            </p>
             <ul className="space-y-3 mb-10">
               {TEACHER_FEATURES.map((feature, idx) => (
                 <li key={idx} className="flex items-start gap-3 text-gray-700">
@@ -195,8 +181,7 @@ export default function TeacherOnboardingPage() {
           {step > 1 && (
             <button
               onClick={handlePrev}
-              disabled={actionLoading}
-              className="px-6 py-3 rounded-lg font-medium text-gray-700 border-2 border-gray-300 hover:border-gray-400 transition-all duration-200 disabled:opacity-50"
+              className="px-6 py-3 rounded-lg font-medium text-gray-700 border-2 border-gray-300 hover:border-gray-400 transition-all duration-200"
             >
               Back
             </button>
@@ -205,7 +190,6 @@ export default function TeacherOnboardingPage() {
           {step < totalSteps ? (
             <button
               onClick={handleNext}
-              disabled={actionLoading}
               className="px-8 py-3 rounded-lg font-medium text-white bg-indigo-900 hover:bg-indigo-800 transition-all duration-200 flex items-center gap-2"
             >
               Next
@@ -216,11 +200,9 @@ export default function TeacherOnboardingPage() {
           ) : (
             <button
               onClick={handleSubmit}
-              disabled={actionLoading || isSubmitting}
+              disabled={isSubmitting}
               className={`px-8 py-3 rounded-lg font-medium text-white transition-all duration-200 flex items-center gap-2 ${
-                actionLoading || isSubmitting
-                  ? 'bg-gray-300 cursor-not-allowed'
-                  : 'bg-indigo-900 hover:bg-indigo-800'
+                isSubmitting ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-900 hover:bg-indigo-800'
               }`}
             >
               {isSubmitting ? (
@@ -247,7 +229,7 @@ export default function TeacherOnboardingPage() {
         )}
       </div>
 
-      {/* Right Section - Illustration */}
+      {/* Right Section */}
       <div className="hidden lg:flex items-center justify-center w-full max-w-xl">
         <img src="/educator.svg" alt="Teacher workspace illustration" className="w-full h-auto" />
       </div>

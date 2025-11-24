@@ -3,10 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useAuthUser, useAuthActions } from '@/lib/hooks';
+import { useAuth } from '@/lib/context/AuthContext';
 import { useOnboardingProtection } from '@/hooks/useRoleRedirect';
-import { useOnboarding } from '@/lib/context/OnboardingContext';
-import { setRole } from '@/lib/api';
 import type { UserRole } from '@/lib/types';
 
 type RoleOption = {
@@ -33,7 +31,6 @@ const ROLE_OPTIONS: RoleOption[] = [
   },
 ];
 
-// CBC only – removed all other roles
 const ROLE_REDIRECT: Record<UserRole, string> = {
   'cbc-student': '/onboarding/student',
   'cbc-teacher': '/onboarding/teacher',
@@ -41,62 +38,49 @@ const ROLE_REDIRECT: Record<UserRole, string> = {
 
 export default function ChooseRolePage() {
   const router = useRouter();
-  const { user, profile, loading: authLoading, error: profileError, refreshProfile } = useAuthUser();
+  const { user, role, onboardingComplete, setRole: setAuthRole, loading: authLoading } = useAuth();
   const { isLoading: guardLoading } = useOnboardingProtection();
-  const { loading: actionLoading, error: actionError, clearError, withErrorHandling } =
-    useAuthActions();
-  const { setIsLoading } = useOnboarding();
+  const [selectedRole, setSelectedRole] = useState<UserRole | null>(role || null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
-
-  // Redirect to /auth if not authenticated
+  // Redirect if not logged in
   useEffect(() => {
     if (!authLoading && !guardLoading && !user) {
       router.replace('/auth');
     }
   }, [authLoading, guardLoading, user, router]);
 
-  const pageLoading = authLoading || guardLoading;
-
+  // Handle next / save role
   const handleNext = async () => {
-    if (!user || actionLoading || !selectedRole) return;
+    if (!user || !selectedRole || loading) return;
 
-    clearError();
-    setIsLoading(true);
+    setLoading(true);
+    setError(null);
 
     try {
-      const response = await withErrorHandling(() => setRole(user.uid, { role: selectedRole }));
-      if (!response) return;
+      // Save role in DB
+      await saveRoleToDb(user.uid, { role: selectedRole });
 
-      await refreshProfile();
+      // Update AuthContext
+      setAuthRole(selectedRole);
 
-      const destination =
-        response.redirectUrl ||
-        ROLE_REDIRECT[selectedRole] ||
-        ROLE_OPTIONS.find((option) => option.id === selectedRole)?.fallbackRedirect;
-
-      if (destination) {
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        router.replace(destination);
+      // Determine redirect
+      if (!onboardingComplete) {
+        const next = ROLE_REDIRECT[selectedRole] || ROLE_OPTIONS.find((o) => o.id === selectedRole)?.fallbackRedirect;
+        if (next) router.replace(next);
+      } else {
+        router.replace(`/dashboard/${selectedRole}`);
       }
     } catch (err) {
-      console.error('Role selection error:', err);
+      console.error('Failed to save role:', err);
+      setError('Unable to save role. Please try again.');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  // Add type guards for user and profile
-  const isUserDefined = user !== null && user !== undefined;
-  const isProfileDefined = profile !== null && profile !== undefined;
-
-  // Update components to use type guards
-  if (!isUserDefined || !isProfileDefined) {
-    return <div>Loading...</div>;
-  }
-
-  // ===== LOADING STATE =====
-  if (pageLoading) {
+  if (authLoading || guardLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500" />
@@ -104,49 +88,30 @@ export default function ChooseRolePage() {
     );
   }
 
-  // ===== PROFILE ERROR =====
-  if (profileError) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="rounded-2xl border border-red-200 bg-red-50 p-8 max-w-xl text-center">
-          <h1 className="text-2xl font-semibold text-red-600 mb-4">We ran into an issue</h1>
-          <p className="text-gray-600">
-            We couldn&apos;t load your profile information. Please retry in a few moments.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // ===== MAIN CONTENT =====
   return (
     <div className="min-h-screen flex items-center justify-between bg-white px-8 lg:px-16 py-8">
-      {/* Left Section - Form */}
-      <div className="w-full max-w-2xl">
-        {actionError && (
-          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
-            {actionError}
+      {/* Left Section */}
+      <div className="w-full max-w-2xl space-y-6">
+        {error && (
+          <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
+            {error}
           </div>
         )}
 
         <div className="space-y-3 mb-8">
           {ROLE_OPTIONS.map((option) => {
             const isSelected = selectedRole === option.id;
-            const isCurrentRole = profile?.role === option.id;
+            const isCurrentRole = role === option.id;
 
             return (
               <button
                 key={option.id}
                 type="button"
                 onClick={() => setSelectedRole(option.id)}
-                disabled={actionLoading}
+                disabled={loading}
                 className={`w-full rounded-lg border-2 p-4 text-left transition-all duration-200 relative
-                  ${
-                    isSelected
-                      ? 'border-blue-500 bg-blue-50/50'
-                      : 'border-gray-300 border-dashed bg-white hover:border-gray-400'
-                  }
-                  ${actionLoading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
+                  ${isSelected ? 'border-blue-500 bg-blue-50/50' : 'border-gray-300 border-dashed bg-white hover:border-gray-400'}
+                  ${loading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
                 `}
               >
                 <div className="flex flex-col">
@@ -167,18 +132,12 @@ export default function ChooseRolePage() {
 
         <button
           onClick={handleNext}
-          disabled={!selectedRole || actionLoading}
-          className={`
-            px-8 py-3 rounded-lg font-medium text-white transition-all duration-200
-            flex items-center gap-2
-            ${
-              !selectedRole || actionLoading
-                ? 'bg-gray-300 cursor-not-allowed'
-                : 'bg-indigo-900 hover:bg-indigo-800'
-            }
-          `}
+          disabled={!selectedRole || loading}
+          className={`px-8 py-3 rounded-lg font-medium text-white transition-all duration-200 flex items-center gap-2 ${
+            !selectedRole || loading ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-900 hover:bg-indigo-800'
+          }`}
         >
-          {actionLoading ? (
+          {loading ? (
             <>
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
               Setting up...
@@ -194,13 +153,9 @@ export default function ChooseRolePage() {
         </button>
       </div>
 
-      {/* Right Section - Illustration */}
+      {/* Right Section */}
       <div className="hidden lg:flex items-center justify-center w-full max-w-xl">
-        <img
-          src="/choose role.svg"
-          alt="Choose your role illustration"
-          className="w-full h-auto"
-        />
+        <img src="/choose role.svg" alt="Choose your role illustration" className="w-full h-auto" />
       </div>
     </div>
   );
