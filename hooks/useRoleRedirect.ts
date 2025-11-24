@@ -1,4 +1,3 @@
-// File: C:\Users\HP\Documents\cbc-ai-tutors\hooks\useRoleRedirect.ts
 'use client';
 
 import { useEffect } from 'react';
@@ -20,29 +19,32 @@ export const useRoleRedirect = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (loading) return; // wait until auth state is resolved
-    if (!user) return; // user not signed in yet, login page handles this
+    if (loading) return;
+    if (!user) return;
 
     const path = window.location.pathname;
 
-    // 1️⃣ No role → choose-role
     if (!role && path !== '/onboarding/choose-role') {
       router.replace('/onboarding/choose-role');
       return;
     }
 
-    // 2️⃣ Role exists, onboarding incomplete → onboarding page
     if (role && !onboardingComplete && !path.startsWith(`/onboarding/${role}`)) {
       router.replace(`/onboarding/${role}`);
       return;
     }
 
-    // 3️⃣ Role exists, onboarding complete → dashboard page
     if (role && onboardingComplete && !path.startsWith(`/dashboard/${role}`)) {
       router.replace(`/dashboard/${role}`);
       return;
     }
-
-    // Otherwise, allow current page (including choose-role if user wants to change role)
   }, [user, role, onboardingComplete, loading, router]);
+};
+
+/**
+ * Re-export hook for backward compatibility.
+ */
+export const useOnboardingProtection = () => {
+  const { loading } = useAuth();
+  return { isLoading: loading };
 };

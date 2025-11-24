@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAuth } from '@/lib/context/AuthContext';
-import { useOnboardingProtection } from '@/hooks/useRoleRedirect';
+import { useRoleRedirect } from '@/hooks/useRoleRedirect';
+import { saveRoleToDb } from '@/lib/api/onboarding'; // make sure this exists
 import type { UserRole } from '@/lib/types';
 
 type RoleOption = {
@@ -39,19 +40,17 @@ const ROLE_REDIRECT: Record<UserRole, string> = {
 export default function ChooseRolePage() {
   const router = useRouter();
   const { user, role, onboardingComplete, setRole: setAuthRole, loading: authLoading } = useAuth();
-  const { isLoading: guardLoading } = useOnboardingProtection();
+  const { isLoading: guardLoading } = useRoleRedirect(); // replaced useOnboardingProtection
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(role || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Redirect if not logged in
   useEffect(() => {
     if (!authLoading && !guardLoading && !user) {
       router.replace('/auth');
     }
   }, [authLoading, guardLoading, user, router]);
 
-  // Handle next / save role
   const handleNext = async () => {
     if (!user || !selectedRole || loading) return;
 
@@ -59,15 +58,13 @@ export default function ChooseRolePage() {
     setError(null);
 
     try {
-      // Save role in DB
       await saveRoleToDb(user.uid, { role: selectedRole });
-
-      // Update AuthContext
       setAuthRole(selectedRole);
 
-      // Determine redirect
       if (!onboardingComplete) {
-        const next = ROLE_REDIRECT[selectedRole] || ROLE_OPTIONS.find((o) => o.id === selectedRole)?.fallbackRedirect;
+        const next =
+          ROLE_REDIRECT[selectedRole] ||
+          ROLE_OPTIONS.find((o) => o.id === selectedRole)?.fallbackRedirect;
         if (next) router.replace(next);
       } else {
         router.replace(`/dashboard/${selectedRole}`);
@@ -90,7 +87,6 @@ export default function ChooseRolePage() {
 
   return (
     <div className="min-h-screen flex items-center justify-between bg-white px-8 lg:px-16 py-8">
-      {/* Left Section */}
       <div className="w-full max-w-2xl space-y-6">
         {error && (
           <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
@@ -153,7 +149,6 @@ export default function ChooseRolePage() {
         </button>
       </div>
 
-      {/* Right Section */}
       <div className="hidden lg:flex items-center justify-center w-full max-w-xl">
         <img src="/choose role.svg" alt="Choose your role illustration" className="w-full h-auto" />
       </div>
