@@ -13,7 +13,7 @@ interface ChapterLessonPageProps {
 }
 
 export default function ChapterLessonPage({ params }: ChapterLessonPageProps) {
-  useDashboardProtection(['individual-student', 'institution-student']);
+  useDashboardProtection(['cbc-student']);
   
   const { courseId, chapterId } = use(params);
   const router = useRouter();

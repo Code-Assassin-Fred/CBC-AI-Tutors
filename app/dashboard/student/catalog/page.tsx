@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function CourseCatalogPage() {
-  useDashboardProtection(['individual-student', 'institution-student']);
+  useDashboardProtection(['cbc-student']);
   
   const router = useRouter();
   const { courses, isLoading, enrollInCourse, refetch } = useCourseCatalog();

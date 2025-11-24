@@ -6,7 +6,7 @@ import { useDashboardProtection } from '@/hooks/useRoleRedirect';
 
 export default function ClassroomPage() {
   // Keep dashboard protection for student roles
-  useDashboardProtection(['individual-student', 'institution-student']);
+  useDashboardProtection(['cbc-student']);
 
   return (
     <DashboardLayout active="Classroom">

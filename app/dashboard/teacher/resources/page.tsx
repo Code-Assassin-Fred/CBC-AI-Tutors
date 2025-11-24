@@ -16,7 +16,7 @@ interface Resource {
 }
 
 export default function ResourcesPage() {
-  useDashboardProtection(['teacher']);
+  useDashboardProtection(['cbc-teacher']);
   
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'lesson' | 'quiz' | 'exam'>('all');
@@ -156,7 +156,7 @@ export default function ResourcesPage() {
                   onClick={() => setFilterType(type as any)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${
                     filterType === type
-                      ? 'bg-gradient-to-r from-[#7c3aed] to-[#9333ea] text-white shadow-lg'
+                      ? 'bg-linear-to-r from-[#7c3aed] to-[#9333ea] text-white shadow-lg'
                       : 'bg-[#0b0f12] text-[#9aa6b2] border border-white/8 hover:border-white/15'
                   }`}
                 >
@@ -319,7 +319,7 @@ export default function ResourcesPage() {
               <p className="text-sm text-[#9aa6b2] mb-6">
                 {searchQuery ? 'Try adjusting your search or filters' : 'Start creating lessons, quizzes, and exams'}
               </p>
-              <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#7c3aed] to-[#9333ea] text-white font-semibold hover:from-[#6b21a8] hover:to-[#7c3aed] transition-all shadow-lg shadow-purple-500/25">
+              <button className="px-6 py-3 rounded-xl bg-linear-to-r from-[#7c3aed] to-[#9333ea] text-white font-semibold hover:from-[#6b21a8] hover:to-[#7c3aed] transition-all shadow-lg shadow-purple-500/25">
                 Create Your First Resource
               </button>
             </div>

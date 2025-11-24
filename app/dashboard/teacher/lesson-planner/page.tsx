@@ -11,7 +11,7 @@ import LessonPlanDisplay from '@/components/Teacher/lesson-planner/LessonPlanDis
 type GenerationMode = 'lesson' | 'quiz' | 'exam';
 
 export default function LessonPlannerPage() {
-  useDashboardProtection(['teacher']);
+  useDashboardProtection(['cbc-teacher']);
   
   const [mode, setMode] = useState<GenerationMode>('lesson');
   const [generatedContent, setGeneratedContent] = useState<any>(null);
@@ -99,7 +99,7 @@ export default function LessonPlannerPage() {
             onClick={() => handleModeChange('lesson')}
             className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
               mode === 'lesson'
-                ? 'bg-gradient-to-r from-[#7c3aed] to-[#9333ea] text-white shadow-lg shadow-purple-500/25'
+                ? 'bg-linear-to-r from-[#7c3aed] to-[#9333ea] text-white shadow-lg shadow-purple-500/25'
                 : 'bg-[#0b0f12] text-[#9aa6b2] border border-white/8 hover:border-white/15'
             }`}
           >
@@ -109,7 +109,7 @@ export default function LessonPlannerPage() {
             onClick={() => handleModeChange('quiz')}
             className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
               mode === 'quiz'
-                ? 'bg-gradient-to-r from-[#06b6d4] to-[#0891b2] text-white shadow-lg shadow-cyan-500/25'
+                ? 'bg-linear-to-r from-[#06b6d4] to-[#0891b2] text-white shadow-lg shadow-cyan-500/25'
                 : 'bg-[#0b0f12] text-[#9aa6b2] border border-white/8 hover:border-white/15'
             }`}
           >
@@ -119,7 +119,7 @@ export default function LessonPlannerPage() {
             onClick={() => handleModeChange('exam')}
             className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
               mode === 'exam'
-                ? 'bg-gradient-to-r from-[#10b981] to-[#059669] text-white shadow-lg shadow-emerald-500/25'
+                ? 'bg-linear-to-r from-[#10b981] to-[#059669] text-white shadow-lg shadow-emerald-500/25'
                 : 'bg-[#0b0f12] text-[#9aa6b2] border border-white/8 hover:border-white/15'
             }`}
           >

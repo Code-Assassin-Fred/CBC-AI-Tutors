@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import BackToRoleSelection from '@/components/onboarding/BackToRoleSelection';
 
-import { onboardIndividualStudent, onboardInstitutionStudent } from '@/lib/api';
 import { useAuthActions, useAuthUser, useFormState } from '@/lib/hooks';
 import { useOnboarding } from '@/lib/context/OnboardingContext';
 import { useOnboardingProtection } from '@/hooks/useRoleRedirect';
@@ -68,7 +67,8 @@ export default function StudentOnboardingPage() {
   const { loading: actionLoading, setError: setGlobalError } = useAuthActions();
   const { isLoading: guardLoading } = useOnboardingProtection();
 
-  const isInstitutionStudent = profile?.role === 'institution-student';
+  // We only support CBC students now; institution-specific onboarding was removed.
+  const isInstitutionStudent = false;
 
   const form = useFormState<StudentFormValues>({
     name: '',
@@ -236,7 +236,7 @@ export default function StudentOnboardingPage() {
                     `}
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`mt-0.5 h-4 w-4 rounded-full border-2 flex-shrink-0 ${
+                      <div className={`mt-0.5 h-4 w-4 rounded-full border-2 shrink-0 ${
                         isSelected ? 'border-blue-500 bg-blue-500' : 'border-gray-400'
                       }`}>
                         {isSelected && (

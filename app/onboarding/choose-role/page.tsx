@@ -18,22 +18,15 @@ type RoleOption = {
 
 const ROLE_OPTIONS: RoleOption[] = [
   {
-    id: 'individual-student',
-    title: 'Individual Student',
+    id: 'cbc-student',
+    title: 'CBC Student',
     description:
-      'Learn independently with AI-personalised study plans and real-time feedback.',
+      'Learn independently with AI-personalised study plans and real-time feedback aligned to the CBC.',
     fallbackRedirect: '/onboarding/student',
   },
   {
-    id: 'upskill-individual',
-    title: 'Upskill Individual',
-    description:
-      'Accelerate your career with curated skill paths and adaptive AI learning tools.',
-    fallbackRedirect: '/onboarding/upskill',
-  },
-  {
-    id: 'teacher',
-    title: 'Teacher',
+    id: 'cbc-teacher',
+    title: 'CBC Teacher',
     description:
       'Create and manage AI-assisted lessons, monitor student progress, and personalise learning experiences.',
     fallbackRedirect: '/onboarding/teacher',
@@ -41,11 +34,8 @@ const ROLE_OPTIONS: RoleOption[] = [
 ];
 
 const ROLE_REDIRECT: Record<UserRole, string> = {
-  'individual-student': '/onboarding/student',
-  'institution-student': '/onboarding/student',
-  'institution-admin': '/onboarding/institution',
-  'upskill-individual': '/onboarding/upskill',
-  teacher: '/onboarding/teacher',
+  'cbc-student': '/onboarding/student',
+  'cbc-teacher': '/onboarding/teacher',
 };
 
 export default function ChooseRolePage() {

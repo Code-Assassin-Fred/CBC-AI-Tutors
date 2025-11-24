@@ -10,7 +10,7 @@ import { formatDateParts } from '@/lib/date';
 
 export default function Page() {
     // Allow student-type roles only; must be onboarded
-    useDashboardProtection(['individual-student', 'institution-student']);
+    useDashboardProtection(['cbc-student']);
     const { user, profile } = useAuthUser();
     const displayName = profile?.displayName || user?.displayName || 'Student';
     const today = new Date();

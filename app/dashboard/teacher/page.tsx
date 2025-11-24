@@ -9,7 +9,7 @@ import UpcomingScheduleCard from '@/components/Teacher/dashboard/UpcomingSchedul
 
 export default function Page() {
     // Allow teacher role only; must be onboarded
-    useDashboardProtection(['teacher']);
+    useDashboardProtection(['cbc-teacher']);
 
     return (
         <DashboardLayout active="Dashboard">

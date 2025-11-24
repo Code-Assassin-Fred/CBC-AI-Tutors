@@ -219,7 +219,7 @@ export default function TeacherOnboardingPage() {
                     `}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`h-4 w-4 rounded-full border-2 flex-shrink-0 ${
+                      <div className={`h-4 w-4 rounded-full border-2 shrink-0 ${
                         isSelected ? 'border-blue-500 bg-blue-500' : 'border-gray-400'
                       }`}>
                         {isSelected && (

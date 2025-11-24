@@ -5,8 +5,8 @@ import DashboardLayout from '@/components/Teacher/layout/DashboardLayout';
 import { useDashboardProtection } from '@/hooks/useRoleRedirect';
 
 export default function ClassroomPage() {
-  // Keep dashboard protection for student roles
-  useDashboardProtection(['individual-student', 'institution-student']);
+  // Keep dashboard protection for student roles (mapped to cbc-student)
+  useDashboardProtection(['cbc-student']);
 
   return (
     <DashboardLayout active="Classroom">

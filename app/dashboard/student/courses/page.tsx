@@ -12,7 +12,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function CoursesPage() {
-  useDashboardProtection(['individual-student', 'institution-student']);
+  useDashboardProtection(['cbc-student']);
   
   const { courses, isLoading, refetch } = useCourses();
   const [isModalOpen, setIsModalOpen] = useState(false);

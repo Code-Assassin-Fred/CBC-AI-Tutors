@@ -14,7 +14,7 @@ interface CourseDetailPageProps {
 }
 
 export default function CourseDetailPage({ params }: CourseDetailPageProps) {
-  useDashboardProtection(['individual-student', 'institution-student']);
+  useDashboardProtection(['cbc-student']);
   
   const { courseId } = use(params);
   const router = useRouter();
@@ -83,7 +83,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
               </div>
               <div className="mt-2 h-2 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-[#7c3aed] to-[#a78bfa] transition-all duration-500"
+                  className="h-full bg-linear-to-r from-[#7c3aed] to-[#a78bfa] transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
