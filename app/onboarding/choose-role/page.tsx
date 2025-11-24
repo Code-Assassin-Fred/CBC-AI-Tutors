@@ -37,6 +37,8 @@ const ROLE_OPTIONS: RoleOption[] = [
 const ROLE_REDIRECT: Record<UserRole, string> = {
   'cbc-student': '/onboarding/student',
   'cbc-teacher': '/onboarding/teacher',
+  'teacher': '/onboarding/teacher',
+  'student': '/onboarding/student',
 };
 
 export default function ChooseRolePage() {
