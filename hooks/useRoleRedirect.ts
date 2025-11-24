@@ -1,51 +1,48 @@
-"use client";
+// File: C:\Users\HP\Documents\cbc-ai-tutors\hooks\useRoleRedirect.ts
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/context/AuthContext';
+
 /**
- * Minimal, conservative role/redirect hooks.
- *
- * Purpose: provide a small shim that satisfies imports used across the app
- * while avoiding runtime side-effects (no automatic redirects). Replace
- * these with real implementations that integrate with your auth/profile
- * provider when available.
+ * Hook to automatically redirect users based on their role and onboarding status.
+ * 
+ * Rules:
+ * - No role → redirect to /onboarding/choose-role
+ * - Role exists + onboarding incomplete → redirect to /onboarding/[role]
+ * - Role exists + onboarding complete → redirect to /dashboard/[role]
+ * 
+ * The hook will not redirect if user is on a page they are allowed to access.
  */
-
-export function useAuthPageRedirect() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Minimal behavior: no redirects here. The caller will handle navigation.
-    // We keep a small delay so callers that expect a short-loading state can
-    // show a spinner briefly.
-    const t = setTimeout(() => setIsLoading(false), 10);
-    return () => clearTimeout(t);
-  }, []);
-
-  return { isLoading };
-}
-
-export function useOnboardingProtection() {
-  const [isLoading, setIsLoading] = useState(true);
+export const useRoleRedirect = () => {
+  const { user, role, onboardingComplete, loading } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    // No-op guard for now. Consumers check `user` and `profile` separately
-    // and will redirect when appropriate. This hook only provides a loading
-    // signal so pages can show a loader while auth/profile state is resolved.
-    const t = setTimeout(() => setIsLoading(false), 10);
-    return () => clearTimeout(t);
-  }, []);
+    if (loading) return; // wait until auth state is resolved
+    if (!user) return; // user not signed in yet, login page handles this
 
-  return { isLoading };
-}
+    const path = window.location.pathname;
 
-export function useDashboardProtection(_allowedRoles?: string[]) {
-  // Intentionally a no-op hook. Real implementation should check the current
-  // user's role and onboarding status and redirect (via next/navigation) when
-  // access is not allowed. Keeping this minimal reduces risk while restoring
-  // the missing module.
-  useEffect(() => {
-    // placeholder
-  }, [_allowedRoles]);
-}
+    // 1️⃣ No role → choose-role
+    if (!role && path !== '/onboarding/choose-role') {
+      router.replace('/onboarding/choose-role');
+      return;
+    }
 
-export default null;
+    // 2️⃣ Role exists, onboarding incomplete → onboarding page
+    if (role && !onboardingComplete && !path.startsWith(`/onboarding/${role}`)) {
+      router.replace(`/onboarding/${role}`);
+      return;
+    }
+
+    // 3️⃣ Role exists, onboarding complete → dashboard page
+    if (role && onboardingComplete && !path.startsWith(`/dashboard/${role}`)) {
+      router.replace(`/dashboard/${role}`);
+      return;
+    }
+
+    // Otherwise, allow current page (including choose-role if user wants to change role)
+  }, [user, role, onboardingComplete, loading, router]);
+};
