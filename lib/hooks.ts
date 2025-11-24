@@ -1,18 +1,38 @@
 // Placeholder for hooks
 export const useAuthUser = () => {
   return {
-    user: null,
+    user: {
+      uid: "12345", // Added uid property to user
+    },
     loading: false,
-    profile: null,
+    profile: {
+      role: null, // Added role property to profile
+    },
     institution: null,
+    error: null, // Added error property
+    refreshProfile: async () => {
+      console.log("Refreshing profile...");
+    },
   };
 };
 
 export const useAuthActions = () => {
   return {
     loading: false,
+    error: null, // Added error property
     setError: (error: string) => {
       console.error(error);
+    },
+    clearError: () => {
+      console.log("Clearing error...");
+    },
+    withErrorHandling: async (action: () => Promise<any>) => {
+      try {
+        return await action();
+      } catch (error) {
+        console.error("Error during action:", error);
+        throw error;
+      }
     },
   };
 };

@@ -37,8 +37,6 @@ const ROLE_OPTIONS: RoleOption[] = [
 const ROLE_REDIRECT: Record<UserRole, string> = {
   'cbc-student': '/onboarding/student',
   'cbc-teacher': '/onboarding/teacher',
-  'teacher': '/onboarding/teacher',
-  'student': '/onboarding/student',
 };
 
 export default function ChooseRolePage() {
@@ -87,6 +85,15 @@ export default function ChooseRolePage() {
       setIsLoading(false);
     }
   };
+
+  // Add type guards for user and profile
+  const isUserDefined = user !== null && user !== undefined;
+  const isProfileDefined = profile !== null && profile !== undefined;
+
+  // Update components to use type guards
+  if (!isUserDefined || !isProfileDefined) {
+    return <div>Loading...</div>;
+  }
 
   // ===== LOADING STATE =====
   if (pageLoading) {
