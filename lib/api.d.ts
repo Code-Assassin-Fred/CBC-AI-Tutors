@@ -1,1 +1,1 @@
-export declare const setTeacherProfile: (userId: string, profileData: any) => Promise<{ success: boolean }>;
+export declare const setTeacherProfile: (userId: string, profileData: any) => Promise<{ success: boolean; message?: string }>;

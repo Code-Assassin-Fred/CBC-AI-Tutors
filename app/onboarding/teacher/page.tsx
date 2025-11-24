@@ -6,12 +6,14 @@ import { useAuthUser, useAuthActions, useFormState } from '@/lib/hooks';
 import { useOnboarding } from '@/lib/context/OnboardingContext';
 import { setTeacherProfile } from '@/lib/api';
 import { useOnboardingProtection } from '@/hooks/useRoleRedirect';
-import BackToRoleSelection from '@/components/onboarding/BackToRoleSelection';
+import BackToRoleSelection from '@/components/shared/BackToRoleSelection';
 
+// Update TeacherFormValues to include 'api' for error handling
 type TeacherFormValues = {
   name: string;
   subject: string;
   school: string;
+  api?: string; // Added 'api' for error handling
 };
 
 const TEACHER_FEATURES = [
@@ -40,6 +42,9 @@ export default function TeacherOnboardingPage() {
 
   const [step, setStep] = useState(1);
   const totalSteps = 3;
+
+  // Add a state variable to track submission status
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !guardLoading && !user) {
@@ -89,10 +94,10 @@ export default function TeacherOnboardingPage() {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep(totalSteps)) return;
+    if (!user) return;
 
     setIsLoading(true);
-    form.setSubmitting(true);
+    setIsSubmitting(true);
 
     try {
       const response = await setTeacherProfile(user.uid, {
@@ -103,7 +108,9 @@ export default function TeacherOnboardingPage() {
         yearsExperience: '0',
       });
 
-      if (!response.success) throw new Error(response.message ?? 'Failed to complete onboarding');
+      if (!response.success) {
+        throw new Error(response.message ?? 'Failed to complete onboarding');
+      }
 
       router.replace('/dashboard/teacher/cbc');
     } catch (error) {
@@ -112,7 +119,7 @@ export default function TeacherOnboardingPage() {
       setGlobalError(message);
     } finally {
       setIsLoading(false);
-      form.setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -209,14 +216,14 @@ export default function TeacherOnboardingPage() {
           ) : (
             <button
               onClick={handleSubmit}
-              disabled={actionLoading || form.isSubmitting}
+              disabled={actionLoading || isSubmitting}
               className={`px-8 py-3 rounded-lg font-medium text-white transition-all duration-200 flex items-center gap-2 ${
-                actionLoading || form.isSubmitting
+                actionLoading || isSubmitting
                   ? 'bg-gray-300 cursor-not-allowed'
                   : 'bg-indigo-900 hover:bg-indigo-800'
               }`}
             >
-              {form.isSubmitting ? (
+              {isSubmitting ? (
                 <>
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                   Setting up...

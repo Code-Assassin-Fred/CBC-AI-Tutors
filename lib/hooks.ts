@@ -56,3 +56,25 @@ export const useFormState = <T extends Record<string, any>>(initialValues: T) =>
   };
   return state;
 };
+
+export async function onboardStudent(userId: string, data: { name: string; curriculum: string; age: number; }): Promise<{ success: boolean; message?: string; redirectUrl?: string }> {
+  try {
+    // Simulate an API call for onboarding
+    const response = await fetch('/api/onboard-student', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, ...data }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to onboard student');
+    }
+
+    const result = await response.json();
+    return { success: true, redirectUrl: result.redirectUrl };
+  } catch (error) {
+    return { success: false, message: error instanceof Error ? error.message : 'Unknown error' };
+  }
+}
