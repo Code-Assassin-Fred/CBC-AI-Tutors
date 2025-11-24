@@ -77,7 +77,13 @@ export default function StudentOnboardingPage() {
         throw new Error(response.message ?? 'Failed to complete onboarding');
       }
 
-      router.replace(response.redirectUrl ?? '/dashboard/student');
+      // Ensure redirect URL is valid
+      const redirectUrl = response.redirectUrl ?? '/dashboard/student';
+      if (!redirectUrl.startsWith('/')) {
+        throw new Error('Invalid redirect URL');
+      }
+
+      router.replace(redirectUrl);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to complete onboarding';
       form.setError('api', message);

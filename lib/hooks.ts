@@ -21,7 +21,7 @@ export const useAuthActions = () => {
     loading: false,
     error: null, // Added error property
     setError: (error: string) => {
-      console.error(error);
+      console.error('Auth Action Error:', error);
     },
     clearError: () => {
       console.log("Clearing error...");
@@ -69,6 +69,8 @@ export async function onboardStudent(userId: string, data: { name: string; curri
     });
 
     if (!response.ok) {
+      const errorDetails = await response.text();
+      console.error(`API Error: ${response.status} - ${response.statusText}`, errorDetails);
       throw new Error('Failed to onboard student');
     }
 
