@@ -1,72 +1,81 @@
+// lib/api/onboarding.ts
+import type { UserRole } from '@/types/onboarding';
+
 /**
- * Utility functions for calling onboarding API routes.
- * All functions return JSON responses or throw properly formatted errors.
+ * Save the user role to the backend.
  */
-
-export async function saveRoleToDb(role: string) {
+export async function saveRoleToDb(userId: string, role: UserRole) {
   try {
-    const res = await fetch("/api/onboarding/role", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ role }),
+    const res = await fetch('/api/onboarding/role', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, role }),
     });
 
     if (!res.ok) {
       const error = await res.json().catch(() => ({}));
-      throw new Error(error.error || "Failed to save role");
+      throw new Error(error.message || 'Failed to save role');
     }
 
     return await res.json();
   } catch (err: any) {
-    console.error("saveRoleToDb error:", err);
-    throw new Error(err.message || "Unknown error");
+    console.error('saveRoleToDb error:', err);
+    throw new Error(err.message || 'Unknown error');
   }
 }
 
+/**
+ * Onboard student
+ */
 export async function onboardStudent(data: {
-  level: string;
-  subjects: string[];
-  goals: string;
+  userId: string;
+  name: string;
+  age?: number;
 }) {
   try {
-    const res = await fetch("/api/onboarding/student", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const res = await fetch('/api/onboarding/student', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
 
     if (!res.ok) {
       const error = await res.json().catch(() => ({}));
-      throw new Error(error.error || "Failed to save student profile");
+      throw new Error(error.message || 'Failed to save student profile');
     }
 
     return await res.json();
   } catch (err: any) {
-    console.error("onboardStudent error:", err);
-    throw new Error(err.message || "Unknown error");
+    console.error('onboardStudent error:', err);
+    throw new Error(err.message || 'Unknown error');
   }
 }
 
+/**
+ * Onboard teacher
+ */
 export async function setTeacherProfile(data: {
-  expertise: string[];
-  experience: string;
-  bio: string;
+  userId: string;
+  name: string;
+  subject: string;
+  school: string;
+  yearsExperience?: string;
 }) {
   try {
-    const res = await fetch("/api/onboarding/teacher", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const res = await fetch('/api/onboarding/teacher', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
 
     if (!res.ok) {
       const error = await res.json().catch(() => ({}));
-      throw new Error(error.error || "Failed to save teacher profile");
+      throw new Error(error.message || 'Failed to save teacher profile');
     }
 
     return await res.json();
   } catch (err: any) {
-    console.error("setTeacherProfile error:", err);
-    throw new Error(err.message || "Unknown error");
+    console.error('setTeacherProfile error:', err);
+    throw new Error(err.message || 'Unknown error');
   }
 }

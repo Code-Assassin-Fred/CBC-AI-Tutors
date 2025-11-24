@@ -1,4 +1,3 @@
-// File: C:\Users\HP\Documents\cbc-ai-tutors\lib\context\AuthContext.tsx
 'use client';
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
@@ -26,6 +25,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
+  // Map backend roles to frontend roles
+  const mapBackendRole = (backendRole: string | null): 'student' | 'teacher' | null => {
+    if (!backendRole) return null;
+    if (backendRole === 'cbc-student' || backendRole === 'student') return 'student';
+    if (backendRole === 'cbc-teacher' || backendRole === 'teacher') return 'teacher';
+    return null;
+  };
+
   // Listen for Firebase auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -48,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await axios.get(`/api/onboarding/user/${uid}`);
       const data = res.data;
-      setRoleState(data.role ?? null);
+      setRoleState(mapBackendRole(data.role ?? null));
       setOnboardingCompleteState(data.onboardingComplete ?? false);
     } catch (error) {
       console.error('Failed to fetch user role:', error);
@@ -63,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await axios.post('/api/onboarding/role', { userId: user.uid, role: newRole });
       setRoleState(newRole);
-      setOnboardingCompleteState(false); // Reset onboarding when role changes
+      setOnboardingCompleteState(false); 
     } catch (error) {
       console.error('Failed to set role:', error);
     }

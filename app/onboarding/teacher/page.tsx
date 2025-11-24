@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import BackToRoleSelection from '@/components/shared/BackToRoleSelection';
 import { useAuth } from '@/lib/context/AuthContext';
 import { useOnboardingProtection } from '@/hooks/useRoleRedirect';
+import { setTeacherProfile } from '@/lib/api/onboarding';
+import type { TeacherOnboardingData } from '@/types/onboarding';
 
 type TeacherFormValues = {
   name: string;
@@ -29,15 +31,15 @@ export default function TeacherOnboardingPage() {
   const { user, setOnboardingComplete, loading: authLoading } = useAuth();
   const { isLoading: guardLoading } = useOnboardingProtection();
 
-  const form = useFormState<TeacherFormValues>({
+  const [formValues, setFormValues] = useState<TeacherFormValues>({
     name: '',
     subject: '',
     school: '',
   });
-
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string | undefined }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [step, setStep] = useState(1);
   const totalSteps = 2;
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !guardLoading && !user) {
@@ -46,59 +48,57 @@ export default function TeacherOnboardingPage() {
   }, [authLoading, guardLoading, user, router]);
 
   const validateStep = (currentStep: number) => {
-    form.clearErrors();
-    if (currentStep === 1) {
-      let valid = true;
-      if (!form.values.name.trim()) {
-        form.setError('name', 'Please enter your full name');
-        valid = false;
-      }
-      if (!form.values.subject.trim()) {
-        form.setError('subject', 'Please enter your subject');
-        valid = false;
-      }
-      if (!form.values.school.trim()) {
-        form.setError('school', 'Please enter your school name');
-        valid = false;
-      }
-      return valid;
+  setFormErrors({});
+  if (currentStep === 1) {
+    let valid = true;
+
+    if (!formValues.name.trim()) {
+      setFormErrors((prev) => ({ ...prev, name: 'Please enter your full name' }));
+      valid = false;
     }
-    return true;
-  };
+
+    if (!formValues.subject.trim()) {
+      setFormErrors((prev) => ({ ...prev, subject: 'Please enter your subject' }));
+      valid = false;
+    }
+
+    if (!formValues.school.trim()) {
+      setFormErrors((prev) => ({ ...prev, school: 'Please enter your school name' }));
+      valid = false;
+    }
+
+    return valid;
+  }
+  return true;
+};
 
   const handleNext = () => {
     if (validateStep(step)) setStep((prev) => Math.min(prev + 1, totalSteps));
   };
-
   const handlePrev = () => setStep((prev) => Math.max(prev - 1, 1));
 
   const handleSubmit = async () => {
     if (!user) return;
 
     setIsSubmitting(true);
-    form.setError('api', undefined);
+    setFormErrors({});
 
     try {
-      const response = await setTeacherProfile(user.uid, {
-        name: form.values.name.trim(),
-        subject: form.values.subject.trim(),
-        school: form.values.school.trim(),
-        curriculum: 'CBC',
-        yearsExperience: '0',
-      });
+      const response = await setTeacherProfile({
+  userId: user.uid,
+  name: formValues.name.trim(),
+  subject: formValues.subject.trim(),
+  school: formValues.school.trim(),
+  yearsExperience: '0',
+});
 
-      if (!response.success) {
-        throw new Error(response.message ?? 'Failed to complete onboarding');
-      }
+      if (!response.success) throw new Error(response.message ?? 'Failed to complete onboarding');
 
-      // Update onboarding completion
       setOnboardingComplete(true);
-
-      // Redirect to teacher dashboard
       router.replace('/dashboard/teacher');
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to complete onboarding';
-      form.setError('api', message);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to complete onboarding';
+      setFormErrors({ api: message });
     } finally {
       setIsSubmitting(false);
     }
@@ -114,45 +114,40 @@ export default function TeacherOnboardingPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-between bg-white px-8 lg:px-16 py-8">
-      {/* Left Section */}
       <div className="w-full max-w-2xl">
         {step === 1 && (
           <>
             <h1 className="text-3xl font-bold text-gray-900 mb-5">Tell us about yourself</h1>
             <div className="space-y-4 mb-6">
-              <div>
-                <input
-                  value={form.values.name}
-                  onChange={(e) => form.setValue('name', e.target.value)}
-                  placeholder="Full Name"
-                  className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    form.errors.name ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
-                  }`}
-                />
-                {form.errors.name && <p className="mt-1 text-sm text-red-600">{form.errors.name}</p>}
-              </div>
-              <div>
-                <input
-                  value={form.values.subject}
-                  onChange={(e) => form.setValue('subject', e.target.value)}
-                  placeholder="Subject you teach"
-                  className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    form.errors.subject ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
-                  }`}
-                />
-                {form.errors.subject && <p className="mt-1 text-sm text-red-600">{form.errors.subject}</p>}
-              </div>
-              <div>
-                <input
-                  value={form.values.school}
-                  onChange={(e) => form.setValue('school', e.target.value)}
-                  placeholder="School / Institution"
-                  className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    form.errors.school ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
-                  }`}
-                />
-                {form.errors.school && <p className="mt-1 text-sm text-red-600">{form.errors.school}</p>}
-              </div>
+              <input
+                value={formValues.name}
+                onChange={(e) => setFormValues({ ...formValues, name: e.target.value })}
+                placeholder="Full Name"
+                className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  formErrors.name ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
+                }`}
+              />
+              {formErrors.name && <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>}
+
+              <input
+                value={formValues.subject}
+                onChange={(e) => setFormValues({ ...formValues, subject: e.target.value })}
+                placeholder="Subject you teach"
+                className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  formErrors.subject ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
+                }`}
+              />
+              {formErrors.subject && <p className="mt-1 text-sm text-red-600">{formErrors.subject}</p>}
+
+              <input
+                value={formValues.school}
+                onChange={(e) => setFormValues({ ...formValues, school: e.target.value })}
+                placeholder="School / Institution"
+                className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  formErrors.school ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
+                }`}
+              />
+              {formErrors.school && <p className="mt-1 text-sm text-red-600">{formErrors.school}</p>}
             </div>
           </>
         )}
@@ -168,15 +163,14 @@ export default function TeacherOnboardingPage() {
                 </li>
               ))}
             </ul>
-            {form.errors.api && (
+            {formErrors.api && (
               <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
-                {form.errors.api}
+                {formErrors.api}
               </div>
             )}
           </>
         )}
 
-        {/* Navigation Buttons */}
         <div className="flex items-center gap-4">
           {step > 1 && (
             <button
@@ -229,7 +223,6 @@ export default function TeacherOnboardingPage() {
         )}
       </div>
 
-      {/* Right Section */}
       <div className="hidden lg:flex items-center justify-center w-full max-w-xl">
         <img src="/educator.svg" alt="Teacher workspace illustration" className="w-full h-auto" />
       </div>

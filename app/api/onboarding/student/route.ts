@@ -3,14 +3,13 @@ import { adminDb } from "@/lib/firebaseAdmin";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId, name, curriculum, age } = await req.json() as {
+    const { userId, name, age } = await req.json() as {
       userId: string;
       name: string;
-      curriculum: string;
       age?: number;
     };
 
-    if (!userId || !name || !curriculum) {
+    if (!userId || !name) {
       return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
     }
 
@@ -19,7 +18,6 @@ export async function POST(req: NextRequest) {
     await studentRef.set(
       {
         name,
-        curriculum,
         age: age || null,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -27,7 +25,6 @@ export async function POST(req: NextRequest) {
       { merge: true }
     );
 
-    // Mark onboarding complete in users collection
     const userRef = adminDb.collection("users").doc(userId);
     await userRef.set({ onboardingComplete: true, updatedAt: new Date() }, { merge: true });
 

@@ -5,51 +5,56 @@ import { useRouter } from 'next/navigation';
 
 import { useAuth } from '@/lib/context/AuthContext';
 import { useRoleRedirect } from '@/hooks/useRoleRedirect';
-import { saveRoleToDb } from '@/lib/api/onboarding'; // make sure this exists
-import type { UserRole } from '@/lib/types';
+import { saveRoleToDb } from '@/lib/api/onboarding';
+import type { UserRole } from '@/types/onboarding';
 
-type RoleOption = {
-  id: UserRole;
+// Unified CBC role options
+const ROLE_OPTIONS: {
+  id: UserRole; // 'student' | 'teacher'
   title: string;
   description: string;
-  fallbackRedirect: string;
-};
-
-const ROLE_OPTIONS: RoleOption[] = [
+  redirect: string;
+}[] = [
   {
-    id: 'cbc-student',
+    id: 'student',
     title: 'CBC Student',
     description:
       'Learn independently with AI-personalised study plans and real-time feedback aligned to the CBC.',
-    fallbackRedirect: '/onboarding/student',
+    redirect: '/onboarding/student',
   },
   {
-    id: 'cbc-teacher',
+    id: 'teacher',
     title: 'CBC Teacher',
     description:
       'Create and manage AI-assisted lessons, monitor student progress, and personalise learning experiences.',
-    fallbackRedirect: '/onboarding/teacher',
+    redirect: '/onboarding/teacher',
   },
 ];
 
-const ROLE_REDIRECT: Record<UserRole, string> = {
-  'cbc-student': '/onboarding/student',
-  'cbc-teacher': '/onboarding/teacher',
-};
-
 export default function ChooseRolePage() {
   const router = useRouter();
-  const { user, role, onboardingComplete, setRole: setAuthRole, loading: authLoading } = useAuth();
-  const { isLoading: guardLoading } = useRoleRedirect(); // replaced useOnboardingProtection
+
+  const {
+    user,
+    role,
+    onboardingComplete,
+    setRole: setAuthRole,
+    loading: authLoading,
+  } = useAuth();
+
+  // Call role redirect hook (side effect only)
+  useRoleRedirect();
+
   const [selectedRole, setSelectedRole] = useState<UserRole | null>(role || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Force login if user not present
   useEffect(() => {
-    if (!authLoading && !guardLoading && !user) {
+    if (!authLoading && !user) {
       router.replace('/auth');
     }
-  }, [authLoading, guardLoading, user, router]);
+  }, [authLoading, user, router]);
 
   const handleNext = async () => {
     if (!user || !selectedRole || loading) return;
@@ -58,13 +63,15 @@ export default function ChooseRolePage() {
     setError(null);
 
     try {
-      await saveRoleToDb(user.uid, { role: selectedRole });
+      // Save role → API expects userId + role
+      await saveRoleToDb(user.uid, selectedRole);
+
+      // Update AuthContext
       setAuthRole(selectedRole);
 
+      // Redirect to onboarding or dashboard
       if (!onboardingComplete) {
-        const next =
-          ROLE_REDIRECT[selectedRole] ||
-          ROLE_OPTIONS.find((o) => o.id === selectedRole)?.fallbackRedirect;
+        const next = ROLE_OPTIONS.find((o) => o.id === selectedRole)?.redirect;
         if (next) router.replace(next);
       } else {
         router.replace(`/dashboard/${selectedRole}`);
@@ -77,7 +84,7 @@ export default function ChooseRolePage() {
     }
   };
 
-  if (authLoading || guardLoading) {
+  if (authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-gray-300 border-t-blue-500" />
@@ -130,7 +137,9 @@ export default function ChooseRolePage() {
           onClick={handleNext}
           disabled={!selectedRole || loading}
           className={`px-8 py-3 rounded-lg font-medium text-white transition-all duration-200 flex items-center gap-2 ${
-            !selectedRole || loading ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-900 hover:bg-indigo-800'
+            !selectedRole || loading
+              ? 'bg-gray-300 cursor-not-allowed'
+              : 'bg-indigo-900 hover:bg-indigo-800'
           }`}
         >
           {loading ? (
@@ -150,7 +159,11 @@ export default function ChooseRolePage() {
       </div>
 
       <div className="hidden lg:flex items-center justify-center w-full max-w-xl">
-        <img src="/choose role.svg" alt="Choose your role illustration" className="w-full h-auto" />
+        <img
+          src="/choose role.svg"
+          alt="Choose your role illustration"
+          className="w-full h-auto"
+        />
       </div>
     </div>
   );
