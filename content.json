@@ -1,0 +1,216 @@
+{
+  "4": {
+    "English": {
+      "Strands": {
+        "Listening and Speaking": {
+          "SubStrands": {
+            "Listening and following instructions": {
+              "Outcomes": [
+                "Follow two- and three-step oral instructions in familiar contexts."
+              ]
+            },
+            "Listening for main ideas and details": {
+              "Outcomes": [
+                "Identify the main idea and supporting details from short oral texts."
+              ]
+            },
+            "Responding to oral stories": {
+              "Outcomes": [
+                "Retell short stories in correct sequence using learners’ own words."
+              ]
+            },
+            "Oral interaction": {
+              "Outcomes": [
+                "Ask and answer simple questions appropriately in conversations."
+              ]
+            },
+            "Describing people, places, events": {
+              "Outcomes": [
+                "Describe familiar things using clear descriptive language."
+              ]
+            },
+            "Pronunciation and oral grammar": {
+              "Outcomes": [
+                "Use correct pronunciation and simple sentence structures in speech."
+              ]
+            }
+          }
+        },
+        "Reading": {
+          "SubStrands": {
+            "Reading aloud": {
+              "Outcomes": [
+                "Read short passages aloud fluently with correct expression."
+              ]
+            },
+            "Reading for comprehension": {
+              "Outcomes": [
+                "Answer literal and simple inferential questions from texts."
+              ]
+            },
+            "Vocabulary development": {
+              "Outcomes": [
+                "Determine word meanings using context and give synonyms/antonyms."
+              ]
+            },
+            "Poetry and drama": {
+              "Outcomes": [
+                "Read and recite short poems, identifying rhyme and rhythm."
+              ]
+            },
+            "Use of reference materials": {
+              "Outcomes": [
+                "Use a simple dictionary to find meanings and spellings."
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Science & Technology": {
+      "Strands": {
+        "Living Things": {
+          "SubStrands": {
+            "Characteristics of living things": {
+              "Outcomes": ["Identify basic characteristics of living things."]
+            },
+            "Plants: parts and functions": {
+              "Outcomes": ["Identify plant parts and state their functions."]
+            },
+            "Animals: classification and use": {
+              "Outcomes": ["Classify common animals and state their uses."]
+            },
+            "Care for living things": {
+              "Outcomes": ["Demonstrate simple care practices for plants and animals."]
+            }
+          }
+        },
+        "Materials and Their Properties": {
+          "SubStrands": {
+            "Types of materials": {
+              "Outcomes": ["Sort materials by observable properties."]
+            },
+            "Uses of materials": {
+              "Outcomes": ["Select materials appropriate for specific uses."]
+            },
+            "Changes in materials": {
+              "Outcomes": ["Describe simple changes such as melting, dissolving and evaporation."]
+            }
+          }
+        },
+        "Energy, Forces and Motion": {
+          "SubStrands": {
+            "Push and pull forces": {
+              "Outcomes": ["Demonstrate how pushes and pulls cause movement."]
+            },
+            "Simple machines": {
+              "Outcomes": ["Identify simple machines and state their uses."]
+            },
+            "Sources of energy": {
+              "Outcomes": ["Identify common sources of energy and their uses."]
+            }
+          }
+        },
+        "Weather, Water and Environment": {
+          "SubStrands": {
+            "Weather elements and instruments": {
+              "Outcomes": ["Observe and record daily weather using simple tools."]
+            },
+            "Water: sources and purification": {
+              "Outcomes": ["Describe water sources and demonstrate simple purification."]
+            },
+            "Environmental conservation": {
+              "Outcomes": ["Demonstrate ways of conserving water and the environment."]
+            }
+          }
+        },
+        "Health, Hygiene and Safety": {
+          "SubStrands": {
+            "Personal hygiene": {
+              "Outcomes": ["Demonstrate correct hygiene practices to prevent disease."]
+            },
+            "First aid and safety": {
+              "Outcomes": ["Apply basic first aid and observe safety rules at home/school."]
+            }
+          }
+        }
+      }
+    }
+  },
+  "5": {
+    "Social Studies": {
+      "Strands": {
+        "Our Environment": {
+          "SubStrands": {
+            "Meaning and Components of the Environment": {
+              "Outcomes": [
+                "Define environment and identify natural and human-made components.",
+                "Identify physical and human features in the local environment.",
+                "Explain how people use and interact with the environment."
+              ]
+            },
+            "Types of Natural Resources": {
+              "Outcomes": [
+                "Distinguish between renewable and non-renewable resources.",
+                "Give examples of local renewable and non-renewable resources.",
+                "Explain how resources are used in the community."
+              ]
+            },
+            "Responsible Use and Conservation of Resources": {
+              "Outcomes": [
+                "Demonstrate conservation methods for soil, water and forests.",
+                "Participate in a simple conservation activity.",
+                "Explain roles of individuals and communities in conservation."
+              ]
+            },
+            "Environmental Pollution and Protection": {
+              "Outcomes": [
+                "Identify types and sources of pollution.",
+                "Describe effects of pollution on people and the environment.",
+                "Suggest and practise ways of reducing pollution."
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Home Science": {
+      "Strands": {
+        "Food and Nutrition": {
+          "SubStrands": {
+            "Types and Functions of Food": {
+              "Outcomes": [
+                "Classify foods into body-building, energy-giving and protective groups.",
+                "Explain basic functions of common nutrients.",
+                "Identify local sources of nutrients."
+              ]
+            },
+            "Food Hygiene and Safety": {
+              "Outcomes": [
+                "Demonstrate correct handwashing and kitchen hygiene.",
+                "Explain causes of food spoilage and contamination.",
+                "Apply safety measures when preparing food."
+              ]
+            },
+            "Meal Planning and Preparation": {
+              "Outcomes": [
+                "Plan a simple balanced meal using local foods.",
+                "Prepare simple nutritious dishes safely.",
+                "Serve food neatly and appropriately."
+              ]
+            },
+            "Storage and Preservation of Food": {
+              "Outcomes": [
+                "Describe methods of storing different types of food.",
+                "Demonstrate simple preservation techniques such as drying.",
+                "Explain why proper labeling and rotation are important."
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
