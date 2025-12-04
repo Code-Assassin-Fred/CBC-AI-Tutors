@@ -23,7 +23,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
     {
       id: 'Dashboard',
       label: 'Dashboard',
-      href: '/dashboard/student/cbc',
+      href: '/dashboard/student',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -38,7 +38,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
     {
       id: 'Classroom',
       label: 'Classroom',
-      href: '/dashboard/student/cbc/classroom',
+      href: '/dashboard/student/classroom',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -53,7 +53,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
     {
       id: 'Courses',
       label: 'Courses',
-      href: '/dashboard/student/cbc/courses',
+      href: '/dashboard/student/courses',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -74,7 +74,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
     {
       id: 'Resources',
       label: 'Resources',
-      href: '/dashboard/student/cbc/resources',
+      href: '/dashboard/student/resources',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -89,7 +89,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
     {
       id: 'Career Paths',
       label: 'Career Paths',
-      href: '/dashboard/student/cbc/paths',
+      href: '/dashboard/student/paths',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -104,7 +104,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
     {
       id: 'Schedule',
       label: 'Schedule',
-      href: '/dashboard/student/cbc/schedule',
+      href: '/dashboard/student/schedule',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -119,7 +119,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
     {
       id: 'Community',
       label: 'Community',
-      href: '/dashboard/student/cbc/community',
+      href: '/dashboard/student/community',
       icon: (
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
