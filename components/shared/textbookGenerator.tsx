@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import TextbookRenderer from "@/components/TextbookRenderer";
+import TextbookRenderer from "@/components/admin/TextbookRenderer";
 import contentJson from "@/content.json";
 
 // ---- Types ----
