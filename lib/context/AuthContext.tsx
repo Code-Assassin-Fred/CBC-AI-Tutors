@@ -3,15 +3,14 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 interface AuthContextType {
   user: User | null;
-  role: 'student' | 'teacher' | null;
+  role: 'student' | 'teacher' | 'admin' | null;
   onboardingComplete: boolean;
   loading: boolean;
-  setRole: (role: 'student' | 'teacher') => Promise<void>;
+  setRole: (role: 'student' | 'teacher' | 'admin') => Promise<void>;
   setOnboardingComplete: (complete: boolean) => void;
   refreshUserData: () => Promise<void>;
 }
@@ -20,16 +19,22 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [role, setRoleState] = useState<'student' | 'teacher' | null>(null);
+  const [role, setRoleState] = useState<'student' | 'teacher' | 'admin' | null>(null);
   const [onboardingComplete, setOnboardingCompleteState] = useState(false);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   // Map backend roles to frontend roles
-  const mapBackendRole = (backendRole: string | null): 'student' | 'teacher' | null => {
+  const mapBackendRole = (
+    backendRole: string | null
+  ): 'student' | 'teacher' | 'admin' | null => {
     if (!backendRole) return null;
-    if (backendRole === 'cbc-student' || backendRole === 'student') return 'student';
-    if (backendRole === 'cbc-teacher' || backendRole === 'teacher') return 'teacher';
+
+    const normalized = backendRole.toLowerCase();
+
+    if (normalized === 'cbc-student' || normalized === 'student') return 'student';
+    if (normalized === 'cbc-teacher' || normalized === 'teacher') return 'teacher';
+    if (normalized === 'cbc-admin'   || normalized === 'admin')   return 'admin';
+
     return null;
   };
 
@@ -38,12 +43,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setLoading(true);
       setUser(firebaseUser);
+
       if (firebaseUser) {
         await fetchUserRole(firebaseUser.uid);
       } else {
         setRoleState(null);
         setOnboardingCompleteState(false);
       }
+
       setLoading(false);
     });
 
@@ -55,6 +62,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await axios.get(`/api/onboarding/user/${uid}`);
       const data = res.data;
+
       setRoleState(mapBackendRole(data.role ?? null));
       setOnboardingCompleteState(data.onboardingComplete ?? false);
     } catch (error) {
@@ -65,12 +73,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Set role and save to DB
-  const setRole = async (newRole: 'student' | 'teacher') => {
+  const setRole = async (newRole: 'student' | 'teacher' | 'admin') => {
     if (!user) return;
+
     try {
-      await axios.post('/api/onboarding/role', { userId: user.uid, role: newRole });
+      await axios.post('/api/onboarding/role', {
+        userId: user.uid,
+        role: newRole,
+      });
+
       setRoleState(newRole);
-      setOnboardingCompleteState(false); 
+      setOnboardingCompleteState(false);
     } catch (error) {
       console.error('Failed to set role:', error);
     }
@@ -81,7 +94,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setOnboardingCompleteState(complete);
   };
 
-  // Refresh role + onboarding info from backend
+  // Force refresh user role + onboarding info
   const refreshUserData = async () => {
     if (!user) return;
     await fetchUserRole(user.uid);
@@ -107,8 +120,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 // Hook to use the AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (!context) {
     throw new Error('useAuth must be used within AuthProvider');
   }
+
   return context;
 };
