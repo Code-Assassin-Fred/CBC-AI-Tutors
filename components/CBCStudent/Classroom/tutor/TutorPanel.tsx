@@ -3,8 +3,7 @@
 import React, { useState } from 'react';
 import TutorChat from '@/components/CBCStudent/Classroom/tutor/TutorChat';
 import TutorInput from '@/components/CBCStudent/Classroom/tutor/TutorInput';
-import { tutorChat } from '@/lib/api';
-import { useAuth } from '@/lib/hooks';
+import { useAuth } from '@/lib/context/AuthContext';
 
 export default function TutorPanel() {
   const [messages, setMessages] = useState<Array<{ id: number; role: 'user' | 'assistant'; text: string }>>([]);
@@ -18,23 +17,16 @@ export default function TutorPanel() {
       text: text
     };
     setMessages((prev) => [...prev, newMessage]);
-    try {
-      const token = await user?.getIdToken();
-      const res = await tutorChat(text, undefined, token || undefined);
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now() + 1, role: 'assistant', text: res.reply },
-      ]);
-    } catch (e) {
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now() + 1, role: 'assistant', text: 'Sorry, I had trouble responding. Please try again.' },
-      ]);
-    }
+
+    // Removed tutorChat call
+    setMessages((prev) => [
+      ...prev,
+      { id: Date.now() + 1, role: 'assistant', text: 'This is a placeholder response from your AI tutor.' },
+    ]);
   };
 
   return (
-  <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
+    <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
       {/* Simple header label with quick actions */}
       <div className="pb-3 border-b border-white/10">
         <div className="flex items-center justify-between">
@@ -52,7 +44,7 @@ export default function TutorPanel() {
           </div>
         </div>
       </div>
-      
+
       <div className="flex-1 overflow-y-auto scrollbar-hide mt-4 space-y-4 min-h-0 pr-1">
         {messages.length === 0 ? (
           <div className="flex items-center justify-center h-full text-white/40 text-sm text-center px-4">
@@ -62,6 +54,7 @@ export default function TutorPanel() {
           <TutorChat messages={messages} />
         )}
       </div>
+
       {/* Input bar at bottom */}
       <div className="mt-2">
         <TutorInput onSend={handleSendMessage} />

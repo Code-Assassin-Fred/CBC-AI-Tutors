@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebaseAdmin";
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { uid: string } } 
-) {
+interface Params {
+  uid: string;
+}
+
+export async function GET(req: NextRequest, context: { params: Params }) {
   try {
-    const uid = context.params.uid; 
+    const params = context.params;
+    const uid = params?.uid;
 
     if (!uid) {
       return NextResponse.json(
