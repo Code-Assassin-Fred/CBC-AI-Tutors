@@ -7,7 +7,8 @@ interface Params {
 
 export async function GET(req: NextRequest, context: { params: Params }) {
   try {
-    const params = context.params;
+    // Always unwrap the params
+    const params = await Promise.resolve(context.params); 
     const uid = params?.uid;
 
     if (!uid) {
@@ -21,7 +22,6 @@ export async function GET(req: NextRequest, context: { params: Params }) {
     const userSnap = await userRef.get();
 
     if (!userSnap.exists) {
-      // User exists in Firebase Auth but not in Firestore yet
       return NextResponse.json({
         success: true,
         role: null,
