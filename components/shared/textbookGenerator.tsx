@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import TextbookRenderer from "@/components/admin/TextbookRenderer";
 import contentJson from "@/content.json";
+import { useAuth } from "@/lib/context/AuthContext";
 
 // ---- Types ----
 interface SubStrand {
@@ -57,6 +58,7 @@ const LoadingSpinner = () => (
 
 // ---- Component ----
 export default function GeneratePage() {
+  const { user } = useAuth(); // ← NEW: Get current admin user
   const grades = Object.keys(contentJson);
 
   const [selectedGrade, setSelectedGrade] = useState<string>(grades[0] || "");
@@ -96,7 +98,7 @@ export default function GeneratePage() {
   }, [selectedGrade, selectedSubject]);
 
   // ---- Generate strand ----
-  const generateStrand = async () => {
+const generateStrand = async () => {
     if (!selectedGrade || !selectedSubject || !selectedStrand) return;
     setLoading(true);
     setLearnerHtml("");
@@ -105,14 +107,20 @@ export default function GeneratePage() {
     try {
       const res = await fetch("/api/generate-strand", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           grade: selectedGrade,
           subject: selectedSubject,
           strand: selectedStrand,
+          generatedBy: user?.uid || null, 
         }),
       });
-      const data = await res.json();
 
+      if (!res.ok) throw new Error("Failed to generate");
+
+      const data = await res.json();
       setLearnerHtml(data.student_html || "");
       setTeacherHtml(data.teacher_html || "");
       setMode("Learner");

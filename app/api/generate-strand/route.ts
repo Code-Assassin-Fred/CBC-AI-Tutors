@@ -67,7 +67,7 @@ Use ONLY the following HTML structure and NOTHING else:
 RULES:
 - Use <h2> ONLY for Sub-Strand title.
 - Use <h3> for main section titles.
-- Use <h4> for sub‑section titles.
+- Use <h4> for sub-section titles.
 - Use <ul> and <ol> for all lists.
 - Wrap examples inside <div class="example-box">.
 - Return CLEAN HTML ONLY.
@@ -169,10 +169,14 @@ const callOpenAI = async (prompt: string) => {
 
 export async function POST(req: Request) {
   try {
-    const { grade, subject, strand } = await req.json();
+    const body = await req.json();
+    const { grade, subject, strand, generatedBy } = body;
 
     if (!grade || !subject || !strand) {
-      return NextResponse.json({ error: "Missing grade, subject, or strand" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing grade, subject, or strand" },
+        { status: 400 }
+      );
     }
 
     const curriculum = loadContentJson();
@@ -205,7 +209,7 @@ export async function POST(req: Request) {
     const finalStudentHtml = student_html.join("\n");
     const finalTeacherHtml = teacher_html.join("\n");
 
-    // Save to Firestore (unique per grade-subject-strand)
+    // Save to Firestore
     const docId = `${grade}_${subject}_${strand.replace(/\s+/g, "_")}`;
     await adminDb.collection("textbooks").doc(docId).set(
       {
@@ -215,7 +219,7 @@ export async function POST(req: Request) {
         student_html: finalStudentHtml,
         teacher_html: finalTeacherHtml,
         generatedAt: new Date(),
-        generatedBy: req.user?.uid 
+        generatedBy: generatedBy || "anonymous",
       },
       { merge: true }
     );
@@ -231,6 +235,9 @@ export async function POST(req: Request) {
     });
   } catch (err: any) {
     console.error("Generate strand error:", err);
-    return NextResponse.json({ error: err.message || "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || "Server error" },
+      { status: 500 }
+    );
   }
 }
