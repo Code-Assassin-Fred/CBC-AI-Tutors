@@ -10,7 +10,7 @@ import type { UserRole } from '@/types/onboarding';
 
 // Unified CBC role options
 const ROLE_OPTIONS: {
-  id: UserRole; // 'student' | 'teacher'
+  id: UserRole;
   title: string;
   description: string;
   redirect: string;
