@@ -1,4 +1,3 @@
-// app/api/generate-strand/route.ts
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import fs from "fs";
