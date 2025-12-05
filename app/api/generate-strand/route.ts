@@ -1,7 +1,9 @@
+// app/api/generate-strand/route.ts
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import fs from "fs";
 import path from "path";
+import { adminDb } from "@/lib/firebaseAdmin";
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -201,15 +203,35 @@ export async function POST(req: Request) {
       teacher_html.push(teacher);
     }
 
+    const finalStudentHtml = student_html.join("\n");
+    const finalTeacherHtml = teacher_html.join("\n");
+
+    // Save to Firestore (unique per grade-subject-strand)
+    const docId = `${grade}_${subject}_${strand.replace(/\s+/g, "_")}`;
+    await adminDb.collection("textbooks").doc(docId).set(
+      {
+        grade,
+        subject,
+        strand,
+        student_html: finalStudentHtml,
+        teacher_html: finalTeacherHtml,
+        generatedAt: new Date(),
+        generatedBy: req.user?.uid 
+      },
+      { merge: true }
+    );
+
     return NextResponse.json({
+      success: true,
+      message: "Strand generated and saved successfully",
       grade,
       subject,
       strand,
-      student_html: student_html.join("\n"),
-      teacher_html: teacher_html.join("\n")
+      student_html: finalStudentHtml,
+      teacher_html: finalTeacherHtml,
     });
   } catch (err: any) {
-    console.error(err);
+    console.error("Generate strand error:", err);
     return NextResponse.json({ error: err.message || "Server error" }, { status: 500 });
   }
 }
