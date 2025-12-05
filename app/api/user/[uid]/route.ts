@@ -37,7 +37,7 @@ export async function GET(req: NextRequest, context: { params: Params }) {
       onboardingComplete: data?.onboardingComplete ?? false,
     });
   } catch (error) {
-    console.error("GET /api/onboarding/user/[uid] error:", error);
+    console.error("GET /api/user/[uid] error:", error);
 
     return NextResponse.json(
       { success: false, message: (error as Error).message },

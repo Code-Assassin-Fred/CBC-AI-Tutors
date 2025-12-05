@@ -1,5 +1,5 @@
 /** Unified user roles across frontend and backend */
-export type UserRole = 'student' | 'teacher';
+export type UserRole = 'student' | 'teacher' | 'admin';
 
 /** Data required for student onboarding */
 export interface StudentOnboardingData {

@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Fetch role + onboarding status from backend
   const fetchUserRole = async (uid: string) => {
     try {
-      const res = await axios.get(`/api/onboarding/user/${uid}`);
+      const res = await axios.get(`/api/user/${uid}`);
       const data = res.data;
 
       setRoleState(mapBackendRole(data.role ?? null));
