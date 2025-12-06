@@ -3,9 +3,8 @@
 import { useState, useEffect } from "react";
 import EmptyLessonState from "./EmptyLessonState";
 import contentJson from "@/content.json";
-import StudentTextbookRenderer from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
+import StudentTextbookRenderer, { TocItem } from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
 
-// Type definitions (unchanged)
 interface SubStrand {
   Outcomes: string[];
   SubStrands?: Record<string, SubStrand>;
@@ -39,10 +38,13 @@ interface TextbookData {
   strand?: string;
 }
 
-export default function LessonCanvas() {
+interface LessonCanvasProps {
+  onTocUpdate?: (toc: TocItem[]) => void; // New prop to lift TOC
+}
+
+export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
   const grades = Object.keys(contentData);
 
-  // Start completely empty — this is the key change
   const [selectedGrade, setSelectedGrade] = useState<string>("");
   const [subjects, setSubjects] = useState<string[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
@@ -51,6 +53,7 @@ export default function LessonCanvas() {
 
   const [textbook, setTextbook] = useState<TextbookData | null>(null);
   const [loading, setLoading] = useState(false);
+  const [toc, setToc] = useState<TocItem[]>([]); // Local TOC
 
   // Update subjects when grade changes
   useEffect(() => {
@@ -63,7 +66,7 @@ export default function LessonCanvas() {
     }
     const subjectsList = Object.keys(contentData[selectedGrade]);
     setSubjects(subjectsList);
-    setSelectedSubject(""); // Don't auto-select
+    setSelectedSubject("");
   }, [selectedGrade]);
 
   // Update strands when subject changes
@@ -83,13 +86,15 @@ export default function LessonCanvas() {
 
     const strandsList = Object.keys(subjectData.Strands);
     setStrands(strandsList);
-    setSelectedStrand(""); // Don't auto-select
+    setSelectedStrand("");
   }, [selectedGrade, selectedSubject]);
 
   // Fetch textbook only when full selection is made
   useEffect(() => {
     if (!selectedGrade || !selectedSubject || !selectedStrand) {
       setTextbook(null);
+      setToc([]);
+      if (onTocUpdate) onTocUpdate([]);
       return;
     }
 
@@ -110,7 +115,7 @@ export default function LessonCanvas() {
     };
 
     fetchTextbook();
-  }, [selectedGrade, selectedSubject, selectedStrand]);
+  }, [selectedGrade, selectedSubject, selectedStrand, onTocUpdate]);
 
   return (
     <div className="h-full flex flex-col bg-gradient-to-br from-[#0E0E10] to-[#1a1a1c] rounded-xl overflow-hidden">
@@ -170,7 +175,13 @@ export default function LessonCanvas() {
             <div className="text-white/60 animate-pulse text-lg">Loading your lesson...</div>
           </div>
         ) : textbook?.exists && textbook.student_html ? (
-          <StudentTextbookRenderer content={textbook.student_html} />
+          <StudentTextbookRenderer
+            content={textbook.student_html}
+            onTocUpdate={(items) => {
+              setToc(items);
+              if (onTocUpdate) onTocUpdate(items);
+            }}
+          />
         ) : selectedGrade && selectedSubject && selectedStrand ? (
           <EmptyLessonState
             grade={selectedGrade}
@@ -178,7 +189,6 @@ export default function LessonCanvas() {
             strand={selectedStrand}
           />
         ) : (
-          // Beautiful empty state — this is what you wanted
           <div className="flex flex-col items-center justify-center h-full text-center px-8">
             <div className="text-8xl mb-6 opacity-20">Book Icon</div>
             <h2 className="text-2xl font-bold text-white mb-3">

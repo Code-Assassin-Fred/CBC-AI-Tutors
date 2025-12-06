@@ -3,10 +3,15 @@
 import React, { useMemo, useState } from "react";
 import LessonCanvas from "@/components/CBCStudent/Classroom/main/LessonCanvas";
 import TutorPanel from "@/components/CBCStudent/Classroom/tutor/TutorPanel";
+import TOCIcon from "@/components/CBCStudent/Classroom/main/tocicon";
+import { TocItem } from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
 
 export default function ClassroomLayout() {
   const [view, setView] = useState<"both" | "left" | "right">("both");
   const [contentMode, setContentMode] = useState<"lesson" | "saved">("lesson");
+
+  // New state to hold TOC from LessonCanvas / StudentTextbookRenderer
+  const [toc, setToc] = useState<TocItem[]>([]);
 
   const leftClasses = useMemo(() => {
     const base =
@@ -100,7 +105,7 @@ export default function ClassroomLayout() {
               }
             >
               {contentMode === "lesson" ? (
-                <LessonCanvas />
+                <LessonCanvas onTocUpdate={setToc} /> // Pass TOC callback
               ) : (
                 <div className="h-full flex items-center justify-center text-white/40">
                   <p>Saved Lessons coming soon...</p>
@@ -108,6 +113,9 @@ export default function ClassroomLayout() {
               )}
             </div>
           </div>
+          
+          {/* TOC Button - Now inside left panel */}
+          <TOCIcon toc={toc} />
         </div>
 
         {/* RIGHT PANEL – AI Tutor */}

@@ -1,16 +1,22 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useEffect } from "react";
 
-interface TocItem {
+export interface TocItem {
   id: string;
   title: string;
   level: number;
 }
 
-export default function StudentTextbookRenderer({ content }: { content: string }) {
-  const [tocOpen, setTocOpen] = useState(false);
+interface StudentTextbookRendererProps {
+  content: string;
+  onTocUpdate?: (toc: TocItem[]) => void; // New prop to lift TOC up
+}
 
+export default function StudentTextbookRenderer({
+  content,
+  onTocUpdate,
+}: StudentTextbookRendererProps) {
   const { formattedHtml, toc } = useMemo(() => {
     if (!content) return { formattedHtml: "", toc: [] as TocItem[] };
 
@@ -149,86 +155,20 @@ export default function StudentTextbookRenderer({ content }: { content: string }
     return { formattedHtml: container.innerHTML, toc: tocItems };
   }, [content]);
 
+  // Lift TOC up to parent
+  useEffect(() => {
+    if (onTocUpdate) onTocUpdate(toc);
+  }, [toc, onTocUpdate]);
+
   function slugify(text: string) {
     return text.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").slice(0, 60);
   }
 
-  // TOC indentation
-  const getIndent = (level: number) => {
-    if (level === 2) return "ml-0";
-    if (level === 3) return "ml-6";
-    if (level === 4) return "ml-12";
-    return "ml-0";
-  };
-
   return (
-    <>
-      {/* Top TOC */}
-      {toc.length > 0 && (
-        <div className="w-full bg-[#111] p-4 rounded-xl mb-6 shadow-md border border-white/10">
-          <h2 className="text-lg font-semibold text-white mb-3">Table of Contents</h2>
-          <div className="space-y-2">
-            {toc.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className={`block text-white/80 hover:text-white transition ${getIndent(item.level)}`}
-              >
-                {item.title}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className="flex gap-10">
-        <main className="flex-1 min-w-0">
-          <div dangerouslySetInnerHTML={{ __html: formattedHtml }} />
-        </main>
-      </div>
-
-      {/* Floating TOC Button */}
-      {toc.length > 0 && (
-        <button
-          onClick={() => setTocOpen(true)}
-          className="fixed bottom-6 right-6 bg-purple-600 text-white px-4 py-3 rounded-full shadow-xl hover:bg-purple-700"
-        >
-          📑 TOC
-        </button>
-      )}
-
-      {/* Slide-In TOC Drawer */}
-      {tocOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setTocOpen(false)}>
-          <div
-            className="absolute right-0 top-0 h-full w-80 bg-[#111] p-6 shadow-xl overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-xl font-bold text-white mb-4">Contents</h2>
-
-            <button
-              onClick={() => setTocOpen(false)}
-              className="text-white/60 hover:text-white text-sm mb-4"
-            >
-              Close ✕
-            </button>
-
-            <nav className="space-y-3">
-              {toc.map((item) => (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  onClick={() => setTocOpen(false)}
-                  className={`block text-white/80 hover:text-white ${getIndent(item.level)}`}
-                >
-                  {item.title}
-                </a>
-              ))}
-            </nav>
-          </div>
-        </div>
-      )}
-    </>
+    <div className="flex gap-10">
+      <main className="flex-1 min-w-0">
+        <div dangerouslySetInnerHTML={{ __html: formattedHtml }} />
+      </main>
+    </div>
   );
 }
