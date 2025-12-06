@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import TextbookRenderer from "@/components/admin/TextbookRenderer";
 import EmptyLessonState from "./EmptyLessonState";
 import contentJson from "@/content.json";
+import StudentTextbookRenderer from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
 
 // Type definitions (unchanged)
 interface SubStrand {
@@ -170,7 +170,7 @@ export default function LessonCanvas() {
             <div className="text-white/60 animate-pulse text-lg">Loading your lesson...</div>
           </div>
         ) : textbook?.exists && textbook.student_html ? (
-          <TextbookRenderer content={textbook.student_html} />
+          <StudentTextbookRenderer content={textbook.student_html} />
         ) : selectedGrade && selectedSubject && selectedStrand ? (
           <EmptyLessonState
             grade={selectedGrade}
