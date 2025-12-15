@@ -60,6 +60,35 @@ export default function TextbookRenderer({
       .replace(/__([^_]+)__/g, "$1")
       .replace(/_([^_]+)_/g, "$1");
 
+    // Convert [IMAGE: description] placeholders to proper HTML
+    // This handles both raw text placeholders and img tags with [IMAGE: src
+    html = html
+      // Replace <img src="[IMAGE: description]" ...> tags with placeholder divs
+      .replace(/<img[^>]*src=["'][^\s]*\[IMAGE:\s*([^\]]+)\][^"']*["'][^>]*\/?>/gi, (match, description) => {
+        const cleanDesc = description.trim();
+        return `
+          <figure class="image-placeholder-figure my-6">
+            <div class="image-placeholder bg-white/[0.02] border-2 border-dashed border-white/20 rounded-lg p-6 text-center">
+              <div class="text-white/40 text-sm mb-2">[Pending Image]</div>
+              <div class="text-white/60 text-sm">${cleanDesc}</div>
+            </div>
+          </figure>
+        `;
+      })
+      // Replace standalone [IMAGE: description] text with placeholder divs
+      .replace(/\[IMAGE:\s*([^\]]+)\]/gi, (match, description) => {
+        const cleanDesc = description.trim();
+        return `
+          <figure class="image-placeholder-figure my-6">
+            <div class="image-placeholder bg-white/[0.02] border-2 border-dashed border-white/20 rounded-lg p-6 text-center">
+              <div class="text-white/40 text-sm mb-2">[Pending Image]</div>
+              <div class="text-white/60 text-sm">${cleanDesc}</div>
+            </div>
+            <figcaption class="mt-2 text-sm text-white/50 italic text-center">${cleanDesc}</figcaption>
+          </figure>
+        `;
+      });
+
     const container = document.createElement("div");
     container.innerHTML = html;
 

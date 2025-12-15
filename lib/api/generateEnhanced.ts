@@ -370,22 +370,41 @@ function summarizeDescription(description: string): string {
 function structureContent(html: string, images: ImageMetadata[]): TextbookContent {
     // Replace image placeholders with proper HTML
     let processedHtml = html;
+    let imageIndex = 0;
 
-    images.forEach((image, index) => {
-        const placeholder = `[IMAGE: ${extractImageDescription(html, index)}]`;
-        const imageHtml = `
+    // Replace each [IMAGE: ...] placeholder with proper HTML
+    processedHtml = processedHtml.replace(/\[IMAGE:\s*([^\]]+)\]/gi, (match, description) => {
+        const image = images[imageIndex];
+        imageIndex++;
+
+        if (image) {
+            // We have image metadata for this placeholder
+            return `
       <figure class="image-figure" data-image-id="${image.id}">
         <div class="image-placeholder" data-generation-prompt="${escapeHtml(image.generationPrompt)}">
-          <span class="placeholder-icon">[Image]</span>
-          <span class="placeholder-text">${escapeHtml(image.caption)}</span>
+          <div class="placeholder-content">
+            <span class="placeholder-badge">${escapeHtml(image.type || 'image')}</span>
+            <span class="placeholder-text">${escapeHtml(image.caption)}</span>
+          </div>
         </div>
         <figcaption>${escapeHtml(image.caption)}</figcaption>
       </figure>
     `.trim();
-
-        // Try to replace the placeholder
-        const regex = new RegExp(`\\[IMAGE:[^\\]]*\\]`, "i");
-        processedHtml = processedHtml.replace(regex, imageHtml);
+        } else {
+            // Fallback for placeholders without metadata
+            const caption = description.trim().substring(0, 80);
+            return `
+      <figure class="image-figure">
+        <div class="image-placeholder">
+          <div class="placeholder-content">
+            <span class="placeholder-badge">image</span>
+            <span class="placeholder-text">${escapeHtml(caption)}</span>
+          </div>
+        </div>
+        <figcaption>Figure: ${escapeHtml(caption)}</figcaption>
+      </figure>
+    `.trim();
+        }
     });
 
     // Extract sections from HTML
