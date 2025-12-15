@@ -17,41 +17,41 @@ import { SectionType, ImageType } from "@/types/textbook";
 // ============================================
 
 export interface ActivityFormat {
-    includesMaterials?: boolean;
-    includesProcedure?: boolean;
-    includesSafetyNotes?: boolean;
-    includesObservations?: boolean;
-    includesConclusion?: boolean;
-    includesIngredients?: boolean;     // Home Science
-    includesEquipment?: boolean;       // Home Science
-    includesServingSuggestions?: boolean; // Home Science
-    includesWorkedExamples?: boolean;  // Mathematics
-    includesReadingPassage?: boolean;  // English
+  includesMaterials?: boolean;
+  includesProcedure?: boolean;
+  includesSafetyNotes?: boolean;
+  includesObservations?: boolean;
+  includesConclusion?: boolean;
+  includesIngredients?: boolean;     // Home Science
+  includesEquipment?: boolean;       // Home Science
+  includesServingSuggestions?: boolean; // Home Science
+  includesWorkedExamples?: boolean;  // Mathematics
+  includesReadingPassage?: boolean;  // English
 }
 
 export interface ImageRequirements {
-    /** Typical number of images per substrand */
-    typicalCount: number;
-    /** Types of images commonly used */
-    types: ImageType[];
-    /** Suggested placements in content */
-    suggestedPlacements: string[];
+  /** Typical number of images per substrand */
+  typicalCount: number;
+  /** Types of images commonly used */
+  types: ImageType[];
+  /** Suggested placements in content */
+  suggestedPlacements: string[];
 }
 
 export interface SubjectTemplate {
-    name: string;
-    /** Required sections that must appear in every substrand */
-    requiredSections: SectionType[];
-    /** Optional sections that can be included */
-    optionalSections: SectionType[];
-    /** Activity format requirements */
-    activityFormat: ActivityFormat;
-    /** Image requirements */
-    imageRequirements: ImageRequirements;
-    /** Additional prompt instructions for this subject */
-    promptAdditions: string;
-    /** HTML structure hints for the LLM */
-    htmlStructureHints: string;
+  name: string;
+  /** Required sections that must appear in every substrand */
+  requiredSections: SectionType[];
+  /** Optional sections that can be included */
+  optionalSections: SectionType[];
+  /** Activity format requirements */
+  activityFormat: ActivityFormat;
+  /** Image requirements */
+  imageRequirements: ImageRequirements;
+  /** Additional prompt instructions for this subject */
+  promptAdditions: string;
+  /** HTML structure hints for the LLM */
+  htmlStructureHints: string;
 }
 
 // ============================================
@@ -59,41 +59,40 @@ export interface SubjectTemplate {
 // ============================================
 
 export const SUBJECT_TEMPLATES: Record<string, SubjectTemplate> = {
-    "Science & Technology": {
-        name: "Science & Technology",
-        requiredSections: [
-            "learning_outcomes",
-            "key_concepts",
-            "detailed_explanation",
-            "examples",
-            "activity",
-            "assessment"
-        ],
-        optionalSections: [
-            "safety_precautions",
-            "note_box",
-            "tip_box",
-            "real_world_connection",
-            "cross_curricular_link",
-            "summary"
-        ],
-        activityFormat: {
-            includesMaterials: true,
-            includesProcedure: true,
-            includesSafetyNotes: true,
-            includesObservations: true,
-            includesConclusion: true
-        },
-        imageRequirements: {
-            typicalCount: 4,
-            types: ["diagram", "photograph", "illustration"],
-            suggestedPlacements: [
-                "after introducing key concepts",
-                "during detailed explanation of structures/processes",
-                "within activity instructions"
-            ]
-        },
-        promptAdditions: `
+  "Science & Technology": {
+    name: "Science & Technology",
+    requiredSections: [
+      "learning_outcomes",
+      "key_concepts",
+      "detailed_explanation",
+      "examples",
+      "activity"
+    ],
+    optionalSections: [
+      "safety_precautions",
+      "note_box",
+      "tip_box",
+      "real_world_connection",
+      "cross_curricular_link",
+      "summary"
+    ],
+    activityFormat: {
+      includesMaterials: true,
+      includesProcedure: true,
+      includesSafetyNotes: true,
+      includesObservations: true,
+      includesConclusion: true
+    },
+    imageRequirements: {
+      typicalCount: 4,
+      types: ["diagram", "photograph", "illustration"],
+      suggestedPlacements: [
+        "after introducing key concepts",
+        "during detailed explanation of structures/processes",
+        "within activity instructions"
+      ]
+    },
+    promptAdditions: `
 SUBJECT-SPECIFIC REQUIREMENTS FOR SCIENCE & TECHNOLOGY:
 
 1. SAFETY FIRST:
@@ -121,11 +120,11 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR SCIENCE & TECHNOLOGY:
    - Include photographs of real specimens where helpful
    - Include process diagrams for cycles and changes
     `,
-        htmlStructureHints: `
+    htmlStructureHints: `
 Use these HTML patterns:
 
 <section class="safety-precautions">
-  <h4>⚠️ Safety Precautions</h4>
+  <h4>Safety Precautions</h4>
   <ul>
     <li>Wear protective gloves when...</li>
     <li>Wash hands after handling...</li>
@@ -133,7 +132,7 @@ Use these HTML patterns:
 </section>
 
 <section class="activity">
-  <h3>🔬 Activity: [Title]</h3>
+  <h3>Activity: [Title]</h3>
   <div class="activity-aim"><strong>Aim:</strong> To investigate...</div>
   <div class="activity-materials">
     <strong>Materials:</strong>
@@ -154,7 +153,7 @@ Use these HTML patterns:
 </section>
 
 <div class="note-box">
-  <strong>📝 Note:</strong> Important information...
+  <strong>Note:</strong> Important information...
 </div>
 
 <figure class="image-figure">
@@ -162,40 +161,39 @@ Use these HTML patterns:
   <figcaption>Figure X: Caption text</figcaption>
 </figure>
     `
-    },
+  },
 
-    "Social Studies": {
-        name: "Social Studies",
-        requiredSections: [
-            "learning_outcomes",
-            "key_concepts",
-            "detailed_explanation",
-            "examples",
-            "activity",
-            "assessment"
-        ],
-        optionalSections: [
-            "note_box",
-            "real_world_connection",
-            "cross_curricular_link",
-            "summary"
-        ],
-        activityFormat: {
-            includesMaterials: false,
-            includesProcedure: true,
-            includesSafetyNotes: false,
-            includesObservations: true
-        },
-        imageRequirements: {
-            typicalCount: 3,
-            types: ["photograph", "illustration", "chart"],
-            suggestedPlacements: [
-                "showing geographical features",
-                "depicting cultural practices",
-                "maps and diagrams"
-            ]
-        },
-        promptAdditions: `
+  "Social Studies": {
+    name: "Social Studies",
+    requiredSections: [
+      "learning_outcomes",
+      "key_concepts",
+      "detailed_explanation",
+      "examples",
+      "activity"
+    ],
+    optionalSections: [
+      "note_box",
+      "real_world_connection",
+      "cross_curricular_link",
+      "summary"
+    ],
+    activityFormat: {
+      includesMaterials: false,
+      includesProcedure: true,
+      includesSafetyNotes: false,
+      includesObservations: true
+    },
+    imageRequirements: {
+      typicalCount: 3,
+      types: ["photograph", "illustration", "chart"],
+      suggestedPlacements: [
+        "showing geographical features",
+        "depicting cultural practices",
+        "maps and diagrams"
+      ]
+    },
+    promptAdditions: `
 SUBJECT-SPECIFIC REQUIREMENTS FOR SOCIAL STUDIES:
 
 1. KENYAN CONTEXT:
@@ -222,56 +220,55 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR SOCIAL STUDIES:
    - Connect present to past where relevant
    - Include respectful discussion of cultural heritage
     `,
-        htmlStructureHints: `
+    htmlStructureHints: `
 <section class="case-study">
-  <h4>📍 Case Study: [Location/Community]</h4>
+  <h4>Case Study: [Location/Community]</h4>
   <p>Description of real-world example...</p>
 </section>
 
 <section class="discussion">
-  <h4>💬 Discussion Questions</h4>
+  <h4>Discussion Questions</h4>
   <ol>
     <li>What do you think about...?</li>
     <li>How does this affect your community?</li>
   </ol>
 </section>
     `
-    },
+  },
 
-    "Home Science": {
-        name: "Home Science",
-        requiredSections: [
-            "learning_outcomes",
-            "key_concepts",
-            "detailed_explanation",
-            "practical_activity",
-            "hygiene_notes",
-            "assessment"
-        ],
-        optionalSections: [
-            "safety_precautions",
-            "tip_box",
-            "real_world_connection",
-            "summary"
-        ],
-        activityFormat: {
-            includesIngredients: true,
-            includesEquipment: true,
-            includesProcedure: true,
-            includesSafetyNotes: true,
-            includesServingSuggestions: true
-        },
-        imageRequirements: {
-            typicalCount: 5,
-            types: ["photograph", "illustration", "diagram"],
-            suggestedPlacements: [
-                "showing cooking techniques",
-                "demonstrating proper hygiene",
-                "showing finished dishes",
-                "illustrating sewing/craft techniques"
-            ]
-        },
-        promptAdditions: `
+  "Home Science": {
+    name: "Home Science",
+    requiredSections: [
+      "learning_outcomes",
+      "key_concepts",
+      "detailed_explanation",
+      "practical_activity",
+      "hygiene_notes"
+    ],
+    optionalSections: [
+      "safety_precautions",
+      "tip_box",
+      "real_world_connection",
+      "summary"
+    ],
+    activityFormat: {
+      includesIngredients: true,
+      includesEquipment: true,
+      includesProcedure: true,
+      includesSafetyNotes: true,
+      includesServingSuggestions: true
+    },
+    imageRequirements: {
+      typicalCount: 5,
+      types: ["photograph", "illustration", "diagram"],
+      suggestedPlacements: [
+        "showing cooking techniques",
+        "demonstrating proper hygiene",
+        "showing finished dishes",
+        "illustrating sewing/craft techniques"
+      ]
+    },
+    promptAdditions: `
 SUBJECT-SPECIFIC REQUIREMENTS FOR HOME SCIENCE:
 
 1. HYGIENE EMPHASIS:
@@ -300,9 +297,9 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR HOME SCIENCE:
    - Discuss proper handling of equipment
    - Include first aid basics where relevant
     `,
-        htmlStructureHints: `
+    htmlStructureHints: `
 <section class="practical-activity">
-  <h3>👩‍🍳 Practical Activity: [Recipe/Project Name]</h3>
+  <h3>Practical Activity: [Recipe/Project Name]</h3>
   
   <div class="ingredients">
     <strong>Ingredients:</strong>
@@ -335,43 +332,42 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR HOME SCIENCE:
 </section>
 
 <section class="hygiene-notes">
-  <h4>🧼 Hygiene Notes</h4>
+  <h4>Hygiene Notes</h4>
   <ul>
     <li>Always wash hands before cooking</li>
     <li>Clean all surfaces after use</li>
   </ul>
 </section>
     `
-    },
+  },
 
-    "English": {
-        name: "English",
-        requiredSections: [
-            "learning_outcomes",
-            "key_concepts",
-            "detailed_explanation",
-            "examples",
-            "activity",
-            "assessment"
-        ],
-        optionalSections: [
-            "note_box",
-            "tip_box",
-            "summary"
-        ],
-        activityFormat: {
-            includesReadingPassage: true,
-            includesProcedure: true
-        },
-        imageRequirements: {
-            typicalCount: 2,
-            types: ["illustration"],
-            suggestedPlacements: [
-                "accompanying reading passages",
-                "illustrating vocabulary"
-            ]
-        },
-        promptAdditions: `
+  "English": {
+    name: "English",
+    requiredSections: [
+      "learning_outcomes",
+      "key_concepts",
+      "detailed_explanation",
+      "examples",
+      "activity"
+    ],
+    optionalSections: [
+      "note_box",
+      "tip_box",
+      "summary"
+    ],
+    activityFormat: {
+      includesReadingPassage: true,
+      includesProcedure: true
+    },
+    imageRequirements: {
+      typicalCount: 2,
+      types: ["illustration"],
+      suggestedPlacements: [
+        "accompanying reading passages",
+        "illustrating vocabulary"
+      ]
+    },
+    promptAdditions: `
 SUBJECT-SPECIFIC REQUIREMENTS FOR ENGLISH:
 
 1. READING PASSAGES:
@@ -399,9 +395,9 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR ENGLISH:
    - Provide model answers where helpful
    - Include peer editing activities
     `,
-        htmlStructureHints: `
+    htmlStructureHints: `
 <section class="reading-passage">
-  <h4>📖 Reading Passage</h4>
+  <h4>Reading Passage</h4>
   <div class="passage-text">
     <p>The story text goes here...</p>
   </div>
@@ -414,7 +410,7 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR ENGLISH:
 </section>
 
 <section class="vocabulary">
-  <h4>📚 New Vocabulary</h4>
+  <h4>New Vocabulary</h4>
   <dl>
     <dt><strong>Word</strong></dt>
     <dd>Definition: meaning of the word</dd>
@@ -422,38 +418,37 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR ENGLISH:
   </dl>
 </section>
     `
-    },
+  },
 
-    "Mathematics": {
-        name: "Mathematics",
-        requiredSections: [
-            "learning_outcomes",
-            "key_concepts",
-            "detailed_explanation",
-            "examples",
-            "activity",
-            "assessment"
-        ],
-        optionalSections: [
-            "note_box",
-            "tip_box",
-            "summary"
-        ],
-        activityFormat: {
-            includesWorkedExamples: true,
-            includesProcedure: true,
-            includesMaterials: true
-        },
-        imageRequirements: {
-            typicalCount: 3,
-            types: ["diagram", "chart", "illustration"],
-            suggestedPlacements: [
-                "geometric shapes and figures",
-                "graphs and charts",
-                "real-world problem illustrations"
-            ]
-        },
-        promptAdditions: `
+  "Mathematics": {
+    name: "Mathematics",
+    requiredSections: [
+      "learning_outcomes",
+      "key_concepts",
+      "detailed_explanation",
+      "examples",
+      "activity"
+    ],
+    optionalSections: [
+      "note_box",
+      "tip_box",
+      "summary"
+    ],
+    activityFormat: {
+      includesWorkedExamples: true,
+      includesProcedure: true,
+      includesMaterials: true
+    },
+    imageRequirements: {
+      typicalCount: 3,
+      types: ["diagram", "chart", "illustration"],
+      suggestedPlacements: [
+        "geometric shapes and figures",
+        "graphs and charts",
+        "real-world problem illustrations"
+      ]
+    },
+    promptAdditions: `
 SUBJECT-SPECIFIC REQUIREMENTS FOR MATHEMATICS:
 
 1. WORKED EXAMPLES:
@@ -481,9 +476,9 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR MATHEMATICS:
    - Vary difficulty levels
    - Include word problems
     `,
-        htmlStructureHints: `
+    htmlStructureHints: `
 <section class="worked-example">
-  <h4>✏️ Worked Example</h4>
+  <h4>Worked Example</h4>
   <div class="problem">
     <strong>Problem:</strong> Calculate 234 + 567
   </div>
@@ -503,37 +498,36 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR MATHEMATICS:
 </section>
 
 <section class="practice-exercises">
-  <h4>📝 Practice Exercises</h4>
+  <h4>Practice Exercises</h4>
   <ol>
     <li>Calculate: 456 + 789 = ___</li>
     <li>Calculate: 321 + 654 = ___</li>
   </ol>
 </section>
     `
-    },
+  },
 
-    // Kiswahili follows similar pattern to English
-    "Kiswahili": {
-        name: "Kiswahili",
-        requiredSections: [
-            "learning_outcomes",
-            "key_concepts",
-            "detailed_explanation",
-            "examples",
-            "activity",
-            "assessment"
-        ],
-        optionalSections: ["note_box", "tip_box", "summary"],
-        activityFormat: {
-            includesReadingPassage: true,
-            includesProcedure: true
-        },
-        imageRequirements: {
-            typicalCount: 2,
-            types: ["illustration"],
-            suggestedPlacements: ["accompanying reading passages", "illustrating vocabulary"]
-        },
-        promptAdditions: `
+  // Kiswahili follows similar pattern to English
+  "Kiswahili": {
+    name: "Kiswahili",
+    requiredSections: [
+      "learning_outcomes",
+      "key_concepts",
+      "detailed_explanation",
+      "examples",
+      "activity"
+    ],
+    optionalSections: ["note_box", "tip_box", "summary"],
+    activityFormat: {
+      includesReadingPassage: true,
+      includesProcedure: true
+    },
+    imageRequirements: {
+      typicalCount: 2,
+      types: ["illustration"],
+      suggestedPlacements: ["accompanying reading passages", "illustrating vocabulary"]
+    },
+    promptAdditions: `
 SUBJECT-SPECIFIC REQUIREMENTS FOR KISWAHILI:
 
 1. Use proper Kiswahili grammar and vocabulary
@@ -543,9 +537,9 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR KISWAHILI:
 5. Include grammar exercises (sarufi)
 6. Use Kenyan cultural contexts
     `,
-        htmlStructureHints: `
+    htmlStructureHints: `
 <section class="kusoma">
-  <h4>📖 Kifungu cha Kusoma</h4>
+  <h4>Kifungu cha Kusoma</h4>
   <div class="hadithi">
     <p>Hadithi inaanza hapa...</p>
   </div>
@@ -557,7 +551,7 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR KISWAHILI:
   </div>
 </section>
     `
-    }
+  }
 };
 
 // ============================================
@@ -568,28 +562,28 @@ SUBJECT-SPECIFIC REQUIREMENTS FOR KISWAHILI:
  * Get the template for a specific subject
  */
 export function getSubjectTemplate(subject: string): SubjectTemplate {
-    const template = SUBJECT_TEMPLATES[subject];
-    if (!template) {
-        console.warn(`Subject "${subject}" not found, using Science & Technology as default`);
-        return SUBJECT_TEMPLATES["Science & Technology"];
-    }
-    return template;
+  const template = SUBJECT_TEMPLATES[subject];
+  if (!template) {
+    console.warn(`Subject "${subject}" not found, using Science & Technology as default`);
+    return SUBJECT_TEMPLATES["Science & Technology"];
+  }
+  return template;
 }
 
 /**
  * Get all required sections for a subject
  */
 export function getRequiredSections(subject: string): SectionType[] {
-    return getSubjectTemplate(subject).requiredSections;
+  return getSubjectTemplate(subject).requiredSections;
 }
 
 /**
  * Build subject-specific prompt instructions
  */
 export function buildSubjectInstructions(subject: string): string {
-    const template = getSubjectTemplate(subject);
+  const template = getSubjectTemplate(subject);
 
-    return `
+  return `
 SUBJECT: ${template.name}
 
 REQUIRED SECTIONS (must include all):
@@ -600,9 +594,9 @@ ${template.optionalSections.map(s => `- ${s.replace(/_/g, " ")}`).join("\n")}
 
 ACTIVITY FORMAT:
 ${Object.entries(template.activityFormat)
-            .filter(([_, v]) => v)
-            .map(([k, _]) => `- Include ${k.replace(/includes/, "").replace(/([A-Z])/g, " $1").toLowerCase().trim()}`)
-            .join("\n")}
+      .filter(([_, v]) => v)
+      .map(([k, _]) => `- Include ${k.replace(/includes/, "").replace(/([A-Z])/g, " $1").toLowerCase().trim()}`)
+      .join("\n")}
 
 IMAGE REQUIREMENTS:
 - Typically include ${template.imageRequirements.typicalCount} images per substrand
@@ -620,5 +614,5 @@ ${template.htmlStructureHints}
  * Get all available subjects
  */
 export function getAvailableSubjects(): string[] {
-    return Object.keys(SUBJECT_TEMPLATES);
+  return Object.keys(SUBJECT_TEMPLATES);
 }

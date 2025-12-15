@@ -1,11 +1,11 @@
 /**
- * Enhanced TextbookRenderer
+ * Enhanced TextbookRenderer - Professional Style
  * 
- * Renders textbook content with support for:
- * - Structured sections (activities, safety notes, tips)
- * - Image placeholders with AI descriptions
- * - Table of Contents navigation
- * - Enhanced styling for various content types
+ * Clean, professional textbook rendering:
+ * - No gradient backgrounds
+ * - Minimal colored containers
+ * - Text color changes for hierarchy
+ * - Traditional textbook appearance
  */
 
 "use client";
@@ -27,7 +27,7 @@ interface Props {
   content: string;
   sections?: TextbookSection[];
   images?: ImageMetadata[];
-  showImageDescriptions?: boolean;  // Admin mode to show AI descriptions
+  showImageDescriptions?: boolean;
 }
 
 // ============================================
@@ -73,7 +73,7 @@ export default function TextbookRenderer({
       const level = parseInt(h.tagName.charAt(1), 10);
       const text = h.textContent?.trim() || "";
 
-      // H1/H2 → Substrand Card
+      // H1/H2 - Substrand heading
       if (level === 1 || level === 2) {
         h2Count += 1;
         h3Count = 0;
@@ -81,19 +81,20 @@ export default function TextbookRenderer({
 
         const id = `substrand-${h2Count}-${slugify(text)}`;
 
+        // Professional card style - clean background
         const card = document.createElement("div");
-        card.className = "substrand-card mb-12 rounded-2xl bg-[#1a1a2e] border border-white/10 shadow-2xl overflow-hidden";
+        card.className = "substrand-card mb-10 rounded-lg bg-[#1e1e28] border border-white/10 overflow-hidden";
         card.id = id;
 
         const header = document.createElement("div");
-        header.className = "bg-gradient-to-r from-[#2a2a45] to-[#1a1a35] border-b border-white/10 px-8 py-6 flex items-center gap-5";
+        header.className = "bg-[#252532] border-b border-white/10 px-6 py-5 flex items-center gap-4";
 
         const badge = document.createElement("div");
-        badge.className = "flex items-center justify-center w-14 h-14 rounded-2xl bg-[#7c3aed]/40 text-[#c4b5fd] text-2xl font-bold shadow-lg";
+        badge.className = "flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 text-white/80 text-lg font-bold";
         badge.textContent = `${h2Count}`;
 
         const title = document.createElement("h2");
-        title.className = "text-3xl font-bold text-white m-0";
+        title.className = "text-2xl font-bold text-white m-0";
         title.textContent = text;
 
         header.appendChild(badge);
@@ -101,10 +102,9 @@ export default function TextbookRenderer({
         card.appendChild(header);
 
         const body = document.createElement("div");
-        body.className = "p-8 space-y-6";
+        body.className = "p-6 space-y-5";
         card.appendChild(body);
 
-        // Move everything until next heading
         let sibling = h.nextElementSibling;
         h.replaceWith(card);
         while (sibling && !headings.includes(sibling as any)) {
@@ -117,101 +117,94 @@ export default function TextbookRenderer({
         return;
       }
 
-      // H3 → Section heading
+      // H3 - Section heading
       if (level === 3) {
         h3Count += 1;
         h4Count = 0;
 
         const id = `section-${h2Count}-${h3Count}-${slugify(text)}`;
         h.id = id;
-        h.className = "text-2xl font-bold text-sky-300 mt-10 mb-4 flex items-center gap-3 scroll-mt-32";
-        h.innerHTML = `<span class="text-sky-500/70">${h2Count}.${h3Count}</span> ${h.innerHTML}`;
+        h.className = "text-xl font-bold text-sky-400 mt-8 mb-4 pb-2 border-b border-white/10 scroll-mt-32";
+        h.innerHTML = `<span class="text-white/50 mr-2">${h2Count}.${h3Count}</span> ${h.innerHTML}`;
 
         tocItems.push({ id, title: text, level: 3 });
         return;
       }
 
-      // H4 → Sub-section heading
+      // H4 - Sub-section heading
       if (level === 4) {
         h4Count += 1;
 
         const id = `sub-${h2Count}-${h3Count}-${h4Count}-${slugify(text)}`;
         h.id = id;
-        h.className = "text-xl font-semibold text-teal-300 mt-8 mb-3 flex items-center gap-3 scroll-mt-32";
-        h.innerHTML = `<span class="text-teal-500/70">${h2Count}.${h3Count}.${h4Count}</span> ${h.innerHTML}`;
+        h.className = "text-lg font-semibold text-teal-400 mt-6 mb-3 scroll-mt-32";
+        h.innerHTML = `<span class="text-white/40 mr-2">${h2Count}.${h3Count}.${h4Count}</span> ${h.innerHTML}`;
 
         tocItems.push({ id, title: text, level: 4 });
       }
     });
 
     // ========================================
-    // ENHANCED SECTION STYLING
+    // PROFESSIONAL SECTION STYLING
     // ========================================
 
-    // Activity sections
+    // Activity sections - subtle border only
     container.querySelectorAll("section.activity, .activity-box").forEach((section) => {
-      section.className = "activity-box my-8 rounded-2xl bg-gradient-to-br from-amber-900/30 to-orange-900/20 border border-amber-500/30 overflow-hidden p-6";
+      section.className = "activity-section my-6 p-5 rounded-lg border border-amber-500/30 bg-white/[0.02]";
 
-      // Style activity headings
       const heading = section.querySelector("h3, h4");
       if (heading) {
-        heading.className = "text-xl font-bold text-amber-300 flex items-center gap-3 mb-4";
-        heading.innerHTML = `<span class="text-amber-400 font-mono text-sm">[ACTIVITY]</span> ${heading.innerHTML}`;
+        heading.className = "text-lg font-bold text-amber-400 mb-4";
       }
     });
 
-    // Safety precautions
+    // Safety precautions - simple left border
     container.querySelectorAll("section.safety-precautions, .safety-precautions").forEach((section) => {
-      section.className = "safety-box my-6 p-5 rounded-xl bg-red-900/30 border border-red-500/30";
+      section.className = "safety-section my-5 p-4 border-l-4 border-red-500 bg-white/[0.02]";
 
       const heading = section.querySelector("h3, h4, strong");
       if (heading) {
-        heading.className = "text-lg font-bold text-red-400 flex items-center gap-2 mb-3";
-        if (!heading.innerHTML.includes("[SAFETY]")) {
-          heading.innerHTML = `<span class="text-red-400 font-mono text-sm">[SAFETY]</span> ${heading.innerHTML}`;
-        }
+        heading.className = "text-base font-bold text-red-400 mb-2";
       }
     });
 
-    // Note boxes
+    // Note boxes - simple left border
     container.querySelectorAll(".note-box, section.note").forEach((section) => {
-      section.className = "note-box my-6 p-5 rounded-xl bg-cyan-900/30 border-l-4 border-cyan-500 backdrop-blur-sm";
+      section.className = "note-section my-5 p-4 border-l-4 border-cyan-500 bg-white/[0.02]";
     });
 
     // Tip boxes
     container.querySelectorAll(".tip-box, section.tip").forEach((section) => {
-      section.className = "tip-box my-6 p-5 rounded-xl bg-emerald-900/30 border-l-4 border-emerald-500 backdrop-blur-sm";
+      section.className = "tip-section my-5 p-4 border-l-4 border-emerald-500 bg-white/[0.02]";
     });
 
     // Warning boxes
     container.querySelectorAll(".warning-box, section.warning").forEach((section) => {
-      section.className = "warning-box my-6 p-5 rounded-xl bg-red-900/30 border-l-4 border-red-500 backdrop-blur-sm";
+      section.className = "warning-section my-5 p-4 border-l-4 border-red-500 bg-white/[0.02]";
     });
 
     // Example boxes
     container.querySelectorAll(".example-box, section.examples").forEach((section) => {
-      section.className = "example-box my-6 p-5 rounded-xl bg-blue-900/30 border border-blue-500/30";
+      section.className = "example-section my-5 p-4 border-l-4 border-blue-500 bg-white/[0.02]";
     });
 
     // Learning outcomes
     container.querySelectorAll("section.learning-outcomes").forEach((section) => {
-      section.className = "learning-outcomes my-6 p-5 rounded-xl bg-purple-900/30 border border-purple-500/30";
+      section.className = "outcomes-section my-5 p-4 border border-purple-500/30 rounded-lg bg-white/[0.02]";
 
       const heading = section.querySelector("h3");
       if (heading) {
-        heading.className = "text-lg font-bold text-purple-400 flex items-center gap-2 mb-3";
-        heading.innerHTML = `<span class="text-purple-400 font-mono text-sm">[OUTCOMES]</span> ${heading.innerHTML}`;
+        heading.className = "text-base font-bold text-purple-400 mb-3";
       }
     });
 
     // Key concepts
     container.querySelectorAll("section.key-concepts").forEach((section) => {
-      section.className = "key-concepts my-6 p-5 rounded-xl bg-indigo-900/30 border border-indigo-500/30";
+      section.className = "concepts-section my-5 p-4 border border-indigo-500/30 rounded-lg bg-white/[0.02]";
 
       const heading = section.querySelector("h3");
       if (heading) {
-        heading.className = "text-lg font-bold text-indigo-400 flex items-center gap-2 mb-3";
-        heading.innerHTML = `<span class="text-indigo-400 font-mono text-sm">[KEY]</span> ${heading.innerHTML}`;
+        heading.className = "text-base font-bold text-indigo-400 mb-3";
       }
     });
 
@@ -219,24 +212,20 @@ export default function TextbookRenderer({
     // IMAGE HANDLING
     // ========================================
 
-    // Style image figures
     container.querySelectorAll("figure.image-figure, figure").forEach((figure) => {
-      figure.className = "image-figure my-8 text-center";
+      figure.className = "image-figure my-6 text-center";
     });
 
-    // Style images
     container.querySelectorAll("img").forEach((img) => {
-      img.className = "rounded-xl mx-auto block max-w-full h-auto shadow-lg border border-white/10";
+      img.className = "rounded-lg mx-auto block max-w-full h-auto border border-white/10";
     });
 
-    // Style image placeholders
     container.querySelectorAll(".image-placeholder").forEach((placeholder) => {
-      placeholder.className = "image-placeholder bg-gradient-to-br from-purple-900/30 to-blue-900/30 border-2 border-dashed border-purple-500/40 rounded-xl p-8 text-center";
+      placeholder.className = "image-placeholder border-2 border-dashed border-white/20 rounded-lg p-6 text-center my-6 bg-white/[0.02]";
     });
 
-    // Style figcaptions
     container.querySelectorAll("figcaption").forEach((cap) => {
-      cap.className = "mt-4 text-sm text-white/60 italic";
+      cap.className = "mt-3 text-sm text-white/60 italic";
     });
 
     // ========================================
@@ -246,49 +235,40 @@ export default function TextbookRenderer({
     // Tables
     container.querySelectorAll("table").forEach((table) => {
       const wrapper = document.createElement("div");
-      wrapper.className = "overflow-x-auto my-8 rounded-xl border border-white/10";
+      wrapper.className = "overflow-x-auto my-6 rounded-lg border border-white/10";
       table.parentElement?.insertBefore(wrapper, table);
       wrapper.appendChild(table);
 
       table.className = "w-full text-left border-collapse";
-      table.querySelector("thead")?.classList.add("bg-white/10");
+      table.querySelector("thead")?.classList.add("bg-white/5");
 
       table.querySelectorAll("th").forEach((th) =>
-        th.classList.add("px-5", "py-4", "font-bold", "text-white", "border-b", "border-white/10")
+        th.classList.add("px-4", "py-3", "font-bold", "text-white", "border-b", "border-white/10")
       );
       table.querySelectorAll("td").forEach((td) =>
-        td.classList.add("px-5", "py-4", "text-white/80", "border-b", "border-white/5")
+        td.classList.add("px-4", "py-3", "text-white/80", "border-b", "border-white/5")
       );
     });
 
     // Paragraphs
     container.querySelectorAll("p").forEach((p) => {
-      if (!p.closest(".activity-box") && !p.closest(".note-box") && !p.closest(".tip-box")) {
-        p.classList.add("my-4", "leading-relaxed", "text-white/90");
-      }
+      p.classList.add("my-3", "leading-relaxed", "text-white/85");
     });
 
     // Lists
     container.querySelectorAll("ul, ol").forEach((list) => {
       list.classList.add(
-        "my-4",
+        "my-3",
         "space-y-2",
-        "text-white/90",
+        "text-white/85",
         list.tagName === "UL" ? "list-disc" : "list-decimal",
         "list-inside"
       );
     });
 
-    // Ordered lists in procedures - special styling
-    container.querySelectorAll(".activity-box ol").forEach((list) => {
-      list.className = "space-y-3 list-none pl-0";
-      list.querySelectorAll("li").forEach((li, i) => {
-        li.className = "flex items-start gap-3 text-white/80";
-        const number = document.createElement("span");
-        number.className = "flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/30 text-amber-300 text-sm font-bold flex items-center justify-center";
-        number.textContent = `${i + 1}`;
-        li.insertBefore(number, li.firstChild);
-      });
+    // Strong/bold text
+    container.querySelectorAll("strong").forEach((strong) => {
+      strong.classList.add("text-white", "font-semibold");
     });
 
     return { formattedHtml: container.innerHTML, toc: tocItems };
@@ -308,27 +288,27 @@ export default function TextbookRenderer({
   // ========================================
 
   return (
-    <div className="text-white flex gap-10">
+    <div className="text-white flex gap-8">
       {/* Table of Contents Sidebar */}
       {toc.length > 0 && (
-        <aside className="sticky top-6 h-fit w-64 shrink-0 p-6 rounded-2xl bg-[#111] border border-white/10 hidden lg:block">
-          <div className="text-sm font-bold uppercase tracking-wider text-white/60 mb-4">
-            Table of Contents
+        <aside className="sticky top-6 h-fit w-60 shrink-0 p-5 rounded-lg bg-[#1e1e28] border border-white/10 hidden lg:block">
+          <div className="text-xs font-bold uppercase tracking-wider text-white/50 mb-4">
+            Contents
           </div>
 
-          <nav className="space-y-2 max-h-[60vh] overflow-y-auto">
+          <nav className="space-y-1 max-h-[60vh] overflow-y-auto text-sm">
             {toc.map((item, index) => {
               const padding =
-                item.level === 2 ? "pl-0" : item.level === 3 ? "pl-4" : "pl-8";
+                item.level === 2 ? "pl-0" : item.level === 3 ? "pl-3" : "pl-6";
 
               return (
                 <div key={item.id} className={padding}>
                   <a
                     href={`#${item.id}`}
-                    className="block py-1.5 text-sm text-white/70 hover:text-white transition-colors"
+                    className="block py-1 text-white/60 hover:text-white transition-colors"
                   >
                     {item.level === 2 && (
-                      <span className="text-[#c4b5fd] font-semibold mr-2">
+                      <span className="text-sky-400 font-medium mr-1">
                         {toc.filter((t, i) => t.level === 2 && i <= index).length}.
                       </span>
                     )}
@@ -347,20 +327,20 @@ export default function TextbookRenderer({
 
         {/* Image descriptions panel (admin only) */}
         {showImageDescriptions && images.length > 0 && (
-          <div className="mt-12 p-6 rounded-2xl bg-[#111] border border-white/10">
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              <span className="text-purple-400 font-mono text-sm">[AI]</span> Image Descriptions ({images.length})
+          <div className="mt-10 p-5 rounded-lg bg-[#1e1e28] border border-white/10">
+            <h3 className="text-base font-bold text-white mb-4">
+              Image Descriptions ({images.length})
             </h3>
-            <div className="space-y-4">
-              {images.map((img, i) => (
-                <div key={img.id} className="p-4 bg-black/30 rounded-xl border border-white/5">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="px-2 py-1 bg-purple-500/30 text-purple-300 text-xs rounded">
+            <div className="space-y-3">
+              {images.map((img) => (
+                <div key={img.id} className="p-3 bg-white/[0.03] rounded border border-white/5">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="px-2 py-0.5 bg-white/10 text-white/70 text-xs rounded">
                       {img.type}
                     </span>
-                    <span className="text-white/60 text-sm">{img.caption}</span>
+                    <span className="text-white/50 text-sm">{img.caption}</span>
                   </div>
-                  <p className="text-white/70 text-sm">{img.description}</p>
+                  <p className="text-white/60 text-sm">{img.description}</p>
                 </div>
               ))}
             </div>

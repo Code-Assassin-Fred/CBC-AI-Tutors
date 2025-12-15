@@ -424,6 +424,12 @@ ${languageInstructions}
 
 ${subjectInstructions}
 
+CRITICAL RULES:
+1. DO NOT include any quizzes, tests, assessments, or evaluation sections
+2. DO NOT use any emojis or emoticons anywhere in the content
+3. Keep the style clean and professional like a traditional printed textbook
+4. Focus on teaching content only: explanations, examples, activities, and key concepts
+
 IMAGE PLACEHOLDERS:
 Insert image placeholders using: [IMAGE: detailed description of what the image should show]
 Include ${template.imageRequirements?.typicalCount || 3} images minimum.
@@ -434,6 +440,7 @@ HTML STRUCTURE:
 - Use <h4> for sub-sections
 - Use <section class="[type]"> wrappers
 - Use <ul>/<ol> for lists
+- NO emoji icons in headings or content
 
 Return ONLY clean HTML. Write comprehensive, engaging content.
   `.trim();
@@ -456,13 +463,18 @@ Include sections:
 2. Prior Knowledge
 3. Key Concepts & Development
 4. Teaching Experiences
-5. Differentiation
-6. Assessment
-7. Common Misconceptions
-8. Cross-Curricular Links
-9. Community Connections
+5. Differentiation Strategies
+6. Common Misconceptions
+7. Cross-Curricular Links
+8. Community Connections
 
-Return ONLY clean HTML with <section> wrappers.
+CRITICAL RULES:
+- DO NOT include formal assessments, quizzes, or tests
+- DO NOT use any emojis or emoticons
+- Keep the style professional and clean
+- Focus on teaching guidance only
+
+Return ONLY clean HTML with <section> wrappers. NO emojis.
   `.trim();
 }
 

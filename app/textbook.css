@@ -1,14 +1,43 @@
-/* app/textbook.css */
+/* app/textbook.css - Professional Style */
 
-/* Dark-mode callouts – exact match to CBC AI Tutors */
-.callout-note     { @apply my-6 p-5 rounded-xl bg-cyan-900/30 border-l-4 border-cyan-500 backdrop-blur-sm; }
-.callout-tip      { @apply my-6 p-5 rounded-xl bg-sky-900/30 border-l-4 border-sky-500 backdrop-blur-sm; }
-.callout-example  { @apply my-6 p-5 rounded-xl bg-blue-900/30 border-l-4 border-blue-500 backdrop-blur-sm; }
-.callout-key      { @apply my-6 p-5 rounded-xl bg-emerald-900/30 border-l-4 border-emerald-500 backdrop-blur-sm; }
-.callout-activity { @apply my-6 p-5 rounded-xl bg-amber-900/30 border-l-4 border-amber-500 backdrop-blur-sm; }
-.callout-exercise { @apply my-6 p-5 rounded-xl bg-amber-900/30 border-l-4 border-amber-500 backdrop-blur-sm; }
+/* ============================================
+   PROFESSIONAL CALLOUT BOXES
+   Clean style with left borders only, no gradients
+   ============================================ */
 
-/* Optional: keep your light textbook styles if you ever want a light mode */
+.callout-note {
+  @apply my-5 p-4 rounded-lg border-l-4 border-cyan-500 bg-white/[0.02];
+}
+
+.callout-tip {
+  @apply my-5 p-4 rounded-lg border-l-4 border-emerald-500 bg-white/[0.02];
+}
+
+.callout-example {
+  @apply my-5 p-4 rounded-lg border-l-4 border-blue-500 bg-white/[0.02];
+}
+
+.callout-key {
+  @apply my-5 p-4 rounded-lg border-l-4 border-indigo-500 bg-white/[0.02];
+}
+
+.callout-activity {
+  @apply my-5 p-4 rounded-lg border border-amber-500/30 bg-white/[0.02];
+}
+
+.callout-exercise {
+  @apply my-5 p-4 rounded-lg border border-amber-500/30 bg-white/[0.02];
+}
+
+.callout-warning {
+  @apply my-5 p-4 rounded-lg border-l-4 border-red-500 bg-white/[0.02];
+}
+
+/* ============================================
+   LIGHT MODE TEXTBOOK STYLES
+   Traditional print-friendly appearance
+   ============================================ */
+
 .textbook-body {
   background: #ffffff;
   color: #111;
@@ -19,41 +48,167 @@
   line-height: 1.65;
 }
 
-.textbook-body h1 { font-size: 2.2rem; font-weight: 700; margin: 2.5rem 0 1.2rem; text-align: center; color: #0b3a75; }
-.textbook-body h2 { font-size: 1.8rem; font-weight: 700; margin: 2rem 0 1rem; color: #0d4d8b; border-bottom: 2px solid #e5e7eb; padding-bottom: 4px; }
-.textbook-body h3 { font-size: 1.4rem; font-weight: 600; margin: 1.4rem 0 0.8rem; color: #0f548c; }
-.textbook-body p  { margin: 0.7rem 0; font-size: 1.05rem; }
-.textbook-body ul, .textbook-body ol { margin: 1rem 0 1rem 2rem; }
-.textbook-body li { margin: 0.4rem 0; }
-.textbook-body img { max-width: 100%; display: block; margin: 1.5rem auto; border-radius: 8px; }
-.textbook-body pre { @apply bg-gray-100 p-4 rounded-lg overflow-x-auto; }
+.textbook-body h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 2.5rem 0 1.2rem;
+  text-align: center;
+  color: #0b3a75;
+}
 
-/* Generation Progress Animations */
+.textbook-body h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem;
+  color: #0d4d8b;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 4px;
+}
+
+.textbook-body h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 1.4rem 0 0.8rem;
+  color: #0f548c;
+}
+
+.textbook-body p {
+  margin: 0.7rem 0;
+  font-size: 1.05rem;
+}
+
+.textbook-body ul,
+.textbook-body ol {
+  margin: 1rem 0 1rem 2rem;
+}
+
+.textbook-body li {
+  margin: 0.4rem 0;
+}
+
+.textbook-body img {
+  max-width: 100%;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 8px;
+}
+
+.textbook-body pre {
+  @apply bg-gray-100 p-4 rounded-lg overflow-x-auto;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out;
 }
 
-/* Substrand divider */
+/* ============================================
+   SUBSTRAND DIVIDER
+   Simple line, no gradient
+   ============================================ */
+
 .substrand-divider {
-  @apply my-12 border-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent;
+  @apply my-10 border-0 h-px bg-white/10;
 }
 
-/* Image placeholder styling */
+/* ============================================
+   IMAGE PLACEHOLDERS
+   Clean border style, no gradient
+   ============================================ */
+
 .image-placeholder {
-  @apply bg-gradient-to-br from-purple-900/30 to-blue-900/30 
-         border-2 border-dashed border-purple-500/40 
-         rounded-xl p-8 text-center my-6;
+  @apply border-2 border-dashed border-white/20 rounded-lg p-6 text-center my-5 bg-white/[0.02];
 }
 
 .image-placeholder .placeholder-icon {
-  @apply text-4xl mb-2 block;
+  @apply text-white/40 mb-2 block;
 }
 
 .image-placeholder .placeholder-text {
-  @apply text-white/60 text-sm;
+  @apply text-white/50 text-sm;
+}
+
+/* ============================================
+   SECTION STYLES
+   Professional, minimal styling
+   ============================================ */
+
+.section-activity {
+  @apply my-5 p-4 rounded-lg border border-amber-500/30 bg-white/[0.02];
+}
+
+.section-safety {
+  @apply my-5 p-4 border-l-4 border-red-500 bg-white/[0.02];
+}
+
+.section-note {
+  @apply my-5 p-4 border-l-4 border-cyan-500 bg-white/[0.02];
+}
+
+.section-tip {
+  @apply my-5 p-4 border-l-4 border-emerald-500 bg-white/[0.02];
+}
+
+.section-warning {
+  @apply my-5 p-4 border-l-4 border-red-500 bg-white/[0.02];
+}
+
+.section-example {
+  @apply my-5 p-4 border-l-4 border-blue-500 bg-white/[0.02];
+}
+
+.section-outcomes {
+  @apply my-5 p-4 border border-purple-500/30 rounded-lg bg-white/[0.02];
+}
+
+.section-concepts {
+  @apply my-5 p-4 border border-indigo-500/30 rounded-lg bg-white/[0.02];
+}
+
+/* ============================================
+   TABLE STYLES
+   Clean, professional tables
+   ============================================ */
+
+.textbook-table {
+  @apply w-full text-left border-collapse my-5;
+}
+
+.textbook-table th {
+  @apply px-4 py-3 font-bold text-white bg-white/5 border-b border-white/10;
+}
+
+.textbook-table td {
+  @apply px-4 py-3 text-white/80 border-b border-white/5;
+}
+
+/* ============================================
+   FIGURE & IMAGE STYLES
+   ============================================ */
+
+.textbook-figure {
+  @apply my-6 text-center;
+}
+
+.textbook-figure img {
+  @apply rounded-lg mx-auto block max-w-full h-auto border border-white/10;
+}
+
+.textbook-figure figcaption {
+  @apply mt-3 text-sm text-white/60 italic;
 }
