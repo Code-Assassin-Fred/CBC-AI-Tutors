@@ -36,6 +36,7 @@ interface TextbookData {
   grade?: string;
   subject?: string;
   strand?: string;
+  images?: any[];
 }
 
 interface LessonCanvasProps {
@@ -177,6 +178,7 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
         ) : textbook?.exists && textbook.student_html ? (
           <StudentTextbookRenderer
             content={textbook.student_html}
+            images={textbook.images || []}
             onTocUpdate={(items) => {
               setToc(items);
               if (onTocUpdate) onTocUpdate(items);

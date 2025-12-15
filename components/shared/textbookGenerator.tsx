@@ -69,6 +69,7 @@ export default function GeneratePage() {
 
   const [learnerHtml, setLearnerHtml] = useState<string>("");
   const [teacherHtml, setTeacherHtml] = useState<string>("");
+  const [images, setImages] = useState<any[]>([]);
   const [mode, setMode] = useState<"Learner" | "Teacher">("Learner");
   const [isGenerating, setIsGenerating] = useState(false);
   const [useStreaming, setUseStreaming] = useState(true); // Toggle for streaming mode
@@ -119,6 +120,7 @@ export default function GeneratePage() {
           if (data.exists) {
             setLearnerHtml(data.student_html || "");
             setTeacherHtml(data.teacher_html || "");
+            setImages(data.images || []);
             setMode("Learner");
           }
         }
@@ -321,6 +323,7 @@ export default function GeneratePage() {
             <div className="p-8 overflow-auto max-h-[80vh] bg-gradient-to-br from-[#0E0E10] to-[#1a1a1c]">
               <TextbookRenderer
                 content={mode === "Learner" ? learnerHtml : teacherHtml}
+                images={images}
                 showImageDescriptions={true}
               />
             </div>
