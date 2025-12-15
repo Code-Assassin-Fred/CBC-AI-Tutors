@@ -63,15 +63,15 @@ export default function ImageFigure({
                     loading="lazy"
                 />
             ) : (
-                <div className="image-placeholder bg-gradient-to-br from-purple-900/30 to-blue-900/30 border-2 border-dashed border-purple-500/40 rounded-xl p-8 text-center">
+                <div className="image-placeholder bg-white/[0.02] border-2 border-dashed border-white/20 rounded-xl p-8 text-center">
                     <div className="flex flex-col items-center gap-4">
                         {/* Placeholder Icon */}
-                        <div className="w-16 h-16 rounded-full bg-purple-500/20 flex items-center justify-center">
+                        <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
                             <ImagePlaceholderIcon />
                         </div>
 
                         {/* Image Type Badge */}
-                        <span className="px-3 py-1 bg-purple-500/30 text-purple-300 text-xs font-medium rounded-full uppercase">
+                        <span className="px-3 py-1 bg-white/10 text-white/60 text-xs font-medium rounded-full uppercase">
                             {image.type}
                         </span>
 
