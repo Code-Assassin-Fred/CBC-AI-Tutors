@@ -156,7 +156,7 @@ export default function TextbookRenderer({
       const heading = section.querySelector("h3, h4");
       if (heading) {
         heading.className = "text-xl font-bold text-amber-300 flex items-center gap-3 mb-4";
-        heading.innerHTML = `<span class="text-2xl">🔬</span> ${heading.innerHTML}`;
+        heading.innerHTML = `<span class="text-amber-400 font-mono text-sm">[ACTIVITY]</span> ${heading.innerHTML}`;
       }
     });
 
@@ -167,8 +167,8 @@ export default function TextbookRenderer({
       const heading = section.querySelector("h3, h4, strong");
       if (heading) {
         heading.className = "text-lg font-bold text-red-400 flex items-center gap-2 mb-3";
-        if (!heading.innerHTML.includes("⚠️")) {
-          heading.innerHTML = `<span>⚠️</span> ${heading.innerHTML}`;
+        if (!heading.innerHTML.includes("[SAFETY]")) {
+          heading.innerHTML = `<span class="text-red-400 font-mono text-sm">[SAFETY]</span> ${heading.innerHTML}`;
         }
       }
     });
@@ -200,7 +200,7 @@ export default function TextbookRenderer({
       const heading = section.querySelector("h3");
       if (heading) {
         heading.className = "text-lg font-bold text-purple-400 flex items-center gap-2 mb-3";
-        heading.innerHTML = `<span>🎯</span> ${heading.innerHTML}`;
+        heading.innerHTML = `<span class="text-purple-400 font-mono text-sm">[OUTCOMES]</span> ${heading.innerHTML}`;
       }
     });
 
@@ -211,7 +211,7 @@ export default function TextbookRenderer({
       const heading = section.querySelector("h3");
       if (heading) {
         heading.className = "text-lg font-bold text-indigo-400 flex items-center gap-2 mb-3";
-        heading.innerHTML = `<span>💡</span> ${heading.innerHTML}`;
+        heading.innerHTML = `<span class="text-indigo-400 font-mono text-sm">[KEY]</span> ${heading.innerHTML}`;
       }
     });
 
@@ -349,7 +349,7 @@ export default function TextbookRenderer({
         {showImageDescriptions && images.length > 0 && (
           <div className="mt-12 p-6 rounded-2xl bg-[#111] border border-white/10">
             <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              <span>🤖</span> AI Image Descriptions ({images.length})
+              <span className="text-purple-400 font-mono text-sm">[AI]</span> Image Descriptions ({images.length})
             </h3>
             <div className="space-y-4">
               {images.map((img, i) => (

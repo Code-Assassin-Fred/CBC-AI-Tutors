@@ -144,7 +144,7 @@ export default function StudentTextbookRenderer({
       const heading = section.querySelector("h3, h4");
       if (heading) {
         heading.className = "text-lg font-bold text-amber-300 flex items-center gap-2 mb-3";
-        heading.innerHTML = `<span>🔬</span> ${heading.innerHTML}`;
+        heading.innerHTML = `<span class="text-amber-400 font-mono text-xs">[ACTIVITY]</span> ${heading.innerHTML}`;
       }
     });
 
@@ -155,8 +155,8 @@ export default function StudentTextbookRenderer({
       const heading = section.querySelector("h3, h4, strong");
       if (heading) {
         heading.className = "text-base font-bold text-red-400 flex items-center gap-2 mb-2";
-        if (!heading.innerHTML.includes("⚠️")) {
-          heading.innerHTML = `<span>⚠️</span> ${heading.innerHTML}`;
+        if (!heading.innerHTML.includes("[SAFETY]")) {
+          heading.innerHTML = `<span class="text-red-400 font-mono text-xs">[SAFETY]</span> ${heading.innerHTML}`;
         }
       }
     });
@@ -188,7 +188,7 @@ export default function StudentTextbookRenderer({
       const heading = section.querySelector("h3");
       if (heading) {
         heading.className = "text-base font-bold text-purple-400 flex items-center gap-2 mb-2";
-        heading.innerHTML = `<span>🎯</span> ${heading.innerHTML}`;
+        heading.innerHTML = `<span class="text-purple-400 font-mono text-xs">[OUTCOMES]</span> ${heading.innerHTML}`;
       }
     });
 
@@ -199,7 +199,7 @@ export default function StudentTextbookRenderer({
       const heading = section.querySelector("h3");
       if (heading) {
         heading.className = "text-base font-bold text-indigo-400 flex items-center gap-2 mb-2";
-        heading.innerHTML = `<span>💡</span> ${heading.innerHTML}`;
+        heading.innerHTML = `<span class="text-indigo-400 font-mono text-xs">[KEY]</span> ${heading.innerHTML}`;
       }
     });
 

@@ -27,3 +27,33 @@
 .textbook-body li { margin: 0.4rem 0; }
 .textbook-body img { max-width: 100%; display: block; margin: 1.5rem auto; border-radius: 8px; }
 .textbook-body pre { @apply bg-gray-100 p-4 rounded-lg overflow-x-auto; }
+
+/* Generation Progress Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Substrand divider */
+.substrand-divider {
+  @apply my-12 border-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent;
+}
+
+/* Image placeholder styling */
+.image-placeholder {
+  @apply bg-gradient-to-br from-purple-900/30 to-blue-900/30 
+         border-2 border-dashed border-purple-500/40 
+         rounded-xl p-8 text-center my-6;
+}
+
+.image-placeholder .placeholder-icon {
+  @apply text-4xl mb-2 block;
+}
+
+.image-placeholder .placeholder-text {
+  @apply text-white/60 text-sm;
+}
