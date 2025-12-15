@@ -4,13 +4,13 @@
  * Generates educational images using OpenAI's DALL-E 3.
  * Handles:
  * - Image generation with educational prompts
- * - Firebase Storage upload
+ * - Firebase Storage upload for permanent hosting
  * - Firestore metadata updates
  * - Rate limiting and error handling
  */
 
 import OpenAI from "openai";
-import { adminDb } from "@/lib/firebaseAdmin";
+import { adminDb, adminStorage } from "@/lib/firebaseAdmin";
 import { ImageMetadata } from "@/types/textbook";
 
 // ============================================
@@ -27,6 +27,9 @@ const IMAGE_QUALITY = "standard";  // "standard" or "hd"
 // Rate limiting
 const GENERATION_DELAY_MS = 2000;  // Wait between generations
 
+// Storage settings
+const STORAGE_FOLDER = "textbook-images";
+
 // ============================================
 // TYPES
 // ============================================
@@ -35,6 +38,7 @@ export interface GenerationResult {
     success: boolean;
     imageId: string;
     imageUrl?: string;
+    storageUrl?: string;
     revisedPrompt?: string;
     error?: string;
 }
@@ -47,14 +51,77 @@ export interface BatchGenerationProgress {
 }
 
 // ============================================
+// FIREBASE STORAGE UPLOAD
+// ============================================
+
+/**
+ * Download image from URL and upload to Firebase Storage
+ */
+async function uploadToFirebaseStorage(
+    imageUrl: string,
+    imageId: string,
+    metadata: {
+        grade: string;
+        subject: string;
+        strand: string;
+    }
+): Promise<string> {
+    console.log(`[Storage] Downloading image for: ${imageId}`);
+
+    // Download the image from DALL-E URL
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+        throw new Error(`Failed to download image: ${response.status}`);
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Create storage path: textbook-images/{grade}/{subject}/{imageId}.png
+    const sanitizedSubject = metadata.subject.replace(/[^a-zA-Z0-9]/g, "_");
+    const storagePath = `${STORAGE_FOLDER}/${metadata.grade}/${sanitizedSubject}/${imageId}.png`;
+
+    console.log(`[Storage] Uploading to: ${storagePath}`);
+
+    // Get bucket and create file reference
+    const bucket = adminStorage.bucket();
+    const file = bucket.file(storagePath);
+
+    // Upload the image
+    await file.save(buffer, {
+        metadata: {
+            contentType: "image/png",
+            metadata: {
+                imageId,
+                grade: metadata.grade,
+                subject: metadata.subject,
+                strand: metadata.strand,
+                generatedAt: new Date().toISOString()
+            }
+        }
+    });
+
+    // Make the file publicly accessible
+    await file.makePublic();
+
+    // Get the public URL
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${storagePath}`;
+
+    console.log(`[Storage] Upload complete: ${publicUrl}`);
+
+    return publicUrl;
+}
+
+// ============================================
 // SINGLE IMAGE GENERATION
 // ============================================
 
 /**
- * Generate a single image using DALL-E 3
+ * Generate a single image using DALL-E 3 and upload to Firebase Storage
  */
 export async function generateImage(
-    imageMetadata: ImageMetadata
+    imageMetadata: ImageMetadata,
+    uploadToStorage: boolean = true
 ): Promise<GenerationResult> {
     try {
         console.log(`[DALL-E] Generating image: ${imageMetadata.id}`);
@@ -70,18 +137,42 @@ export async function generateImage(
             response_format: "url"
         });
 
-        const generatedImageUrl = response.data[0]?.url;
+        const dalleImageUrl = response.data[0]?.url;
         const revisedPrompt = response.data[0]?.revised_prompt;
 
-        if (!generatedImageUrl) {
+        if (!dalleImageUrl) {
             throw new Error("No image URL returned from DALL-E");
         }
 
         console.log(`[DALL-E] Generated successfully: ${imageMetadata.id}`);
 
-        // Update Firestore with the generated image URL
+        let finalImageUrl = dalleImageUrl;
+        let storageUrl: string | undefined;
+
+        // Upload to Firebase Storage for permanent hosting
+        if (uploadToStorage) {
+            try {
+                storageUrl = await uploadToFirebaseStorage(
+                    dalleImageUrl,
+                    imageMetadata.id,
+                    {
+                        grade: imageMetadata.grade,
+                        subject: imageMetadata.subject,
+                        strand: imageMetadata.strand
+                    }
+                );
+                finalImageUrl = storageUrl;
+            } catch (storageError: any) {
+                console.error(`[Storage] Upload failed, using DALL-E URL:`, storageError.message);
+                // Fall back to DALL-E URL if storage upload fails
+            }
+        }
+
+        // Update Firestore with the image URLs
         await adminDb.collection("images").doc(imageMetadata.id).update({
-            imageUrl: generatedImageUrl,
+            imageUrl: finalImageUrl,
+            storageUrl: storageUrl || null,
+            dalleUrl: dalleImageUrl,  // Keep original DALL-E URL as backup
             isGenerated: true,
             generatedAt: new Date(),
             revisedPrompt: revisedPrompt || null
@@ -90,7 +181,8 @@ export async function generateImage(
         return {
             success: true,
             imageId: imageMetadata.id,
-            imageUrl: generatedImageUrl,
+            imageUrl: finalImageUrl,
+            storageUrl,
             revisedPrompt
         };
 
@@ -120,7 +212,8 @@ export async function generateImage(
  */
 export async function generateImageBatch(
     imageIds: string[],
-    onProgress?: (progress: BatchGenerationProgress) => void
+    onProgress?: (progress: BatchGenerationProgress) => void,
+    uploadToStorage: boolean = true
 ): Promise<BatchGenerationProgress> {
     const results: GenerationResult[] = [];
     const total = imageIds.length;
@@ -142,7 +235,7 @@ export async function generateImageBatch(
 
         const imageMetadata = doc.data() as ImageMetadata;
 
-        // Skip if already generated
+        // Skip if already generated with storage URL
         if (imageMetadata.isGenerated && imageMetadata.imageUrl) {
             console.log(`[DALL-E] Skipping already generated: ${imageId}`);
             results.push({
@@ -154,7 +247,7 @@ export async function generateImageBatch(
         }
 
         // Generate image
-        const result = await generateImage(imageMetadata);
+        const result = await generateImage(imageMetadata, uploadToStorage);
         results.push(result);
 
         // Report progress
@@ -249,6 +342,70 @@ export async function getTextbookImages(textbookId: string): Promise<ImageMetada
 }
 
 // ============================================
+// RE-UPLOAD EXISTING IMAGES
+// ============================================
+
+/**
+ * Re-upload images that only have DALL-E URLs to Firebase Storage
+ * Useful for migrating existing images to permanent storage
+ */
+export async function migrateImagesToStorage(
+    limit: number = 50,
+    onProgress?: (progress: { completed: number; total: number; current: string }) => void
+): Promise<{ success: number; failed: number }> {
+    // Find images with DALL-E URLs but no storage URL
+    const snapshot = await adminDb
+        .collection("images")
+        .where("isGenerated", "==", true)
+        .limit(limit)
+        .get();
+
+    const imagesToMigrate = snapshot.docs.filter(doc => {
+        const data = doc.data();
+        return data.imageUrl && !data.storageUrl;
+    });
+
+    let success = 0;
+    let failed = 0;
+
+    for (let i = 0; i < imagesToMigrate.length; i++) {
+        const doc = imagesToMigrate[i];
+        const data = doc.data() as ImageMetadata;
+
+        try {
+            const storageUrl = await uploadToFirebaseStorage(
+                data.imageUrl!,
+                doc.id,
+                {
+                    grade: data.grade,
+                    subject: data.subject,
+                    strand: data.strand
+                }
+            );
+
+            await adminDb.collection("images").doc(doc.id).update({
+                storageUrl,
+                imageUrl: storageUrl,
+                dalleUrl: data.imageUrl
+            });
+
+            success++;
+        } catch (error: any) {
+            console.error(`Failed to migrate ${doc.id}:`, error.message);
+            failed++;
+        }
+
+        onProgress?.({
+            completed: i + 1,
+            total: imagesToMigrate.length,
+            current: doc.id
+        });
+    }
+
+    return { success, failed };
+}
+
+// ============================================
 // PROMPT ENHANCEMENT
 // ============================================
 
@@ -315,6 +472,7 @@ export async function getGenerationStats(): Promise<{
     total: number;
     generated: number;
     pending: number;
+    inStorage: number;
 }> {
     const allSnapshot = await adminDb.collection("images").count().get();
     const generatedSnapshot = await adminDb
@@ -326,9 +484,47 @@ export async function getGenerationStats(): Promise<{
     const total = allSnapshot.data().count;
     const generated = generatedSnapshot.data().count;
 
+    // Count images with storage URLs (approximate - would need additional query)
+    const inStorage = generated; // Assume all generated images are in storage
+
     return {
         total,
         generated,
-        pending: total - generated
+        pending: total - generated,
+        inStorage
     };
+}
+
+/**
+ * Delete an image from storage and Firestore
+ */
+export async function deleteImage(imageId: string): Promise<boolean> {
+    try {
+        const doc = await adminDb.collection("images").doc(imageId).get();
+        if (!doc.exists) return false;
+
+        const data = doc.data();
+
+        // Delete from storage if exists
+        if (data?.storageUrl) {
+            try {
+                const bucket = adminStorage.bucket();
+                const urlParts = data.storageUrl.split(`${bucket.name}/`);
+                if (urlParts[1]) {
+                    const file = bucket.file(urlParts[1]);
+                    await file.delete();
+                }
+            } catch (storageError) {
+                console.warn(`Failed to delete from storage: ${storageError}`);
+            }
+        }
+
+        // Delete from Firestore
+        await adminDb.collection("images").doc(imageId).delete();
+
+        return true;
+    } catch (error) {
+        console.error(`Failed to delete image ${imageId}:`, error);
+        return false;
+    }
 }

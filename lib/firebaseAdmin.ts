@@ -5,30 +5,35 @@ if (!admin.apps.length) {
   const projectId = process.env.FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
   const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
-  
+  const storageBucket = process.env.FIREBASE_STORAGE_BUCKET || `${projectId}.appspot.com`;
+
   if (!projectId || !clientEmail || !privateKey) {
     throw new Error('Missing Firebase Admin credentials. Please check FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, and FIREBASE_PRIVATE_KEY environment variables.');
   }
-  
+
   console.log('[firebaseAdmin] Initializing Firebase Admin SDK:', {
     projectId,
     clientEmail,
     hasPrivateKey: !!privateKey,
+    storageBucket,
   });
-  
+
   admin.initializeApp({
     credential: admin.credential.cert({
       projectId,
       clientEmail,
       privateKey,
     }),
+    storageBucket,
   });
-  
+
   console.log('[firebaseAdmin] Firebase Admin SDK initialized successfully');
 }
 
 export const adminAuth = admin.auth();
 export const adminDb = admin.firestore();
+export const adminStorage = admin.storage();
+
 // Ignore undefined fields in writes to avoid Firestore validation errors
 // This must be set before any Firestore operations are performed.
 try {

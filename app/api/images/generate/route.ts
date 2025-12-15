@@ -19,7 +19,9 @@ import {
     generateTextbookImages,
     getPendingImages,
     getGenerationStats,
-    getTextbookImages
+    getTextbookImages,
+    migrateImagesToStorage,
+    deleteImage
 } from "@/lib/api/imageGeneration";
 import { adminDb } from "@/lib/firebaseAdmin";
 import { ImageMetadata } from "@/types/textbook";
@@ -31,7 +33,7 @@ import { ImageMetadata } from "@/types/textbook";
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { mode, textbookId, imageIds, imageId } = body;
+        const { mode, textbookId, imageIds, imageId, limit } = body;
 
         // Single image generation
         if (mode === "single" && imageId) {
@@ -73,7 +75,7 @@ export async function POST(req: NextRequest) {
 
         // Generate all pending images
         if (mode === "pending") {
-            const pendingImages = await getPendingImages(body.limit || 10);
+            const pendingImages = await getPendingImages(limit || 10);
 
             if (pendingImages.length === 0) {
                 return NextResponse.json({
@@ -85,8 +87,8 @@ export async function POST(req: NextRequest) {
                 });
             }
 
-            const imageIds = pendingImages.map(img => img.id);
-            const results = await generateImageBatch(imageIds);
+            const pendingIds = pendingImages.map(img => img.id);
+            const results = await generateImageBatch(pendingIds);
 
             return NextResponse.json({
                 success: true,
@@ -94,8 +96,30 @@ export async function POST(req: NextRequest) {
             });
         }
 
+        // Migrate existing images to Firebase Storage
+        if (mode === "migrate") {
+            const results = await migrateImagesToStorage(limit || 50);
+
+            return NextResponse.json({
+                message: `Migrated ${results.success} images to Firebase Storage, ${results.failed} failed`,
+                migratedCount: results.success,
+                failedCount: results.failed
+            });
+        }
+
+        // Delete an image
+        if (mode === "delete" && imageId) {
+            const success = await deleteImage(imageId);
+
+            return NextResponse.json({
+                success,
+                imageId,
+                message: success ? "Image deleted" : "Failed to delete image"
+            });
+        }
+
         return NextResponse.json(
-            { error: "Invalid mode. Use: single, batch, textbook, or pending" },
+            { error: "Invalid mode. Use: single, batch, textbook, pending, migrate, or delete" },
             { status: 400 }
         );
 
