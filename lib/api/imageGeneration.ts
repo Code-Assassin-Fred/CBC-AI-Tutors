@@ -84,7 +84,9 @@ async function uploadToFirebaseStorage(
     console.log(`[Storage] Uploading to: ${storagePath}`);
 
     // Get bucket and create file reference
-    const bucket = adminStorage.bucket();
+    // Explicitly use bucket name to avoid "Bucket name not specified" error
+    const bucketName = process.env.FIREBASE_STORAGE_BUCKET || `${process.env.FIREBASE_PROJECT_ID}.appspot.com`;
+    const bucket = adminStorage.bucket(bucketName);
     const file = bucket.file(storagePath);
 
     // Upload the image
@@ -137,8 +139,8 @@ export async function generateImage(
             response_format: "url"
         });
 
-        const dalleImageUrl = response.data[0]?.url;
-        const revisedPrompt = response.data[0]?.revised_prompt;
+        const dalleImageUrl = response.data?.[0]?.url;
+        const revisedPrompt = response.data?.[0]?.revised_prompt;
 
         if (!dalleImageUrl) {
             throw new Error("No image URL returned from DALL-E");

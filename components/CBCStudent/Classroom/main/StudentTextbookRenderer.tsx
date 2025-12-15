@@ -233,6 +233,29 @@ export default function StudentTextbookRenderer({
     // IMAGE HANDLING
     // ========================================
 
+    // Handle structured images with IDs
+    container.querySelectorAll("figure[data-image-id]").forEach((figure) => {
+      const id = figure.getAttribute("data-image-id");
+      const image = images.find((img) => img.id === id);
+
+      if (image?.isGenerated && image.imageUrl) {
+        // Create real image
+        const img = document.createElement("img");
+        img.src = image.imageUrl;
+        img.alt = image.caption || "Textbook image";
+        img.className = "rounded-lg mx-auto block max-w-full h-auto border border-white/10";
+
+        // Remove existing placeholder if present
+        const placeholder = figure.querySelector(".image-placeholder");
+        if (placeholder) {
+          placeholder.remove();
+        }
+
+        // Insert image at the top
+        figure.insertBefore(img, figure.firstChild);
+      }
+    });
+
     container.querySelectorAll("img").forEach((img) => {
       img.className = "rounded-lg mx-auto block max-w-full h-auto border border-white/10";
 

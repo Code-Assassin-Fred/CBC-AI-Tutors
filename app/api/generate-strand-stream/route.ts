@@ -25,6 +25,7 @@ import {
     generateImagePrompts
 } from "@/lib/prompts";
 import { ImageMetadata } from "@/types/textbook";
+import { generateImageBatch, BatchGenerationProgress } from "@/lib/api/imageGeneration";
 
 // ============================================
 // CONFIGURATION
@@ -338,6 +339,53 @@ export async function POST(req: NextRequest) {
                 details: { phase: "saving-textbook" },
                 timestamp: timestamp()
             });
+
+            // Start DALL-E Generation if there are images
+            if (allImages.length > 0) {
+                send({
+                    type: "image",
+                    message: `[IMAGE] Starting AI image generation for ${allImages.length} images...`,
+                    details: { phase: "generating-images", total: allImages.length },
+                    timestamp: timestamp()
+                });
+
+                try {
+                    // Get IDs of images to generate
+                    const imageIds = allImages.map(img => img.id);
+
+                    // Generate images with SSE progress updates
+                    await generateImageBatch(imageIds, (progress: BatchGenerationProgress) => {
+                        send({
+                            type: "image",
+                            message: `[IMAGE] Generated image ${progress.completed}/${progress.total}`,
+                            details: {
+                                phase: "generating-images",
+                                current: progress.completed,
+                                total: progress.total,
+                                content: progress.currentImage
+                            },
+                            timestamp: timestamp()
+                        });
+                    }, true); // true = upload to storage
+
+                    send({
+                        type: "image",
+                        message: `[IMAGE] Successfully generated ${allImages.length} images`,
+                        details: { phase: "generating-images-complete" },
+                        timestamp: timestamp()
+                    });
+
+                } catch (imgError: any) {
+                    console.error("Image generation failed:", imgError);
+                    send({
+                        type: "image",
+                        message: `[IMAGE] Background generation warning: ${imgError.message}`,
+                        details: { phase: "generating-images-error" },
+                        timestamp: timestamp()
+                    });
+                    // Don't fail the whole request, just log it
+                }
+            }
 
             await adminDb.collection("textbooks").doc(docId).set({
                 grade, subject, strand,

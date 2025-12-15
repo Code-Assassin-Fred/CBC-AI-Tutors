@@ -245,12 +245,38 @@ export default function TextbookRenderer({
     // IMAGE HANDLING
     // ========================================
 
+    // Handle structured images with IDs
+    container.querySelectorAll("figure[data-image-id]").forEach((figure) => {
+      const id = figure.getAttribute("data-image-id");
+      const image = images.find((img) => img.id === id);
+
+      if (image?.isGenerated && image.imageUrl) {
+        // Create real image
+        const img = document.createElement("img");
+        img.src = image.imageUrl;
+        img.alt = image.caption || "Textbook image";
+        img.className = "rounded-lg mx-auto block max-w-full h-auto border border-white/10";
+
+        // Remove existing placeholder if present
+        const placeholder = figure.querySelector(".image-placeholder");
+        if (placeholder) {
+          placeholder.remove();
+        }
+
+        // Insert image at the top
+        figure.insertBefore(img, figure.firstChild);
+      }
+    });
+
     container.querySelectorAll("figure.image-figure, figure").forEach((figure) => {
       figure.className = "image-figure my-6 text-center";
     });
 
     container.querySelectorAll("img").forEach((img) => {
-      img.className = "rounded-lg mx-auto block max-w-full h-auto border border-white/10";
+      // Don't re-style if we already styled it (from above)
+      if (!img.classList.contains("rounded-lg")) {
+        img.className = "rounded-lg mx-auto block max-w-full h-auto border border-white/10";
+      }
     });
 
     container.querySelectorAll(".image-placeholder").forEach((placeholder) => {
@@ -365,7 +391,8 @@ export default function TextbookRenderer({
               Image Descriptions ({images.length})
             </h3>
             <div className="space-y-3">
-              {images.map((img) => (
+              {/* Deduplicate images by ID to prevent key errors */}
+              {Array.from(new Map(images.map(img => [img.id, img])).values()).map((img) => (
                 <div key={img.id} className="p-3 bg-white/[0.03] rounded border border-white/5">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="px-2 py-0.5 bg-white/10 text-white/70 text-xs rounded">
