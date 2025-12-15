@@ -85,7 +85,9 @@ async function uploadToFirebaseStorage(
 
     // Get bucket and create file reference
     // Explicitly use bucket name to avoid "Bucket name not specified" error
-    const bucketName = process.env.FIREBASE_STORAGE_BUCKET || `${process.env.FIREBASE_PROJECT_ID}.appspot.com`;
+    const bucketName = process.env.FIREBASE_STORAGE_BUCKET ||
+        process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+        `${process.env.FIREBASE_PROJECT_ID}.appspot.com`;
     const bucket = adminStorage.bucket(bucketName);
     const file = bucket.file(storagePath);
 

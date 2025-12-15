@@ -54,12 +54,58 @@ export default function StudentTextbookRenderer({
       .replace(/__([^_]+)__/g, "$1")
       .replace(/_([^_]+)_/g, "$1");
 
-    // Convert [IMAGE: description] placeholders to proper HTML
-    // This handles both raw text placeholders and img tags with [IMAGE: src
-    html = html
-      // Replace <img src="[IMAGE: description]" ...> tags with placeholder divs
-      .replace(/<img[^>]*src=["'][^\s]*\[IMAGE:\s*([^\]]+)\][^"']*["'][^>]*\/?>/gi, (match, description) => {
+    // Create a map of images by ID and by index for quick lookup
+    const imageById = new Map(images.map((img) => [img.id, img]));
+    const generatedImages = images.filter((img) => img.isGenerated && img.imageUrl);
+    let imageIndex = 0;
+
+    // Debug logging - remove after fixing
+    console.log(`[StudentTextbookRenderer] Images received: ${images.length}`);
+    console.log(`[StudentTextbookRenderer] Generated images: ${generatedImages.length}`);
+    if (generatedImages.length > 0) {
+      console.log(`[StudentTextbookRenderer] First generated image:`, generatedImages[0]);
+    }
+
+    // First pass: Replace figure[data-image-id] placeholders with actual images
+    // This regex finds figures with data-image-id and replaces their placeholder content
+    html = html.replace(
+      /<figure[^>]*data-image-id=["']([^"']+)["'][^>]*>([\s\S]*?)<\/figure>/gi,
+      (match, imageId, figureContent) => {
+        const image = imageById.get(imageId);
+
+        if (image?.isGenerated && image.imageUrl) {
+          // Image is generated - replace with actual image
+          const caption = image.caption || "Textbook image";
+          return `
+            <figure class="image-figure my-6 text-center" data-image-id="${imageId}">
+              <img src="${image.imageUrl}" alt="${caption}" class="rounded-lg mx-auto block max-w-full h-auto border border-white/10" />
+              <figcaption class="mt-2 text-sm text-white/60 italic">${caption}</figcaption>
+            </figure>
+          `;
+        }
+        // Image not generated yet - keep original placeholder content
+        return match;
+      }
+    );
+
+    // Second pass: Handle [IMAGE: description] patterns that weren't already in figure elements
+    // These need to be matched with generated images by index
+    html = html.replace(
+      /<img[^>]*src=["'][^\s]*\[IMAGE:\s*([^\]]+)\][^"']*["'][^>]*\/?>/gi,
+      (match, description) => {
         const cleanDesc = description.trim();
+        const nextImage = generatedImages[imageIndex];
+        imageIndex++;
+
+        if (nextImage?.imageUrl) {
+          return `
+            <figure class="image-figure my-6 text-center">
+              <img src="${nextImage.imageUrl}" alt="${nextImage.caption || cleanDesc}" class="rounded-lg mx-auto block max-w-full h-auto border border-white/10" />
+              <figcaption class="mt-2 text-sm text-white/60 italic">${nextImage.caption || cleanDesc}</figcaption>
+            </figure>
+          `;
+        }
+
         return `
           <figure class="image-placeholder-figure my-6">
             <div class="image-placeholder bg-white/[0.02] border-2 border-dashed border-white/20 rounded-lg p-6 text-center">
@@ -68,20 +114,34 @@ export default function StudentTextbookRenderer({
             </div>
           </figure>
         `;
-      })
-      // Replace standalone [IMAGE: description] text with placeholder divs
-      .replace(/\[IMAGE:\s*([^\]]+)\]/gi, (match, description) => {
-        const cleanDesc = description.trim();
+      }
+    );
+
+    // Third pass: Handle standalone [IMAGE: description] text patterns
+    html = html.replace(/\[IMAGE:\s*([^\]]+)\]/gi, (match, description) => {
+      const cleanDesc = description.trim();
+      const nextImage = generatedImages[imageIndex];
+      imageIndex++;
+
+      if (nextImage?.imageUrl) {
         return `
-          <figure class="image-placeholder-figure my-6">
-            <div class="image-placeholder bg-white/[0.02] border-2 border-dashed border-white/20 rounded-lg p-6 text-center">
-              <div class="text-white/40 text-sm mb-2">[Pending Image]</div>
-              <div class="text-white/60 text-sm">${cleanDesc}</div>
-            </div>
-            <figcaption class="mt-2 text-sm text-white/50 italic text-center">${cleanDesc}</figcaption>
+          <figure class="image-figure my-6 text-center">
+            <img src="${nextImage.imageUrl}" alt="${nextImage.caption || cleanDesc}" class="rounded-lg mx-auto block max-w-full h-auto border border-white/10" />
+            <figcaption class="mt-2 text-sm text-white/60 italic">${nextImage.caption || cleanDesc}</figcaption>
           </figure>
         `;
-      });
+      }
+
+      return `
+        <figure class="image-placeholder-figure my-6">
+          <div class="image-placeholder bg-white/[0.02] border-2 border-dashed border-white/20 rounded-lg p-6 text-center">
+            <div class="text-white/40 text-sm mb-2">[Pending Image]</div>
+            <div class="text-white/60 text-sm">${cleanDesc}</div>
+          </div>
+          <figcaption class="mt-2 text-sm text-white/50 italic text-center">${cleanDesc}</figcaption>
+        </figure>
+      `;
+    });
 
     const container = document.createElement("div");
     container.innerHTML = html;
@@ -230,31 +290,11 @@ export default function StudentTextbookRenderer({
     });
 
     // ========================================
-    // IMAGE HANDLING
+    // IMAGE HANDLING (additional styling)
     // ========================================
 
-    // Handle structured images with IDs
-    container.querySelectorAll("figure[data-image-id]").forEach((figure) => {
-      const id = figure.getAttribute("data-image-id");
-      const image = images.find((img) => img.id === id);
-
-      if (image?.isGenerated && image.imageUrl) {
-        // Create real image
-        const img = document.createElement("img");
-        img.src = image.imageUrl;
-        img.alt = image.caption || "Textbook image";
-        img.className = "rounded-lg mx-auto block max-w-full h-auto border border-white/10";
-
-        // Remove existing placeholder if present
-        const placeholder = figure.querySelector(".image-placeholder");
-        if (placeholder) {
-          placeholder.remove();
-        }
-
-        // Insert image at the top
-        figure.insertBefore(img, figure.firstChild);
-      }
-    });
+    // Note: Main image replacement is done in string processing above
+    // This section just handles styling of remaining img elements
 
     container.querySelectorAll("img").forEach((img) => {
       img.className = "rounded-lg mx-auto block max-w-full h-auto border border-white/10";
@@ -328,7 +368,7 @@ export default function StudentTextbookRenderer({
     });
 
     return { formattedHtml: container.innerHTML, toc: tocItems };
-  }, [content]);
+  }, [content, images]);
 
   // Lift TOC up to parent
   useEffect(() => {
