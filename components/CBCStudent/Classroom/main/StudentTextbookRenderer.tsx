@@ -43,8 +43,12 @@ export default function StudentTextbookRenderer({
   const { formattedHtml, toc } = useMemo(() => {
     if (!content) return { formattedHtml: "", toc: [] as TocItem[] };
 
-    // Remove markdown artifacts
+    // Remove markdown artifacts and code block wrappers
     let html = content
+      // Remove markdown code block wrappers (```html, ```, etc.)
+      .replace(/^```\w*\n?/gm, "")
+      .replace(/```$/gm, "")
+      // Remove bold/italic markdown
       .replace(/\*\*([^*]+)\*\*/g, "$1")
       .replace(/\*([^*]+)\*/g, "$1")
       .replace(/__([^_]+)__/g, "$1")
