@@ -157,6 +157,13 @@ ${template.requiredSections.map((s, i) => `${i + 1}. ${formatSectionName(s)}`).j
 OPTIONAL SECTIONS (include where appropriate):
 ${template.optionalSections.map(s => `- ${formatSectionName(s)}`).join("\n")}
 
+CRITICAL RULES - MUST FOLLOW:
+1. DO NOT include any quizzes, tests, assessments, or evaluation sections
+2. DO NOT use any emojis or emoticons anywhere in the content
+3. Keep the style clean and professional like a traditional printed textbook
+4. Focus on teaching content ONLY: explanations, examples, activities, and key concepts
+5. NO "Test Yourself", "Quiz", "Assessment", or "Evaluation" sections
+
 IMAGE PLACEHOLDERS:
 - Insert image placeholders using this format: [IMAGE: detailed description of what the image should show]
 - Include ${template.imageRequirements.typicalCount} images minimum
@@ -171,12 +178,14 @@ HTML STRUCTURE REQUIREMENTS:
 - Use <ul> and <ol> for lists
 - Use <table> for comparison data
 - Use <div class="note-box">, <div class="tip-box">, <div class="warning-box"> for callouts
+- NO emoji icons in headings or anywhere in content
 
 OUTPUT RULES:
 - Return ONLY clean HTML, no markdown
 - Be comprehensive but age-appropriate
 - Include real Kenyan examples where possible
 - Make content engaging and practical
+- ABSOLUTELY NO quizzes or assessments
 
 Write the complete textbook content now:
   `.trim();
@@ -233,10 +242,10 @@ REQUIRED SECTIONS FOR TEACHER'S GUIDE:
    - Extension activities for advanced learners
    - Inclusive teaching strategies
 
-6. ASSESSMENT FOR LEARNING
-   - Formative assessment strategies
-   - Questions to check understanding
-   - Success criteria
+6. FORMATIVE CHECKING (NOT formal assessment)
+   - Observation strategies
+   - Questions to check understanding during lessons
+   - Success criteria for teachers to monitor progress
 
 7. COMMON ERRORS & MISCONCEPTIONS
    - What students often get wrong
@@ -250,11 +259,18 @@ REQUIRED SECTIONS FOR TEACHER'S GUIDE:
    - How to make content relevant
    - Community resources to use
 
+CRITICAL RULES - MUST FOLLOW:
+- DO NOT include formal assessments, quizzes, tests, or evaluation sections
+- DO NOT use any emojis or emoticons
+- This is teaching guidance only, NOT student-facing content
+- Keep professional and clean style
+
 HTML STRUCTURE:
 - Use <h2> for sub-strand title
 - Use <h3> for section headings
 - Use <section class="[section-type]"> wrappers
 - Use practical, actionable language
+- NO emoji icons anywhere
 
 Write the complete Teacher's Guide now:
   `.trim();
@@ -360,7 +376,7 @@ function structureContent(html: string, images: ImageMetadata[]): TextbookConten
         const imageHtml = `
       <figure class="image-figure" data-image-id="${image.id}">
         <div class="image-placeholder" data-generation-prompt="${escapeHtml(image.generationPrompt)}">
-          <span class="placeholder-icon">🖼️</span>
+          <span class="placeholder-icon">[Image]</span>
           <span class="placeholder-text">${escapeHtml(image.caption)}</span>
         </div>
         <figcaption>${escapeHtml(image.caption)}</figcaption>
@@ -428,7 +444,6 @@ function mapClassToSectionType(className: string): SectionType {
         "note-box": "note_box",
         "tip-box": "tip_box",
         "warning-box": "warning_box",
-        "assessment": "assessment",
         "summary": "summary",
         "hygiene-notes": "hygiene_notes"
     };

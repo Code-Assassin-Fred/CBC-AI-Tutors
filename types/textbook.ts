@@ -24,7 +24,6 @@ export type SectionType =
     | "warning_box"
     | "table"
     | "diagram"
-    | "assessment"
     | "summary"
     | "real_world_connection"
     | "cross_curricular_link"
