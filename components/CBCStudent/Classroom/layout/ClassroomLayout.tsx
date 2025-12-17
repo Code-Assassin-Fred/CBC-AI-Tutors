@@ -5,6 +5,7 @@ import LessonCanvas from "@/components/CBCStudent/Classroom/main/LessonCanvas";
 import TutorPanel from "@/components/CBCStudent/Classroom/tutor/TutorPanel";
 import TOCIcon from "@/components/CBCStudent/Classroom/main/tocicon";
 import { TocItem } from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
+import { TutorProvider } from "@/lib/context/TutorContext";
 
 export default function ClassroomLayout() {
   const [view, setView] = useState<"both" | "left" | "right">("both");
@@ -31,113 +32,111 @@ export default function ClassroomLayout() {
   }, [view]);
 
   return (
-    <div className="relative flex flex-col h-[85vh] md:h-[87vh] lg:h-[90vh] w-full bg-[#0E0E10] text-white overflow-hidden rounded-2xl shadow-md shadow-black/20 border border-white/10">
-      {/* Top controls */}
-      <div className="flex items-center justify-between gap-2 p-2 border-b border-white/10 bg-[#0E0E10]">
-        <div className="flex items-center gap-2">
-          <button
-            className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${
-              view === "left"
-                ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
-                : "bg-white/10 hover:bg-white/20"
-            }`}
-            onClick={() => setView("left")}
-          >
-            Main Only
-          </button>
-
-          <button
-            className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${
-              view === "both"
-                ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
-                : "bg-white/10 hover:bg-white/20"
-            }`}
-            onClick={() => setView("both")}
-          >
-            Split View
-          </button>
-
-          <button
-            className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${
-              view === "right"
-                ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
-                : "bg-white/10 hover:bg-white/20"
-            }`}
-            onClick={() => setView("right")}
-          >
-            Tutor Only
-          </button>
-        </div>
-
-        {/* We keep this for future "Saved Lessons" feature */}
-        <div className="flex items-center gap-2">
-          <button
-            className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${
-              contentMode === "lesson"
-                ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
-                : "bg-white/10 hover:bg-white/20"
-            }`}
-            onClick={() => setContentMode("lesson")}
-          >
-            Current Lesson
-          </button>
-
-          <button
-            className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors opacity-50 cursor-not-allowed`}
-            disabled
-            title="Saved Lessons (Coming Soon)"
-          >
-            Saved Lessons
-          </button>
-        </div>
-      </div>
-
-      {/* Main layout area */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* LEFT PANEL – Lesson Canvas */}
-        <div className={leftClasses}>
-          <div className="h-full overflow-y-auto scrollbar-hide">
-            <div
-              className={
-                view === "right"
-                  ? "opacity-0 pointer-events-none select-none"
-                  : "opacity-100"
-              }
+    <TutorProvider>
+      <div className="relative flex flex-col h-[85vh] md:h-[87vh] lg:h-[90vh] w-full bg-[#0E0E10] text-white overflow-hidden rounded-2xl shadow-md shadow-black/20 border border-white/10">
+        {/* Top controls */}
+        <div className="flex items-center justify-between gap-2 p-2 border-b border-white/10 bg-[#0E0E10]">
+          <div className="flex items-center gap-2">
+            <button
+              className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "left"
+                  ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
+                  : "bg-white/10 hover:bg-white/20"
+                }`}
+              onClick={() => setView("left")}
             >
-              {contentMode === "lesson" ? (
-                <LessonCanvas onTocUpdate={setToc} /> // Pass TOC callback
-              ) : (
-                <div className="h-full flex items-center justify-center text-white/40">
-                  <p>Saved Lessons coming soon...</p>
-                </div>
-              )}
-            </div>
+              Main Only
+            </button>
+
+            <button
+              className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "both"
+                  ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
+                  : "bg-white/10 hover:bg-white/20"
+                }`}
+              onClick={() => setView("both")}
+            >
+              Split View
+            </button>
+
+            <button
+              className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "right"
+                  ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
+                  : "bg-white/10 hover:bg-white/20"
+                }`}
+              onClick={() => setView("right")}
+            >
+              Tutor Only
+            </button>
           </div>
-          
-          {/* TOC Button - Now inside left panel */}
-          <TOCIcon toc={toc} />
+
+          {/* We keep this for future "Saved Lessons" feature */}
+          <div className="flex items-center gap-2">
+            <button
+              className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${contentMode === "lesson"
+                  ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
+                  : "bg-white/10 hover:bg-white/20"
+                }`}
+              onClick={() => setContentMode("lesson")}
+            >
+              Current Lesson
+            </button>
+
+            <button
+              className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors opacity-50 cursor-not-allowed`}
+              disabled
+              title="Saved Lessons (Coming Soon)"
+            >
+              Saved Lessons
+            </button>
+          </div>
         </div>
 
-        {/* RIGHT PANEL – AI Tutor */}
-        <div className={rightClasses}>
-          {view !== "right" && view !== "left" && (
-            <div className="absolute left-0 top-0 bottom-0 w-px bg-white/10"></div>
-          )}
+        {/* Main layout area */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* LEFT PANEL – Lesson Canvas */}
+          <div className={leftClasses}>
+            <div className="h-full overflow-y-auto scrollbar-hide">
+              <div
+                className={
+                  view === "right"
+                    ? "opacity-0 pointer-events-none select-none"
+                    : "opacity-100"
+                }
+              >
+                {contentMode === "lesson" ? (
+                  <LessonCanvas onTocUpdate={setToc} /> // Pass TOC callback
+                ) : (
+                  <div className="h-full flex items-center justify-center text-white/40">
+                    <p>Saved Lessons coming soon...</p>
+                  </div>
+                )}
+              </div>
+            </div>
 
-          <div className="h-full p-6 overflow-hidden">
-            <div
-              className={
-                (view === "left"
-                  ? "opacity-0 pointer-events-none select-none"
-                  : "opacity-100") +
-                " h-full flex flex-col min-h-0"
-              }
-            >
-              <TutorPanel />
+            {/* TOC Button - Now inside left panel */}
+            <TOCIcon toc={toc} />
+          </div>
+
+          {/* RIGHT PANEL – AI Tutor */}
+          <div className={rightClasses}>
+            {view !== "right" && view !== "left" && (
+              <div className="absolute left-0 top-0 bottom-0 w-px bg-white/10"></div>
+            )}
+
+            <div className="h-full p-6 overflow-hidden">
+              <div
+                className={
+                  (view === "left"
+                    ? "opacity-0 pointer-events-none select-none"
+                    : "opacity-100") +
+                  " h-full flex flex-col min-h-0"
+                }
+              >
+                <TutorPanel />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </TutorProvider>
   );
 }

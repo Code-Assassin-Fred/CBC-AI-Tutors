@@ -1,64 +1,109 @@
 "use client";
 
-import React, { useState } from 'react';
-import TutorChat from '@/components/CBCStudent/Classroom/tutor/TutorChat';
-import TutorInput from '@/components/CBCStudent/Classroom/tutor/TutorInput';
-import { useAuth } from '@/lib/context/AuthContext';
+import React from 'react';
+import { useTutor } from '@/lib/context/TutorContext';
+import LoadingState from './LoadingState';
+import IdleState from './IdleState';
+import TutorModeSelector from './TutorModeSelector';
+import ReadModeView from './modes/ReadModeView';
+import PodcastModeView from './modes/PodcastModeView';
+import ImmersiveModeView from './modes/ImmersiveModeView';
+import QuizModeView from './modes/QuizModeView';
 
 export default function TutorPanel() {
-  const [messages, setMessages] = useState<Array<{ id: number; role: 'user' | 'assistant'; text: string }>>([]);
+  const {
+    mode,
+    learningSubMode,
+    context,
+    preparedContent,
+    quizContent,
+    loadingProgress,
+    setLearningSubMode,
+    exitMode,
+  } = useTutor();
 
-  const { user } = useAuth();
+  // Loading state
+  if (mode === 'loading' && loadingProgress) {
+    return (
+      <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
+        <LoadingState progress={loadingProgress} />
+      </div>
+    );
+  }
 
-  const handleSendMessage = async (text: string) => {
-    const newMessage = {
-      id: Date.now(),
-      role: 'user' as const,
-      text: text
-    };
-    setMessages((prev) => [...prev, newMessage]);
+  // Quiz mode
+  if (mode === 'quiz' && quizContent) {
+    return (
+      <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
+        {/* Quiz Header */}
+        <div className="pb-3 border-b border-white/10 flex items-center justify-between">
+          <h3 className="text-sm font-medium text-white/70 flex items-center gap-2">
+            <span>📝</span>
+            Quiz Mode
+          </h3>
+          <button
+            onClick={exitMode}
+            className="text-xs text-white/40 hover:text-white/60 transition-colors"
+          >
+            Exit Quiz
+          </button>
+        </div>
 
-    // Removed tutorChat call
-    setMessages((prev) => [
-      ...prev,
-      { id: Date.now() + 1, role: 'assistant', text: 'This is a placeholder response from your AI tutor.' },
-    ]);
-  };
-
-  return (
-    <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
-      {/* Simple header label with quick actions */}
-      <div className="pb-3 border-b border-white/10">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-white/70">Your Personal AI Tutor</h3>
-          <div className="flex items-center gap-3 text-xs">
-            <a href="#quiz" className="text-blue-400 hover:text-blue-300 underline">
-              Quiz
-            </a>
-            <a href="#practice" className="text-purple-400 hover:text-purple-300 underline">
-              Practice
-            </a>
-            <a href="#summary" className="text-green-400 hover:text-green-300 underline">
-              Summary
-            </a>
-          </div>
+        <div className="flex-1 overflow-hidden mt-4">
+          <QuizModeView quiz={quizContent} />
         </div>
       </div>
+    );
+  }
 
-      <div className="flex-1 overflow-y-auto scrollbar-hide mt-4 space-y-4 min-h-0 pr-1">
-        {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-white/40 text-sm text-center px-4">
-            <p>Ask a question to get started with your AI tutor</p>
+  // Learning mode
+  if (mode === 'learning' && preparedContent && learningSubMode) {
+    return (
+      <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
+        {/* Learning Header */}
+        <div className="pb-3 border-b border-white/10">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-white/70 flex items-center gap-2">
+              <span>🎓</span>
+              {context?.substrand || 'Learning'}
+            </h3>
+            <button
+              onClick={exitMode}
+              className="text-xs text-white/40 hover:text-white/60 transition-colors"
+            >
+              Exit
+            </button>
           </div>
-        ) : (
-          <TutorChat messages={messages} />
-        )}
-      </div>
 
-      {/* Input bar at bottom */}
-      <div className="mt-2">
-        <TutorInput onSend={handleSendMessage} />
+          <TutorModeSelector
+            currentMode={learningSubMode}
+            onModeChange={setLearningSubMode}
+          />
+        </div>
+
+        {/* Mode Content */}
+        <div className="flex-1 overflow-hidden mt-4">
+          {learningSubMode === 'read' && (
+            <ReadModeView content={preparedContent.readContent} />
+          )}
+          {learningSubMode === 'podcast' && (
+            <PodcastModeView script={preparedContent.podcastScript} />
+          )}
+          {learningSubMode === 'immersive' && (
+            <ImmersiveModeView content={preparedContent.immersiveContent} />
+          )}
+        </div>
       </div>
+    );
+  }
+
+  // Idle state (default)
+  return (
+    <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
+      <div className="pb-3 border-b border-white/10">
+        <h3 className="text-sm font-medium text-white/70">Your Personal AI Tutor</h3>
+      </div>
+      <IdleState />
     </div>
   );
 }

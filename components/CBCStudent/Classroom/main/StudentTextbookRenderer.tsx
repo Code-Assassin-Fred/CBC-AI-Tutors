@@ -23,11 +23,19 @@ export interface TocItem {
   level: number;
 }
 
+interface SubstrandInfo {
+  id: string;
+  title: string;
+  content: string;
+}
+
 interface StudentTextbookRendererProps {
   content: string;
   sections?: TextbookSection[];
   images?: ImageMetadata[];
   onTocUpdate?: (toc: TocItem[]) => void;
+  onLearnWithAI?: (substrand: SubstrandInfo) => void;
+  onTakeQuiz?: (substrand: SubstrandInfo) => void;
 }
 
 // ============================================
@@ -39,6 +47,8 @@ export default function StudentTextbookRenderer({
   sections,
   images = [],
   onTocUpdate,
+  onLearnWithAI,
+  onTakeQuiz,
 }: StudentTextbookRendererProps) {
   const { formattedHtml, toc } = useMemo(() => {
     if (!content) return { formattedHtml: "", toc: [] as TocItem[] };
@@ -180,18 +190,37 @@ export default function StudentTextbookRenderer({
         card.id = id;
 
         const header = document.createElement("div");
-        header.className = "bg-[#252532] border-b border-white/10 px-5 py-4 flex items-center gap-3";
+        header.className = "bg-[#252532] border-b border-white/10 px-5 py-4 flex items-center justify-between";
+
+        const leftSection = document.createElement("div");
+        leftSection.className = "flex items-center gap-3";
 
         const badge = document.createElement("div");
         badge.className = "flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 text-white/80 text-base font-bold";
         badge.textContent = `${h2Count}`;
 
         const title = document.createElement("h2");
-        title.className = "text-xl font-bold text-white m-0";
+        title.className = "text-xl font-bold text-white m-0 flex-1";
         title.textContent = text;
 
-        header.appendChild(badge);
-        header.appendChild(title);
+        leftSection.appendChild(badge);
+        leftSection.appendChild(title);
+
+        // Action buttons section
+        const actionsSection = document.createElement("div");
+        actionsSection.className = "flex items-center gap-2";
+
+        // Learn with AI button
+        const learnBtn = document.createElement("button");
+        learnBtn.className = "learn-with-ai-btn px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-lg transition-all flex items-center gap-1.5";
+        learnBtn.innerHTML = `<span>🎓</span><span>Learn with AI</span>`;
+        learnBtn.setAttribute("data-substrand-id", id);
+        learnBtn.setAttribute("data-substrand-title", text);
+
+        actionsSection.appendChild(learnBtn);
+
+        header.appendChild(leftSection);
+        header.appendChild(actionsSection);
         card.appendChild(header);
 
         const body = document.createElement("div");
@@ -205,6 +234,19 @@ export default function StudentTextbookRenderer({
           body.appendChild(sibling);
           sibling = next;
         }
+
+        // Take Quiz footer
+        const footer = document.createElement("div");
+        footer.className = "px-5 py-3 border-t border-white/10 bg-white/[0.02]";
+
+        const quizBtn = document.createElement("button");
+        quizBtn.className = "take-quiz-btn w-full py-2.5 text-sm font-medium bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-lg transition-all flex items-center justify-center gap-2";
+        quizBtn.innerHTML = `<span>📝</span><span>Take Quiz</span>`;
+        quizBtn.setAttribute("data-substrand-id", id);
+        quizBtn.setAttribute("data-substrand-title", text);
+
+        footer.appendChild(quizBtn);
+        card.appendChild(footer);
 
         tocItems.push({ id, title: text, level: 2 });
         return;
@@ -382,6 +424,42 @@ export default function StudentTextbookRenderer({
   useEffect(() => {
     if (onTocUpdate) onTocUpdate(toc);
   }, [toc, onTocUpdate]);
+
+  // Handle button clicks
+  useEffect(() => {
+    const handleLearnClick = (e: MouseEvent) => {
+      const btn = e.target as HTMLElement;
+      const learnBtn = btn.closest('.learn-with-ai-btn') as HTMLElement;
+      if (learnBtn && onLearnWithAI) {
+        const id = learnBtn.getAttribute('data-substrand-id') || '';
+        const title = learnBtn.getAttribute('data-substrand-title') || '';
+        // Get the substrand card content
+        const card = document.getElementById(id);
+        const bodyContent = card?.querySelector('.p-5')?.innerHTML || '';
+        onLearnWithAI({ id, title, content: bodyContent });
+      }
+    };
+
+    const handleQuizClick = (e: MouseEvent) => {
+      const btn = e.target as HTMLElement;
+      const quizBtn = btn.closest('.take-quiz-btn') as HTMLElement;
+      if (quizBtn && onTakeQuiz) {
+        const id = quizBtn.getAttribute('data-substrand-id') || '';
+        const title = quizBtn.getAttribute('data-substrand-title') || '';
+        const card = document.getElementById(id);
+        const bodyContent = card?.querySelector('.p-5')?.innerHTML || '';
+        onTakeQuiz({ id, title, content: bodyContent });
+      }
+    };
+
+    document.addEventListener('click', handleLearnClick);
+    document.addEventListener('click', handleQuizClick);
+
+    return () => {
+      document.removeEventListener('click', handleLearnClick);
+      document.removeEventListener('click', handleQuizClick);
+    };
+  }, [onLearnWithAI, onTakeQuiz]);
 
   function slugify(text: string) {
     return text.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").slice(0, 60);

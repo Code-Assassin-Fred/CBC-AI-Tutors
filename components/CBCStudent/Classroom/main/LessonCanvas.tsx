@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import EmptyLessonState from "./EmptyLessonState";
 import contentJson from "@/content.json";
 import StudentTextbookRenderer, { TocItem } from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
+import { useTutor } from "@/lib/context/TutorContext";
 
 interface SubStrand {
   Outcomes: string[];
@@ -45,6 +46,7 @@ interface LessonCanvasProps {
 
 export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
   const grades = Object.keys(contentData);
+  const { activateLearningMode, activateQuizMode } = useTutor();
 
   const [selectedGrade, setSelectedGrade] = useState<string>("");
   const [subjects, setSubjects] = useState<string[]>([]);
@@ -182,6 +184,24 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
             onTocUpdate={(items) => {
               setToc(items);
               if (onTocUpdate) onTocUpdate(items);
+            }}
+            onLearnWithAI={(substrand) => {
+              activateLearningMode({
+                grade: selectedGrade,
+                subject: selectedSubject,
+                strand: selectedStrand,
+                substrand: substrand.title,
+                textbookContent: substrand.content,
+              });
+            }}
+            onTakeQuiz={(substrand) => {
+              activateQuizMode({
+                grade: selectedGrade,
+                subject: selectedSubject,
+                strand: selectedStrand,
+                substrand: substrand.title,
+                textbookContent: substrand.content,
+              });
             }}
           />
         ) : selectedGrade && selectedSubject && selectedStrand ? (
