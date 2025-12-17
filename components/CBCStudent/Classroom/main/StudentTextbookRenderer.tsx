@@ -196,7 +196,7 @@ export default function StudentTextbookRenderer({
         titleSpan.className = "flex-1";
         titleSpan.textContent = text;
 
-        // Create actions container
+        // Create actions container (only Learn with AI in header)
         const actionsDiv = document.createElement("div");
         actionsDiv.className = "flex items-center gap-2 ml-4";
 
@@ -207,21 +207,38 @@ export default function StudentTextbookRenderer({
         learnBtn.setAttribute("data-substrand-id", id);
         learnBtn.setAttribute("data-substrand-title", text);
 
-        // Take Quiz button
-        const quizBtn = document.createElement("button");
-        quizBtn.className = "take-quiz-btn px-3 py-1.5 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors";
-        quizBtn.textContent = "Take Quiz";
-        quizBtn.setAttribute("data-substrand-id", id);
-        quizBtn.setAttribute("data-substrand-title", text);
-
         actionsDiv.appendChild(learnBtn);
-        actionsDiv.appendChild(quizBtn);
 
         // Clear and rebuild header content
         h.textContent = "";
         h.appendChild(badge);
         h.appendChild(titleSpan);
         h.appendChild(actionsDiv);
+
+        // Find where to insert the quiz button (before the next H1/H2 or at the end)
+        let lastContentElement: Element | null = h;
+        let sibling = h.nextElementSibling;
+        while (sibling && !["H1", "H2"].includes(sibling.tagName)) {
+          lastContentElement = sibling;
+          sibling = sibling.nextElementSibling;
+        }
+
+        // Create Take Quiz button and insert after last content element
+        const quizDiv = document.createElement("div");
+        quizDiv.className = "take-quiz-container my-6 pt-4 border-t border-white/10 text-center";
+
+        const quizBtn = document.createElement("button");
+        quizBtn.className = "take-quiz-btn px-4 py-2 text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors";
+        quizBtn.textContent = "📝 Take Quiz on this Section";
+        quizBtn.setAttribute("data-substrand-id", id);
+        quizBtn.setAttribute("data-substrand-title", text);
+
+        quizDiv.appendChild(quizBtn);
+
+        // Insert after the last content element
+        if (lastContentElement && lastContentElement.parentNode) {
+          lastContentElement.parentNode.insertBefore(quizDiv, lastContentElement.nextSibling);
+        }
 
         tocItems.push({ id, title: text, level: 2 });
 
@@ -252,66 +269,66 @@ export default function StudentTextbookRenderer({
     });
 
     // ========================================
-    // PROFESSIONAL SECTION STYLING
+    // PROFESSIONAL SECTION STYLING (Minimal/Clean)
     // ========================================
 
-    // Activity sections - subtle border
+    // Activity sections - clean styling, no box
     container.querySelectorAll("section.activity, .activity-box").forEach((section) => {
-      section.className = "activity-section my-5 p-4 rounded-lg border border-amber-500/30 bg-white/[0.02]";
+      section.className = "activity-section my-4";
 
       const heading = section.querySelector("h3, h4");
       if (heading) {
-        heading.className = "text-base font-bold text-amber-400 mb-3";
+        heading.className = "text-base font-semibold text-white/90 mb-2";
       }
     });
 
-    // Safety precautions
+    // Safety precautions - clean styling
     container.querySelectorAll("section.safety-precautions, .safety-precautions").forEach((section) => {
-      section.className = "safety-section my-4 p-4 border-l-4 border-red-500 bg-white/[0.02]";
+      section.className = "safety-section my-4";
 
       const heading = section.querySelector("h3, h4, strong");
       if (heading) {
-        heading.className = "text-sm font-bold text-red-400 mb-2";
+        heading.className = "text-base font-semibold text-white/90 mb-2";
       }
     });
 
-    // Note boxes
+    // Note boxes - clean styling
     container.querySelectorAll(".note-box, section.note").forEach((section) => {
-      section.className = "note-section my-4 p-4 border-l-4 border-cyan-500 bg-white/[0.02]";
+      section.className = "note-section my-4";
     });
 
-    // Tip boxes
+    // Tip boxes - clean styling
     container.querySelectorAll(".tip-box, section.tip").forEach((section) => {
-      section.className = "tip-section my-4 p-4 border-l-4 border-emerald-500 bg-white/[0.02]";
+      section.className = "tip-section my-4";
     });
 
-    // Warning boxes
+    // Warning boxes - clean styling
     container.querySelectorAll(".warning-box, section.warning").forEach((section) => {
-      section.className = "warning-section my-4 p-4 border-l-4 border-red-500 bg-white/[0.02]";
+      section.className = "warning-section my-4";
     });
 
-    // Example boxes
+    // Example boxes - clean styling
     container.querySelectorAll(".example-box, section.examples").forEach((section) => {
-      section.className = "example-section my-4 p-4 border-l-4 border-blue-500 bg-white/[0.02]";
+      section.className = "example-section my-4";
     });
 
-    // Learning outcomes
+    // Learning outcomes - clean styling
     container.querySelectorAll("section.learning-outcomes").forEach((section) => {
-      section.className = "outcomes-section my-4 p-4 border border-purple-500/30 rounded-lg bg-white/[0.02]";
+      section.className = "outcomes-section my-4";
 
       const heading = section.querySelector("h3");
       if (heading) {
-        heading.className = "text-sm font-bold text-purple-400 mb-2";
+        heading.className = "text-base font-semibold text-white/90 mb-2";
       }
     });
 
-    // Key concepts
+    // Key concepts - clean styling
     container.querySelectorAll("section.key-concepts").forEach((section) => {
-      section.className = "concepts-section my-4 p-4 border border-indigo-500/30 rounded-lg bg-white/[0.02]";
+      section.className = "concepts-section my-4";
 
       const heading = section.querySelector("h3");
       if (heading) {
-        heading.className = "text-sm font-bold text-indigo-400 mb-2";
+        heading.className = "text-base font-semibold text-white/90 mb-2";
       }
     });
 
