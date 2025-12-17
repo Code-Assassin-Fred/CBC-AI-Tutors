@@ -67,14 +67,15 @@ export default function StudentTextbookRenderer({
     }
 
     // First pass: Replace figure[data-image-id] placeholders with actual images
-    // This regex finds figures with data-image-id and replaces their placeholder content
+    // Extract the existing figcaption if present and use it (don't duplicate)
     html = html.replace(
       /<figure[^>]*data-image-id=["']([^"']+)["'][^>]*>([\s\S]*?)<\/figure>/gi,
       (match, imageId, figureContent) => {
         const image = imageById.get(imageId);
 
         if (image?.isGenerated && image.imageUrl) {
-          // Image is generated - replace with actual image
+          // Image is generated - replace placeholder with actual image
+          // Use image.caption as the single source of truth for the caption
           const caption = image.caption || "Textbook image";
           return `
             <figure class="image-figure my-6 text-center" data-image-id="${imageId}">
@@ -87,6 +88,11 @@ export default function StudentTextbookRenderer({
         return match;
       }
     );
+
+    // Remove any orphaned figcaptions or duplicate caption text that appears after figures
+    // This cleans up cases where GPT outputs "Figure X: description" text after the figure
+    html = html.replace(/<\/figure>\s*<p[^>]*>\s*Figure\s*\d+[^<]*<\/p>/gi, '</figure>');
+    html = html.replace(/<\/figure>\s*Figure\s*\d+[^<\n]*/gi, '</figure>');
 
     // Second pass: Handle [IMAGE: description] patterns that weren't already in figure elements
     // These need to be matched with generated images by index
