@@ -1,7 +1,7 @@
 /**
  * Image Generation API
  * 
- * Endpoints for generating educational images using DALL-E 3.
+ * Endpoints for generating educational images using Gemini 2.5 Flash.
  * 
  * POST /api/images/generate
  * - Generate images for a textbook or specific image IDs
@@ -14,17 +14,15 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import {
-    generateImage,
+    generateImageWithGemini,
     generateImageBatch,
     generateTextbookImages,
     getPendingImages,
-    getGenerationStats,
-    getTextbookImages,
-    migrateImagesToStorage,
-    deleteImage
-} from "@/lib/api/imageGeneration";
+    getGenerationStats
+} from "@/lib/api/geminiImageGeneration";
 import { adminDb } from "@/lib/firebaseAdmin";
 import { ImageMetadata } from "@/types/textbook";
+
 
 // ============================================
 // POST - Generate Images
@@ -47,7 +45,7 @@ export async function POST(req: NextRequest) {
             }
 
             const imageMetadata = { id: doc.id, ...doc.data() } as ImageMetadata;
-            const result = await generateImage(imageMetadata);
+            const result = await generateImageWithGemini(imageMetadata);
 
             return NextResponse.json(result);
         }
@@ -96,30 +94,8 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        // Migrate existing images to Firebase Storage
-        if (mode === "migrate") {
-            const results = await migrateImagesToStorage(limit || 50);
-
-            return NextResponse.json({
-                message: `Migrated ${results.success} images to Firebase Storage, ${results.failed} failed`,
-                migratedCount: results.success,
-                failedCount: results.failed
-            });
-        }
-
-        // Delete an image
-        if (mode === "delete" && imageId) {
-            const success = await deleteImage(imageId);
-
-            return NextResponse.json({
-                success,
-                imageId,
-                message: success ? "Image deleted" : "Failed to delete image"
-            });
-        }
-
         return NextResponse.json(
-            { error: "Invalid mode. Use: single, batch, textbook, pending, migrate, or delete" },
+            { error: "Invalid mode. Use: single, batch, textbook, or pending" },
             { status: 400 }
         );
 
@@ -154,35 +130,18 @@ export async function GET(req: NextRequest) {
             const pending = await getPendingImages(limit);
             return NextResponse.json({
                 count: pending.length,
-                images: pending.map(img => ({
+                images: pending.map((img: ImageMetadata) => ({
                     id: img.id,
                     caption: img.caption,
                     type: img.type,
+                    category: img.category,
                     textbookRef: img.textbookRef
                 }))
             });
         }
 
-        // Get images for a specific textbook
-        if (action === "textbook" && textbookId) {
-            const images = await getTextbookImages(textbookId);
-            return NextResponse.json({
-                textbookId,
-                count: images.length,
-                generated: images.filter(img => img.isGenerated).length,
-                pending: images.filter(img => !img.isGenerated).length,
-                images: images.map(img => ({
-                    id: img.id,
-                    caption: img.caption,
-                    type: img.type,
-                    isGenerated: img.isGenerated,
-                    imageUrl: img.imageUrl
-                }))
-            });
-        }
-
         return NextResponse.json(
-            { error: "Invalid action. Use: stats, pending, or textbook" },
+            { error: "Invalid action. Use: stats or pending" },
             { status: 400 }
         );
 

@@ -299,7 +299,7 @@ function processImagePlaceholders(
     const placeholders = extractImagePlaceholders(html);
     const images: ImageMetadata[] = [];
 
-    placeholders.forEach((placeholder, index) => {
+    placeholders.forEach((placeholder: { placeholder: string; description: string; position: number }, index: number) => {
         const id = generateImageId({
             grade: params.grade,
             subject: params.subject,
@@ -310,7 +310,7 @@ function processImagePlaceholders(
         // Determine image type from description
         const imageType = inferImageType(placeholder.description);
 
-        // Generate prompts and descriptions
+        // Generate prompts and descriptions (now includes category, labeledParts, tutorScript)
         const prompts = generateImagePrompts({
             subject: params.subject,
             grade: params.grade,
@@ -325,13 +325,23 @@ function processImagePlaceholders(
         images.push({
             id,
             textbookRef: `${params.grade}_${params.subject}_${params.strand}`.replace(/\s+/g, "_"),
+            // New classification
+            category: prompts.category,
             type: imageType,
             position: "inline",
             caption: prompts.caption,
+            // New rich metadata for AI tutor
+            visualDescription: prompts.visualDescription,
+            labeledParts: prompts.labeledParts,
+            conceptExplanation: prompts.conceptExplanation,
+            tutorScript: prompts.tutorScript,
+            // Legacy fields (kept for backward compatibility)
             description: prompts.description,
             educationalContext: prompts.educationalContext,
+            // Generation
             generationPrompt: prompts.generationPrompt,
             isGenerated: false,
+            // Metadata
             subject: params.subject,
             grade: params.grade,
             strand: params.strand,

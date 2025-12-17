@@ -25,7 +25,7 @@ import {
     generateImagePrompts
 } from "@/lib/prompts";
 import { ImageMetadata } from "@/types/textbook";
-import { generateImageBatch, BatchGenerationProgress } from "@/lib/api/imageGeneration";
+import { generateImageBatch, BatchGenerationProgress } from "@/lib/api/geminiImageGeneration";
 
 // ============================================
 // CONFIGURATION
@@ -268,7 +268,7 @@ export async function POST(req: NextRequest) {
 
                 const placeholders = extractImagePlaceholders(studentHtml);
 
-                placeholders.forEach((placeholder, idx) => {
+                placeholders.forEach((placeholder: { placeholder: string; description: string; position: number }, idx: number) => {
                     const imageId = generateImageId({ grade, subject, strand, index: allImages.length + idx });
                     const imageType = inferImageType(placeholder.description);
                     const prompts = generateImagePrompts({
@@ -282,9 +282,17 @@ export async function POST(req: NextRequest) {
                     allImages.push({
                         id: imageId,
                         textbookRef: `${grade}_${subject}_${strand}`.replace(/\s+/g, "_"),
+                        // New classification
+                        category: prompts.category,
                         type: imageType,
                         position: "inline",
                         caption: prompts.caption,
+                        // New rich metadata for AI tutor
+                        visualDescription: prompts.visualDescription,
+                        labeledParts: prompts.labeledParts,
+                        conceptExplanation: prompts.conceptExplanation,
+                        tutorScript: prompts.tutorScript,
+                        // Legacy fields
                         description: prompts.description,
                         educationalContext: prompts.educationalContext,
                         generationPrompt: prompts.generationPrompt,
@@ -344,7 +352,7 @@ export async function POST(req: NextRequest) {
             if (allImages.length > 0) {
                 send({
                     type: "image",
-                    message: `[IMAGE] Starting AI image generation for ${allImages.length} images...`,
+                    message: `[IMAGE] Starting Gemini image generation for ${allImages.length} images...`,
                     details: { phase: "generating-images", total: allImages.length },
                     timestamp: timestamp()
                 });
@@ -366,7 +374,7 @@ export async function POST(req: NextRequest) {
                             },
                             timestamp: timestamp()
                         });
-                    }, true); // true = upload to storage
+                    }); // Uses Gemini now
 
                     send({
                         type: "image",

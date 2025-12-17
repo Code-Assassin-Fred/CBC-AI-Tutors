@@ -33,31 +33,69 @@ export type SectionType =
 export type ImageType = "diagram" | "photograph" | "illustration" | "chart";
 export type ImagePosition = "inline" | "full-width" | "float-right" | "float-left";
 
+/**
+ * Image category determines if image should have text labels
+ * - labeled_diagram: Educational diagrams with text annotations (parts, labels)
+ * - illustration: Concept visualizations without labels
+ * - photograph: Realistic depictions without labels
+ */
+export type ImageCategory = "labeled_diagram" | "illustration" | "photograph";
+
+// ============================================
+// LABELED PARTS (for diagrams)
+// ============================================
+
+/**
+ * Represents a labeled part in a diagram.
+ * Used by AI tutor to explain image without seeing it.
+ */
+export interface LabeledPart {
+    /** Name of the part (e.g., "Lever arm", "Fulcrum") */
+    partName: string;
+    /** Where in the image this part is located */
+    location: string;
+    /** What this part does / its function */
+    function: string;
+}
+
 // ============================================
 // IMAGE METADATA
 // ============================================
 
 /**
  * Image metadata stored in Firestore 'images' collection.
- * The description field is critical for AI tutoring.
+ * Rich metadata enables AI tutor to explain images without seeing them.
  */
 export interface ImageMetadata {
     id: string;
     textbookRef: string;  // Reference to parent textbook document
 
-    // Rendering properties
+    // Classification
+    /** Category determines if image has labels */
+    category: ImageCategory;
+    /** Legacy type field for backward compatibility */
     type: ImageType;
     position: ImagePosition;
     caption: string;
 
-    // AI Tutoring - CRITICAL
-    /** Detailed visual description for AI tutor to explain the image */
+    // AI Tutoring - CRITICAL (Rich context for tutor)
+    /** What the image literally shows (visual description) */
+    visualDescription: string;
+    /** For labeled diagrams: array of parts with names, locations, functions */
+    labeledParts?: LabeledPart[];
+    /** How this image explains the educational concept */
+    conceptExplanation: string;
+    /** Pre-written script the AI tutor can use to explain the image */
+    tutorScript: string;
+
+    // Legacy fields (kept for backward compatibility)
+    /** @deprecated Use visualDescription instead */
     description: string;
-    /** Educational context explaining how the image relates to learning objectives */
+    /** @deprecated Use conceptExplanation instead */
     educationalContext: string;
 
     // Generation
-    /** Prompt used to generate this image with DALL-E */
+    /** Prompt used to generate this image with Gemini */
     generationPrompt: string;
     /** URL of the generated image (populated after generation) */
     imageUrl?: string;
