@@ -1,14 +1,16 @@
 /**
- * Chat API Route
+ * Chat API Route (OpenAI)
  * 
  * Conversational AI for Read mode interactions
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import OpenAI from 'openai';
 import { SubstrandContext, PlannerOutput, ChatMessage } from '@/lib/types/agents';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 interface ChatRequest {
     message: string;
@@ -27,8 +29,6 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             );
         }
-
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
 
         // Build conversation history
         const historyText = chatHistory
@@ -71,10 +71,16 @@ INSTRUCTIONS:
 
 Respond directly as the tutor (don't include "Tutor:" prefix).`;
 
-        const result = await model.generateContent(prompt);
-        const response = result.response.text();
+        const response = await openai.chat.completions.create({
+            model: 'gpt-4o-mini',
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.7,
+            max_tokens: 500,
+        });
 
-        return NextResponse.json({ response });
+        const reply = response.choices[0]?.message?.content || 'I apologize, I could not generate a response. Please try again.';
+
+        return NextResponse.json({ response: reply });
     } catch (error) {
         console.error('Chat API error:', error);
         return NextResponse.json(
