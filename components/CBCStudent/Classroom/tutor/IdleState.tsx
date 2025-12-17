@@ -5,27 +5,28 @@ import React from 'react';
 export default function IdleState() {
     return (
         <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-            <div className="w-16 h-16 mb-4 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
-                <span className="text-3xl">📚</span>
+            <div className="mb-4">
+                <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] underline decoration-blue-500 decoration-2 underline-offset-8">
+                    AI Assistant
+                </h3>
             </div>
 
-            <h3 className="text-lg font-semibold text-white mb-2">
-                Your AI Tutor
-            </h3>
-
-            <p className="text-sm text-white/50 max-w-xs leading-relaxed">
-                Select a substrand and click <span className="text-blue-400 font-medium">"Learn with AI"</span> to start your personalized lesson.
+            <p className="text-[10px] text-white/40 uppercase tracking-widest max-w-xs leading-relaxed mt-4">
+                Select a substrand on the left canvas to begin a guided session.
             </p>
 
-            <div className="mt-6 flex flex-wrap justify-center gap-2">
-                <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
-                    <span className="text-xs text-white/40">📖 Read</span>
-                </div>
-                <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
-                    <span className="text-xs text-white/40">🎧 Podcast</span>
-                </div>
-                <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
-                    <span className="text-xs text-white/40">🧠 Immersive</span>
+            <div className="mt-8 flex flex-col gap-3">
+                <div className="text-[10px] text-white/20 uppercase tracking-[0.2em] font-bold">Available Interactivities</div>
+                <div className="flex flex-wrap justify-center gap-2">
+                    <div className="px-3 py-1.5 border border-white/5">
+                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Interactive Reading</span>
+                    </div>
+                    <div className="px-3 py-1.5 border border-white/5">
+                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Dialogue Podcast</span>
+                    </div>
+                    <div className="px-3 py-1.5 border border-white/5">
+                        <span className="text-[10px] text-white/40 uppercase tracking-widest font-bold">Immersive Teaching</span>
+                    </div>
                 </div>
             </div>
         </div>

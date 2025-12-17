@@ -108,53 +108,47 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
 
     return (
         <div className="flex flex-col h-full">
-            {/* Progress Header */}
-            <div className="mb-4">
+            {/* Progress Header - Minimalist */}
+            <div className="mb-6">
                 <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-white/40">
-                        Concept {currentChunkIndex + 1} of {totalChunks}
+                    <span className="text-[10px] uppercase tracking-widest text-white/40">
+                        Section {currentChunkIndex + 1} / {totalChunks}
                     </span>
-                    <span className="text-xs text-white/40">
-                        {Math.round(progress)}% complete
+                    <span className="text-[10px] uppercase tracking-widest text-white/40">
+                        {Math.round(progress)}%
                     </span>
                 </div>
-                <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                <div className="h-1 bg-white/5 overflow-hidden">
                     <div
-                        className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500"
+                        className="h-full bg-sky-500 transition-all duration-700"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
             </div>
 
-            {/* All Complete */}
+            {/* All Complete - Minimalist */}
             {allComplete && (
                 <div className="flex-1 flex items-center justify-center">
-                    <div className="text-center p-6 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-2xl border border-green-500/20">
-                        <span className="text-4xl mb-4 block">🎉</span>
-                        <h3 className="text-lg font-bold text-white mb-2">Lesson Complete!</h3>
-                        <p className="text-sm text-white/70">{content.completionMessage}</p>
-                        <div className="mt-4 flex gap-2 justify-center">
+                    <div className="text-center w-full">
+                        <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">Lesson Complete</h3>
+                        <p className="text-sm text-white/60 leading-relaxed max-w-xs mx-auto mb-6">{content.completionMessage}</p>
+                        <div className="flex gap-2 justify-center">
                             {content.chunks.map((_, i) => (
                                 <div
                                     key={i}
-                                    className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center"
-                                >
-                                    <span className="text-green-400">✓</span>
-                                </div>
+                                    className="w-2 h-2 rounded-full bg-emerald-500"
+                                />
                             ))}
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* Learning Phase */}
+            {/* Learning Phase - Minimalist */}
             {!allComplete && phase === 'learning' && (
-                <div className="flex-1 overflow-y-auto scrollbar-hide">
-                    <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-4 border border-white/10 mb-4">
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="text-xl">🧠</span>
-                            <h3 className="text-sm font-semibold text-white">{currentChunk.concept}</h3>
-                        </div>
+                <div className="flex-1 overflow-y-auto scrollbar-hide space-y-6">
+                    <div className="space-y-3">
+                        <h3 className="text-sm font-bold text-white uppercase tracking-wider underline decoration-sky-500 decoration-2 underline-offset-4">{currentChunk.concept}</h3>
                         <p className="text-sm text-white/80 leading-relaxed whitespace-pre-line">
                             {currentChunk.aiExplanation}
                         </p>
@@ -162,101 +156,90 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
 
                     <button
                         onClick={handleStartExplaining}
-                        className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl text-white font-medium text-sm transition-colors"
+                        className="w-full py-4 border border-white/10 hover:bg-white/5 text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all"
                     >
-                        I'm ready to explain! →
+                        Explain Now
                     </button>
                 </div>
             )}
 
-            {/* Explaining Phase */}
+            {/* Explaining Phase - Minimalist */}
             {!allComplete && phase === 'explaining' && (
-                <div className="flex-1 flex flex-col">
-                    <div className="bg-white/5 rounded-xl p-4 border border-white/10 mb-4">
-                        <h4 className="text-sm font-medium text-amber-400 mb-2">🎤 Your turn!</h4>
-                        <p className="text-sm text-white/70">{currentChunk.promptForStudent}</p>
+                <div className="flex-1 flex flex-col space-y-4">
+                    <div className="space-y-2">
+                        <h4 className="text-[10px] uppercase tracking-widest text-amber-500 font-bold">Your Explanation</h4>
+                        <p className="text-sm text-white/70 italic leading-relaxed">{currentChunk.promptForStudent}</p>
                     </div>
 
                     <textarea
                         value={userExplanation}
                         onChange={(e) => setUserExplanation(e.target.value)}
-                        placeholder="Explain the concept in your own words..."
-                        className="flex-1 min-h-[150px] p-4 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-white/30 resize-none focus:outline-none focus:border-white/20"
+                        placeholder="Type your explanation here..."
+                        className="flex-1 bg-transparent border-b border-white/20 text-sm text-white placeholder-white/20 resize-none focus:outline-none focus:border-white/40 transition-colors py-2"
                     />
 
                     <button
                         onClick={handleSubmitExplanation}
                         disabled={!userExplanation.trim() || isAssessing}
-                        className="mt-4 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:from-white/10 disabled:to-white/10 disabled:text-white/30 rounded-xl text-white font-medium text-sm transition-colors"
+                        className="py-4 bg-sky-600 hover:bg-sky-500 disabled:bg-white/5 disabled:text-white/20 text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all"
                     >
-                        {isAssessing ? 'Checking...' : 'Submit my explanation'}
+                        {isAssessing ? 'Processing...' : 'Submit Explanation'}
                     </button>
                 </div>
             )}
 
-            {/* Feedback Phase */}
+            {/* Feedback Phase - Minimalist */}
             {!allComplete && phase === 'feedback' && currentAssessment && (
-                <div className="flex-1 overflow-y-auto scrollbar-hide">
-                    {/* Score */}
-                    <div className={`rounded-xl p-4 border mb-4 ${currentAssessment.level === 'excellent' ? 'bg-green-500/10 border-green-500/20' :
-                            currentAssessment.level === 'good' ? 'bg-blue-500/10 border-blue-500/20' :
-                                'bg-amber-500/10 border-amber-500/20'
-                        }`}>
-                        <div className="flex items-center justify-between mb-2">
-                            <span className="text-2xl">
-                                {currentAssessment.level === 'excellent' ? '🌟' :
-                                    currentAssessment.level === 'good' ? '👍' : '💪'}
-                            </span>
-                            <span className={`text-2xl font-bold ${currentAssessment.level === 'excellent' ? 'text-green-400' :
-                                    currentAssessment.level === 'good' ? 'text-blue-400' :
-                                        'text-amber-400'
+                <div className="flex-1 overflow-y-auto scrollbar-hide space-y-6 pr-2">
+                    {/* Score Summary */}
+                    <div className="pb-4 border-b border-white/10">
+                        <div className="flex items-center justify-between mb-4">
+                            <span className="text-[10px] uppercase tracking-widest text-white/40">Assessment Result</span>
+                            <span className={`text-xl font-bold font-mono ${currentAssessment.level === 'excellent' ? 'text-emerald-400' :
+                                    currentAssessment.level === 'good' ? 'text-sky-400' : 'text-amber-400'
                                 }`}>
                                 {currentAssessment.score}%
                             </span>
                         </div>
-                        <p className="text-sm text-white/80">{currentAssessment.feedback}</p>
+                        <p className="text-sm text-white/80 leading-relaxed italic">{currentAssessment.feedback}</p>
                     </div>
 
-                    {/* Matched Points */}
-                    {currentAssessment.matchedKeyPoints.length > 0 && (
-                        <div className="bg-green-500/10 rounded-lg p-3 border border-green-500/20 mb-3">
-                            <h5 className="text-xs font-semibold text-green-400 mb-2">✓ You covered:</h5>
-                            <ul className="space-y-1">
-                                {currentAssessment.matchedKeyPoints.map((point, i) => (
-                                    <li key={i} className="text-xs text-white/60 flex items-start gap-2">
-                                        <span className="text-green-400">•</span>
-                                        {point}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
+                    {/* Checkpoints */}
+                    <div className="space-y-4">
+                        {currentAssessment.matchedKeyPoints.length > 0 && (
+                            <div className="space-y-2">
+                                <h5 className="text-[10px] uppercase tracking-widest text-emerald-500 font-bold">Concept Clarity</h5>
+                                <ul className="space-y-1">
+                                    {currentAssessment.matchedKeyPoints.map((point, i) => (
+                                        <li key={i} className="text-xs text-white/60 flex items-start gap-2">
+                                            <span className="text-emerald-500">•</span>
+                                            {point}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
 
-                    {/* Missed Points */}
-                    {currentAssessment.missedKeyPoints.length > 0 && (
-                        <div className="bg-amber-500/10 rounded-lg p-3 border border-amber-500/20 mb-3">
-                            <h5 className="text-xs font-semibold text-amber-400 mb-2">Areas to improve:</h5>
-                            <ul className="space-y-1">
-                                {currentAssessment.missedKeyPoints.map((point, i) => (
-                                    <li key={i} className="text-xs text-white/60 flex items-start gap-2">
-                                        <span className="text-amber-400">•</span>
-                                        {point}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
+                        {currentAssessment.missedKeyPoints.length > 0 && (
+                            <div className="space-y-2">
+                                <h5 className="text-[10px] uppercase tracking-widest text-amber-500 font-bold">Points to Refine</h5>
+                                <ul className="space-y-1">
+                                    {currentAssessment.missedKeyPoints.map((point, i) => (
+                                        <li key={i} className="text-xs text-white/60 flex items-start gap-2">
+                                            <span className="text-amber-500">•</span>
+                                            {point}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
 
                     <button
                         onClick={handleContinue}
-                        className="w-full mt-4 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-xl text-white font-medium text-sm transition-colors"
+                        className="w-full py-4 bg-white/10 hover:bg-white/20 text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all"
                     >
-                        {currentAssessment.shouldRetry
-                            ? 'Try again →'
-                            : currentChunkIndex < totalChunks - 1
-                                ? 'Next concept →'
-                                : 'Finish lesson'
-                        }
+                        {currentAssessment.shouldRetry ? 'Refine Explanation' : currentChunkIndex < totalChunks - 1 ? 'Continue' : 'Finish Session'}
                     </button>
                 </div>
             )}

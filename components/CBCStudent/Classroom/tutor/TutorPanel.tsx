@@ -37,13 +37,12 @@ export default function TutorPanel() {
       <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
         {/* Quiz Header */}
         <div className="pb-3 border-b border-white/10 flex items-center justify-between">
-          <h3 className="text-sm font-medium text-white/70 flex items-center gap-2">
-            <span>📝</span>
+          <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">
             Quiz Mode
           </h3>
           <button
             onClick={exitMode}
-            className="text-xs text-white/40 hover:text-white/60 transition-colors"
+            className="text-[10px] font-bold text-white/40 hover:text-white/60 uppercase tracking-widest transition-colors"
           >
             Exit Quiz
           </button>
@@ -63,13 +62,12 @@ export default function TutorPanel() {
         {/* Learning Header */}
         <div className="pb-3 border-b border-white/10">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-medium text-white/70 flex items-center gap-2">
-              <span>🎓</span>
+            <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">
               {context?.substrand || 'Learning'}
             </h3>
             <button
               onClick={exitMode}
-              className="text-xs text-white/40 hover:text-white/60 transition-colors"
+              className="text-[10px] font-bold text-white/40 hover:text-white/60 uppercase tracking-widest transition-colors"
             >
               Exit
             </button>
@@ -101,7 +99,7 @@ export default function TutorPanel() {
   return (
     <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
       <div className="pb-3 border-b border-white/10">
-        <h3 className="text-sm font-medium text-white/70">Your Personal AI Tutor</h3>
+        <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">AI Tutor</h3>
       </div>
       <IdleState />
     </div>

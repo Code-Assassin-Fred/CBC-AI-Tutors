@@ -33,10 +33,10 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
     return (
         <div className="flex flex-col h-full">
             {/* Content Area */}
-            <div className="flex-1 overflow-y-auto pr-2 space-y-4 scrollbar-hide">
+            <div className="flex-1 overflow-y-auto pr-2 space-y-8 scrollbar-hide">
                 {/* Introduction */}
-                <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-xl p-4 border border-white/10">
-                    <h4 className="text-sm font-semibold text-blue-400 mb-2">📖 Introduction</h4>
+                <div className="pb-4 border-b border-white/10">
+                    <h4 className="text-sm font-semibold text-sky-400 uppercase tracking-wider mb-2">Introduction</h4>
                     <p className="text-sm text-white/80 leading-relaxed">{content.introduction}</p>
                 </div>
 
@@ -44,35 +44,35 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                 {content.sections.map((section, index) => (
                     <div
                         key={section.id}
-                        className="bg-white/5 rounded-xl border border-white/10 overflow-hidden"
+                        className="space-y-4"
                     >
                         {/* Section Header */}
                         <button
                             onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}
-                            className="w-full px-4 py-3 flex items-center justify-between hover:bg-white/5 transition-colors"
+                            className="w-full flex items-center justify-between group transition-colors"
                         >
-                            <span className="text-sm font-medium text-white flex items-center gap-2">
+                            <span className="text-sm font-bold text-white flex items-center gap-2">
                                 <span className="text-white/40">{index + 1}.</span>
                                 {section.title}
                             </span>
-                            <span className={`text-white/40 transition-transform ${activeSection === section.id ? 'rotate-180' : ''}`}>
+                            <span className={`text-white/20 group-hover:text-white/40 transition-transform ${activeSection === section.id ? 'rotate-180' : ''}`}>
                                 ▼
                             </span>
                         </button>
 
                         {/* Section Content */}
                         {(activeSection === section.id || index === 0) && (
-                            <div className="px-4 pb-4 space-y-3">
+                            <div className="space-y-6">
                                 <p className="text-sm text-white/70 leading-relaxed">{section.content}</p>
 
                                 {/* Key Points */}
                                 {section.keyPoints.length > 0 && (
-                                    <div className="bg-emerald-500/10 rounded-lg p-3 border border-emerald-500/20">
-                                        <h5 className="text-xs font-semibold text-emerald-400 mb-2">Key Points</h5>
-                                        <ul className="space-y-1">
+                                    <div className="space-y-3">
+                                        <h5 className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Key Points</h5>
+                                        <ul className="space-y-2">
                                             {section.keyPoints.map((point, i) => (
                                                 <li key={i} className="text-xs text-white/60 flex items-start gap-2">
-                                                    <span className="text-emerald-400 mt-0.5">•</span>
+                                                    <span className="text-emerald-500 mt-1">•</span>
                                                     {point}
                                                 </li>
                                             ))}
@@ -82,14 +82,16 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
 
                                 {/* Examples */}
                                 {section.examples.length > 0 && (
-                                    <div className="space-y-2">
-                                        <h5 className="text-xs font-semibold text-amber-400">Examples</h5>
-                                        {section.examples.map((example, i) => (
-                                            <div key={i} className="bg-amber-500/10 rounded-lg p-3 border border-amber-500/20">
-                                                <p className="text-xs font-medium text-white/80">{example.title}</p>
-                                                <p className="text-xs text-white/60 mt-1">{example.description}</p>
-                                            </div>
-                                        ))}
+                                    <div className="space-y-3">
+                                        <h5 className="text-xs font-semibold text-amber-500 uppercase tracking-wider">Examples</h5>
+                                        <div className="grid gap-3">
+                                            {section.examples.map((example, i) => (
+                                                <div key={i} className="bg-white/[0.02] p-3 rounded-lg border border-white/5">
+                                                    <p className="text-xs font-bold text-white/90">{example.title}</p>
+                                                    <p className="text-xs text-white/60 mt-1 leading-relaxed">{example.description}</p>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 )}
                             </div>
@@ -98,19 +100,19 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                 ))}
 
                 {/* Summary */}
-                <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-4 border border-white/10">
-                    <h4 className="text-sm font-semibold text-purple-400 mb-2">📝 Summary</h4>
+                <div className="pt-6 border-t border-white/10">
+                    <h4 className="text-sm font-semibold text-purple-400 uppercase tracking-wider mb-2">Summary</h4>
                     <p className="text-sm text-white/80 leading-relaxed">{content.summary}</p>
                 </div>
 
                 {/* Review Questions */}
                 {content.reviewQuestions.length > 0 && (
-                    <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-                        <h4 className="text-sm font-semibold text-cyan-400 mb-3">🤔 Think About It</h4>
-                        <ul className="space-y-2">
+                    <div className="pt-6 pb-4">
+                        <h4 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider mb-4">Think About It</h4>
+                        <ul className="space-y-3">
                             {content.reviewQuestions.map((q, i) => (
-                                <li key={i} className="text-xs text-white/60 flex items-start gap-2">
-                                    <span className="text-cyan-400 font-medium">{i + 1}.</span>
+                                <li key={i} className="text-xs text-white/60 flex items-start gap-3">
+                                    <span className="text-cyan-500 font-bold">{i + 1}.</span>
                                     {q}
                                 </li>
                             ))}
@@ -126,8 +128,8 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                             <div
                                 key={msg.id}
                                 className={`p-3 rounded-lg text-sm ${msg.role === 'user'
-                                        ? 'bg-blue-500/20 text-white/90 ml-8'
-                                        : 'bg-white/5 text-white/80 mr-8'
+                                    ? 'bg-blue-500/20 text-white/90 ml-8'
+                                    : 'bg-white/5 text-white/80 mr-8'
                                     }`}
                             >
                                 {msg.content}
