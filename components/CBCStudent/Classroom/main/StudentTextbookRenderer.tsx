@@ -212,8 +212,8 @@ export default function StudentTextbookRenderer({
 
         // Learn with AI button
         const learnBtn = document.createElement("button");
-        learnBtn.className = "learn-with-ai-btn px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-lg transition-all flex items-center gap-1.5";
-        learnBtn.innerHTML = `<span>🎓</span><span>Learn with AI</span>`;
+        learnBtn.className = "learn-with-ai-btn px-3 py-1.5 text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors";
+        learnBtn.textContent = "Learn with AI";
         learnBtn.setAttribute("data-substrand-id", id);
         learnBtn.setAttribute("data-substrand-title", text);
 
@@ -235,18 +235,13 @@ export default function StudentTextbookRenderer({
           sibling = next;
         }
 
-        // Take Quiz footer
-        const footer = document.createElement("div");
-        footer.className = "px-5 py-3 border-t border-white/10 bg-white/[0.02]";
-
-        const quizBtn = document.createElement("button");
-        quizBtn.className = "take-quiz-btn w-full py-2.5 text-sm font-medium bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-lg transition-all flex items-center justify-center gap-2";
-        quizBtn.innerHTML = `<span>📝</span><span>Take Quiz</span>`;
-        quizBtn.setAttribute("data-substrand-id", id);
-        quizBtn.setAttribute("data-substrand-title", text);
-
-        footer.appendChild(quizBtn);
-        card.appendChild(footer);
+        // Take Quiz link at the end
+        const quizLink = document.createElement("a");
+        quizLink.className = "take-quiz-btn block text-center text-sm text-blue-400 hover:text-blue-300 py-3 border-t border-white/10 cursor-pointer transition-colors";
+        quizLink.textContent = "Take Quiz";
+        quizLink.setAttribute("data-substrand-id", id);
+        quizLink.setAttribute("data-substrand-title", text);
+        card.appendChild(quizLink);
 
         tocItems.push({ id, title: text, level: 2 });
         return;
