@@ -80,7 +80,6 @@ export default function StudentTextbookRenderer({
           return `
             <figure class="image-figure my-6 text-center" data-image-id="${imageId}">
               <img src="${image.imageUrl}" alt="${caption}" class="rounded-lg mx-auto block max-w-full h-auto border border-white/10" />
-              <figcaption class="mt-2 text-sm text-white/60 italic">${caption}</figcaption>
             </figure>
           `;
         }
@@ -90,8 +89,13 @@ export default function StudentTextbookRenderer({
     );
 
     // Remove any orphaned figcaptions or duplicate caption text that appears after figures
-    // This cleans up cases where GPT outputs "Figure X: description" text after the figure
+    // GPT often outputs "Figure X: description" as a separate line after the image placeholder
+    // These can appear as <p>, <em>, <i>, or plain text
+    html = html.replace(/<\/figure>\s*<p[^>]*>\s*<em>\s*Figure\s*\d+[^<]*<\/em>\s*<\/p>/gi, '</figure>');
+    html = html.replace(/<\/figure>\s*<p[^>]*>\s*<i>\s*Figure\s*\d+[^<]*<\/i>\s*<\/p>/gi, '</figure>');
     html = html.replace(/<\/figure>\s*<p[^>]*>\s*Figure\s*\d+[^<]*<\/p>/gi, '</figure>');
+    html = html.replace(/<\/figure>\s*<em>\s*Figure\s*\d+[^<]*<\/em>/gi, '</figure>');
+    html = html.replace(/<\/figure>\s*<i>\s*Figure\s*\d+[^<]*<\/i>/gi, '</figure>');
     html = html.replace(/<\/figure>\s*Figure\s*\d+[^<\n]*/gi, '</figure>');
 
     // Second pass: Handle [IMAGE: description] patterns that weren't already in figure elements
@@ -107,7 +111,6 @@ export default function StudentTextbookRenderer({
           return `
             <figure class="image-figure my-6 text-center">
               <img src="${nextImage.imageUrl}" alt="${nextImage.caption || cleanDesc}" class="rounded-lg mx-auto block max-w-full h-auto border border-white/10" />
-              <figcaption class="mt-2 text-sm text-white/60 italic">${nextImage.caption || cleanDesc}</figcaption>
             </figure>
           `;
         }
@@ -133,7 +136,6 @@ export default function StudentTextbookRenderer({
         return `
           <figure class="image-figure my-6 text-center">
             <img src="${nextImage.imageUrl}" alt="${nextImage.caption || cleanDesc}" class="rounded-lg mx-auto block max-w-full h-auto border border-white/10" />
-            <figcaption class="mt-2 text-sm text-white/60 italic">${nextImage.caption || cleanDesc}</figcaption>
           </figure>
         `;
       }
