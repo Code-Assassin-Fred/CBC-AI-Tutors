@@ -89,7 +89,7 @@ export default function StudentTextbookRenderer({
           const caption = image.caption || "Textbook image";
           return `
             <figure class="image-figure my-6 text-center" data-image-id="${imageId}">
-              <img src="${image.imageUrl}" alt="${caption}" class="rounded-lg mx-auto block max-w-full h-auto border border-gray-200 shadow-sm" />
+              <img src="${image.imageUrl}" alt="${caption}" class="rounded-lg mx-auto block max-w-full h-auto border border-white/10" />
             </figure>
           `;
         }
@@ -120,16 +120,16 @@ export default function StudentTextbookRenderer({
         if (nextImage?.imageUrl) {
           return `
             <figure class="image-figure my-6 text-center">
-              <img src="${nextImage.imageUrl}" alt="${nextImage.caption || cleanDesc}" class="rounded-lg mx-auto block max-w-full h-auto border border-gray-200 shadow-sm" />
+              <img src="${nextImage.imageUrl}" alt="${nextImage.caption || cleanDesc}" class="rounded-lg mx-auto block max-w-full h-auto border border-white/10" />
             </figure>
           `;
         }
 
         return `
           <figure class="image-placeholder-figure my-6">
-            <div class="image-placeholder bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <div class="text-gray-400 text-sm mb-2">[Pending Image]</div>
-              <div class="text-gray-600 text-sm">${cleanDesc}</div>
+            <div class="image-placeholder bg-white/5 border-2 border-dashed border-white/20 rounded-lg p-6 text-center">
+              <div class="text-white/40 text-sm mb-2">[Pending Image]</div>
+              <div class="text-white/60 text-sm">${cleanDesc}</div>
             </div>
           </figure>
         `;
@@ -145,18 +145,18 @@ export default function StudentTextbookRenderer({
       if (nextImage?.imageUrl) {
         return `
           <figure class="image-figure my-6 text-center">
-            <img src="${nextImage.imageUrl}" alt="${nextImage.caption || cleanDesc}" class="rounded-lg mx-auto block max-w-full h-auto border border-gray-200 shadow-sm" />
+            <img src="${nextImage.imageUrl}" alt="${nextImage.caption || cleanDesc}" class="rounded-lg mx-auto block max-w-full h-auto border border-white/10" />
           </figure>
         `;
       }
 
       return `
         <figure class="image-placeholder-figure my-6">
-          <div class="image-placeholder bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-            <div class="text-gray-400 text-sm mb-2">[Pending Image]</div>
-            <div class="text-gray-600 text-sm">${cleanDesc}</div>
+          <div class="image-placeholder bg-white/5 border-2 border-dashed border-white/20 rounded-lg p-6 text-center">
+            <div class="text-white/40 text-sm mb-2">[Pending Image]</div>
+            <div class="text-white/60 text-sm">${cleanDesc}</div>
           </div>
-          <figcaption class="mt-2 text-sm text-gray-500 italic text-center">${cleanDesc}</figcaption>
+          <figcaption class="mt-2 text-sm text-white/50 italic text-center">${cleanDesc}</figcaption>
         </figure>
       `;
     });
@@ -184,7 +184,7 @@ export default function StudentTextbookRenderer({
 
         const id = `substrand-${h2Count}-${slugify(text)}`;
         h.id = id;
-        h.className = "substrand-heading text-2xl font-bold text-gray-900 mt-8 mb-4 pb-3 border-b-2 border-gray-200 scroll-mt-24 flex items-center justify-between";
+        h.className = "substrand-heading text-2xl font-bold text-white mt-8 mb-4 pb-3 border-b-2 border-white/20 scroll-mt-24 flex items-center justify-between";
 
         // Create number badge
         const badge = document.createElement("span");
@@ -234,8 +234,8 @@ export default function StudentTextbookRenderer({
         h4Count = 0;
         const id = `section-${h2Count}-${h3Count}-${slugify(text)}`;
         h.id = id;
-        h.className = "text-lg font-bold text-blue-700 mt-6 mb-3 pb-2 border-b border-gray-200 scroll-mt-24";
-        h.innerHTML = `<span class="text-gray-400 mr-2">${h2Count}.${h3Count}</span> ${h.innerHTML}`;
+        h.className = "text-lg font-bold text-sky-400 mt-6 mb-3 pb-2 border-b border-white/10 scroll-mt-24";
+        h.innerHTML = `<span class="text-white/50 mr-2">${h2Count}.${h3Count}</span> ${h.innerHTML}`;
         tocItems.push({ id, title: text, level: 3 });
         return;
       }
@@ -245,8 +245,8 @@ export default function StudentTextbookRenderer({
         h4Count++;
         const id = `sub-${h2Count}-${h3Count}-${h4Count}-${slugify(text)}`;
         h.id = id;
-        h.className = "text-base font-semibold text-teal-700 mt-5 mb-2 scroll-mt-24";
-        h.innerHTML = `<span class="text-gray-400 mr-2">${h2Count}.${h3Count}.${h4Count}</span> ${h.innerHTML}`;
+        h.className = "text-base font-semibold text-teal-400 mt-5 mb-2 scroll-mt-24";
+        h.innerHTML = `<span class="text-white/40 mr-2">${h2Count}.${h3Count}.${h4Count}</span> ${h.innerHTML}`;
         tocItems.push({ id, title: text, level: 4 });
       }
     });
@@ -257,61 +257,61 @@ export default function StudentTextbookRenderer({
 
     // Activity sections - subtle border
     container.querySelectorAll("section.activity, .activity-box").forEach((section) => {
-      section.className = "activity-section my-5 p-4 rounded-lg border border-amber-300 bg-amber-50";
+      section.className = "activity-section my-5 p-4 rounded-lg border border-amber-500/30 bg-white/[0.02]";
 
       const heading = section.querySelector("h3, h4");
       if (heading) {
-        heading.className = "text-base font-bold text-amber-700 mb-3";
+        heading.className = "text-base font-bold text-amber-400 mb-3";
       }
     });
 
     // Safety precautions
     container.querySelectorAll("section.safety-precautions, .safety-precautions").forEach((section) => {
-      section.className = "safety-section my-4 p-4 border-l-4 border-red-500 bg-red-50";
+      section.className = "safety-section my-4 p-4 border-l-4 border-red-500 bg-white/[0.02]";
 
       const heading = section.querySelector("h3, h4, strong");
       if (heading) {
-        heading.className = "text-sm font-bold text-red-700 mb-2";
+        heading.className = "text-sm font-bold text-red-400 mb-2";
       }
     });
 
     // Note boxes
     container.querySelectorAll(".note-box, section.note").forEach((section) => {
-      section.className = "note-section my-4 p-4 border-l-4 border-cyan-500 bg-cyan-50";
+      section.className = "note-section my-4 p-4 border-l-4 border-cyan-500 bg-white/[0.02]";
     });
 
     // Tip boxes
     container.querySelectorAll(".tip-box, section.tip").forEach((section) => {
-      section.className = "tip-section my-4 p-4 border-l-4 border-emerald-500 bg-emerald-50";
+      section.className = "tip-section my-4 p-4 border-l-4 border-emerald-500 bg-white/[0.02]";
     });
 
     // Warning boxes
     container.querySelectorAll(".warning-box, section.warning").forEach((section) => {
-      section.className = "warning-section my-4 p-4 border-l-4 border-red-500 bg-red-50";
+      section.className = "warning-section my-4 p-4 border-l-4 border-red-500 bg-white/[0.02]";
     });
 
     // Example boxes
     container.querySelectorAll(".example-box, section.examples").forEach((section) => {
-      section.className = "example-section my-4 p-4 border-l-4 border-blue-500 bg-blue-50";
+      section.className = "example-section my-4 p-4 border-l-4 border-blue-500 bg-white/[0.02]";
     });
 
     // Learning outcomes
     container.querySelectorAll("section.learning-outcomes").forEach((section) => {
-      section.className = "outcomes-section my-4 p-4 border border-purple-300 rounded-lg bg-purple-50";
+      section.className = "outcomes-section my-4 p-4 border border-purple-500/30 rounded-lg bg-white/[0.02]";
 
       const heading = section.querySelector("h3");
       if (heading) {
-        heading.className = "text-sm font-bold text-purple-700 mb-2";
+        heading.className = "text-sm font-bold text-purple-400 mb-2";
       }
     });
 
     // Key concepts
     container.querySelectorAll("section.key-concepts").forEach((section) => {
-      section.className = "concepts-section my-4 p-4 border border-indigo-300 rounded-lg bg-indigo-50";
+      section.className = "concepts-section my-4 p-4 border border-indigo-500/30 rounded-lg bg-white/[0.02]";
 
       const heading = section.querySelector("h3");
       if (heading) {
-        heading.className = "text-sm font-bold text-indigo-700 mb-2";
+        heading.className = "text-sm font-bold text-indigo-400 mb-2";
       }
     });
 
@@ -323,7 +323,7 @@ export default function StudentTextbookRenderer({
     // This section just handles styling of remaining img elements
 
     container.querySelectorAll("img").forEach((img) => {
-      img.className = "rounded-lg mx-auto block max-w-full h-auto border border-gray-200 shadow-sm";
+      img.className = "rounded-lg mx-auto block max-w-full h-auto border border-white/10";
 
       if (img.parentElement?.tagName !== "FIGURE") {
         const figure = document.createElement("figure");
@@ -333,7 +333,7 @@ export default function StudentTextbookRenderer({
 
         if (img.alt) {
           const cap = document.createElement("figcaption");
-          cap.className = "mt-2 text-sm text-gray-600 italic";
+          cap.className = "mt-2 text-sm text-white/60 italic";
           cap.textContent = img.alt;
           figure.appendChild(cap);
         }
@@ -341,11 +341,11 @@ export default function StudentTextbookRenderer({
     });
 
     container.querySelectorAll(".image-placeholder").forEach((placeholder) => {
-      placeholder.className = "image-placeholder border-2 border-dashed border-gray-300 rounded-lg p-5 text-center my-5 bg-gray-50";
+      placeholder.className = "image-placeholder border-2 border-dashed border-white/20 rounded-lg p-5 text-center my-5 bg-white/[0.02]";
     });
 
     container.querySelectorAll("figcaption").forEach((cap) => {
-      cap.className = "mt-2 text-sm text-gray-600 italic";
+      cap.className = "mt-2 text-sm text-white/60 italic";
     });
 
     // ========================================
@@ -357,24 +357,24 @@ export default function StudentTextbookRenderer({
       if (table.parentElement?.classList.contains("table-wrapper")) return;
 
       const wrapper = document.createElement("div");
-      wrapper.className = "table-wrapper overflow-x-auto my-5 rounded-lg border border-gray-200 shadow-sm";
+      wrapper.className = "table-wrapper overflow-x-auto my-5 rounded-lg border border-white/10";
       table.parentElement?.insertBefore(wrapper, table);
       wrapper.appendChild(table);
 
       table.className = "w-full text-left border-collapse text-sm";
-      table.querySelector("thead")?.classList.add("bg-gray-50");
+      table.querySelector("thead")?.classList.add("bg-white/5");
 
       table.querySelectorAll("th").forEach((th) =>
-        th.classList.add("px-3", "py-2", "font-bold", "text-gray-900", "border-b", "border-gray-200")
+        th.classList.add("px-3", "py-2", "font-bold", "text-white", "border-b", "border-white/10")
       );
       table.querySelectorAll("td").forEach((td) =>
-        td.classList.add("px-3", "py-2", "text-gray-700", "border-b", "border-gray-100")
+        td.classList.add("px-3", "py-2", "text-white/80", "border-b", "border-white/5")
       );
     });
 
     // Paragraphs
     container.querySelectorAll("p").forEach((p) => {
-      p.classList.add("my-2", "leading-relaxed", "text-gray-700");
+      p.classList.add("my-2", "leading-relaxed", "text-white/85");
     });
 
     // Lists
@@ -382,7 +382,7 @@ export default function StudentTextbookRenderer({
       list.classList.add(
         "my-2",
         "space-y-1",
-        "text-gray-700",
+        "text-white/85",
         list.tagName === "UL" ? "list-disc" : "list-decimal",
         "list-inside"
       );
@@ -390,7 +390,7 @@ export default function StudentTextbookRenderer({
 
     // Strong/bold
     container.querySelectorAll("strong").forEach((strong) => {
-      strong.classList.add("text-gray-900", "font-semibold");
+      strong.classList.add("text-white", "font-semibold");
     });
 
     return { formattedHtml: container.innerHTML, toc: tocItems };
@@ -446,7 +446,7 @@ export default function StudentTextbookRenderer({
   // ========================================
 
   return (
-    <div className="student-textbook-content bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+    <div className="student-textbook-content text-white">
       <div dangerouslySetInnerHTML={{ __html: formattedHtml }} />
     </div>
   );

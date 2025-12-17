@@ -121,17 +121,17 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
   }, [selectedGrade, selectedSubject, selectedStrand, onTocUpdate]);
 
   return (
-    <div className="h-full flex flex-col bg-[#f5f5f7] rounded-xl overflow-hidden">
+    <div className="h-full flex flex-col bg-gradient-to-br from-[#111113] to-[#1a1a1f] overflow-hidden">
       {/* Selector Bar */}
-      <div className="p-5 border-b border-gray-200 bg-white/80 backdrop-blur-md">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4 text-center">
+      <div className="p-5 border-b border-white/10 bg-black/20 backdrop-blur-md">
+        <h2 className="text-lg font-semibold text-white mb-4 text-center">
           Browse Lessons
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <select
             value={selectedGrade}
             onChange={(e) => setSelectedGrade(e.target.value)}
-            className="px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-800 text-sm focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-200 transition-all"
+            className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all"
           >
             <option value="">Select Grade</option>
             {grades.map((g) => (
@@ -143,7 +143,7 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
             disabled={!subjects.length}
-            className="px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-800 text-sm focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-200 transition-all disabled:opacity-50"
+            className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50"
           >
             <option value="">Select Subject</option>
             {subjects.map((s) => (
@@ -155,7 +155,7 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
             value={selectedStrand}
             onChange={(e) => setSelectedStrand(e.target.value)}
             disabled={!strands.length}
-            className="px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-800 text-sm focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-200 transition-all disabled:opacity-50"
+            className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50"
           >
             <option value="">Select Strand</option>
             {strands.map((s) => (
@@ -165,7 +165,7 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
         </div>
 
         {selectedGrade && selectedSubject && selectedStrand && (
-          <div className="mt-4 text-center text-gray-600 text-sm font-medium">
+          <div className="mt-4 text-center text-white/70 text-sm font-medium">
             Grade {selectedGrade} • {selectedSubject} • {selectedStrand}
           </div>
         )}
@@ -175,7 +175,7 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
       <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
         {loading ? (
           <div className="flex items-center justify-center h-full">
-            <div className="text-gray-500 animate-pulse text-lg">Loading your lesson...</div>
+            <div className="text-white/60 animate-pulse text-lg">Loading your lesson...</div>
           </div>
         ) : textbook?.exists && textbook.student_html ? (
           <StudentTextbookRenderer
@@ -213,13 +213,13 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
         ) : (
           <div className="flex flex-col items-center justify-center h-full text-center px-8">
             <div className="text-8xl mb-6 opacity-30">📚</div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">
+            <h2 className="text-2xl font-bold text-white mb-3">
               Welcome to Your Classroom
             </h2>
-            <p className="text-gray-600 text-lg max-w-md">
+            <p className="text-white/60 text-lg max-w-md">
               Select a grade, subject, and strand above to load your lesson.
             </p>
-            <p className="text-gray-400 text-sm mt-4">
+            <p className="text-white/40 text-sm mt-4">
               Lessons are prepared by your teacher and appear here when ready.
             </p>
           </div>

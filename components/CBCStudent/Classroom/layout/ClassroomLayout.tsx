@@ -39,8 +39,8 @@ export default function ClassroomLayout() {
           <div className="flex items-center gap-2">
             <button
               className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "left"
-                  ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
-                  : "bg-white/10 hover:bg-white/20"
+                ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
+                : "bg-white/10 hover:bg-white/20"
                 }`}
               onClick={() => setView("left")}
             >
@@ -49,8 +49,8 @@ export default function ClassroomLayout() {
 
             <button
               className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "both"
-                  ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
-                  : "bg-white/10 hover:bg-white/20"
+                ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
+                : "bg-white/10 hover:bg-white/20"
                 }`}
               onClick={() => setView("both")}
             >
@@ -59,8 +59,8 @@ export default function ClassroomLayout() {
 
             <button
               className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "right"
-                  ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
-                  : "bg-white/10 hover:bg-white/20"
+                ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
+                : "bg-white/10 hover:bg-white/20"
                 }`}
               onClick={() => setView("right")}
             >
@@ -72,8 +72,8 @@ export default function ClassroomLayout() {
           <div className="flex items-center gap-2">
             <button
               className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${contentMode === "lesson"
-                  ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
-                  : "bg-white/10 hover:bg-white/20"
+                ? "bg-[#7c3aed] hover:bg-[#6d28d9]"
+                : "bg-white/10 hover:bg-white/20"
                 }`}
               onClick={() => setContentMode("lesson")}
             >
@@ -97,9 +97,9 @@ export default function ClassroomLayout() {
             <div className="h-full overflow-y-auto scrollbar-hide">
               <div
                 className={
-                  view === "right"
+                  (view === "right"
                     ? "opacity-0 pointer-events-none select-none"
-                    : "opacity-100"
+                    : "opacity-100") + " h-full"
                 }
               >
                 {contentMode === "lesson" ? (
