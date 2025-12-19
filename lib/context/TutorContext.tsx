@@ -173,21 +173,24 @@ export function TutorProvider({ children }: TutorProviderProps) {
         try {
             stopSpeaking(); // Don't listen to yourself
 
-            // 1. Get temporary token from backend
+            // 1. Request microphone access immediately (PROMPT USER)
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true }).catch(err => {
+                console.error('[STT] Mic access denied:', err);
+                throw new Error('Microphone access denied. Please check your browser settings.');
+            });
+            streamRef.current = stream;
+
+            // 2. Get temporary token from backend in parallel
             const tokenResponse = await fetch('/api/tutor/stt/token');
             if (!tokenResponse.ok) {
                 const errorData = await tokenResponse.json().catch(() => ({}));
                 console.error('[STT] Token fetch failed:', errorData);
-                throw new Error(errorData.error || 'Failed to get STT token');
+                throw new Error(errorData.error || 'Failed to get STT token. Please ensure DEEPGRAM_API_KEY is configured.');
             }
             const tokenData = await tokenResponse.json();
             const apiKey = tokenData.key;
 
             if (!apiKey) throw new Error('No API key returned from token endpoint');
-
-            // 2. Request microphone access
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            streamRef.current = stream;
 
             // 3. Connect to Deepgram via WebSocket
             // Using nova-2 model for best speed/accuracy
@@ -226,9 +229,6 @@ export function TutorProvider({ children }: TutorProviderProps) {
                         ...prev,
                         transcript: prev.transcript ? prev.transcript + ' ' + transcript : transcript
                     }));
-                } else if (transcript) {
-                    // Show interim results (can be handled differently if UI needs it)
-                    // For now, we'll just append final results to keep it simple but "instant"
                 }
             };
 
@@ -241,9 +241,13 @@ export function TutorProvider({ children }: TutorProviderProps) {
                 setAudioState(prev => ({ ...prev, isListening: false }));
             };
 
-        } catch (error) {
-            console.error('Failed to start real-time recording:', error);
-            alert('Could not start real-time transcription. Please check microphone permissions.');
+        } catch (error: any) {
+            console.error('STT Start Error:', error);
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
+                streamRef.current = null;
+            }
+            alert(error.message || 'Could not start transcription.');
         }
     }, [stopSpeaking]);
 
