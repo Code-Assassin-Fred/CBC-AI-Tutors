@@ -220,14 +220,7 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                     {audio.isListening && (
                         <div className="flex items-center gap-3 py-2 px-3 bg-red-500/10 rounded-lg border border-red-500/20">
                             <VoiceVisualization isActive={true} color="bg-red-500" />
-                            <span className="text-[10px] text-red-500 uppercase font-bold tracking-widest">Listening...</span>
-                        </div>
-                    )}
-
-                    {audio.isTranscribing && (
-                        <div className="flex items-center gap-3 py-2 px-3 bg-sky-500/10 rounded-lg border border-sky-500/20">
-                            <div className="w-4 h-4 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
-                            <span className="text-[10px] text-sky-500 uppercase font-bold tracking-widest">Processing speech...</span>
+                            <span className="text-[10px] text-red-500 uppercase font-bold tracking-widest">Live Transcription</span>
                         </div>
                     )}
 

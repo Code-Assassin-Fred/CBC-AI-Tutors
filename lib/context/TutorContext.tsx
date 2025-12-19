@@ -158,101 +158,96 @@ export function TutorProvider({ children }: TutorProviderProps) {
     }, [stopSpeaking]);
 
     // ============================================
-    // LISTENING (STT) - Google Cloud Speech-to-Text
+    // LISTENING (STT) - Deepgram Real-time
     // ============================================
 
-    const transcribeAudio = useCallback(async (audioBlob: Blob) => {
-        try {
-            setAudioState(prev => ({ ...prev, isTranscribing: true }));
-
-            // Convert blob to base64
-            const reader = new FileReader();
-            const base64Promise = new Promise<string>((resolve, reject) => {
-                reader.onloadend = () => resolve(reader.result as string);
-                reader.onerror = reject;
-            });
-            reader.readAsDataURL(audioBlob);
-            const base64Audio = await base64Promise;
-
-            // Send to our transcription API
-            const response = await fetch('/api/tutor/transcribe', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    audio: base64Audio,
-                    encoding: 'WEBM_OPUS',
-                    sampleRate: 48000,
-                }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.details || 'Transcription failed');
-            }
-
-            const data = await response.json();
-            setAudioState(prev => ({
-                ...prev,
-                transcript: data.transcript || '',
-                isTranscribing: false,
-            }));
-
-            return data.transcript;
-        } catch (error) {
-            console.error('Transcription error:', error);
-            setAudioState(prev => ({ ...prev, isTranscribing: false }));
-            return '';
-        }
-    }, []);
+    const socketRef = React.useRef<WebSocket | null>(null);
 
     const startListening = useCallback(async () => {
         try {
             stopSpeaking(); // Don't listen to yourself
 
-            // Request microphone access
+            // 1. Get temporary token from backend
+            const tokenResponse = await fetch('/api/tutor/stt/token');
+            if (!tokenResponse.ok) throw new Error('Failed to get STT token');
+            const tokenData = await tokenResponse.json();
+            const apiKey = tokenData.key;
+
+            if (!apiKey) throw new Error('No API key returned from token endpoint');
+
+            // 2. Request microphone access
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             streamRef.current = stream;
 
-            // Create MediaRecorder
-            const mediaRecorder = new MediaRecorder(stream, {
-                mimeType: 'audio/webm;codecs=opus',
-            });
-            mediaRecorderRef.current = mediaRecorder;
-            audioChunksRef.current = [];
+            // 3. Connect to Deepgram via WebSocket
+            // Using nova-2 model for best speed/accuracy
+            const socket = new WebSocket('wss://api.deepgram.com/v1/listen?model=nova-2&smart_format=true&interim_results=true', [
+                'token',
+                apiKey,
+            ]);
 
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    audioChunksRef.current.push(event.data);
+            socketRef.current = socket;
+
+            socket.onopen = () => {
+                console.log('[Deepgram] WebSocket opened');
+
+                // Create MediaRecorder to stream audio
+                const mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: 'audio/webm;codecs=opus',
+                });
+                mediaRecorderRef.current = mediaRecorder;
+
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0 && socket.readyState === WebSocket.OPEN) {
+                        socket.send(event.data);
+                    }
+                };
+
+                mediaRecorder.start(250); // Send chunks every 250ms for low latency
+                setAudioState(prev => ({ ...prev, isListening: true, transcript: '' }));
+            };
+
+            socket.onmessage = (message) => {
+                const received = JSON.parse(message.data);
+                const transcript = received.channel?.alternatives?.[0]?.transcript;
+
+                if (transcript && received.is_final) {
+                    setAudioState(prev => ({
+                        ...prev,
+                        transcript: prev.transcript ? prev.transcript + ' ' + transcript : transcript
+                    }));
+                } else if (transcript) {
+                    // Show interim results (can be handled differently if UI needs it)
+                    // For now, we'll just append final results to keep it simple but "instant"
                 }
             };
 
-            mediaRecorder.onstop = async () => {
-                // Combine all chunks into a single blob
-                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
-
-                // Stop the stream
-                if (streamRef.current) {
-                    streamRef.current.getTracks().forEach(track => track.stop());
-                    streamRef.current = null;
-                }
-
-                // Transcribe the audio
-                await transcribeAudio(audioBlob);
+            socket.onerror = (error) => {
+                console.error('[Deepgram] WebSocket error:', error);
             };
 
-            // Start recording
-            mediaRecorder.start(1000); // Collect data every second
-            setAudioState(prev => ({ ...prev, isListening: true, transcript: '' }));
+            socket.onclose = () => {
+                console.log('[Deepgram] WebSocket closed');
+                setAudioState(prev => ({ ...prev, isListening: false }));
+            };
 
         } catch (error) {
-            console.error('Failed to start recording:', error);
-            alert('Could not access microphone. Please ensure microphone permissions are granted.');
+            console.error('Failed to start real-time recording:', error);
+            alert('Could not start real-time transcription. Please check microphone permissions.');
         }
-    }, [stopSpeaking, transcribeAudio]);
+    }, [stopSpeaking]);
 
     const stopListening = useCallback(() => {
         if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
             mediaRecorderRef.current.stop();
+        }
+        if (socketRef.current) {
+            socketRef.current.close();
+            socketRef.current = null;
+        }
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
         }
         setAudioState(prev => ({ ...prev, isListening: false }));
     }, []);
