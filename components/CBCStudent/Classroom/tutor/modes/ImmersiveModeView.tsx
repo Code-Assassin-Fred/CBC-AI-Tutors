@@ -2,21 +2,39 @@
 
 import React, { useState } from 'react';
 import { ImmersiveContent, ImmersiveChunk, AssessmentResult } from '@/lib/types/agents';
+import { useTutor } from '@/lib/context/TutorContext';
+import VoiceVisualization from '@/components/shared/VoiceVisualization';
+import { HiOutlineMicrophone, HiOutlineStop, HiOutlineSpeakerWave } from 'react-icons/hi2';
 
 interface ImmersiveModeViewProps {
     content: ImmersiveContent;
 }
 
 export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
+    const { audio, speak, stopSpeaking, startListening, stopListening } = useTutor();
     const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
     const [phase, setPhase] = useState<'learning' | 'explaining' | 'feedback'>('learning');
     const [userExplanation, setUserExplanation] = useState('');
-    const [assessments, setAssessments] = useState<Map<string, AssessmentResult>>(new Map());
     const [isAssessing, setIsAssessing] = useState(false);
+    const [assessments, setAssessments] = useState<Map<string, AssessmentResult>>(new Map());
+
+    // Update terminal from audio transcript
+    React.useEffect(() => {
+        if (audio.isListening && audio.transcript) {
+            setUserExplanation(audio.transcript);
+        }
+    }, [audio.isListening, audio.transcript]);
 
     const currentChunk = content.chunks[currentChunkIndex];
     const totalChunks = content.chunks.length;
     const completedChunks = assessments.size;
+
+    // Auto-speak explanation when entering learning phase
+    React.useEffect(() => {
+        if (phase === 'learning' && currentChunk) {
+            speak(`${currentChunk.concept}. ${currentChunk.aiExplanation}`);
+        }
+    }, [phase, currentChunkIndex]);
 
     const handleStartExplaining = () => {
         setPhase('explaining');
@@ -154,12 +172,24 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                         </p>
                     </div>
 
-                    <button
-                        onClick={handleStartExplaining}
-                        className="w-full py-4 border border-white/10 hover:bg-white/5 text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all"
-                    >
-                        Explain Now
-                    </button>
+                    <div className="flex flex-col gap-4">
+                        <button
+                            onClick={() => audio.isPlaying ? stopSpeaking() : speak(currentChunk.aiExplanation)}
+                            className="w-full py-4 border border-white/10 hover:bg-white/5 text-white flex items-center justify-center gap-3 transition-all"
+                        >
+                            {audio.isPlaying ? <HiOutlineStop className="w-5 h-5 text-sky-500" /> : <HiOutlineSpeakerWave className="w-5 h-5" />}
+                            <span className="font-bold text-[10px] uppercase tracking-[0.2em]">
+                                {audio.isPlaying ? 'Stop Listening' : 'Listen Again'}
+                            </span>
+                        </button>
+
+                        <button
+                            onClick={handleStartExplaining}
+                            className="w-full py-4 bg-sky-600 hover:bg-sky-500 text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all"
+                        >
+                            Explain Now
+                        </button>
+                    </div>
                 </div>
             )}
 
@@ -171,12 +201,28 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                         <p className="text-sm text-white/70 italic leading-relaxed">{currentChunk.promptForStudent}</p>
                     </div>
 
-                    <textarea
-                        value={userExplanation}
-                        onChange={(e) => setUserExplanation(e.target.value)}
-                        placeholder="Type your explanation here..."
-                        className="flex-1 bg-transparent border-b border-white/20 text-sm text-white placeholder-white/20 resize-none focus:outline-none focus:border-white/40 transition-colors py-2"
-                    />
+                    <div className="relative flex-1 flex flex-col">
+                        <textarea
+                            value={userExplanation}
+                            onChange={(e) => setUserExplanation(e.target.value)}
+                            placeholder="Type or speak your explanation here..."
+                            className="flex-1 bg-transparent border-b border-white/20 text-sm text-white placeholder-white/20 resize-none focus:outline-none focus:border-white/40 transition-colors py-2 pr-10"
+                        />
+                        <button
+                            onClick={audio.isListening ? stopListening : startListening}
+                            className={`absolute right-0 bottom-4 p-2 rounded-full transition-all ${audio.isListening ? 'bg-red-500 text-white scale-110 animate-pulse' : 'bg-white/5 text-white/40 hover:text-white'
+                                }`}
+                        >
+                            <HiOutlineMicrophone className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    {audio.isListening && (
+                        <div className="flex items-center gap-3 py-2 px-3 bg-red-500/10 rounded-lg border border-red-500/20">
+                            <VoiceVisualization isActive={true} color="bg-red-500" />
+                            <span className="text-[10px] text-red-500 uppercase font-bold tracking-widest">Listening...</span>
+                        </div>
+                    )}
 
                     <button
                         onClick={handleSubmitExplanation}
@@ -196,7 +242,7 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                         <div className="flex items-center justify-between mb-4">
                             <span className="text-[10px] uppercase tracking-widest text-white/40">Assessment Result</span>
                             <span className={`text-xl font-bold font-mono ${currentAssessment.level === 'excellent' ? 'text-emerald-400' :
-                                    currentAssessment.level === 'good' ? 'text-sky-400' : 'text-amber-400'
+                                currentAssessment.level === 'good' ? 'text-sky-400' : 'text-amber-400'
                                 }`}>
                                 {currentAssessment.score}%
                             </span>

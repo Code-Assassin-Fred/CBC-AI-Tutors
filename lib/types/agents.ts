@@ -191,6 +191,23 @@ export interface QuizOutput {
 }
 
 // ============================================
+// AUDIO & VOICE TYPES
+// ============================================
+
+export interface AudioState {
+    isPlaying: boolean;
+    isListening: boolean;
+    transcript?: string;
+    activeTextId?: string; // To highlight specific paragraphs
+}
+
+export interface VoiceConfig {
+    voiceType: 'standard' | 'wavenet' | 'neural2';
+    languageCode: string;
+    ssmlGender: 'NEUTRAL' | 'FEMALE' | 'MALE';
+}
+
+// ============================================
 // TUTOR PANEL MODES
 // ============================================
 
@@ -204,6 +221,7 @@ export interface TutorPanelState {
     preparedContent: PlannerOutput | null;
     quizContent: QuizOutput | null;
     loadingProgress: LoadingProgress | null;
+    audio: AudioState;
 }
 
 export interface LoadingProgress {

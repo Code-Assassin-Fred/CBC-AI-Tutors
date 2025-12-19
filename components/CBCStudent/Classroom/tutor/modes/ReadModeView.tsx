@@ -3,16 +3,36 @@
 import React, { useState } from 'react';
 import { ReadModeContent, ChatMessage } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
+import VoiceVisualization from '@/components/shared/VoiceVisualization';
+import { HiOutlineSpeakerWave, HiOutlineStop } from 'react-icons/hi2';
 
 interface ReadModeViewProps {
     content: ReadModeContent;
 }
 
 export default function ReadModeView({ content }: ReadModeViewProps) {
-    const { chatMessages, sendChatMessage, context } = useTutor();
+    const {
+        chatMessages,
+        sendChatMessage,
+        context,
+        speak,
+        stopSpeaking,
+        audio
+    } = useTutor();
     const [inputValue, setInputValue] = useState('');
     const [isSending, setIsSending] = useState(false);
     const [activeSection, setActiveSection] = useState<string | null>(null);
+
+    const handleSpeakAll = async () => {
+        if (audio.isPlaying) {
+            stopSpeaking();
+            return;
+        }
+
+        // Combine all text for speaking
+        const allText = `${content.introduction}. ${content.sections.map(s => `${s.title}. ${s.content}`).join('. ')}. In summary, ${content.summary}`;
+        speak(allText);
+    };
 
     const handleSend = async () => {
         if (!inputValue.trim() || isSending) return;
@@ -35,9 +55,18 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
             {/* Content Area */}
             <div className="flex-1 overflow-y-auto pr-2 space-y-8 scrollbar-hide">
                 {/* Introduction */}
-                <div className="pb-4 border-b border-white/10">
-                    <h4 className="text-sm font-semibold text-sky-400 uppercase tracking-wider mb-2">Introduction</h4>
+                <div className="pb-4 border-b border-white/10 group relative">
+                    <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-sm font-semibold text-sky-400 uppercase tracking-wider">Introduction</h4>
+                        <button
+                            onClick={audio.isPlaying ? stopSpeaking : () => speak(content.introduction)}
+                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all"
+                        >
+                            {audio.isPlaying ? <HiOutlineStop className="w-4 h-4" /> : <HiOutlineSpeakerWave className="w-4 h-4" />}
+                        </button>
+                    </div>
                     <p className="text-sm text-white/80 leading-relaxed">{content.introduction}</p>
+                    {audio.isPlaying && <div className="mt-2"><VoiceVisualization isActive={true} /></div>}
                 </div>
 
                 {/* Sections */}
@@ -47,18 +76,29 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                         className="space-y-4"
                     >
                         {/* Section Header */}
-                        <button
-                            onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}
-                            className="w-full flex items-center justify-between group transition-colors"
-                        >
-                            <span className="text-sm font-bold text-white flex items-center gap-2">
-                                <span className="text-white/40">{index + 1}.</span>
-                                {section.title}
-                            </span>
-                            <span className={`text-white/20 group-hover:text-white/40 transition-transform ${activeSection === section.id ? 'rotate-180' : ''}`}>
-                                ▼
-                            </span>
-                        </button>
+                        <div className="w-full flex items-center justify-between group/header">
+                            <button
+                                onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}
+                                className="flex-1 flex items-center group transition-colors py-2 text-left"
+                            >
+                                <span className="text-sm font-bold text-white flex items-center gap-2">
+                                    <span className="text-white/40">{index + 1}.</span>
+                                    {section.title}
+                                </span>
+                                <span className={`ml-4 text-white/20 group-hover:text-white/40 transition-transform ${activeSection === section.id ? 'rotate-180' : ''}`}>
+                                    ▼
+                                </span>
+                            </button>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    audio.isPlaying ? stopSpeaking : speak(`${section.title}. ${section.content}`);
+                                }}
+                                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/40 hover:text-white opacity-0 group-hover/header:opacity-100 transition-all"
+                            >
+                                <HiOutlineSpeakerWave className="w-4 h-4" />
+                            </button>
+                        </div>
 
                         {/* Section Content */}
                         {(activeSection === section.id || index === 0) && (

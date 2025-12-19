@@ -10,7 +10,17 @@ import {
     LoadingProgress,
     ChatMessage,
     StreamEvent,
+    AudioState,
+    VoiceConfig,
 } from '@/lib/types/agents';
+
+// Declare global for SpeechRecognition
+declare global {
+    interface Window {
+        SpeechRecognition: any;
+        webkitSpeechRecognition: any;
+    }
+}
 
 // ============================================
 // CONTEXT TYPE
@@ -25,6 +35,7 @@ interface TutorContextType {
     quizContent: QuizOutput | null;
     loadingProgress: LoadingProgress | null;
     chatMessages: ChatMessage[];
+    audio: AudioState;
 
     // Actions
     activateLearningMode: (context: SubstrandContext) => Promise<void>;
@@ -33,6 +44,10 @@ interface TutorContextType {
     exitMode: () => void;
     sendChatMessage: (message: string) => Promise<void>;
     clearChat: () => void;
+    speak: (text: string, options?: Partial<VoiceConfig>) => Promise<void>;
+    stopSpeaking: () => void;
+    startListening: () => void;
+    stopListening: () => void;
 }
 
 const TutorContext = createContext<TutorContextType | null>(null);
@@ -54,6 +69,138 @@ export function TutorProvider({ children }: TutorProviderProps) {
     const [quizContent, setQuizContent] = useState<QuizOutput | null>(null);
     const [loadingProgress, setLoadingProgress] = useState<LoadingProgress | null>(null);
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+    const [audioState, setAudioState] = useState<AudioState>({
+        isPlaying: false,
+        isListening: false,
+    });
+
+    // Refs for audio and recognition
+    const audioRef = React.useRef<HTMLAudioElement | null>(null);
+    const recognitionRef = React.useRef<any>(null);
+
+    // Initialize audio ref on mount
+    React.useEffect(() => {
+        audioRef.current = new Audio();
+        audioRef.current.onended = () => {
+            setAudioState(prev => ({ ...prev, isPlaying: false, activeTextId: undefined }));
+        };
+
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+            }
+            if (recognitionRef.current) {
+                recognitionRef.current.stop();
+            }
+        };
+    }, []);
+
+    // ============================================
+    // SPEECH (TTS)
+    // ============================================
+
+    const stopSpeaking = useCallback(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+        }
+        setAudioState(prev => ({ ...prev, isPlaying: false, activeTextId: undefined }));
+    }, []);
+
+    const speak = useCallback(async (text: string, options?: Partial<VoiceConfig>) => {
+        stopSpeaking(); // Stop any current audio
+
+        return new Promise<void>(async (resolve, reject) => {
+            try {
+                setAudioState(prev => ({ ...prev, isPlaying: true }));
+
+                const response = await fetch('/api/tutor/speech', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        text,
+                        voiceType: options?.voiceType || 'neural2',
+                        languageCode: options?.languageCode || 'en-US',
+                        ssmlGender: options?.ssmlGender || 'NEUTRAL',
+                    }),
+                });
+
+                if (!response.ok) throw new Error('Speech synthesis failed');
+
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+
+                if (audioRef.current) {
+                    audioRef.current.src = url;
+
+                    audioRef.current.onended = () => {
+                        setAudioState(prev => ({ ...prev, isPlaying: false, activeTextId: undefined }));
+                        resolve();
+                    };
+
+                    audioRef.current.onerror = (e) => {
+                        reject(e);
+                    };
+
+                    await audioRef.current.play();
+                } else {
+                    resolve();
+                }
+            } catch (error) {
+                console.error('TTS error:', error);
+                setAudioState(prev => ({ ...prev, isPlaying: false }));
+                reject(error);
+            }
+        });
+    }, [stopSpeaking]);
+
+    // ============================================
+    // LISTENING (STT)
+    // ============================================
+
+    const startListening = useCallback(() => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert('Speech recognition is not supported in this browser.');
+            return;
+        }
+
+        stopSpeaking(); // Don't listen to yourself
+
+        if (!recognitionRef.current) {
+            recognitionRef.current = new SpeechRecognition();
+            recognitionRef.current.continuous = true;
+            recognitionRef.current.interimResults = true;
+
+            recognitionRef.current.onresult = (event: any) => {
+                let currentTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    currentTranscript += event.results[i][0].transcript;
+                }
+                setAudioState(prev => ({ ...prev, transcript: currentTranscript }));
+            };
+
+            recognitionRef.current.onerror = (event: any) => {
+                console.error('Recognition error:', event.error);
+                setAudioState(prev => ({ ...prev, isListening: false }));
+            };
+
+            recognitionRef.current.onend = () => {
+                setAudioState(prev => ({ ...prev, isListening: false }));
+            };
+        }
+
+        setAudioState(prev => ({ ...prev, isListening: true, transcript: '' }));
+        recognitionRef.current.start();
+    }, [stopSpeaking]);
+
+    const stopListening = useCallback(() => {
+        if (recognitionRef.current) {
+            recognitionRef.current.stop();
+        }
+        setAudioState(prev => ({ ...prev, isListening: false }));
+    }, []);
 
     // ============================================
     // PLANNER AGENT - 6 Step Process
@@ -339,6 +486,8 @@ export function TutorProvider({ children }: TutorProviderProps) {
     }, []);
 
     const exitMode = useCallback(() => {
+        stopSpeaking();
+        stopListening();
         setMode('idle');
         setLearningSubModeState(null);
         setContext(null);
@@ -346,7 +495,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
         setQuizContent(null);
         setLoadingProgress(null);
         setChatMessages([]);
-    }, []);
+    }, [stopSpeaking, stopListening]);
 
     const clearChat = useCallback(() => {
         setChatMessages([]);
@@ -364,12 +513,17 @@ export function TutorProvider({ children }: TutorProviderProps) {
         quizContent,
         loadingProgress,
         chatMessages,
+        audio: audioState,
         activateLearningMode,
         activateQuizMode,
         setLearningSubMode,
         exitMode,
         sendChatMessage,
         clearChat,
+        speak,
+        stopSpeaking,
+        startListening,
+        stopListening,
     };
 
     return (
