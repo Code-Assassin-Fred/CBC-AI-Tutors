@@ -145,7 +145,13 @@ export function TutorProvider({ children }: TutorProviderProps) {
                         reject(e);
                     };
 
-                    await audioRef.current.play();
+                    await audioRef.current.play().catch(e => {
+                        if (e.name === 'AbortError') {
+                            console.log('Audio playback was interrupted (expected)');
+                        } else {
+                            throw e;
+                        }
+                    });
                 } else {
                     resolve();
                 }
@@ -169,7 +175,11 @@ export function TutorProvider({ children }: TutorProviderProps) {
 
             // 1. Get temporary token from backend
             const tokenResponse = await fetch('/api/tutor/stt/token');
-            if (!tokenResponse.ok) throw new Error('Failed to get STT token');
+            if (!tokenResponse.ok) {
+                const errorData = await tokenResponse.json().catch(() => ({}));
+                console.error('[STT] Token fetch failed:', errorData);
+                throw new Error(errorData.error || 'Failed to get STT token');
+            }
             const tokenData = await tokenResponse.json();
             const apiKey = tokenData.key;
 
