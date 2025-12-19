@@ -197,6 +197,7 @@ export interface QuizOutput {
 export interface AudioState {
     isPlaying: boolean;
     isListening: boolean;
+    isTranscribing?: boolean;  // True when audio is being sent to Google Cloud STT
     transcript?: string;
     activeTextId?: string; // To highlight specific paragraphs
 }

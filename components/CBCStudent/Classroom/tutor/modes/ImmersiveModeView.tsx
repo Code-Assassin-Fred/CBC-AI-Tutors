@@ -224,6 +224,13 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                         </div>
                     )}
 
+                    {audio.isTranscribing && (
+                        <div className="flex items-center gap-3 py-2 px-3 bg-sky-500/10 rounded-lg border border-sky-500/20">
+                            <div className="w-4 h-4 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
+                            <span className="text-[10px] text-sky-500 uppercase font-bold tracking-widest">Processing speech...</span>
+                        </div>
+                    )}
+
                     <button
                         onClick={handleSubmitExplanation}
                         disabled={!userExplanation.trim() || isAssessing}
