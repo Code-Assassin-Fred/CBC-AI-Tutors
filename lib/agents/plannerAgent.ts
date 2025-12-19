@@ -187,8 +187,8 @@ export async function generatePodcastScript(
   const prompt = `You are a script writer for an educational podcast for Kenyan students.
 
 Write a COMPLETE podcast script with TWO HOSTS:
-- Mwalimu (Teacher): Knowledgeable, encouraging, explains concepts
-- Mwanafunzi (Student): Curious, asks good questions, sometimes confused
+- Teacher: Knowledgeable, encouraging, explains concepts
+- Student: Curious, asks good questions, sometimes confused
 
 SUBSTRAND: ${context.substrand}
 GRADE: ${context.grade}
@@ -209,8 +209,8 @@ Respond with ONLY a JSON object:
   "duration": "X minutes",
   "introduction": "One paragraph setting up what we'll learn",
   "dialogue": [
-    { "id": "d1", "speaker": "Mwalimu", "text": "...", "emotion": "encouraging" },
-    { "id": "d2", "speaker": "Mwanafunzi", "text": "...", "emotion": "curious" }
+    { "id": "d1", "speaker": "Teacher", "text": "...", "emotion": "encouraging" },
+    { "id": "d2", "speaker": "Student", "text": "...", "emotion": "curious" }
   ],
   "conclusion": "Closing message"
 }`;

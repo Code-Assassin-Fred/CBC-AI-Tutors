@@ -101,7 +101,7 @@ export interface PodcastScript {
     introduction: string;
     dialogue: Array<{
         id: string;
-        speaker: 'Mwalimu' | 'Mwanafunzi';
+        speaker: 'Teacher' | 'Student';
         text: string;
         emotion?: 'curious' | 'excited' | 'thoughtful' | 'encouraging';
     }>;
