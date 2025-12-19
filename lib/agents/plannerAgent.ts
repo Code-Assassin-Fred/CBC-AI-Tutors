@@ -152,12 +152,15 @@ Respond with ONLY a JSON object:
     {
       "id": "section-1",
       "title": "Section Title",
-      "content": "Full, detailed explanation paragraph(s)...",
-      "keyPoints": ["Key point 1", "Key point 2"],
-      "examples": [
-        { "title": "Example Name", "description": "Detailed example..." }
-      ],
-      "visualAids": ["Description of helpful diagram"]
+      "content": "...",
+      "keyPoints": ["..."],
+      "examples": [{ "title": "...", "description": "..." }],
+      "visualAids": ["..."]
+    },
+    {
+      "id": "section-2",
+      "title": "Another Section",
+      ...
     }
   ],
   "summary": "Summary of what was learned...",
@@ -210,7 +213,8 @@ Respond with ONLY a JSON object:
   "introduction": "One paragraph setting up what we'll learn",
   "dialogue": [
     { "id": "d1", "speaker": "Teacher", "text": "...", "emotion": "encouraging" },
-    { "id": "d2", "speaker": "Student", "text": "...", "emotion": "curious" }
+    { "id": "d2", "speaker": "Student", "text": "...", "emotion": "curious" },
+    { "id": "d3", "speaker": "Teacher", "text": "...", "emotion": "encouraging" }
   ],
   "conclusion": "Closing message"
 }`;
@@ -260,16 +264,17 @@ Respond with ONLY a JSON object:
     {
       "id": "chunk-1",
       "order": 1,
-      "concept": "The main concept being taught",
-      "aiExplanation": "Clear, detailed explanation (2-3 paragraphs)...",
-      "keyPointsToCheck": ["point the student MUST mention"],
-      "promptForStudent": "Now it's your turn! Explain this in your own words.",
-      "scoringRubric": {
-        "excellent": ["Mentioned X and Y"],
-        "good": ["Mentioned main concept"],
-        "needsWork": ["Missed key point X"]
-      },
-      "followUpIfStruggling": "That's okay! Let me explain it another way..."
+      "concept": "...",
+      "aiExplanation": "...",
+      "keyPointsToCheck": ["..."],
+      "promptForStudent": "...",
+      "scoringRubric": { "excellent": ["..."], "good": ["..."], "needsWork": ["..."] },
+      "followUpIfStruggling": "..."
+    },
+    {
+      "id": "chunk-2",
+      "order": 2,
+      ...
     }
   ],
   "completionMessage": "Congratulations message when all chunks are mastered"

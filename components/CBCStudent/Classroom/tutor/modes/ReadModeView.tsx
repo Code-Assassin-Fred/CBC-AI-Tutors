@@ -72,7 +72,7 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                 {/* Sections */}
                 {content.sections.map((section, index) => (
                     <div
-                        key={section.id}
+                        key={`${section.id}-${index}`}
                         className="space-y-4"
                     >
                         {/* Section Header */}

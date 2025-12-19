@@ -61,7 +61,7 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
             <div className="flex-1 overflow-y-auto scrollbar-hide space-y-6 pr-2" ref={containerRef}>
                 {script.dialogue.map((segment, index) => (
                     <div
-                        key={segment.id}
+                        key={`${segment.id}-${index}`}
                         className={`space-y-1 transition-opacity duration-500 ${currentSegmentIndex === index ? 'opacity-100' : 'opacity-40'
                             }`}
                     >

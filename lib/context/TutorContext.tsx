@@ -126,7 +126,10 @@ export function TutorProvider({ children }: TutorProviderProps) {
                     }),
                 });
 
-                if (!response.ok) throw new Error('Speech synthesis failed');
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.details || 'Speech synthesis failed');
+                }
 
                 const blob = await response.blob();
                 const url = URL.createObjectURL(blob);

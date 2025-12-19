@@ -14,6 +14,13 @@ const client = new TextToSpeechClient({
 
 export async function POST(request: NextRequest) {
     try {
+        if (!googleCredentials.project_id || !googleCredentials.client_email || !googleCredentials.private_key) {
+            return NextResponse.json({
+                error: 'Configuration error',
+                details: 'Google Cloud credentials are not fully configured in environment variables.'
+            }, { status: 500 });
+        }
+
         const { text, voiceType = 'neural2', languageCode = 'en-US', ssmlGender = 'NEUTRAL' } = await request.json();
 
         if (!text) {
@@ -21,25 +28,29 @@ export async function POST(request: NextRequest) {
         }
 
         // Select the voice name based on type, language, and gender
-        let voiceName = 'en-US-Neural2-F'; // Default: Female Neural
+        let voiceName = 'en-US-Neural2-F';
+        let actualGender: 'MALE' | 'FEMALE' = 'FEMALE';
 
         if (languageCode === 'en-US') {
             if (ssmlGender === 'MALE') {
+                actualGender = 'MALE';
                 if (voiceType === 'standard') voiceName = 'en-US-Standard-B';
-                if (voiceType === 'wavenet') voiceName = 'en-US-Wavenet-D';
-                if (voiceType === 'neural2') voiceName = 'en-US-Neural2-J';
+                else if (voiceType === 'wavenet') voiceName = 'en-US-Wavenet-D';
+                else voiceName = 'en-US-Neural2-J';
             } else {
+                // Default to FEMALE for NEUTRAL or FEMALE requests
+                actualGender = 'FEMALE';
                 if (voiceType === 'standard') voiceName = 'en-US-Standard-C';
-                if (voiceType === 'wavenet') voiceName = 'en-US-Wavenet-F';
-                if (voiceType === 'neural2') voiceName = 'en-US-Neural2-F';
+                else if (voiceType === 'wavenet') voiceName = 'en-US-Wavenet-F';
+                else voiceName = 'en-US-Neural2-F';
             }
         }
 
-        console.log(`[TTS] Synthesizing: "${text.substring(0, 30)}..." voice: ${voiceName}`);
+        console.log(`[TTS] Synthesizing: "${text.substring(0, 30)}..." voice: ${voiceName} (${actualGender})`);
 
         const [response] = await client.synthesizeSpeech({
             input: { text },
-            voice: { languageCode, name: voiceName, ssmlGender },
+            voice: { languageCode, name: voiceName, ssmlGender: actualGender },
             audioConfig: { audioEncoding: 'MP3' },
         });
 
@@ -50,7 +61,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Return the binary data directly
-        return new NextResponse(audioContent as Uint8Array, {
+        return new NextResponse(Buffer.from(audioContent as Uint8Array), {
             headers: {
                 'Content-Type': 'audio/mpeg',
                 'Content-Length': audioContent.length.toString(),
@@ -58,9 +69,14 @@ export async function POST(request: NextRequest) {
         });
 
     } catch (error: any) {
-        console.error('[TTS] Error:', error.message);
+        console.error('[TTS] Error:', error);
         return NextResponse.json(
-            { error: 'Failed to synthesize speech', details: error.message },
+            {
+                error: 'Failed to synthesize speech',
+                details: error.message,
+                code: error.code,
+                stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+            },
             { status: 500 }
         );
     }
