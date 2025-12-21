@@ -165,93 +165,134 @@ export function TutorProvider({ children }: TutorProviderProps) {
     }, [stopSpeaking]);
 
     // ============================================
-    // LISTENING (STT) - Deepgram Real-time
+    // LISTENING (STT) - AssemblyAI Real-time
     // ============================================
 
     const socketRef = React.useRef<WebSocket | null>(null);
+    const audioContextRef = React.useRef<AudioContext | null>(null);
+    const processorRef = React.useRef<ScriptProcessorNode | null>(null);
 
     const startListening = useCallback(async () => {
         try {
             stopSpeaking(); // Don't listen to yourself
 
             // 1. Request microphone access immediately (PROMPT USER)
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true }).catch(err => {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    sampleRate: 16000,
+                    channelCount: 1,
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                }
+            }).catch(err => {
                 console.error('[STT] Mic access denied:', err);
                 throw new Error('Microphone access denied. Please check your browser settings.');
             });
             streamRef.current = stream;
 
-            // 2. Get temporary token from backend in parallel
+            // 2. Get temporary token from backend
             const tokenResponse = await fetch('/api/tutor/stt/token');
             if (!tokenResponse.ok) {
                 const errorData = await tokenResponse.json().catch(() => ({}));
                 console.error('[STT] Token fetch failed:', errorData);
                 const msg = errorData.message || errorData.error || 'Failed to get STT token';
-                throw new Error(`${msg}. Please ensure DEEPGRAM_API_KEY is an Admin/Owner key.`);
+                throw new Error(`${msg}. Please ensure ASSEMBLY_API_KEY is configured.`);
             }
             const tokenData = await tokenResponse.json();
-            const apiKey = tokenData.key;
+            console.log('[STT] Token response received');
+            const token = tokenData.token;
 
-            if (!apiKey) throw new Error('No API key returned from token endpoint');
+            if (!token) {
+                console.error('[STT] No token in response:', tokenData);
+                throw new Error('No token returned from token endpoint. Check console for full response.');
+            }
+            console.log('[STT] Got temporary token, connecting to AssemblyAI...');
 
-            // 3. Connect to Deepgram via WebSocket
-            // Using nova-2 model for best speed/accuracy
-            const socket = new WebSocket('wss://api.deepgram.com/v1/listen?model=nova-2&smart_format=true&interim_results=true', [
-                'token',
-                apiKey,
-            ]);
+            // 3. Connect to AssemblyAI via WebSocket
+            const socket = new WebSocket(
+                `wss://streaming.assemblyai.com/v3/ws?sample_rate=16000&token=${token}`
+            );
 
             socketRef.current = socket;
 
             socket.onopen = () => {
-                console.log('[Deepgram] WebSocket opened');
+                console.log('[AssemblyAI] WebSocket opened successfully');
 
-                // Create MediaRecorder to stream audio
-                const mediaRecorder = new MediaRecorder(stream, {
-                    mimeType: 'audio/webm;codecs=opus',
-                });
-                mediaRecorderRef.current = mediaRecorder;
+                // Create AudioContext for PCM16 conversion
+                const audioContext = new AudioContext({ sampleRate: 16000 });
+                audioContextRef.current = audioContext;
 
-                mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0 && socket.readyState === WebSocket.OPEN) {
-                        socket.send(event.data);
+                const source = audioContext.createMediaStreamSource(stream);
+
+                // Use ScriptProcessorNode to get raw PCM data
+                // Buffer size of 4096 gives ~256ms chunks at 16kHz
+                const processor = audioContext.createScriptProcessor(4096, 1, 1);
+                processorRef.current = processor;
+
+                processor.onaudioprocess = (event) => {
+                    if (socket.readyState === WebSocket.OPEN) {
+                        const inputData = event.inputBuffer.getChannelData(0);
+
+                        // Convert Float32Array to Int16Array (PCM16)
+                        const pcm16 = new Int16Array(inputData.length);
+                        for (let i = 0; i < inputData.length; i++) {
+                            // Clamp to [-1, 1] and scale to Int16 range
+                            const s = Math.max(-1, Math.min(1, inputData[i]));
+                            pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+                        }
+
+                        socket.send(pcm16.buffer);
                     }
                 };
 
-                mediaRecorder.start(250); // Send chunks every 250ms for low latency
+                source.connect(processor);
+                processor.connect(audioContext.destination);
+
+                console.log('[AssemblyAI] Audio processing started');
                 setAudioState(prev => ({ ...prev, isListening: true, transcript: '' }));
             };
 
             socket.onmessage = (message) => {
                 const received = JSON.parse(message.data);
-                const transcript = received.channel?.alternatives?.[0]?.transcript;
 
-                if (transcript) {
-                    if (received.is_final) {
-                        // Append final transcript
-                        setAudioState(prev => ({
-                            ...prev,
-                            transcript: (prev.transcript?.replace(/\s*\(transcribing\.\.\.\)$/, '') || '') + ' ' + transcript.trim()
-                        }));
-                    } else {
-                        // Show interim result (volatile)
-                        setAudioState(prev => {
-                            const base = prev.transcript?.replace(/\s*\(transcribing\.\.\.\)$/, '') || '';
-                            return {
+                // Handle different message types
+                if (received.type === 'Begin') {
+                    console.log('[AssemblyAI] Session started:', received.id);
+                } else if (received.type === 'Turn') {
+                    const transcript = received.transcript;
+                    console.log('[AssemblyAI] Turn:', transcript, 'end_of_turn:', received.end_of_turn);
+
+                    if (transcript) {
+                        if (received.end_of_turn) {
+                            // Final transcript for this turn
+                            setAudioState(prev => ({
                                 ...prev,
-                                transcript: base + (base ? ' ' : '') + transcript.trim() + ' (transcribing...)'
-                            };
-                        });
+                                transcript: (prev.transcript?.replace(/\s*\(transcribing\.\.\.\)$/, '') || '') + ' ' + transcript.trim()
+                            }));
+                        } else {
+                            // Interim result
+                            setAudioState(prev => {
+                                const base = prev.transcript?.replace(/\s*\(transcribing\.\.\.\)$/, '') || '';
+                                return {
+                                    ...prev,
+                                    transcript: base + (base ? ' ' : '') + transcript.trim() + ' (transcribing...)'
+                                };
+                            });
+                        }
                     }
+                } else if (received.type === 'Termination') {
+                    console.log('[AssemblyAI] Session terminated:', received.audio_duration_seconds, 'seconds processed');
+                } else if (received.type === 'Error') {
+                    console.error('[AssemblyAI] Error:', received.error);
                 }
             };
 
             socket.onerror = (error) => {
-                console.error('[Deepgram] WebSocket error:', error);
+                console.error('[AssemblyAI] WebSocket error:', error);
             };
 
-            socket.onclose = () => {
-                console.log('[Deepgram] WebSocket closed');
+            socket.onclose = (event) => {
+                console.log('[AssemblyAI] WebSocket closed, code:', event.code, 'reason:', event.reason);
                 setAudioState(prev => ({ ...prev, isListening: false }));
             };
 
@@ -266,13 +307,29 @@ export function TutorProvider({ children }: TutorProviderProps) {
     }, [stopSpeaking]);
 
     const stopListening = useCallback(() => {
+        // Stop audio processing
+        if (processorRef.current) {
+            processorRef.current.disconnect();
+            processorRef.current = null;
+        }
+        if (audioContextRef.current) {
+            audioContextRef.current.close();
+            audioContextRef.current = null;
+        }
         if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
             mediaRecorderRef.current.stop();
         }
+
+        // Send termination signal and close socket
         if (socketRef.current) {
+            if (socketRef.current.readyState === WebSocket.OPEN) {
+                socketRef.current.send(JSON.stringify({ type: 'Terminate' }));
+            }
             socketRef.current.close();
             socketRef.current = null;
         }
+
+        // Stop microphone
         if (streamRef.current) {
             streamRef.current.getTracks().forEach(track => track.stop());
             streamRef.current = null;

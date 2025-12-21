@@ -1,67 +1,47 @@
-import { createClient } from "@deepgram/sdk";
 import { NextResponse } from "next/server";
 
 export const revalidate = 0;
 
 export async function GET() {
     try {
-        const apiKey = process.env.DEEPGRAM_API_KEY;
+        const apiKey = process.env.ASSEMBLY_API_KEY;
 
         if (!apiKey) {
-            console.error("[Deepgram Token] Missing DEEPGRAM_API_KEY");
+            console.error("[AssemblyAI Token] Missing ASSEMBLY_API_KEY");
             return NextResponse.json(
-                { error: "Deepgram API key not configured" },
+                { error: "AssemblyAI API key not configured" },
                 { status: 500 }
             );
         }
 
-        const deepgram = createClient(apiKey);
-
-        // 1. Get Project ID (essential if not provided in env)
-        let projectId = process.env.DEEPGRAM_PROJECT_ID;
-
-        if (!projectId) {
-            console.log("[Deepgram Token] Project ID not in ENV, fetching from API...");
-            const { result: projects, error: projectsError } = await deepgram.manage.getProjects();
-
-            if (projectsError || !projects || projects.projects.length === 0) {
-                console.error("[Deepgram Token] Failed to fetch projects:", projectsError);
-                return NextResponse.json(
-                    { error: "Could not find a Deepgram project", details: projectsError },
-                    { status: 500 }
-                );
-            }
-            projectId = projects.projects[0].project_id;
-            console.log(`[Deepgram Token] Using project: ${projectId}`);
-        }
-
-        // 2. Create temporary key
-        const { result, error } = await deepgram.manage.createProjectKey(
-            projectId,
+        // Generate a temporary token for client-side authentication
+        // This token expires in 120 seconds and is single-use
+        const response = await fetch(
+            'https://streaming.assemblyai.com/v3/token?expires_in_seconds=120',
             {
-                comment: "Temporary key for real-time transcription",
-                scopes: ["usage:write"],
-                tags: ["nextjs-app"],
-                time_to_live_in_seconds: 120, // Increased TTL slightly
+                method: 'GET',
+                headers: {
+                    'Authorization': apiKey,
+                },
             }
         );
 
-        if (error) {
-            console.error("[Deepgram Token] Error creating key. Full error:", JSON.stringify(error, null, 2));
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("[AssemblyAI Token] Failed to generate token:", errorText);
             return NextResponse.json(
-                {
-                    error: "Failed to create temporary key",
-                    message: error.message || "Deepgram API error. Your API key might lack 'keys:write' permissions.",
-                    details: error
-                },
+                { error: "Failed to generate temporary token", details: errorText },
                 { status: 500 }
             );
         }
 
-        // Ensure the response structure matches what TutorContext expects
-        return NextResponse.json(result);
+        const data = await response.json();
+        console.log("[AssemblyAI Token] Token generated successfully");
+
+        // Return the token to the client
+        return NextResponse.json({ token: data.token });
     } catch (err: any) {
-        console.error("[Deepgram Token] Unexpected error:", err);
+        console.error("[AssemblyAI Token] Unexpected error:", err);
         return NextResponse.json(
             { error: "Internal server error", details: err.message },
             { status: 500 }
