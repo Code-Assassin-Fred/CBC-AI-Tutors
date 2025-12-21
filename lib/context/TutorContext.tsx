@@ -42,6 +42,7 @@ interface TutorContextType {
     stopSpeaking: () => void;
     startListening: () => void;
     stopListening: () => void;
+    setAudioState: React.Dispatch<React.SetStateAction<AudioState>>;
 }
 
 const TutorContext = createContext<TutorContextType | null>(null);
@@ -185,7 +186,8 @@ export function TutorProvider({ children }: TutorProviderProps) {
             if (!tokenResponse.ok) {
                 const errorData = await tokenResponse.json().catch(() => ({}));
                 console.error('[STT] Token fetch failed:', errorData);
-                throw new Error(errorData.error || 'Failed to get STT token. Please ensure DEEPGRAM_API_KEY is configured.');
+                const msg = errorData.message || errorData.error || 'Failed to get STT token';
+                throw new Error(`${msg}. Please ensure DEEPGRAM_API_KEY is an Admin/Owner key.`);
             }
             const tokenData = await tokenResponse.json();
             const apiKey = tokenData.key;
@@ -224,11 +226,23 @@ export function TutorProvider({ children }: TutorProviderProps) {
                 const received = JSON.parse(message.data);
                 const transcript = received.channel?.alternatives?.[0]?.transcript;
 
-                if (transcript && received.is_final) {
-                    setAudioState(prev => ({
-                        ...prev,
-                        transcript: prev.transcript ? prev.transcript + ' ' + transcript : transcript
-                    }));
+                if (transcript) {
+                    if (received.is_final) {
+                        // Append final transcript
+                        setAudioState(prev => ({
+                            ...prev,
+                            transcript: (prev.transcript?.replace(/\s*\(transcribing\.\.\.\)$/, '') || '') + ' ' + transcript.trim()
+                        }));
+                    } else {
+                        // Show interim result (volatile)
+                        setAudioState(prev => {
+                            const base = prev.transcript?.replace(/\s*\(transcribing\.\.\.\)$/, '') || '';
+                            return {
+                                ...prev,
+                                transcript: base + (base ? ' ' : '') + transcript.trim() + ' (transcribing...)'
+                            };
+                        });
+                    }
                 }
             };
 
@@ -588,6 +602,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
         stopSpeaking,
         startListening,
         stopListening,
+        setAudioState,
     };
 
     return (

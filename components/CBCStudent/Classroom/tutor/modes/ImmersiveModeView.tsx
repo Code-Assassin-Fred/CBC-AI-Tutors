@@ -11,7 +11,7 @@ interface ImmersiveModeViewProps {
 }
 
 export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
-    const { audio, speak, stopSpeaking, startListening, stopListening } = useTutor();
+    const { audio, speak, stopSpeaking, startListening, stopListening, setAudioState } = useTutor();
     const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
     const [phase, setPhase] = useState<'learning' | 'explaining' | 'feedback'>('learning');
     const [userExplanation, setUserExplanation] = useState('');
@@ -21,9 +21,21 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
     // Update terminal from audio transcript
     React.useEffect(() => {
         if (audio.isListening && audio.transcript) {
-            setUserExplanation(audio.transcript);
+            // Only update if it's not just the placeholder
+            const displayTranscript = audio.transcript.replace(/\s*\(transcribing\.\.\.\)$/, '');
+            if (displayTranscript) {
+                setUserExplanation(displayTranscript);
+            }
         }
     }, [audio.isListening, audio.transcript]);
+
+    // Clean up transcript placeholder when stopping
+    React.useEffect(() => {
+        if (!audio.isListening && audio.transcript?.includes('(transcribing...)')) {
+            const cleaned = audio.transcript.replace(/\s*\(transcribing\.\.\.\)$/, '');
+            setAudioState(prev => ({ ...prev, transcript: cleaned }));
+        }
+    }, [audio.isListening, audio.transcript, setAudioState]);
 
     const currentChunk = content.chunks[currentChunkIndex];
     const totalChunks = content.chunks.length;

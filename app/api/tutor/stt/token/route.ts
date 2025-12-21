@@ -47,9 +47,13 @@ export async function GET() {
         );
 
         if (error) {
-            console.error("[Deepgram Token] Error creating key:", error);
+            console.error("[Deepgram Token] Error creating key. Full error:", JSON.stringify(error, null, 2));
             return NextResponse.json(
-                { error: "Failed to create temporary key", details: error },
+                {
+                    error: "Failed to create temporary key",
+                    message: error.message || "Deepgram API error. Your API key might lack 'keys:write' permissions.",
+                    details: error
+                },
                 { status: 500 }
             );
         }
