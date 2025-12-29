@@ -165,168 +165,100 @@ export function TutorProvider({ children }: TutorProviderProps) {
     }, [stopSpeaking]);
 
     // ============================================
-    // LISTENING (STT) - AssemblyAI Real-time
+    // LISTENING (STT) - OpenAI Whisper (Record then Transcribe)
     // ============================================
 
-    const socketRef = React.useRef<WebSocket | null>(null);
-    const audioContextRef = React.useRef<AudioContext | null>(null);
-    const processorRef = React.useRef<ScriptProcessorNode | null>(null);
+    // Record audio, then send to Whisper for accurate transcription
+    const mediaRecorderInstanceRef = React.useRef<MediaRecorder | null>(null);
 
     const startListening = useCallback(async () => {
         try {
             stopSpeaking(); // Don't listen to yourself
 
-            // 1. Request microphone access immediately (PROMPT USER)
+            // Request microphone access
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: {
-                    sampleRate: 16000,
-                    channelCount: 1,
                     echoCancellation: true,
                     noiseSuppression: true,
                 }
             }).catch(err => {
-                console.error('[STT] Mic access denied:', err);
+                console.error('[Whisper] Mic access denied:', err);
                 throw new Error('Microphone access denied. Please check your browser settings.');
             });
             streamRef.current = stream;
 
-            // 2. Get temporary token from backend
-            const tokenResponse = await fetch('/api/tutor/stt/token');
-            if (!tokenResponse.ok) {
-                const errorData = await tokenResponse.json().catch(() => ({}));
-                console.error('[STT] Token fetch failed:', errorData);
-                const msg = errorData.message || errorData.error || 'Failed to get STT token';
-                throw new Error(`${msg}. Please ensure ASSEMBLY_API_KEY is configured.`);
-            }
-            const tokenData = await tokenResponse.json();
-            console.log('[STT] Token response received');
-            const token = tokenData.token;
+            // Create MediaRecorder
+            const mediaRecorder = new MediaRecorder(stream, {
+                mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4'
+            });
+            mediaRecorderInstanceRef.current = mediaRecorder;
+            audioChunksRef.current = [];
 
-            if (!token) {
-                console.error('[STT] No token in response:', tokenData);
-                throw new Error('No token returned from token endpoint. Check console for full response.');
-            }
-            console.log('[STT] Got temporary token, connecting to AssemblyAI...');
-
-            // 3. Connect to AssemblyAI via WebSocket
-            const socket = new WebSocket(
-                `wss://streaming.assemblyai.com/v3/ws?sample_rate=16000&token=${token}`
-            );
-
-            socketRef.current = socket;
-
-            socket.onopen = () => {
-                console.log('[AssemblyAI] WebSocket opened successfully');
-
-                // Create AudioContext for PCM16 conversion
-                const audioContext = new AudioContext({ sampleRate: 16000 });
-                audioContextRef.current = audioContext;
-
-                const source = audioContext.createMediaStreamSource(stream);
-
-                // Use ScriptProcessorNode to get raw PCM data
-                // Buffer size of 4096 gives ~256ms chunks at 16kHz
-                const processor = audioContext.createScriptProcessor(4096, 1, 1);
-                processorRef.current = processor;
-
-                processor.onaudioprocess = (event) => {
-                    if (socket.readyState === WebSocket.OPEN) {
-                        const inputData = event.inputBuffer.getChannelData(0);
-
-                        // Convert Float32Array to Int16Array (PCM16)
-                        const pcm16 = new Int16Array(inputData.length);
-                        for (let i = 0; i < inputData.length; i++) {
-                            // Clamp to [-1, 1] and scale to Int16 range
-                            const s = Math.max(-1, Math.min(1, inputData[i]));
-                            pcm16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
-                        }
-
-                        socket.send(pcm16.buffer);
-                    }
-                };
-
-                source.connect(processor);
-                processor.connect(audioContext.destination);
-
-                console.log('[AssemblyAI] Audio processing started');
-                setAudioState(prev => ({ ...prev, isListening: true, transcript: '' }));
-            };
-
-            socket.onmessage = (message) => {
-                const received = JSON.parse(message.data);
-
-                // Handle different message types
-                if (received.type === 'Begin') {
-                    console.log('[AssemblyAI] Session started:', received.id);
-                } else if (received.type === 'Turn') {
-                    const transcript = received.transcript;
-                    console.log('[AssemblyAI] Turn:', transcript, 'end_of_turn:', received.end_of_turn);
-
-                    if (transcript) {
-                        if (received.end_of_turn) {
-                            // Final transcript for this turn
-                            setAudioState(prev => ({
-                                ...prev,
-                                transcript: (prev.transcript?.replace(/\s*\(transcribing\.\.\.\)$/, '') || '') + ' ' + transcript.trim()
-                            }));
-                        } else {
-                            // Interim result
-                            setAudioState(prev => {
-                                const base = prev.transcript?.replace(/\s*\(transcribing\.\.\.\)$/, '') || '';
-                                return {
-                                    ...prev,
-                                    transcript: base + (base ? ' ' : '') + transcript.trim() + ' (transcribing...)'
-                                };
-                            });
-                        }
-                    }
-                } else if (received.type === 'Termination') {
-                    console.log('[AssemblyAI] Session terminated:', received.audio_duration_seconds, 'seconds processed');
-                } else if (received.type === 'Error') {
-                    console.error('[AssemblyAI] Error:', received.error);
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    audioChunksRef.current.push(event.data);
                 }
             };
 
-            socket.onerror = (error) => {
-                console.error('[AssemblyAI] WebSocket error:', error);
+            mediaRecorder.onstop = async () => {
+                console.log('[Whisper] Recording stopped, transcribing...');
+                setAudioState(prev => ({ ...prev, isListening: false, isTranscribing: true }));
+
+                // Create audio blob
+                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                console.log('[Whisper] Audio size:', audioBlob.size, 'bytes');
+
+                if (audioBlob.size < 1000) {
+                    console.log('[Whisper] Audio too short, skipping transcription');
+                    setAudioState(prev => ({ ...prev, isTranscribing: false }));
+                    return;
+                }
+
+                // Send to Whisper API
+                try {
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob, 'recording.webm');
+
+                    const response = await fetch('/api/tutor/stt/transcribe', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.details || 'Transcription failed');
+                    }
+
+                    const data = await response.json();
+                    console.log('[Whisper] Transcription:', data.transcript);
+
+                    setAudioState(prev => ({
+                        ...prev,
+                        transcript: data.transcript,
+                        isTranscribing: false,
+                    }));
+                } catch (err: any) {
+                    console.error('[Whisper] Transcription error:', err);
+                    setAudioState(prev => ({ ...prev, isTranscribing: false }));
+                    alert('Transcription failed: ' + err.message);
+                }
             };
 
-            socket.onclose = (event) => {
-                console.log('[AssemblyAI] WebSocket closed, code:', event.code, 'reason:', event.reason);
-                setAudioState(prev => ({ ...prev, isListening: false }));
-            };
+            // Start recording
+            mediaRecorder.start(1000); // Collect data every second
+            console.log('[Whisper] Recording started');
+            setAudioState(prev => ({ ...prev, isListening: true, transcript: '' }));
 
         } catch (error: any) {
             console.error('STT Start Error:', error);
-            if (streamRef.current) {
-                streamRef.current.getTracks().forEach(track => track.stop());
-                streamRef.current = null;
-            }
-            alert(error.message || 'Could not start transcription.');
+            alert(error.message || 'Could not start recording.');
         }
     }, [stopSpeaking]);
 
     const stopListening = useCallback(() => {
-        // Stop audio processing
-        if (processorRef.current) {
-            processorRef.current.disconnect();
-            processorRef.current = null;
-        }
-        if (audioContextRef.current) {
-            audioContextRef.current.close();
-            audioContextRef.current = null;
-        }
-        if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-            mediaRecorderRef.current.stop();
-        }
-
-        // Send termination signal and close socket
-        if (socketRef.current) {
-            if (socketRef.current.readyState === WebSocket.OPEN) {
-                socketRef.current.send(JSON.stringify({ type: 'Terminate' }));
-            }
-            socketRef.current.close();
-            socketRef.current = null;
+        // Stop recording (this triggers the onstop handler which transcribes)
+        if (mediaRecorderInstanceRef.current && mediaRecorderInstanceRef.current.state !== 'inactive') {
+            mediaRecorderInstanceRef.current.stop();
         }
 
         // Stop microphone
@@ -334,7 +266,6 @@ export function TutorProvider({ children }: TutorProviderProps) {
             streamRef.current.getTracks().forEach(track => track.stop());
             streamRef.current = null;
         }
-        setAudioState(prev => ({ ...prev, isListening: false }));
     }, []);
 
     // ============================================

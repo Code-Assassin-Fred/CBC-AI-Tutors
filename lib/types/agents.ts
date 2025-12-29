@@ -199,7 +199,9 @@ export interface AudioState {
     isListening: boolean;
     isTranscribing?: boolean;  // True when audio is being sent to Google Cloud STT
     transcript?: string;
-    activeTextId?: string; // To highlight specific paragraphs
+    finalTranscript?: string;  // For Web Speech API interim result tracking
+    isInterim?: boolean;       // True when showing interim (non-final) transcript
+    activeTextId?: string;     // To highlight specific paragraphs
 }
 
 export interface VoiceConfig {

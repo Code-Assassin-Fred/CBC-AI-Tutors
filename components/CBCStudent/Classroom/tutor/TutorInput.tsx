@@ -11,7 +11,7 @@ interface TutorInputProps {
 }
 
 export default function TutorInput({ onSend }: TutorInputProps) {
-  const { audio, startListening, stopListening } = useTutor();
+  const { audio, startListening, stopListening, setAudioState } = useTutor();
   const [text, setText] = useState('');
 
   // Sync text with listening transcript
@@ -23,8 +23,14 @@ export default function TutorInput({ onSend }: TutorInputProps) {
 
   const send = () => {
     if (text.trim()) {
+      // Stop listening if active
+      if (audio.isListening) {
+        stopListening();
+      }
       onSend(text.trim());
       setText('');
+      // Clear transcript for next input
+      setAudioState(prev => ({ ...prev, transcript: '' }));
     }
   };
 

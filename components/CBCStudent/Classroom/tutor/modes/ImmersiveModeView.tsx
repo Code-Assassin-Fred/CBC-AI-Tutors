@@ -18,24 +18,13 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
     const [isAssessing, setIsAssessing] = useState(false);
     const [assessments, setAssessments] = useState<Map<string, AssessmentResult>>(new Map());
 
-    // Update terminal from audio transcript
+    // Update explanation from audio transcript
+    // For Whisper: transcript arrives AFTER recording stops, so we check transcript changes
     React.useEffect(() => {
-        if (audio.isListening && audio.transcript) {
-            // Only update if it's not just the placeholder
-            const displayTranscript = audio.transcript.replace(/\s*\(transcribing\.\.\.\)$/, '');
-            if (displayTranscript) {
-                setUserExplanation(displayTranscript);
-            }
+        if (audio.transcript) {
+            setUserExplanation(audio.transcript);
         }
-    }, [audio.isListening, audio.transcript]);
-
-    // Clean up transcript placeholder when stopping
-    React.useEffect(() => {
-        if (!audio.isListening && audio.transcript?.includes('(transcribing...)')) {
-            const cleaned = audio.transcript.replace(/\s*\(transcribing\.\.\.\)$/, '');
-            setAudioState(prev => ({ ...prev, transcript: cleaned }));
-        }
-    }, [audio.isListening, audio.transcript, setAudioState]);
+    }, [audio.transcript]);
 
     const currentChunk = content.chunks[currentChunkIndex];
     const totalChunks = content.chunks.length;
@@ -51,10 +40,17 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
     const handleStartExplaining = () => {
         setPhase('explaining');
         setUserExplanation('');
+        // Clear transcript so next recording starts fresh
+        setAudioState(prev => ({ ...prev, transcript: '' }));
     };
 
     const handleSubmitExplanation = async () => {
         if (!userExplanation.trim()) return;
+
+        // Stop listening if still active
+        if (audio.isListening) {
+            stopListening();
+        }
 
         setIsAssessing(true);
 
@@ -64,6 +60,9 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
         setAssessments(prev => new Map(prev).set(currentChunk.id, assessment));
         setPhase('feedback');
         setIsAssessing(false);
+
+        // Clear transcript for next input
+        setAudioState(prev => ({ ...prev, transcript: '' }));
     };
 
     const assessExplanation = (chunk: ImmersiveChunk, explanation: string): AssessmentResult => {
@@ -232,7 +231,14 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                     {audio.isListening && (
                         <div className="flex items-center gap-3 py-2 px-3 bg-red-500/10 rounded-lg border border-red-500/20">
                             <VoiceVisualization isActive={true} color="bg-red-500" />
-                            <span className="text-[10px] text-red-500 uppercase font-bold tracking-widest">Live Transcription</span>
+                            <span className="text-[10px] text-red-500 uppercase font-bold tracking-widest">Recording...</span>
+                        </div>
+                    )}
+
+                    {audio.isTranscribing && (
+                        <div className="flex items-center gap-3 py-2 px-3 bg-sky-500/10 rounded-lg border border-sky-500/20">
+                            <div className="w-4 h-4 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
+                            <span className="text-[10px] text-sky-500 uppercase font-bold tracking-widest">Transcribing with Whisper...</span>
                         </div>
                     )}
 
