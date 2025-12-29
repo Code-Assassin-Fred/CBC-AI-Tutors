@@ -285,7 +285,7 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
 
             // Build WebSocket URL with config
             const params = new URLSearchParams({
-                model: 'nova-2',
+                model: 'nova-3',
                 language: 'en-US',
                 smart_format: 'true',
                 interim_results: 'true',
