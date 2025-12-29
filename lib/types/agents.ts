@@ -281,3 +281,34 @@ export interface StreamEvent {
     data?: unknown;
     error?: string;
 }
+
+// ============================================
+// CONVERSATIONAL MODE TYPES
+// ============================================
+
+export interface ConversationMessage {
+    id: string;
+    role: 'user' | 'assistant';
+    content: string;
+    timestamp: Date;
+    audioUrl?: string;  // For playback history
+}
+
+export interface ConversationalState {
+    isActive: boolean;
+    isListening: boolean;
+    isSpeaking: boolean;
+    isProcessing: boolean;
+    currentTranscript: string;
+    messages: ConversationMessage[];
+    error: string | null;
+}
+
+export interface ConversationalLessonContext {
+    subject: string;
+    grade: string;
+    strand: string;
+    substrand: string;
+    currentTopic?: string;
+    textbookContent?: string;
+}

@@ -4,16 +4,17 @@ import React, { useState } from 'react';
 import { ImmersiveContent, ImmersiveChunk, AssessmentResult } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
-import { HiOutlineMicrophone, HiOutlineStop, HiOutlineSpeakerWave } from 'react-icons/hi2';
+import ConversationalModeView from './ConversationalModeView';
+import { HiOutlineMicrophone, HiOutlineStop, HiOutlineSpeakerWave, HiOutlineChatBubbleLeftRight } from 'react-icons/hi2';
 
 interface ImmersiveModeViewProps {
     content: ImmersiveContent;
 }
 
 export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
-    const { audio, speak, stopSpeaking, startListening, stopListening, setAudioState } = useTutor();
+    const { audio, speak, stopSpeaking, startListening, stopListening, setAudioState, context } = useTutor();
     const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
-    const [phase, setPhase] = useState<'learning' | 'explaining' | 'feedback'>('learning');
+    const [phase, setPhase] = useState<'learning' | 'explaining' | 'feedback' | 'conversation'>('learning');
     const [userExplanation, setUserExplanation] = useState('');
     const [isAssessing, setIsAssessing] = useState(false);
     const [assessments, setAssessments] = useState<Map<string, AssessmentResult>>(new Map());
@@ -200,6 +201,14 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                         >
                             Explain Now
                         </button>
+
+                        <button
+                            onClick={() => setPhase('conversation')}
+                            className="w-full py-4 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
+                        >
+                            <HiOutlineChatBubbleLeftRight className="w-4 h-4" />
+                            Chat with AI Tutor
+                        </button>
                     </div>
                 </div>
             )}
@@ -306,6 +315,21 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                         {currentAssessment.shouldRetry ? 'Refine Explanation' : currentChunkIndex < totalChunks - 1 ? 'Continue' : 'Finish Session'}
                     </button>
                 </div>
+            )}
+
+            {/* Conversation Phase - Full conversational mode */}
+            {phase === 'conversation' && context && (
+                <ConversationalModeView
+                    lessonContext={{
+                        subject: context.subject,
+                        grade: context.grade,
+                        strand: context.strand,
+                        substrand: context.substrand,
+                        currentTopic: currentChunk?.concept,
+                        textbookContent: context.textbookContent?.substring(0, 3000),
+                    }}
+                    onClose={() => setPhase('learning')}
+                />
             )}
         </div>
     );

@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@deepgram/sdk": "^4.11.3",
     "@google-cloud/speech": "^7.2.1",
     "@google-cloud/text-to-speech": "^6.4.0",
     "@google/generative-ai": "^0.24.1",
