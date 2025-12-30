@@ -18,7 +18,7 @@ const categoryStyles: Record<string, { gradient: string; icon: string }> = {
         icon: '🖥️'
     },
     Science: {
-        gradient: 'from-purple-500/20 to-violet-500/20',
+        gradient: 'from-sky-500/20 to-cyan-500/20',
         icon: '🔬'
     },
     Finance: {
@@ -34,7 +34,7 @@ const categoryStyles: Record<string, { gradient: string; icon: string }> = {
         icon: '🎯'
     },
     Creative: {
-        gradient: 'from-fuchsia-500/20 to-purple-500/20',
+        gradient: 'from-fuchsia-500/20 to-pink-500/20',
         icon: '🎨'
     },
     Health: {
@@ -79,7 +79,7 @@ export default function TopicSuggestions({ suggestions, onSelect }: TopicSuggest
             {/* Trending Section */}
             <div>
                 <div className="flex items-center gap-2 mb-4">
-                    <svg className="w-4 h-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
                     <span className="text-sm font-medium text-white/70">Trending Topics</span>
@@ -93,11 +93,11 @@ export default function TopicSuggestions({ suggestions, onSelect }: TopicSuggest
                             <button
                                 key={suggestion.id}
                                 onClick={() => onSelect(suggestion.topic)}
-                                className={`group relative p-4 rounded-xl bg-gradient-to-br ${style.gradient} border border-white/5 hover:border-violet-500/30 transition-all hover:scale-[1.02] active:scale-[0.98] text-left`}
+                                className={`group relative p-4 rounded-xl bg-gradient-to-br ${style.gradient} border border-white/5 hover:border-sky-500/30 transition-all hover:scale-[1.02] active:scale-[0.98] text-left`}
                             >
                                 {/* Trending badge */}
                                 {suggestion.trending && (
-                                    <span className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-400 text-[10px] font-medium">
+                                    <span className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-400 text-[10px] font-medium">
                                         <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                                         </svg>
@@ -110,7 +110,7 @@ export default function TopicSuggestions({ suggestions, onSelect }: TopicSuggest
                                 </div>
 
                                 {/* Title */}
-                                <h3 className="font-medium text-white text-sm leading-tight mb-1 group-hover:text-violet-300 transition-colors">
+                                <h3 className="font-medium text-white text-sm leading-tight mb-1 group-hover:text-sky-300 transition-colors">
                                     {suggestion.displayName}
                                 </h3>
 
@@ -121,7 +121,7 @@ export default function TopicSuggestions({ suggestions, onSelect }: TopicSuggest
 
                                 {/* Arrow on hover */}
                                 <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <svg className="w-4 h-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg className="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                     </svg>
                                 </div>

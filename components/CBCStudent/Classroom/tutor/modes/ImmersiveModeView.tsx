@@ -204,7 +204,7 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
 
                         <button
                             onClick={() => setPhase('conversation')}
-                            className="w-full py-4 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
+                            className="w-full py-4 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
                         >
                             <HiOutlineChatBubbleLeftRight className="w-4 h-4" />
                             Chat with AI Tutor

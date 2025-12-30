@@ -8,7 +8,7 @@ export default function ProgressSummary() {
       value: 75,
       label: 'In Progress',
       count: 34,
-      color: '#7c3aed'
+      color: '#10b981'
     },
     {
       value: 45,
@@ -60,7 +60,7 @@ export default function ProgressSummary() {
               <p className="text-[11px] text-[#9aa6b2] mt-0.5 leading-tight">Latest topic you were learning</p>
             </div>
             <button
-              className="px-2.5 py-1.5 rounded-lg border border-[#7c3aed] text-[#7c3aed] font-medium text-[11px] shrink-0 hover:bg-linear-to-r hover:from-[#6b21a8] hover:to-[#7c3aed] hover:text-white hover:border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400/40"
+              className="px-2.5 py-1.5 rounded-lg border border-[#f59e0b] text-[#f59e0b] font-medium text-[11px] shrink-0 hover:bg-linear-to-r hover:from-[#d97706] hover:to-[#f59e0b] hover:text-white hover:border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400/40"
               aria-label="Continue learning"
             >
               Continue →
@@ -78,7 +78,7 @@ export default function ProgressSummary() {
                 </div>
                 <div className="relative w-full h-1.5 bg-[#0a0f14] rounded-full overflow-hidden">
                   <div
-                    className="absolute top-0 left-0 h-full bg-linear-to-r from-[#6b21a8] via-[#7c3aed] to-[#a855f7] rounded-full"
+                    className="absolute top-0 left-0 h-full bg-linear-to-r from-[#059669] via-[#10b981] to-[#34d399] rounded-full"
                     style={{ width: `78%` }}
                   >
                     <div className="absolute top-0 right-0 w-1.5 h-1.5 bg-white/90 rounded-full shadow-[0_0_8px_rgba(255,255,255,0.6)]"></div>

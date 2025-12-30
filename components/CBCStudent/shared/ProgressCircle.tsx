@@ -12,7 +12,7 @@ export default function ProgressCircle({
   size = 120,
   strokeWidth = 8,
   value,
-  color = '#7c3aed',
+  color = '#10b981',
   trackColor = '#1a1f26'
 }: ProgressCircleProps) {
   const radius = (size - strokeWidth) / 2;

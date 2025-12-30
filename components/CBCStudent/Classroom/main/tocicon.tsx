@@ -29,20 +29,20 @@ export default function TOCIcon({ toc }: TOCIconProps) {
       {/* Floating TOC Button - Bottom Left of Panel */}
       <button
         onClick={() => setTocOpen(true)}
-        className="absolute bottom-6 left-6 bg-purple-600 text-white px-4 py-3 rounded-full shadow-xl hover:bg-purple-700 transition-all z-50 flex items-center gap-2"
+        className="absolute bottom-6 left-6 bg-[#0ea5e9] text-white px-4 py-3 rounded-full shadow-xl hover:bg-[#0284c7] transition-all z-50 flex items-center gap-2"
       >
         📑 <span>TOC</span>
       </button>
 
       {/* Slide-In TOC Overlay - Contained within panel */}
       {tocOpen && (
-        <div 
+        <div
           className="absolute inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity duration-300"
           onClick={() => setTocOpen(false)}
         >
           <div
             className="absolute bottom-0 left-0 w-1/2 max-h-[80%] bg-gradient-to-b from-[#1a1a2e] to-[#111] rounded-t-2xl shadow-2xl overflow-hidden transform transition-transform duration-300 ease-out"
-            style={{ 
+            style={{
               animation: tocOpen ? 'slideUp 0.3s ease-out' : 'none'
             }}
             onClick={(e) => e.stopPropagation()}

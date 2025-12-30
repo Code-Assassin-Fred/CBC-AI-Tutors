@@ -2,13 +2,13 @@ import React from 'react';
 
 interface TagProps {
   children: React.ReactNode;
-  variant?: 'purple' | 'cyan' | 'green' | 'orange' | 'blue';
+  variant?: 'sky' | 'cyan' | 'green' | 'orange' | 'blue';
   className?: string;
 }
 
-export default function Tag({ children, variant = 'purple', className = '' }: TagProps) {
+export default function Tag({ children, variant = 'sky', className = '' }: TagProps) {
   const variantStyles = {
-    purple: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
+    sky: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
     cyan: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20',
     green: 'bg-green-500/10 text-green-400 border-green-500/20',
     orange: 'bg-orange-500/10 text-orange-400 border-orange-500/20',

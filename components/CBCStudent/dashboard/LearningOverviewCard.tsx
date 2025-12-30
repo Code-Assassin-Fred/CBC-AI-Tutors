@@ -24,7 +24,7 @@ export default function LearningOverviewCard() {
   ];
 
   const subjects = [
-    { name: 'Mathematics', hours: 18, color: '#7c3aed', icon: '📐' },
+    { name: 'Mathematics', hours: 18, color: '#0ea5e9', icon: '📐' },
     { name: 'English', hours: 12, color: '#06b6d4', icon: '📖' },
     { name: 'Science', hours: 9, color: '#10b981', icon: '🔬' }
   ];
@@ -64,7 +64,7 @@ export default function LearningOverviewCard() {
         <select
           value={period}
           onChange={(e) => setPeriod(e.target.value)}
-          className="px-3 py-1.5 text-xs font-medium bg-[#0b1113] border border-white/8 rounded-lg text-[#9aa6b2] focus:outline-none focus:ring-2 focus:ring-purple-400/40"
+          className="px-3 py-1.5 text-xs font-medium bg-[#0b1113] border border-white/8 rounded-lg text-[#9aa6b2] focus:outline-none focus:ring-2 focus:ring-sky-400/40"
         >
           <option>Weekly</option>
           <option>Monthly</option>
@@ -100,7 +100,7 @@ export default function LearningOverviewCard() {
           />
           <path
             d={createAreaPath(thisWeekData)}
-            fill="rgba(124, 58, 237, 0.08)"
+            fill="rgba(14, 165, 233, 0.08)"
           />
 
           {/* Lines */}
@@ -113,7 +113,7 @@ export default function LearningOverviewCard() {
           <path
             d={createPath(thisWeekData)}
             fill="none"
-            stroke="#7c3aed"
+            stroke="#0ea5e9"
             strokeWidth="2"
           />
 
@@ -130,7 +130,7 @@ export default function LearningOverviewCard() {
                 cx={getX(index)}
                 cy={getY(point.thisWeek)}
                 r="3"
-                fill="#7c3aed"
+                fill="#0ea5e9"
               />
               {/* Hover area */}
               <rect
@@ -163,7 +163,7 @@ export default function LearningOverviewCard() {
         {/* Legend */}
         <div className="flex items-center justify-center gap-6 mt-4">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[#7c3aed]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#0ea5e9]"></div>
             <span className="text-xs text-[#9aa6b2]">This week</span>
           </div>
           <div className="flex items-center gap-2">

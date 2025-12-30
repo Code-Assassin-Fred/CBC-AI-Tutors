@@ -12,14 +12,14 @@ type GenerationMode = 'lesson' | 'quiz' | 'exam';
 
 export default function LessonPlannerPage() {
   useDashboardProtection(['cbc-teacher']);
-  
+
   const [mode, setMode] = useState<GenerationMode>('lesson');
   const [generatedContent, setGeneratedContent] = useState<any>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleGenerate = (formData: any) => {
     setIsGenerating(true);
-    
+
     // Simulate AI generation with mock data
     setTimeout(() => {
       if (mode === 'lesson') {
@@ -97,31 +97,28 @@ export default function LessonPlannerPage() {
         <div className="flex items-center gap-3 mb-6">
           <button
             onClick={() => handleModeChange('lesson')}
-            className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-              mode === 'lesson'
-                ? 'bg-linear-to-r from-[#7c3aed] to-[#9333ea] text-white shadow-lg shadow-purple-500/25'
+            className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${mode === 'lesson'
+                ? 'bg-linear-to-r from-[#0ea5e9] to-[#0284c7] text-white shadow-lg shadow-sky-500/25'
                 : 'bg-[#0b0f12] text-[#9aa6b2] border border-white/8 hover:border-white/15'
-            }`}
+              }`}
           >
             📝 Lesson Plan
           </button>
           <button
             onClick={() => handleModeChange('quiz')}
-            className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-              mode === 'quiz'
+            className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${mode === 'quiz'
                 ? 'bg-linear-to-r from-[#06b6d4] to-[#0891b2] text-white shadow-lg shadow-cyan-500/25'
                 : 'bg-[#0b0f12] text-[#9aa6b2] border border-white/8 hover:border-white/15'
-            }`}
+              }`}
           >
             📋 Quiz
           </button>
           <button
             onClick={() => handleModeChange('exam')}
-            className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-              mode === 'exam'
+            className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${mode === 'exam'
                 ? 'bg-linear-to-r from-[#10b981] to-[#059669] text-white shadow-lg shadow-emerald-500/25'
                 : 'bg-[#0b0f12] text-[#9aa6b2] border border-white/8 hover:border-white/15'
-            }`}
+              }`}
           >
             📄 Exam
           </button>
@@ -132,19 +129,19 @@ export default function LessonPlannerPage() {
           {/* Form Section */}
           <div className="lg:col-span-5">
             {mode === 'lesson' && (
-              <LessonPlanForm 
+              <LessonPlanForm
                 onGenerate={handleGenerate}
                 isGenerating={isGenerating}
               />
             )}
             {mode === 'quiz' && (
-              <QuizGeneratorModal 
+              <QuizGeneratorModal
                 onGenerate={handleGenerate}
                 isGenerating={isGenerating}
               />
             )}
             {mode === 'exam' && (
-              <ExamGeneratorModal 
+              <ExamGeneratorModal
                 onGenerate={handleGenerate}
                 isGenerating={isGenerating}
               />

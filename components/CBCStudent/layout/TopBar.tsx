@@ -18,9 +18,8 @@ export default function TopBar() {
 
   return (
     <div
-      className={`h-16 flex items-center justify-end px-6 sticky top-0 z-30 transition-colors duration-300 ${
-        scrolled ? 'bg-[#0b1113]/60 backdrop-blur-xl' : 'bg-transparent'
-      }`}
+      className={`h-16 flex items-center justify-end px-6 sticky top-0 z-30 transition-colors duration-300 ${scrolled ? 'bg-[#0b1113]/60 backdrop-blur-xl' : 'bg-transparent'
+        }`}
     >
       {/* Centered Search Bar */}
       <div className="absolute left-6 right-40 sm:right-48 md:right-56 lg:right-64">
@@ -71,7 +70,7 @@ export default function TopBar() {
       <div className="flex items-center gap-3.5">
         {/* Theme Toggle */}
         <button
-          className="w-9 h-9 rounded-full bg-[#7c3aed] text-white shadow-[0_6px_18px_rgba(124,58,237,0.4)] flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400/50"
+          className="w-9 h-9 rounded-full bg-[#0ea5e9] text-white shadow-[0_6px_18px_rgba(14,165,233,0.4)] flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400/50"
           aria-label="Toggle theme"
         >
           <svg
@@ -91,7 +90,7 @@ export default function TopBar() {
 
         {/* Notifications */}
         <button
-          className="relative w-9 h-9 rounded-full bg-[#0b1113] border border-white/10 flex items-center justify-center hover:border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400/30"
+          className="relative w-9 h-9 rounded-full bg-[#0b1113] border border-white/10 flex items-center justify-center hover:border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400/30"
           aria-label="Notifications"
         >
           <svg
@@ -114,7 +113,7 @@ export default function TopBar() {
 
         {/* Settings */}
         <button
-          className="w-9 h-9 rounded-full bg-[#0b1113] border border-white/10 flex items-center justify-center hover:border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400/30"
+          className="w-9 h-9 rounded-full bg-[#0b1113] border border-white/10 flex items-center justify-center hover:border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400/30"
           aria-label="Settings"
         >
           <svg

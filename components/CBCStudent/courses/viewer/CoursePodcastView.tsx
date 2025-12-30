@@ -45,7 +45,7 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
                 <button
                     onClick={handlePlay}
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition-all ${isPlaying
-                        ? 'bg-violet-500 text-white'
+                        ? 'bg-sky-500 text-white'
                         : 'bg-white text-black hover:bg-white/90'
                         }`}
                 >
@@ -88,7 +88,7 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
                             {/* Speaker indicator */}
                             <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold ${segment.speaker === 'Teacher'
                                 ? 'bg-sky-500/20 text-sky-400'
-                                : 'bg-purple-500/20 text-purple-400'
+                                : 'bg-amber-500/20 text-amber-400'
                                 }`}>
                                 {segment.speaker === 'Teacher' ? 'Jo' : 'Be'}
                             </div>
@@ -98,7 +98,7 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
                                 <div className="flex items-center gap-2 mb-1">
                                     <span className={`text-xs font-medium uppercase tracking-wider ${segment.speaker === 'Teacher'
                                         ? 'text-sky-400'
-                                        : 'text-purple-400'
+                                        : 'text-amber-400'
                                         }`}>
                                         {segment.speaker === 'Teacher' ? 'Jo' : 'Beau'}
                                     </span>
@@ -109,9 +109,9 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
                                     )}
                                     {currentSegmentIndex === index && isPlaying && (
                                         <div className="flex items-center gap-0.5 ml-2">
-                                            <div className="w-1 h-3 bg-violet-400 rounded-full animate-pulse" />
-                                            <div className="w-1 h-4 bg-violet-400 rounded-full animate-pulse" style={{ animationDelay: '0.1s' }} />
-                                            <div className="w-1 h-2 bg-violet-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
+                                            <div className="w-1 h-3 bg-sky-400 rounded-full animate-pulse" />
+                                            <div className="w-1 h-4 bg-sky-400 rounded-full animate-pulse" style={{ animationDelay: '0.1s' }} />
+                                            <div className="w-1 h-2 bg-sky-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
                                         </div>
                                     )}
                                 </div>

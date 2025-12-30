@@ -17,7 +17,7 @@ export default function Card({ children, className = '' }: CardProps) {
         // Shadow similar to elevated cards in the mock
         `shadow-[0_8px_24px_rgba(0,0,0,0.45)] ` +
         // Interactive focus/hover polish (color only; no content change)
-        `transition-colors hover:ring-[#7c3aed]/20 ${className}`
+        `transition-colors hover:ring-[#0ea5e9]/20 ${className}`
       }
     >
       {children}

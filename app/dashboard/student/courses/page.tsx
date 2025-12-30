@@ -57,8 +57,8 @@ function CoursesPageContent() {
             <div className="max-w-4xl mx-auto text-center pt-12 pb-8">
                 {/* Mascot/Icon */}
                 <div className="mb-6">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-violet-500/20 to-purple-600/20 border border-violet-500/30">
-                        <svg className="w-10 h-10 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-sky-500/20 to-cyan-600/20 border border-sky-500/30">
+                        <svg className="w-10 h-10 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                         </svg>
                     </div>
@@ -82,20 +82,20 @@ function CoursesPageContent() {
                     <button
                         onClick={() => setActiveTab('create')}
                         className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'create'
-                                ? 'text-violet-400'
-                                : 'text-white/50 hover:text-white/80'
+                            ? 'text-sky-400'
+                            : 'text-white/50 hover:text-white/80'
                             }`}
                     >
                         Suggested Topics
                         {activeTab === 'create' && (
-                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-400 rounded-full" />
+                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-sky-400 rounded-full" />
                         )}
                     </button>
                     <button
                         onClick={() => setActiveTab('my-courses')}
                         className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'my-courses'
-                                ? 'text-violet-400'
-                                : 'text-white/50 hover:text-white/80'
+                            ? 'text-sky-400'
+                            : 'text-white/50 hover:text-white/80'
                             }`}
                     >
                         My Courses
@@ -105,19 +105,19 @@ function CoursesPageContent() {
                             </span>
                         )}
                         {activeTab === 'my-courses' && (
-                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-400 rounded-full" />
+                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-sky-400 rounded-full" />
                         )}
                     </button>
                     <button
                         onClick={() => setActiveTab('discover')}
                         className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'discover'
-                                ? 'text-violet-400'
-                                : 'text-white/50 hover:text-white/80'
+                            ? 'text-sky-400'
+                            : 'text-white/50 hover:text-white/80'
                             }`}
                     >
                         Discover
                         {activeTab === 'discover' && (
-                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-400 rounded-full" />
+                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-sky-400 rounded-full" />
                         )}
                     </button>
                 </div>

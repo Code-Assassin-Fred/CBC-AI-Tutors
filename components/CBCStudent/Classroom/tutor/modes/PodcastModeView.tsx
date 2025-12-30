@@ -67,7 +67,7 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
                     >
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                                <span className={`text-[10px] font-bold uppercase tracking-widest ${segment.speaker === 'Teacher' ? 'text-sky-400' : 'text-purple-400'
+                                <span className={`text-[10px] font-bold uppercase tracking-widest ${segment.speaker === 'Teacher' ? 'text-sky-400' : 'text-amber-400'
                                     }`}>
                                     {segment.speaker}
                                 </span>
@@ -76,7 +76,7 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
                                 )}
                             </div>
                             {currentSegmentIndex === index && audio.isPlaying && (
-                                <VoiceVisualization isActive={true} color={segment.speaker === 'Teacher' ? 'bg-sky-400' : 'bg-purple-400'} />
+                                <VoiceVisualization isActive={true} color={segment.speaker === 'Teacher' ? 'bg-sky-400' : 'bg-amber-400'} />
                             )}
                         </div>
                         <p className={`text-sm leading-relaxed transition-colors ${currentSegmentIndex === index ? 'text-white' : 'text-white/60'

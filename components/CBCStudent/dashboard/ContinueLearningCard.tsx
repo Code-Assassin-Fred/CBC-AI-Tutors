@@ -21,18 +21,18 @@ export default function ContinueLearningCard() {
           <h2 className="text-base font-semibold text-white/95 mb-3">
             Build A Navigation Hierarchy
           </h2>
-          
+
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-4">
-            <Tag variant="purple">UI Design</Tag>
+            <Tag variant="sky">UI Design</Tag>
             <Tag variant="cyan">App</Tag>
             <Tag variant="green">Illustration</Tag>
           </div>
         </div>
-        
+
         {/* Menu button */}
         <button
-          className="w-8 h-8 rounded-lg hover:bg-white/5 flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="w-8 h-8 rounded-lg hover:bg-white/5 flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400"
           aria-label="More options"
         >
           <svg className="w-5 h-5 text-[#9aa6b2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -58,11 +58,11 @@ export default function ContinueLearningCard() {
           <p className="text-xs text-[#9aa6b2]">Course Progress</p>
           <p className="text-sm font-semibold text-white/95">{progress}%</p>
         </div>
-        
+
         {/* Progress Bar */}
         <div className="relative w-full h-2 bg-[#0b0f12] rounded-full overflow-hidden">
           <div
-            className="absolute top-0 left-0 h-full bg-linear-to-r from-[#6b21a8] to-[#7c3aed] rounded-full transition-all duration-500"
+            className="absolute top-0 left-0 h-full bg-linear-to-r from-[#059669] to-[#10b981] rounded-full transition-all duration-500"
             style={{ width: `${progress}%` }}
           >
             <div className="absolute top-0 right-0 w-2 h-2 bg-white rounded-full shadow-lg"></div>
@@ -87,7 +87,7 @@ export default function ContinueLearningCard() {
       {/* CTA Button */}
       <button
         onClick={handleContinue}
-        className="w-full py-3 rounded-lg border border-[#7c3aed] text-[#7c3aed] font-medium text-sm hover:bg-linear-to-r hover:from-[#6b21a8] hover:to-[#7c3aed] hover:text-white hover:border-transparent transition-all focus:outline-none focus:ring-2 focus:ring-purple-400"
+        className="w-full py-3 rounded-lg border border-[#f59e0b] text-[#f59e0b] font-medium text-sm hover:bg-linear-to-r hover:from-[#d97706] hover:to-[#f59e0b] hover:text-white hover:border-transparent transition-all focus:outline-none focus:ring-2 focus:ring-amber-400"
         aria-label="Continue learning"
       >
         Continue Learning →

@@ -31,8 +31,8 @@ export default function CourseSidebar() {
                 </Link>
 
                 {/* Course thumbnail */}
-                <div className="aspect-video rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20 mb-4 flex items-center justify-center border border-white/5">
-                    <svg className="w-12 h-12 text-violet-400/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="aspect-video rounded-xl bg-gradient-to-br from-sky-500/20 to-cyan-600/20 mb-4 flex items-center justify-center border border-white/5">
+                    <svg className="w-12 h-12 text-sky-400/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                     </svg>
                 </div>
@@ -55,12 +55,12 @@ export default function CourseSidebar() {
                                 <button
                                     onClick={() => selectLesson(lesson.id)}
                                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${isActive
-                                            ? 'bg-violet-500/20 text-violet-300 border-l-2 border-violet-500'
-                                            : 'text-white/60 hover:text-white/90 hover:bg-white/5'
+                                        ? 'bg-sky-500/20 text-sky-300 border-l-2 border-sky-500'
+                                        : 'text-white/60 hover:text-white/90 hover:bg-white/5'
                                         }`}
                                 >
                                     <div className="flex items-start gap-2">
-                                        <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium border ${isActive ? 'border-violet-500 text-violet-400' : 'border-white/20 text-white/40'
+                                        <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium border ${isActive ? 'border-sky-500 text-sky-400' : 'border-white/20 text-white/40'
                                             }`}>
                                             {lesson.order}
                                         </span>
@@ -73,8 +73,8 @@ export default function CourseSidebar() {
                                     <button
                                         onClick={() => selectQuiz(quiz.id)}
                                         className={`w-full text-left pl-10 pr-3 py-1.5 rounded-lg text-xs transition-all ${isQuizActive
-                                                ? 'bg-violet-500/20 text-violet-300'
-                                                : 'text-white/40 hover:text-white/70 hover:bg-white/5'
+                                            ? 'bg-sky-500/20 text-sky-300'
+                                            : 'text-white/40 hover:text-white/70 hover:bg-white/5'
                                             }`}
                                     >
                                         <div className="flex items-center gap-1.5">
@@ -95,8 +95,8 @@ export default function CourseSidebar() {
                             <button
                                 onClick={() => selectQuiz(finalExam.id)}
                                 className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${currentQuiz?.id === finalExam.id
-                                        ? 'bg-violet-500/20 text-violet-300 border-l-2 border-violet-500'
-                                        : 'text-white/60 hover:text-white/90 hover:bg-white/5'
+                                    ? 'bg-sky-500/20 text-sky-300 border-l-2 border-sky-500'
+                                    : 'text-white/60 hover:text-white/90 hover:bg-white/5'
                                     }`}
                             >
                                 <div className="flex items-center gap-2">
@@ -117,7 +117,7 @@ export default function CourseSidebar() {
                         <span>0%</span>
                     </div>
                     <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
-                        <div className="h-full bg-violet-500 rounded-full" style={{ width: '0%' }} />
+                        <div className="h-full bg-sky-500 rounded-full" style={{ width: '0%' }} />
                     </div>
                 </div>
             </div>

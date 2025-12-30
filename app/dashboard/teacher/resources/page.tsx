@@ -17,7 +17,7 @@ interface Resource {
 
 export default function ResourcesPage() {
   useDashboardProtection(['cbc-teacher']);
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'lesson' | 'quiz' | 'exam'>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -82,8 +82,8 @@ export default function ResourcesPage() {
 
   const filteredResources = resources.filter(resource => {
     const matchesSearch = resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         resource.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         resource.grade.toLowerCase().includes(searchQuery.toLowerCase());
+      resource.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.grade.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = filterType === 'all' || resource.type === filterType;
     return matchesSearch && matchesType;
   });
@@ -99,7 +99,7 @@ export default function ResourcesPage() {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'lesson': return '#7c3aed';
+      case 'lesson': return '#0ea5e9';
       case 'quiz': return '#06b6d4';
       case 'exam': return '#10b981';
       default: return '#9aa6b2';
@@ -108,7 +108,7 @@ export default function ResourcesPage() {
 
   const getTypeBadgeClass = (type: string) => {
     switch (type) {
-      case 'lesson': return 'bg-[#7c3aed]/10 border-[#7c3aed]/20 text-[#7c3aed]';
+      case 'lesson': return 'bg-[#0ea5e9]/10 border-[#0ea5e9]/20 text-[#0ea5e9]';
       case 'quiz': return 'bg-[#06b6d4]/10 border-[#06b6d4]/20 text-[#06b6d4]';
       case 'exam': return 'bg-[#10b981]/10 border-[#10b981]/20 text-[#10b981]';
       default: return 'bg-white/5 border-white/10 text-[#9aa6b2]';
@@ -130,10 +130,10 @@ export default function ResourcesPage() {
             {/* Search */}
             <div className="flex-1 w-full lg:w-auto">
               <div className="relative">
-                <svg 
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#9aa6b2]" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#9aa6b2]"
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -143,7 +143,7 @@ export default function ResourcesPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by title, subject, or grade..."
-                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-[#0b0f12] border border-white/8 text-white placeholder-[#9aa6b2] focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:border-transparent transition-all"
+                  className="w-full pl-12 pr-4 py-3 rounded-xl bg-[#0b0f12] border border-white/8 text-white placeholder-[#9aa6b2] focus:outline-none focus:ring-2 focus:ring-[#0ea5e9] focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -154,11 +154,10 @@ export default function ResourcesPage() {
                 <button
                   key={type}
                   onClick={() => setFilterType(type as any)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${
-                    filterType === type
-                      ? 'bg-linear-to-r from-[#7c3aed] to-[#9333ea] text-white shadow-lg'
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 capitalize ${filterType === type
+                      ? 'bg-linear-to-r from-[#0ea5e9] to-[#0284c7] text-white shadow-lg'
                       : 'bg-[#0b0f12] text-[#9aa6b2] border border-white/8 hover:border-white/15'
-                  }`}
+                    }`}
                 >
                   {type}
                 </button>
@@ -169,9 +168,8 @@ export default function ResourcesPage() {
             <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0b0f12] border border-white/8">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg transition-all ${
-                  viewMode === 'grid' ? 'bg-[#7c3aed] text-white' : 'text-[#9aa6b2] hover:text-white'
-                }`}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-[#0ea5e9] text-white' : 'text-[#9aa6b2] hover:text-white'
+                  }`}
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -179,9 +177,8 @@ export default function ResourcesPage() {
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg transition-all ${
-                  viewMode === 'list' ? 'bg-[#7c3aed] text-white' : 'text-[#9aa6b2] hover:text-white'
-                }`}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-[#0ea5e9] text-white' : 'text-[#9aa6b2] hover:text-white'
+                  }`}
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -219,7 +216,7 @@ export default function ResourcesPage() {
 
                   {/* Title */}
                   <div>
-                    <h3 className="text-base font-semibold text-white/95 mb-2 line-clamp-2 group-hover:text-[#7c3aed] transition-colors duration-300">
+                    <h3 className="text-base font-semibold text-white/95 mb-2 line-clamp-2 group-hover:text-[#0ea5e9] transition-colors duration-300">
                       {resource.title}
                     </h3>
                     <div className="flex items-center gap-2 text-xs text-[#9aa6b2]">
@@ -234,10 +231,10 @@ export default function ResourcesPage() {
                     <p className="text-xs text-[#9aa6b2] mb-3">
                       Created {new Date(resource.createdAt).toLocaleDateString()}
                     </p>
-                    
+
                     {/* Actions */}
                     <div className="flex items-center gap-2">
-                      <button className="flex-1 px-3 py-2 rounded-lg bg-[#7c3aed] text-white text-xs font-medium hover:bg-[#6b21a8] transition-all">
+                      <button className="flex-1 px-3 py-2 rounded-lg bg-[#0ea5e9] text-white text-xs font-medium hover:bg-[#0284c7] transition-all">
                         View
                       </button>
                       <button className="px-3 py-2 rounded-lg bg-[#0b0f12] border border-white/8 text-white/90 hover:border-white/15 transition-all">
@@ -272,7 +269,7 @@ export default function ResourcesPage() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-4 mb-1">
-                      <h3 className="text-base font-semibold text-white/95 group-hover:text-[#7c3aed] transition-colors duration-300 line-clamp-1">
+                      <h3 className="text-base font-semibold text-white/95 group-hover:text-[#0ea5e9] transition-colors duration-300 line-clamp-1">
                         {resource.title}
                       </h3>
                       <span className={`px-3 py-1 rounded-lg border text-xs font-medium capitalize shrink-0 ${getTypeBadgeClass(resource.type)}`}>
@@ -290,7 +287,7 @@ export default function ResourcesPage() {
 
                   {/* Actions */}
                   <div className="flex items-center gap-2 shrink-0">
-                    <button className="px-4 py-2 rounded-lg bg-[#7c3aed] text-white text-xs font-medium hover:bg-[#6b21a8] transition-all">
+                    <button className="px-4 py-2 rounded-lg bg-[#0ea5e9] text-white text-xs font-medium hover:bg-[#0284c7] transition-all">
                       View
                     </button>
                     <button className="px-3 py-2 rounded-lg bg-[#0b0f12] border border-white/8 text-white/90 hover:border-white/15 transition-all">
@@ -319,7 +316,7 @@ export default function ResourcesPage() {
               <p className="text-sm text-[#9aa6b2] mb-6">
                 {searchQuery ? 'Try adjusting your search or filters' : 'Start creating lessons, quizzes, and exams'}
               </p>
-              <button className="px-6 py-3 rounded-xl bg-linear-to-r from-[#7c3aed] to-[#9333ea] text-white font-semibold hover:from-[#6b21a8] hover:to-[#7c3aed] transition-all shadow-lg shadow-purple-500/25">
+              <button className="px-6 py-3 rounded-xl bg-linear-to-r from-[#0ea5e9] to-[#0284c7] text-white font-semibold hover:from-[#0284c7] hover:to-[#0ea5e9] transition-all shadow-lg shadow-sky-500/25">
                 Create Your First Resource
               </button>
             </div>

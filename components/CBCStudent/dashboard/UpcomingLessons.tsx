@@ -67,7 +67,7 @@ export default function UpcomingLessons() {
             </div>
 
             {/* Title */}
-            <h3 className="text-sm font-semibold text-white/95 mb-2 line-clamp-1 transition-colors duration-300 group-hover:text-[#7c3aed]">
+            <h3 className="text-sm font-semibold text-white/95 mb-2 line-clamp-1 transition-colors duration-300 group-hover:text-[#0ea5e9]">
               {lesson.title}
             </h3>
 

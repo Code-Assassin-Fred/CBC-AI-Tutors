@@ -141,7 +141,7 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
 
                 {/* Summary */}
                 <div className="pt-6 border-t border-white/10">
-                    <h4 className="text-sm font-semibold text-purple-400 uppercase tracking-wider mb-2">Summary</h4>
+                    <h4 className="text-sm font-semibold text-sky-400 uppercase tracking-wider mb-2">Summary</h4>
                     <p className="text-sm text-white/80 leading-relaxed">{content.summary}</p>
                 </div>
 

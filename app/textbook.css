@@ -173,7 +173,7 @@
 }
 
 .section-outcomes {
-  @apply my-5 p-4 border border-purple-500/30 rounded-lg bg-white/[0.02];
+  @apply my-5 p-4 border border-sky-500/30 rounded-lg bg-white/[0.02];
 }
 
 .section-concepts {
