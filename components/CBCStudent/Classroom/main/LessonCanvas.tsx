@@ -124,9 +124,9 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
     <div className="h-full flex flex-col bg-gradient-to-br from-[#111113] to-[#1a1a1f] overflow-hidden">
       {/* Selector Bar */}
       <div className="p-5 border-b border-white/10 bg-black/20 backdrop-blur-md">
-        <h2 className="text-lg font-semibold text-white mb-4 text-center">
+        {/* <h2 className="text-lg font-semibold text-white mb-4 text-center">
           Browse Lessons
-        </h2>
+        </h2> */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <select
             value={selectedGrade}
@@ -218,9 +218,6 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
             </h2>
             <p className="text-white/60 text-lg max-w-md">
               Select a grade, subject, and strand above to load your lesson.
-            </p>
-            <p className="text-white/40 text-sm mt-4">
-              Lessons are prepared by your teacher and appear here when ready.
             </p>
           </div>
         )}

@@ -29,9 +29,9 @@ export default function TOCIcon({ toc }: TOCIconProps) {
       {/* Floating TOC Button - Bottom Left of Panel */}
       <button
         onClick={() => setTocOpen(true)}
-        className="absolute bottom-6 left-6 bg-[#0ea5e9] text-white px-4 py-3 rounded-full shadow-xl hover:bg-[#0284c7] transition-all z-50 flex items-center gap-2"
+        className="absolute bottom-6 left-6 bg-[#0ea5e9] text-white px-4 py-3 rounded-full shadow-xl hover:bg-[#0284c7] transition-all z-50"
       >
-        📑 <span>TOC</span>
+        TOC
       </button>
 
       {/* Slide-In TOC Overlay - Contained within panel */}

@@ -35,11 +35,11 @@ export default function ClassroomLayout() {
     <TutorProvider>
       <div className="relative flex flex-col h-[85vh] md:h-[87vh] lg:h-[90vh] w-full bg-[#0E0E10] text-white overflow-hidden rounded-2xl shadow-md shadow-black/20 border border-white/10">
         {/* Top controls */}
-        <div className="flex items-center justify-between gap-2 p-2 border-b border-white/10 bg-[#0E0E10]">
+        <div className="flex items-center justify-center gap-2 p-2 border-b border-white/10 bg-[#0E0E10]">
           <div className="flex items-center gap-2">
             <button
               className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "left"
-                ? "bg-[#0ea5e9] hover:bg-[#0284c7]"
+                ? "bg-[#10b981] hover:bg-[#059669]"
                 : "bg-white/10 hover:bg-white/20"
                 }`}
               onClick={() => setView("left")}
@@ -49,7 +49,7 @@ export default function ClassroomLayout() {
 
             <button
               className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "both"
-                ? "bg-[#0ea5e9] hover:bg-[#0284c7]"
+                ? "bg-[#10b981] hover:bg-[#059669]"
                 : "bg-white/10 hover:bg-white/20"
                 }`}
               onClick={() => setView("both")}
@@ -59,33 +59,12 @@ export default function ClassroomLayout() {
 
             <button
               className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "right"
-                ? "bg-[#0ea5e9] hover:bg-[#0284c7]"
+                ? "bg-[#10b981] hover:bg-[#059669]"
                 : "bg-white/10 hover:bg-white/20"
                 }`}
               onClick={() => setView("right")}
             >
               Tutor Only
-            </button>
-          </div>
-
-          {/* We keep this for future "Saved Lessons" feature */}
-          <div className="flex items-center gap-2">
-            <button
-              className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${contentMode === "lesson"
-                ? "bg-[#0ea5e9] hover:bg-[#0284c7]"
-                : "bg-white/10 hover:bg-white/20"
-                }`}
-              onClick={() => setContentMode("lesson")}
-            >
-              Current Lesson
-            </button>
-
-            <button
-              className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors opacity-50 cursor-not-allowed`}
-              disabled
-              title="Saved Lessons (Coming Soon)"
-            >
-              Saved Lessons
             </button>
           </div>
         </div>

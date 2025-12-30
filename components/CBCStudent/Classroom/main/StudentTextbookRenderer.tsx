@@ -184,38 +184,32 @@ export default function StudentTextbookRenderer({
 
         const id = `substrand-${h2Count}-${slugify(text)}`;
         h.id = id;
-        h.className = "substrand-heading text-2xl font-bold text-white mt-8 mb-4 pb-3 border-b-2 border-white/20 scroll-mt-24 flex items-center justify-between";
+        h.className = "substrand-heading text-2xl font-bold text-white mt-8 mb-4 scroll-mt-24 flex items-center justify-between";
 
-        // Create number badge
-        const badge = document.createElement("span");
-        badge.className = "inline-flex items-center justify-center w-8 h-8 rounded-lg bg-blue-500 text-white text-sm font-bold mr-3";
-        badge.textContent = `${h2Count}`;
+        // Create number span (no blue badge, just plain number)
+        const numberSpan = document.createElement("span");
+        numberSpan.className = "text-white/50 font-bold mr-3";
+        numberSpan.textContent = `${h2Count}`;
 
         // Create title span
         const titleSpan = document.createElement("span");
         titleSpan.className = "flex-1";
         titleSpan.textContent = text;
 
-        // Create actions container (only Learn with AI in header)
-        const actionsDiv = document.createElement("div");
-        actionsDiv.className = "flex items-center gap-2 ml-4";
-
-        // Learn with AI button
-        const learnBtn = document.createElement("button");
-        learnBtn.className = "learn-with-ai-btn px-3 py-1.5 text-xs font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors";
-        learnBtn.textContent = "Learn with AI";
-        learnBtn.setAttribute("data-substrand-id", id);
-        learnBtn.setAttribute("data-substrand-title", text);
-
-        actionsDiv.appendChild(learnBtn);
+        // Create Learn with AI text link (not a button)
+        const learnLink = document.createElement("a");
+        learnLink.className = "learn-with-ai-btn text-sm font-medium text-sky-400 hover:text-sky-300 transition-colors cursor-pointer ml-4";
+        learnLink.textContent = "Learn with AI →";
+        learnLink.setAttribute("data-substrand-id", id);
+        learnLink.setAttribute("data-substrand-title", text);
 
         // Clear and rebuild header content
         h.textContent = "";
-        h.appendChild(badge);
+        h.appendChild(numberSpan);
         h.appendChild(titleSpan);
-        h.appendChild(actionsDiv);
+        h.appendChild(learnLink);
 
-        // Find where to insert the quiz button (before the next H1/H2 or at the end)
+        // Find where to insert the quiz link (before the next H1/H2)
         let lastContentElement: Element | null = h;
         let sibling = h.nextElementSibling;
         while (sibling && !["H1", "H2"].includes(sibling.tagName)) {
@@ -223,17 +217,17 @@ export default function StudentTextbookRenderer({
           sibling = sibling.nextElementSibling;
         }
 
-        // Create Take Quiz button and insert after last content element
+        // Create Take Quiz text link (not a button, no icon, no border/line)
         const quizDiv = document.createElement("div");
-        quizDiv.className = "take-quiz-container my-6 pt-4 border-t border-white/10 text-center";
+        quizDiv.className = "take-quiz-container my-6 text-right";
 
-        const quizBtn = document.createElement("button");
-        quizBtn.className = "take-quiz-btn px-4 py-2 text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors";
-        quizBtn.textContent = "📝 Take Quiz on this Section";
-        quizBtn.setAttribute("data-substrand-id", id);
-        quizBtn.setAttribute("data-substrand-title", text);
+        const quizLink = document.createElement("a");
+        quizLink.className = "take-quiz-btn text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer";
+        quizLink.textContent = "Take Quiz on this Section →";
+        quizLink.setAttribute("data-substrand-id", id);
+        quizLink.setAttribute("data-substrand-title", text);
 
-        quizDiv.appendChild(quizBtn);
+        quizDiv.appendChild(quizLink);
 
         // Insert after the last content element
         if (lastContentElement && lastContentElement.parentNode) {
@@ -251,7 +245,7 @@ export default function StudentTextbookRenderer({
         h4Count = 0;
         const id = `section-${h2Count}-${h3Count}-${slugify(text)}`;
         h.id = id;
-        h.className = "text-lg font-bold text-sky-400 mt-6 mb-3 pb-2 border-b border-white/10 scroll-mt-24";
+        h.className = "text-lg font-bold text-sky-400 mt-6 mb-3 scroll-mt-24";
         h.innerHTML = `<span class="text-white/50 mr-2">${h2Count}.${h3Count}</span> ${h.innerHTML}`;
         tocItems.push({ id, title: text, level: 3 });
         return;
@@ -464,6 +458,16 @@ export default function StudentTextbookRenderer({
 
   return (
     <div className="student-textbook-content text-white">
+      {/* Hide any horizontal rules or divider lines from generated content */}
+      <style jsx global>{`
+        .student-textbook-content hr {
+          display: none !important;
+        }
+        .student-textbook-content section,
+        .student-textbook-content div {
+          border: none !important;
+        }
+      `}</style>
       <div dangerouslySetInnerHTML={{ __html: formattedHtml }} />
     </div>
   );
