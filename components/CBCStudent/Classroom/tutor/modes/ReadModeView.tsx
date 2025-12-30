@@ -29,25 +29,34 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
             return;
         }
 
-        // Combine all text for speaking, including key points and examples
-        const sectionsText = content.sections.map(s => {
-            let text = `${s.title}. ${s.content}`;
+        // Sequential reading: Introduction -> Sections -> Summary
+        try {
+            // 1. Introduction
+            await speak(content.introduction, { textId: 'intro' });
 
-            // Add key points
-            if (s.keyPoints && s.keyPoints.length > 0) {
-                text += `. Key points: ${s.keyPoints.join('. ')}`;
+            // 2. Sections
+            for (const section of content.sections) {
+                // Speak title and content together
+                await speak(`${section.title}. ${section.content}`, { textId: section.id });
+
+                // Speak key points if any
+                if (section.keyPoints.length > 0) {
+                    await speak(`Key points. ${section.keyPoints.join('. ')}`, { textId: `${section.id}-points` });
+                }
+
+                // Speak examples if any
+                if (section.examples.length > 0) {
+                    const examplesText = section.examples.map(e => `${e.title}: ${e.description}`).join('. ');
+                    await speak(`Examples. ${examplesText}`, { textId: `${section.id}-examples` });
+                }
             }
 
-            // Add examples
-            if (s.examples && s.examples.length > 0) {
-                text += `. Examples: ${s.examples.map(e => `${e.title}: ${e.description}`).join('. ')}`;
-            }
-
-            return text;
-        }).join('. ');
-
-        const allText = `${content.introduction}. ${sectionsText}. In summary, ${content.summary}`;
-        speak(allText);
+            // 3. Summary
+            await speak(`In summary, ${content.summary}`, { textId: 'summary' });
+        } catch (error) {
+            console.error('Sequential reading error:', error);
+            stopSpeaking();
+        }
     };
 
     const handleSend = async () => {
@@ -75,14 +84,18 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                     <div className="flex items-center justify-between mb-2">
                         <h4 className="text-sm font-semibold text-sky-400 uppercase tracking-wider">Introduction</h4>
                         <button
-                            onClick={audio.isPlaying ? stopSpeaking : () => speak(content.introduction)}
+                            onClick={audio.isPlaying && audio.activeTextId === 'intro' ? stopSpeaking : () => speak(content.introduction, { textId: 'intro' })}
                             className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all"
                         >
-                            {audio.isPlaying ? <HiOutlineStop className="w-4 h-4" /> : <HiOutlineSpeakerWave className="w-4 h-4" />}
+                            {audio.isPlaying && audio.activeTextId === 'intro' ? <HiOutlineStop className="w-4 h-4" /> : <HiOutlineSpeakerWave className="w-4 h-4" />}
                         </button>
                     </div>
                     <p className="text-sm text-white/80 leading-relaxed">{content.introduction}</p>
-                    {audio.isPlaying && <div className="mt-2"><VoiceVisualization isActive={true} /></div>}
+                    {audio.isPlaying && audio.activeTextId === 'intro' && (
+                        <div className="mt-3 py-2 border-t border-white/5">
+                            <VoiceVisualization isActive={true} />
+                        </div>
+                    )}
                 </div>
 
                 {/* Sections */}
@@ -108,11 +121,11 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                             <button
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    audio.isPlaying ? stopSpeaking : speak(`${section.title}. ${section.content}`);
+                                    audio.isPlaying && audio.activeTextId === section.id ? stopSpeaking() : speak(`${section.title}. ${section.content}`, { textId: section.id });
                                 }}
-                                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/40 hover:text-white opacity-0 group-hover/header:opacity-100 transition-all"
+                                className={`p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all ${audio.isPlaying && audio.activeTextId === section.id ? 'opacity-100 ring-1 ring-sky-500/50' : 'opacity-0 group-hover/header:opacity-100'}`}
                             >
-                                <HiOutlineSpeakerWave className="w-4 h-4" />
+                                {audio.isPlaying && audio.activeTextId === section.id ? <HiOutlineStop className="w-4 h-4 text-sky-400" /> : <HiOutlineSpeakerWave className="w-4 h-4" />}
                             </button>
                         </div>
 
@@ -120,6 +133,12 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                         {(activeSection === section.id || index === 0) && (
                             <div className="space-y-6">
                                 <p className="text-sm text-white/70 leading-relaxed">{section.content}</p>
+
+                                {audio.isPlaying && audio.activeTextId === section.id && (
+                                    <div className="py-2 border-t border-white/5">
+                                        <VoiceVisualization isActive={true} />
+                                    </div>
+                                )}
 
                                 {/* Key Points */}
                                 {section.keyPoints.length > 0 && (
@@ -133,6 +152,11 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                                                 </li>
                                             ))}
                                         </ul>
+                                        {audio.isPlaying && audio.activeTextId === `${section.id}-points` && (
+                                            <div className="py-2 border-t border-white/5">
+                                                <VoiceVisualization isActive={true} />
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 
@@ -148,6 +172,11 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                                                 </div>
                                             ))}
                                         </div>
+                                        {audio.isPlaying && audio.activeTextId === `${section.id}-examples` && (
+                                            <div className="py-2 border-t border-white/5">
+                                                <VoiceVisualization isActive={true} />
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -157,8 +186,21 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
 
                 {/* Summary */}
                 <div className="pt-6 border-t border-white/10">
-                    <h4 className="text-sm font-semibold text-sky-400 uppercase tracking-wider mb-2">Summary</h4>
+                    <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-sm font-semibold text-sky-400 uppercase tracking-wider">Summary</h4>
+                        <button
+                            onClick={audio.isPlaying && audio.activeTextId === 'summary' ? stopSpeaking : () => speak(`In summary, ${content.summary}`, { textId: 'summary' })}
+                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white/40 hover:text-white transition-all"
+                        >
+                            {audio.isPlaying && audio.activeTextId === 'summary' ? <HiOutlineStop className="w-4 h-4" /> : <HiOutlineSpeakerWave className="w-4 h-4" />}
+                        </button>
+                    </div>
                     <p className="text-sm text-white/80 leading-relaxed">{content.summary}</p>
+                    {audio.isPlaying && audio.activeTextId === 'summary' && (
+                        <div className="mt-3 py-2 border-t border-white/5">
+                            <VoiceVisualization isActive={true} />
+                        </div>
+                    )}
                 </div>
 
                 {/* Review Questions */}

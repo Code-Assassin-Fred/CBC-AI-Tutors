@@ -108,12 +108,12 @@ export function TutorProvider({ children }: TutorProviderProps) {
         setAudioState(prev => ({ ...prev, isPlaying: false, activeTextId: undefined }));
     }, []);
 
-    const speak = useCallback(async (text: string, options?: Partial<VoiceConfig>) => {
+    const speak = useCallback(async (text: string, options?: Partial<VoiceConfig> & { textId?: string }) => {
         stopSpeaking(); // Stop any current audio
 
         return new Promise<void>(async (resolve, reject) => {
             try {
-                setAudioState(prev => ({ ...prev, isPlaying: true }));
+                setAudioState(prev => ({ ...prev, isPlaying: true, activeTextId: options?.textId }));
 
                 const response = await fetch('/api/tutor/speech', {
                     method: 'POST',

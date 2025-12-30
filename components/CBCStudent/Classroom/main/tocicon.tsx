@@ -41,7 +41,7 @@ export default function TOCIcon({ toc }: TOCIconProps) {
           onClick={() => setTocOpen(false)}
         >
           <div
-            className="absolute bottom-0 left-0 w-1/2 max-h-[80%] bg-gradient-to-b from-[#1a1a2e] to-[#111] rounded-t-2xl shadow-2xl overflow-hidden transform transition-transform duration-300 ease-out"
+            className="absolute bottom-0 left-0 w-1/2 max-h-[80%] bg-[#0a0f14] rounded-t-2xl shadow-2xl border-t border-r border-white/10 overflow-hidden transform transition-transform duration-300 ease-out"
             style={{
               animation: tocOpen ? 'slideUp 0.3s ease-out' : 'none'
             }}
