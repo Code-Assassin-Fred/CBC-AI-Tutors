@@ -108,8 +108,8 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                     aiSummary: response.data.aiSummary
                 }));
             }
-        } catch (error) {
-            console.error('Failed to save quiz results:', error);
+        } catch (error: any) {
+            console.error('Failed to save quiz results:', error.response?.data || error.message);
             setState(prev => ({ ...prev, isSaving: false }));
         }
     };
@@ -172,6 +172,7 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                                     answers: new Map(),
                                     showResult: false,
                                     showFinalResults: false,
+                                    isSaving: false,
                                 });
                                 setSelectedAnswer(null);
                             }}
