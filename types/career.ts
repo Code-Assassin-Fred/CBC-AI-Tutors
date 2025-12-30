@@ -1,98 +1,88 @@
-import { UserRole } from './userprofile';
+/**
+ * Career Path Types
+ * 
+ * Types for AI-powered career discovery, skill assessment, and learning plans
+ */
 
 // ============================================
-// CAREER PATH DEFINITIONS
+// CAREER PATH CORE TYPES
 // ============================================
+
+export type CareerSource = 'ai-generated' | 'curated' | 'user-created';
+export type DemandLevel = 'low' | 'medium' | 'high' | 'very-high';
+export type DemandTrend = 'declining' | 'stable' | 'growing' | 'booming';
+export type EntryDifficulty = 'beginner-friendly' | 'moderate' | 'challenging' | 'expert';
+export type AutomationRisk = 'very-low' | 'low' | 'medium' | 'high';
+export type SkillImportance = 'essential' | 'important' | 'nice-to-have';
 
 export interface CareerPath {
     id: string;
-    title: string;                    // "Machine Learning Engineer"
+    title: string;
     description: string;
     generatedAt: Date;
-    source: 'ai-generated' | 'curated' | 'user-created';
+    source: CareerSource;
 
-    // === SKILL GRAPH ===
+    // Skill Graph
     skillCategories: SkillCategory[];
     totalSkillCount: number;
 
-    // === MARKET INTELLIGENCE (AI-researched) ===
+    // Market Intelligence
     market: {
-        demand: 'low' | 'medium' | 'high' | 'very-high';
-        demandTrend: 'declining' | 'stable' | 'growing' | 'booming';
-        salaryRange: { min: number; max: number; median: number; currency: string };
+        demand: DemandLevel;
+        demandTrend: DemandTrend;
+        salaryRange: { min: number; max: number; median: number };
         topHiringIndustries: string[];
         topLocations: string[];
         growthOutlook: string;
     };
 
-    // === ENTRY REQUIREMENTS ===
+    // Entry Requirements
     entry: {
-        difficulty: 'beginner-friendly' | 'moderate' | 'challenging' | 'expert';
-        typicalBackground: string[];     // "CS degree", "Self-taught", etc.
-        timeToEntry: string;             // "6-12 months focused study"
-        certifications: string[];        // Recommended certifications
+        difficulty: EntryDifficulty;
+        typicalBackground: string[];
+        timeToEntry: string;
+        certifications: Certification[];
     };
 
-    // === AI IMPACT ===
+    // AI Impact
     aiImpact: {
-        automationRisk: 'very-low' | 'low' | 'medium' | 'high';
+        automationRisk: AutomationRisk;
         riskExplanation: string;
-        futureProofSkills: string[];     // Skills that remain valuable
-        aiAugmentation: string;          // How AI helps, not replaces
+        futureProofSkills: string[];
+        aiAugmentation: string;
     };
 
-    // === LEARNING RESOURCES ===
+    // Learning Resources
     resources: {
-        platformCourses: string[];       // IDs of existing platform courses
+        platformCourses: string[];
         externalResources: ExternalResource[];
         communities: CommunityLink[];
         books: BookReference[];
     };
 
-    // === RELATED ===
-    relatedCareers: string[];          // Similar paths (IDs or names)
-    transitionPaths: TransitionPath[]; // "If you master X, you could also do Y"
+    // Related
+    relatedCareers: string[];
+    transitionPaths: TransitionPath[];
 }
 
-export interface SkillCategory {
-    name: string;                      // "Foundation", "Core", "Advanced"
-    weight: number;                    // % of total (all categories = 100%)
-    skills: Skill[];
-}
-
-export interface Skill {
-    id: string;
-    name: string;                      // "Python Programming"
-    description: string;
-    importance: 'essential' | 'important' | 'nice-to-have';
-    dependencies: string[];            // Skill IDs that must be learned first
-
-    // Assessment
-    assessmentQuestions?: QuizQuestion[]; // Optional, loaded on demand or generated
-    proficiencyLevels: {
-        beginner: string;                // "Can write basic scripts"
-        intermediate: string;            // "Can build full applications"
-        advanced: string;                // "Can architect complex systems"
-    };
-
-    // Learning
-    learningResources: {
-        platformCourses: string[];
-        estimatedTimeToLearn: string;
-    };
+export interface Certification {
+    name: string;
+    provider: string;
+    url?: string;
+    importance: SkillImportance;
 }
 
 export interface ExternalResource {
     title: string;
     url: string;
-    type: 'article' | 'video' | 'course' | 'tool';
-    isFree: boolean;
+    type: 'article' | 'video' | 'course' | 'documentation';
+    free: boolean;
 }
 
 export interface CommunityLink {
     name: string;
+    platform: 'discord' | 'reddit' | 'slack' | 'linkedin' | 'other';
     url: string;
-    platform: 'Discord' | 'Reddit' | 'LinkedIn' | 'Slack' | 'Other';
 }
 
 export interface BookReference {
@@ -103,150 +93,213 @@ export interface BookReference {
 
 export interface TransitionPath {
     toCareer: string;
-    description: string;
-    skillOverlap: number; // Percentage 0-100
-}
-
-// Re-using QuizQuestion from agents.ts or course.ts if possible, but defining a local version for independence if needed.
-// For now, let's use a simplified version compatible with the existing one.
-export interface QuizQuestion {
-    id: string;
-    question: string;
-    options: string[];
-    correctAnswer: string; // The correct option string
-    explanation: string;
+    sharedSkillsPercent: number;
+    additionalSkillsNeeded: string[];
 }
 
 // ============================================
-// USER PROFILE & PROGRESS
+// SKILL TYPES
+// ============================================
+
+export interface SkillCategory {
+    name: string;
+    weight: number;
+    skills: Skill[];
+}
+
+export interface Skill {
+    id: string;
+    name: string;
+    importance: SkillImportance;
+    dependencies: string[];
+
+    // Assessment
+    assessmentQuestions: SkillAssessmentQuestion[];
+    proficiencyLevels: {
+        beginner: string;
+        intermediate: string;
+        advanced: string;
+    };
+
+    // Learning
+    learningResources: {
+        platformCourses: string[];
+        estimatedTimeToLearn: string;
+    };
+}
+
+export interface SkillAssessmentQuestion {
+    id: string;
+    question: string;
+    options: string[];
+    correctAnswer: number;
+    difficulty: 'easy' | 'medium' | 'hard';
+}
+
+// ============================================
+// USER CAREER PROFILE
 // ============================================
 
 export interface UserCareerProfile {
     userId: string;
 
-    // === DISCOVERED STRENGTHS ===
+    // Discovered Strengths
     discoveredStrengths: {
-        skills: string[];                // Skills they're good at
-        traits: string[];                // "Analytical", "Creative", etc.
+        skills: string[];
+        traits: string[];
         assessmentDate: Date;
     };
 
-    // === CAREER GOALS ===
+    // Career Goals
     goals: {
         primary?: UserCareerGoal;
-        alternatives: UserCareerGoal[];  // Other interests
+        alternatives: UserCareerGoal[];
     };
 
-    // === SKILL STATE ===
-    // Map key is skillId
+    // Skill State
     skills: Record<string, UserSkillState>;
 
-    // === LEARNING PLAN ===
-    learningPlan?: PersonalizedLearningPlan;
+    // Learning Plan
+    learningPlanId?: string;
 }
 
 export interface UserCareerGoal {
     careerPathId: string;
-    careerPathTitle: string; // Denormalized for easy access
+    careerTitle: string;
     selectedAt: Date;
-    targetDate?: Date;                 // When they want to achieve it
-    progress: number;                  // 0-100%
+    targetDate?: Date;
+    progress: number;
 }
 
 export interface UserSkillState {
     skillId: string;
-    proficiency: number;               // 0-100
+    skillName: string;
+    proficiency: number;
     sources: SkillProficiencySource[];
     lastUpdated: Date;
 }
 
 export interface SkillProficiencySource {
-    type: 'assessment' | 'course-completion' | 'quiz-performance' | 'manual-entry';
+    type: 'assessment' | 'course-completion' | 'quiz-performance';
     value: number;
     timestamp: Date;
-    reference?: string;                // Course ID, quiz ID, etc.
+    reference?: string;
 }
 
 // ============================================
-// LEARNING PLAN
+// PERSONALIZED LEARNING PLAN
 // ============================================
 
 export interface PersonalizedLearningPlan {
     id: string;
     userId: string;
     careerPathId: string;
+    careerTitle: string;
 
     createdAt: Date;
     lastAdaptedAt: Date;
 
-    // Current position
     currentPhaseIndex: number;
-    overallProgress: number;           // 0-100%
+    overallProgress: number;
 
-    // Timeline
     estimatedCompletion: Date;
 
-    // Phases
     phases: LearningPhase[];
-
-    // Adaptations (how plan has evolved)
     adaptationHistory: PlanAdaptation[];
 }
 
 export interface LearningPhase {
-    id: string;
     order: number;
-    title: string;                     // "Phase 1: Programming Foundations"
+    title: string;
     description: string;
-    estimatedDuration: string;         // "4-6 weeks"
+    estimatedDuration: string;
 
-    // What to learn
     targetSkills: {
         skillId: string;
-        targetProficiency: number;       // Goal: reach 70% in Python
+        skillName: string;
+        targetProficiency: number;
     }[];
 
-    // How to learn
-    recommendedCourses: string[];      // Platform course IDs
+    recommendedCourses: string[];
     externalResources: ExternalResource[];
 
-    // Milestones
     milestones: Milestone[];
 
-    // Status
     status: 'locked' | 'active' | 'completed';
     progress: number;
 }
 
 export interface Milestone {
     id: string;
-    title: string;                     // "Complete Python Basics course"
+    title: string;
     type: 'course' | 'quiz' | 'project' | 'skill-level';
-    requirement: string;               // "Complete course X" or "Reach 70% in skill Y"
+    requirement: string;
     completed: boolean;
 }
 
 export interface PlanAdaptation {
     timestamp: Date;
-    reason: string;                    // "User excelled in Python, advancing faster"
-    changes: string[];                 // What was modified
+    reason: string;
+    changes: string[];
 }
 
 // ============================================
-// COMPARISON
+// CAREER COMPARISON
 // ============================================
 
 export interface CareerComparison {
-    careers: string[];                  // Career path IDs being compared
-    userId: string;                     // For personalized metrics
-
-    comparison: Record<string, {         // Dimension -> Career Data
-        [careerId: string]: ComparisonValue;
-    }>;
+    careers: CareerPath[];
+    userId: string;
+    comparison: CareerComparisonDimension[];
 }
 
-export interface ComparisonValue {
-    value: string | number;
-    formatted: string;
-    score?: number; // 0-100 for visual bars
+export interface CareerComparisonDimension {
+    dimension: string;
+    label: string;
+    values: { careerId: string; value: string | number; formatted: string }[];
+}
+
+// ============================================
+// CAREER DISCOVERY CHAT
+// ============================================
+
+export interface CareerDiscoveryMessage {
+    id: string;
+    role: 'user' | 'assistant';
+    content: string;
+    timestamp: Date;
+    suggestions?: CareerSuggestion[];
+}
+
+export interface CareerSuggestion {
+    careerTitle: string;
+    matchScore: number;
+    matchReason: string;
+}
+
+// ============================================
+// GENERATION TYPES
+// ============================================
+
+export type CareerGenerationStep =
+    | 'researching'
+    | 'analyzing-skills'
+    | 'market-research'
+    | 'building-path'
+    | 'complete'
+    | 'error';
+
+export interface CareerGenerationProgress {
+    step: CareerGenerationStep;
+    message: string;
+    percentage: number;
+}
+
+export interface CareerGenerationEvent {
+    type: 'progress' | 'complete' | 'error';
+    step?: CareerGenerationStep;
+    message?: string;
+    percentage?: number;
+    data?: Partial<CareerPath>;
+    error?: string;
 }

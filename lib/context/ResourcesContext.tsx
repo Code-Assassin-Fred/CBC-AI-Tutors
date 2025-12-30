@@ -1,135 +1,208 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState } from 'react';
-import { Resource, ResourceFilter, ResourceCategory } from '@/types/resources';
+import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import {
+    Resource,
+    ResourceCategory,
+    ResourceFilter,
+    ArticleGenerationProgress,
+    RESOURCE_HUB_CATEGORIES,
+    ResourceHubCategory,
+} from '@/types/resource';
+import { useAuth } from './AuthContext';
 
-// Mock Data
-const MOCK_RESOURCES: Resource[] = [
-    {
-        id: '1',
-        title: 'The Future of AI work',
-        description: 'How specialized AI agents are changing the workforce landscape.',
-        type: 'ai-article',
-        category: 'ai-future',
-        subcategory: 'Job Market',
-        tags: ['AI', 'career', 'future'],
-        relatedCareers: [],
-        relatedSkills: [],
-        isFree: true,
-        saves: 120,
-        helpfulVotes: 45,
-        createdAt: new Date()
-    },
-    {
-        id: '2',
-        title: 'Deep Work',
-        description: 'Excerpts and summary of Cal Newport\'s book.',
-        type: 'book',
-        category: 'meta-learning',
-        subcategory: 'Productivity',
-        tags: ['focus', 'productivity'],
-        relatedCareers: [],
-        relatedSkills: [],
-        isFree: false,
-        saves: 85,
-        helpfulVotes: 30,
-        createdAt: new Date()
-    }
-];
+// ============================================
+// CONTEXT TYPE
+// ============================================
 
 interface ResourcesContextType {
+    // Categories
+    categories: ResourceHubCategory[];
+    activeCategory: ResourceCategory | null;
+    setActiveCategory: (category: ResourceCategory | null) => void;
+    activeSubcategory: string | null;
+    setActiveSubcategory: (subcategory: string | null) => void;
+
+    // Resources
     resources: Resource[];
     isLoading: boolean;
-    activeFilter: ResourceFilter;
+    loadResources: (filter?: ResourceFilter) => Promise<void>;
 
-    // Actions
-    setFilter: (filter: ResourceFilter) => void;
-    searchResources: (query: string) => Promise<void>;
-    generateAIArticle: (topic: string) => Promise<string | null>; // Returns ID
+    // AI Article Generation
+    isGeneratingArticle: boolean;
+    articleProgress: ArticleGenerationProgress | null;
+    generateArticle: (topic: string, category: ResourceCategory) => Promise<Resource | null>;
+
+    // Active Resource (for viewing)
+    activeResource: Resource | null;
+    setActiveResource: (resource: Resource | null) => void;
+
+    // Career Filtering
+    careerFilter: string | null;
+    setCareerFilter: (careerId: string | null) => void;
+
+    // Search
+    searchQuery: string;
+    setSearchQuery: (query: string) => void;
+
+    // Saved Resources
+    savedResources: string[];
+    saveResource: (resourceId: string) => void;
+    unsaveResource: (resourceId: string) => void;
+    isSaved: (resourceId: string) => boolean;
 }
 
-const ResourcesContext = createContext<ResourcesContextType | undefined>(undefined);
+const ResourcesContext = createContext<ResourcesContextType | null>(null);
 
-export function ResourcesProvider({ children }: { children: React.ReactNode }) {
-    const [resources, setResources] = useState<Resource[]>(MOCK_RESOURCES);
+// ============================================
+// PROVIDER
+// ============================================
+
+interface ResourcesProviderProps {
+    children: ReactNode;
+}
+
+export function ResourcesProvider({ children }: ResourcesProviderProps) {
+    const { user } = useAuth();
+
+    // Categories
+    const [activeCategory, setActiveCategory] = useState<ResourceCategory | null>('meta-learning');
+    const [activeSubcategory, setActiveSubcategory] = useState<string | null>(null);
+
+    // Resources
+    const [resources, setResources] = useState<Resource[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [activeFilter, setActiveFilter] = useState<ResourceFilter>({});
 
-    const setFilter = (filter: ResourceFilter) => {
-        setActiveFilter(filter);
-        // TODO: Filter local resources or fetch new ones
-    };
+    // Article Generation
+    const [isGeneratingArticle, setIsGeneratingArticle] = useState(false);
+    const [articleProgress, setArticleProgress] = useState<ArticleGenerationProgress | null>(null);
 
-    const searchResources = async (query: string) => {
+    // Active Resource
+    const [activeResource, setActiveResource] = useState<Resource | null>(null);
+
+    // Filtering
+    const [careerFilter, setCareerFilter] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // Saved
+    const [savedResources, setSavedResources] = useState<string[]>([]);
+
+    // Load Resources
+    const loadResources = useCallback(async (filter?: ResourceFilter) => {
         setIsLoading(true);
-        // TODO: API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setIsLoading(false);
-    };
 
-    const generateAIArticle = async (topic: string) => {
-        setIsLoading(true);
+        try {
+            const params = new URLSearchParams();
+            if (filter?.category) params.set('category', filter.category);
+            if (filter?.subcategory) params.set('subcategory', filter.subcategory);
+            if (filter?.relatedCareer) params.set('career', filter.relatedCareer);
+            if (filter?.searchQuery) params.set('q', filter.searchQuery);
+
+            const response = await fetch(`/api/resources/list?${params.toString()}`);
+
+            if (response.ok) {
+                const data = await response.json();
+                setResources(data.resources || []);
+            }
+        } catch (error) {
+            console.error('Failed to load resources:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }, []);
+
+    // Generate AI Article
+    const generateArticle = useCallback(async (
+        topic: string,
+        category: ResourceCategory
+    ): Promise<Resource | null> => {
+        if (!user) return null;
+
+        setIsGeneratingArticle(true);
+        setArticleProgress({ step: 'researching', message: 'Researching topic...', percentage: 0 });
+
         try {
             const response = await fetch('/api/resources/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ topic })
+                body: JSON.stringify({
+                    topic,
+                    category,
+                    userId: user.uid,
+                }),
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to generate article');
-            }
+            if (!response.ok) throw new Error('Generation failed');
 
+            // Handle streaming if needed, or direct response
             const data = await response.json();
 
-            const newArticle: Resource = {
-                id: `gen-${Date.now()}`,
-                title: data.title,
-                description: data.description,
-                type: 'ai-article',
-                category: data.category as ResourceCategory,
-                subcategory: data.subcategory,
-                tags: data.tags,
-                relatedCareers: [],
-                relatedSkills: [],
-                isFree: true,
-                saves: 0,
-                helpfulVotes: 0,
-                createdAt: new Date(),
-                content: data.markdownContent,
-                duration: data.duration,
-                difficulty: data.difficulty
-            };
+            setArticleProgress({ step: 'complete', message: 'Article ready!', percentage: 100 });
 
-            setResources(prev => [newArticle, ...prev]);
-            return newArticle.id;
-        } catch (err) {
-            console.error(err);
-            // Optionally handle error state here
+            return data.resource;
+        } catch (error) {
+            console.error('Article generation error:', error);
+            setArticleProgress({ step: 'error', message: 'Failed to generate', percentage: 0 });
             return null;
         } finally {
-            setIsLoading(false);
+            setIsGeneratingArticle(false);
         }
+    }, [user]);
+
+    // Save/Unsave Resources
+    const saveResource = useCallback((resourceId: string) => {
+        setSavedResources(prev => [...prev, resourceId]);
+        // TODO: Persist to Firestore
+    }, []);
+
+    const unsaveResource = useCallback((resourceId: string) => {
+        setSavedResources(prev => prev.filter(id => id !== resourceId));
+        // TODO: Persist to Firestore
+    }, []);
+
+    const isSaved = useCallback((resourceId: string) => {
+        return savedResources.includes(resourceId);
+    }, [savedResources]);
+
+    const value: ResourcesContextType = {
+        categories: RESOURCE_HUB_CATEGORIES,
+        activeCategory,
+        setActiveCategory,
+        activeSubcategory,
+        setActiveSubcategory,
+        resources,
+        isLoading,
+        loadResources,
+        isGeneratingArticle,
+        articleProgress,
+        generateArticle,
+        activeResource,
+        setActiveResource,
+        careerFilter,
+        setCareerFilter,
+        searchQuery,
+        setSearchQuery,
+        savedResources,
+        saveResource,
+        unsaveResource,
+        isSaved,
     };
 
     return (
-        <ResourcesContext.Provider value={{
-            resources,
-            isLoading,
-            activeFilter,
-            setFilter,
-            searchResources,
-            generateAIArticle
-        }}>
+        <ResourcesContext.Provider value={value}>
             {children}
         </ResourcesContext.Provider>
     );
 }
 
+// ============================================
+// HOOK
+// ============================================
+
 export function useResources() {
     const context = useContext(ResourcesContext);
     if (!context) {
-        throw new Error('useResources must be used within a ResourcesProvider');
+        throw new Error('useResources must be used within ResourcesProvider');
     }
     return context;
 }

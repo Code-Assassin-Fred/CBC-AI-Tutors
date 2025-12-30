@@ -1,210 +1,198 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
-import { CareerPath } from '@/types/career';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { CareerPath, CareerGenerationEvent } from '@/types/career';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash-exp",
-    generationConfig: {
-        responseMimeType: "application/json",
-        responseSchema: {
-            type: SchemaType.OBJECT,
-            properties: {
-                title: { type: SchemaType.STRING },
-                description: { type: SchemaType.STRING },
-                totalSkillCount: { type: SchemaType.NUMBER },
-                skillCategories: {
-                    type: SchemaType.ARRAY,
-                    items: {
-                        type: SchemaType.OBJECT,
-                        properties: {
-                            name: { type: SchemaType.STRING },
-                            weight: { type: SchemaType.NUMBER },
-                            skills: {
-                                type: SchemaType.ARRAY,
-                                items: {
-                                    type: SchemaType.OBJECT,
-                                    properties: {
-                                        id: { type: SchemaType.STRING },
-                                        name: { type: SchemaType.STRING },
-                                        description: { type: SchemaType.STRING },
-                                        importance: { type: SchemaType.STRING, enum: ["essential", "important", "nice-to-have"] },
-                                        dependencies: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-                                        proficiencyLevels: {
-                                            type: SchemaType.OBJECT,
-                                            properties: {
-                                                beginner: { type: SchemaType.STRING },
-                                                intermediate: { type: SchemaType.STRING },
-                                                advanced: { type: SchemaType.STRING }
-                                            },
-                                            required: ["beginner", "intermediate", "advanced"]
-                                        },
-                                        learningResources: {
-                                            type: SchemaType.OBJECT,
-                                            properties: {
-                                                platformCourses: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-                                                estimatedTimeToLearn: { type: SchemaType.STRING }
-                                            },
-                                            required: ["platformCourses", "estimatedTimeToLearn"]
-                                        }
-                                    },
-                                    required: ["id", "name", "description", "importance", "dependencies", "proficiencyLevels", "learningResources"]
-                                }
-                            }
-                        },
-                        required: ["name", "weight", "skills"]
-                    }
-                },
-                market: {
-                    type: SchemaType.OBJECT,
-                    properties: {
-                        demand: { type: SchemaType.STRING, enum: ["low", "medium", "high", "very-high"] },
-                        demandTrend: { type: SchemaType.STRING, enum: ["declining", "stable", "growing", "booming"] },
-                        salaryRange: {
-                            type: SchemaType.OBJECT,
-                            properties: {
-                                min: { type: SchemaType.NUMBER },
-                                max: { type: SchemaType.NUMBER },
-                                median: { type: SchemaType.NUMBER },
-                                currency: { type: SchemaType.STRING }
-                            },
-                            required: ["min", "max", "median", "currency"]
-                        },
-                        topHiringIndustries: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-                        topLocations: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-                        growthOutlook: { type: SchemaType.STRING }
-                    },
-                    required: ["demand", "demandTrend", "salaryRange", "topHiringIndustries", "topLocations", "growthOutlook"]
-                },
-                entry: {
-                    type: SchemaType.OBJECT,
-                    properties: {
-                        difficulty: { type: SchemaType.STRING, enum: ["beginner-friendly", "moderate", "challenging", "expert"] },
-                        typicalBackground: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-                        timeToEntry: { type: SchemaType.STRING },
-                        certifications: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } }
-                    },
-                    required: ["difficulty", "typicalBackground", "timeToEntry", "certifications"]
-                },
-                aiImpact: {
-                    type: SchemaType.OBJECT,
-                    properties: {
-                        automationRisk: { type: SchemaType.STRING, enum: ["very-low", "low", "medium", "high"] },
-                        riskExplanation: { type: SchemaType.STRING },
-                        futureProofSkills: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-                        aiAugmentation: { type: SchemaType.STRING }
-                    },
-                    required: ["automationRisk", "riskExplanation", "futureProofSkills", "aiAugmentation"]
-                },
-                resources: {
-                    type: SchemaType.OBJECT,
-                    properties: {
-                        platformCourses: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-                        externalResources: {
-                            type: SchemaType.ARRAY,
-                            items: {
-                                type: SchemaType.OBJECT,
-                                properties: {
-                                    title: { type: SchemaType.STRING },
-                                    url: { type: SchemaType.STRING },
-                                    type: { type: SchemaType.STRING, enum: ["article", "video", "course", "tool"] },
-                                    isFree: { type: SchemaType.BOOLEAN }
-                                },
-                                required: ["title", "url", "type", "isFree"]
-                            }
-                        },
-                        communities: {
-                            type: SchemaType.ARRAY,
-                            items: {
-                                type: SchemaType.OBJECT,
-                                properties: {
-                                    name: { type: SchemaType.STRING },
-                                    url: { type: SchemaType.STRING },
-                                    platform: { type: SchemaType.STRING, enum: ["Discord", "Reddit", "LinkedIn", "Slack", "Other"] }
-                                },
-                                required: ["name", "url", "platform"]
-                            }
-                        },
-                        books: {
-                            type: SchemaType.ARRAY,
-                            items: {
-                                type: SchemaType.OBJECT,
-                                properties: {
-                                    title: { type: SchemaType.STRING },
-                                    author: { type: SchemaType.STRING },
-                                    url: { type: SchemaType.STRING }
-                                },
-                                required: ["title", "author"]
-                            }
-                        }
-                    },
-                    required: ["platformCourses", "externalResources", "communities", "books"]
-                },
-                relatedCareers: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
-                transitionPaths: {
-                    type: SchemaType.ARRAY,
-                    items: {
-                        type: SchemaType.OBJECT,
-                        properties: {
-                            toCareer: { type: SchemaType.STRING },
-                            description: { type: SchemaType.STRING },
-                            skillOverlap: { type: SchemaType.NUMBER }
-                        },
-                        required: ["toCareer", "description", "skillOverlap"]
-                    }
-                }
-            },
-            required: [
-                "title",
-                "description",
-                "totalSkillCount",
-                "skillCategories",
-                "market",
-                "entry",
-                "aiImpact",
-                "resources",
-                "relatedCareers",
-                "transitionPaths"
-            ]
-        }
-    }
-});
-
 export async function POST(req: NextRequest) {
     try {
-        const { goal } = await req.json();
+        const { title, userId } = await req.json();
 
-        if (!goal) {
-            return NextResponse.json({ error: 'Goal is required' }, { status: 400 });
+        if (!title || !userId) {
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        const prompt = `
-            You are an expert career counselor and industry analyst.
-            Create a detailed career path and skill graph for the following career goal: "${goal}".
-            
-            Follow the JSON schema strictly.
-            Ensure the "id" for skills are unique and kebab-case (e.g., "python-programming").
-            Provide realistic market data and salary ranges (in USD, annual).
-            Focus on modern, high-demand skills.
-        `;
+        // Create a streaming response
+        const encoder = new TextEncoder();
+        const stream = new ReadableStream({
+            async start(controller) {
+                const sendEvent = (event: CareerGenerationEvent) => {
+                    controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+                };
 
-        const result = await model.generateContent(prompt);
-        const responseText = result.response.text();
-        const data = JSON.parse(responseText);
+                try {
+                    // Step 1: Researching
+                    sendEvent({
+                        type: 'progress',
+                        step: 'researching',
+                        message: `Researching ${title} career...`,
+                        percentage: 10,
+                    });
 
-        // Add server-side generated fields
-        const careerPath: CareerPath = {
-            id: `path-${Date.now()}`,
-            source: 'ai-generated',
-            generatedAt: new Date(),
-            ...data
-        };
+                    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
-        return NextResponse.json(careerPath);
+                    // Step 2: Analyzing skills
+                    sendEvent({
+                        type: 'progress',
+                        step: 'analyzing-skills',
+                        message: 'Analyzing required skills...',
+                        percentage: 30,
+                    });
+
+                    // Step 3: Market research
+                    sendEvent({
+                        type: 'progress',
+                        step: 'market-research',
+                        message: 'Gathering market intelligence...',
+                        percentage: 50,
+                    });
+
+                    // Generate the career path
+                    const prompt = `You are a career advisor AI. Generate a comprehensive career path for: "${title}"
+
+Return a JSON object with this exact structure (no markdown, just JSON):
+{
+    "title": "${title}",
+    "description": "2-3 sentence description of this career",
+    "skillCategories": [
+        {
+            "name": "Foundation",
+            "weight": 30,
+            "skills": [
+                {
+                    "id": "skill-1",
+                    "name": "Skill Name",
+                    "importance": "essential",
+                    "dependencies": [],
+                    "assessmentQuestions": [
+                        {
+                            "id": "q1",
+                            "question": "Question text?",
+                            "options": ["Option A", "Option B", "Option C", "Option D"],
+                            "correctAnswer": 1,
+                            "difficulty": "easy"
+                        }
+                    ],
+                    "proficiencyLevels": {
+                        "beginner": "Can do basic tasks",
+                        "intermediate": "Can work independently",
+                        "advanced": "Can mentor others"
+                    },
+                    "learningResources": {
+                        "platformCourses": [],
+                        "estimatedTimeToLearn": "2-4 weeks"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Core Skills",
+            "weight": 50,
+            "skills": []
+        },
+        {
+            "name": "Advanced",
+            "weight": 20,
+            "skills": []
+        }
+    ],
+    "totalSkillCount": 8,
+    "market": {
+        "demand": "high",
+        "demandTrend": "growing",
+        "salaryRange": { "min": 70000, "max": 150000, "median": 100000 },
+        "topHiringIndustries": ["Tech", "Finance", "Healthcare"],
+        "topLocations": ["San Francisco", "New York", "London"],
+        "growthOutlook": "Expected to grow 20% over the next decade"
+    },
+    "entry": {
+        "difficulty": "moderate",
+        "typicalBackground": ["Computer Science degree", "Self-taught", "Bootcamp"],
+        "timeToEntry": "6-12 months",
+        "certifications": [
+            { "name": "Relevant Cert", "provider": "Provider", "importance": "important" }
+        ]
+    },
+    "aiImpact": {
+        "automationRisk": "low",
+        "riskExplanation": "Why this career is or isn't at risk from AI",
+        "futureProofSkills": ["Critical thinking", "Creativity"],
+        "aiAugmentation": "How AI helps professionals in this field"
+    },
+    "resources": {
+        "platformCourses": [],
+        "externalResources": [],
+        "communities": [],
+        "books": []
+    },
+    "relatedCareers": ["Related Career 1", "Related Career 2"],
+    "transitionPaths": []
+}
+
+Generate 2-3 skills per category with 2-3 assessment questions each. Be specific and realistic.`;
+
+                    const result = await model.generateContent(prompt);
+                    const responseText = result.response.text();
+
+                    // Step 4: Building path
+                    sendEvent({
+                        type: 'progress',
+                        step: 'building-path',
+                        message: 'Building your personalized path...',
+                        percentage: 80,
+                    });
+
+                    // Parse the response
+                    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+                    if (!jsonMatch) {
+                        throw new Error('Failed to parse career data');
+                    }
+
+                    const careerData = JSON.parse(jsonMatch[0]);
+
+                    // Create the career path object
+                    const careerPath: CareerPath = {
+                        id: `career-${Date.now()}`,
+                        ...careerData,
+                        generatedAt: new Date(),
+                        source: 'ai-generated',
+                    };
+
+                    // TODO: Save to Firestore here
+
+                    // Send complete event
+                    sendEvent({
+                        type: 'complete',
+                        step: 'complete',
+                        message: 'Career path ready!',
+                        percentage: 100,
+                        data: careerPath,
+                    });
+
+                } catch (error) {
+                    sendEvent({
+                        type: 'error',
+                        error: error instanceof Error ? error.message : 'Unknown error',
+                    });
+                }
+
+                controller.close();
+            },
+        });
+
+        return new NextResponse(stream, {
+            headers: {
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                'Connection': 'keep-alive',
+            },
+        });
 
     } catch (error) {
         console.error('Career generation error:', error);
-        return NextResponse.json({ error: 'Failed to generate career path' }, { status: 500 });
+        return NextResponse.json(
+            { error: 'Failed to generate career path' },
+            { status: 500 }
+        );
     }
 }

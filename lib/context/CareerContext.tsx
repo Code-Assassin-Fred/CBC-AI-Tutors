@@ -1,166 +1,377 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import {
     CareerPath,
     UserCareerProfile,
-    UserCareerGoal,
+    PersonalizedLearningPlan,
+    CareerDiscoveryMessage,
+    CareerSuggestion,
+    CareerGenerationProgress,
     UserSkillState,
-    PersonalizedLearningPlan
 } from '@/types/career';
 import { useAuth } from './AuthContext';
 
-// Mock data for initial development
-const MOCK_CAREER_PATH: CareerPath = {
-    id: 'generated-1',
-    title: 'Machine Learning Engineer',
-    description: 'Design and implement machine learning models and systems.',
-    generatedAt: new Date(),
-    source: 'ai-generated',
-    skillCategories: [],
-    totalSkillCount: 15,
-    market: {
-        demand: 'high',
-        demandTrend: 'growing',
-        salaryRange: { min: 90000, max: 180000, median: 130000, currency: 'USD' },
-        topHiringIndustries: ['Tech', 'Finance', 'Healthcare'],
-        topLocations: ['San Francisco', 'New York', 'Remote'],
-        growthOutlook: 'Very Strong'
-    },
-    entry: {
-        difficulty: 'challenging',
-        typicalBackground: ['CS', 'Math', 'Physics'],
-        timeToEntry: '12-18 months',
-        certifications: ['AWS ML', 'TensorFlow Dev']
-    },
-    aiImpact: {
-        automationRisk: 'low',
-        riskExplanation: 'AI builds AI; demand increases.',
-        futureProofSkills: ['Model Architecture', 'Ethics'],
-        aiAugmentation: 'Copilot for coding'
-    },
-    resources: {
-        platformCourses: [],
-        externalResources: [],
-        communities: [],
-        books: []
-    },
-    relatedCareers: [],
-    transitionPaths: []
-};
+// ============================================
+// CONTEXT TYPE
+// ============================================
+
+type CareerView = 'entry' | 'discovery-chat' | 'generating' | 'assessment' | 'gap-analysis' | 'career-view' | 'learning-plan' | 'comparison';
 
 interface CareerContextType {
-    userProfile: UserCareerProfile | null;
-    activeCareerPath: CareerPath | null;
-    isLoading: boolean;
-    error: string | null;
+    // View State
+    currentView: CareerView;
+    setCurrentView: (view: CareerView) => void;
 
-    // Actions
-    generateCareerPath: (goal: string) => Promise<string | null>;
-    selectCareerPath: (pathId: string) => Promise<void>;
-    startSkillAssessment: (skillId: string) => void;
-    updateSkillProficiency: (skillId: string, level: number) => Promise<void>;
+    // Career Generation
+    isGenerating: boolean;
+    generationProgress: CareerGenerationProgress | null;
+    generationError: string | null;
+    generateCareer: (title: string) => Promise<CareerPath | null>;
+
+    // Discovery Chat
+    discoveryMessages: CareerDiscoveryMessage[];
+    isDiscovering: boolean;
+    sendDiscoveryMessage: (message: string) => Promise<void>;
+    careerSuggestions: CareerSuggestion[];
+    selectSuggestion: (suggestion: CareerSuggestion) => void;
+
+    // Active Career
+    activeCareer: CareerPath | null;
+    setActiveCareer: (career: CareerPath | null) => void;
+
+    // User Profile
+    userProfile: UserCareerProfile | null;
+    loadUserProfile: () => Promise<void>;
+
+    // Skills
+    skillStates: Record<string, UserSkillState>;
+    updateSkillState: (skillId: string, state: UserSkillState) => void;
+
+    // Assessment
+    isAssessing: boolean;
+    startAssessment: () => void;
+    submitAssessmentAnswer: (skillId: string, questionId: string, answer: number) => void;
+    assessmentResults: Record<string, number>;
+
+    // Learning Plan
+    learningPlan: PersonalizedLearningPlan | null;
+    generateLearningPlan: () => Promise<void>;
+    isGeneratingPlan: boolean;
+
+    // Comparison
+    comparisonCareers: CareerPath[];
+    addToComparison: (career: CareerPath) => void;
+    removeFromComparison: (careerId: string) => void;
+    clearComparison: () => void;
+
+    // Reset
+    reset: () => void;
 }
 
-const CareerContext = createContext<CareerContextType | undefined>(undefined);
+const CareerContext = createContext<CareerContextType | null>(null);
 
-export function CareerProvider({ children }: { children: React.ReactNode }) {
+// ============================================
+// PROVIDER
+// ============================================
+
+interface CareerProviderProps {
+    children: ReactNode;
+}
+
+export function CareerProvider({ children }: CareerProviderProps) {
     const { user } = useAuth();
+
+    // View State
+    const [currentView, setCurrentView] = useState<CareerView>('entry');
+
+    // Generation State
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [generationProgress, setGenerationProgress] = useState<CareerGenerationProgress | null>(null);
+    const [generationError, setGenerationError] = useState<string | null>(null);
+
+    // Discovery State
+    const [discoveryMessages, setDiscoveryMessages] = useState<CareerDiscoveryMessage[]>([]);
+    const [isDiscovering, setIsDiscovering] = useState(false);
+    const [careerSuggestions, setCareerSuggestions] = useState<CareerSuggestion[]>([]);
+
+    // Active Career
+    const [activeCareer, setActiveCareer] = useState<CareerPath | null>(null);
+
+    // User Profile
     const [userProfile, setUserProfile] = useState<UserCareerProfile | null>(null);
-    const [activeCareerPath, setActiveCareerPath] = useState<CareerPath | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [skillStates, setSkillStates] = useState<Record<string, UserSkillState>>({});
 
-    // Initialize profile
-    useEffect(() => {
-        if (user) {
-            // TODO: Fetch real profile from Firestore
-            setUserProfile({
-                userId: user.uid,
-                discoveredStrengths: { skills: [], traits: [], assessmentDate: new Date() },
-                goals: { alternatives: [] },
-                skills: {}
-            });
-        }
-    }, [user]);
+    // Assessment
+    const [isAssessing, setIsAssessing] = useState(false);
+    const [assessmentResults, setAssessmentResults] = useState<Record<string, number>>({});
 
-    const generateCareerPath = async (goal: string) => {
-        setIsLoading(true);
-        setError(null);
+    // Learning Plan
+    const [learningPlan, setLearningPlan] = useState<PersonalizedLearningPlan | null>(null);
+    const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+
+    // Comparison
+    const [comparisonCareers, setComparisonCareers] = useState<CareerPath[]>([]);
+
+    // Generate Career Path
+    const generateCareer = useCallback(async (title: string): Promise<CareerPath | null> => {
+        if (!user) return null;
+
+        setIsGenerating(true);
+        setGenerationError(null);
+        setCurrentView('generating');
+        setGenerationProgress({ step: 'researching', message: 'Researching career...', percentage: 0 });
+
         try {
             const response = await fetch('/api/career/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ goal })
+                body: JSON.stringify({ title, userId: user.uid }),
             });
 
             if (!response.ok) {
                 throw new Error('Failed to generate career path');
             }
 
-            const newPath: CareerPath = await response.json();
+            // Handle streaming response
+            const reader = response.body?.getReader();
+            if (!reader) throw new Error('No response stream');
 
-            setActiveCareerPath(newPath);
-            return newPath.id;
-        } catch (err) {
-            console.error(err);
-            setError('Failed to generate career path');
-            return null;
-        } finally {
-            setIsLoading(false);
-        }
-    };
+            const decoder = new TextDecoder();
+            let career: CareerPath | null = null;
 
-    const selectCareerPath = async (pathId: string) => {
-        // TODO: fetch path details if not already loaded
-        // setActiveCareerPath(fetchedPath);
-    };
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
 
-    const startSkillAssessment = (skillId: string) => {
-        // TODO: Transition to assessment UI
-        console.log('Starting assessment for', skillId);
-    };
+                const chunk = decoder.decode(value);
+                const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
 
-    const updateSkillProficiency = async (skillId: string, level: number) => {
-        if (!userProfile) return;
+                for (const line of lines) {
+                    try {
+                        const data = JSON.parse(line.slice(6));
 
-        setUserProfile(prev => {
-            if (!prev) return null;
-            return {
-                ...prev,
-                skills: {
-                    ...prev.skills,
-                    [skillId]: {
-                        skillId,
-                        proficiency: level,
-                        sources: [],
-                        lastUpdated: new Date()
+                        if (data.type === 'progress') {
+                            setGenerationProgress({
+                                step: data.step,
+                                message: data.message,
+                                percentage: data.percentage,
+                            });
+                        } else if (data.type === 'complete') {
+                            career = data.data;
+                            setActiveCareer(career);
+                            setCurrentView('assessment');
+                        } else if (data.type === 'error') {
+                            throw new Error(data.error);
+                        }
+                    } catch {
+                        // Skip invalid JSON
                     }
                 }
+            }
+
+            return career;
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Unknown error';
+            setGenerationError(message);
+            setCurrentView('entry');
+            return null;
+        } finally {
+            setIsGenerating(false);
+        }
+    }, [user]);
+
+    // Discovery Chat
+    const sendDiscoveryMessage = useCallback(async (message: string) => {
+        if (!user) return;
+
+        const userMessage: CareerDiscoveryMessage = {
+            id: Date.now().toString(),
+            role: 'user',
+            content: message,
+            timestamp: new Date(),
+        };
+        setDiscoveryMessages(prev => [...prev, userMessage]);
+        setIsDiscovering(true);
+
+        try {
+            const response = await fetch('/api/career/discover', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: [...discoveryMessages, userMessage],
+                    userId: user.uid,
+                }),
+            });
+
+            if (!response.ok) throw new Error('Discovery failed');
+
+            const data = await response.json();
+
+            const assistantMessage: CareerDiscoveryMessage = {
+                id: (Date.now() + 1).toString(),
+                role: 'assistant',
+                content: data.message,
+                timestamp: new Date(),
+                suggestions: data.suggestions,
             };
+
+            setDiscoveryMessages(prev => [...prev, assistantMessage]);
+
+            if (data.suggestions?.length > 0) {
+                setCareerSuggestions(data.suggestions);
+            }
+        } catch (error) {
+            console.error('Discovery error:', error);
+        } finally {
+            setIsDiscovering(false);
+        }
+    }, [user, discoveryMessages]);
+
+    // Select Suggestion
+    const selectSuggestion = useCallback((suggestion: CareerSuggestion) => {
+        generateCareer(suggestion.careerTitle);
+    }, [generateCareer]);
+
+    // Load User Profile
+    const loadUserProfile = useCallback(async () => {
+        if (!user) return;
+
+        try {
+            const response = await fetch(`/api/user/career-profile?userId=${user.uid}`);
+            if (response.ok) {
+                const data = await response.json();
+                setUserProfile(data);
+                setSkillStates(data.skills || {});
+            }
+        } catch (error) {
+            console.error('Failed to load career profile:', error);
+        }
+    }, [user]);
+
+    // Update Skill State
+    const updateSkillState = useCallback((skillId: string, state: UserSkillState) => {
+        setSkillStates(prev => ({ ...prev, [skillId]: state }));
+    }, []);
+
+    // Assessment
+    const startAssessment = useCallback(() => {
+        setIsAssessing(true);
+        setAssessmentResults({});
+        setCurrentView('assessment');
+    }, []);
+
+    const submitAssessmentAnswer = useCallback((skillId: string, questionId: string, answer: number) => {
+        // This would be called for each question, accumulating results
+        setAssessmentResults(prev => ({
+            ...prev,
+            [`${skillId}_${questionId}`]: answer,
+        }));
+    }, []);
+
+    // Generate Learning Plan
+    const generateLearningPlan = useCallback(async () => {
+        if (!user || !activeCareer) return;
+
+        setIsGeneratingPlan(true);
+
+        try {
+            const response = await fetch('/api/career/learning-plan', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: user.uid,
+                    careerId: activeCareer.id,
+                    skillStates,
+                }),
+            });
+
+            if (response.ok) {
+                const plan = await response.json();
+                setLearningPlan(plan);
+                setCurrentView('learning-plan');
+            }
+        } catch (error) {
+            console.error('Failed to generate learning plan:', error);
+        } finally {
+            setIsGeneratingPlan(false);
+        }
+    }, [user, activeCareer, skillStates]);
+
+    // Comparison
+    const addToComparison = useCallback((career: CareerPath) => {
+        setComparisonCareers(prev => {
+            if (prev.length >= 3 || prev.find(c => c.id === career.id)) return prev;
+            return [...prev, career];
         });
+    }, []);
+
+    const removeFromComparison = useCallback((careerId: string) => {
+        setComparisonCareers(prev => prev.filter(c => c.id !== careerId));
+    }, []);
+
+    const clearComparison = useCallback(() => {
+        setComparisonCareers([]);
+    }, []);
+
+    // Reset
+    const reset = useCallback(() => {
+        setCurrentView('entry');
+        setActiveCareer(null);
+        setDiscoveryMessages([]);
+        setCareerSuggestions([]);
+        setAssessmentResults({});
+        setLearningPlan(null);
+        setGenerationError(null);
+    }, []);
+
+    const value: CareerContextType = {
+        currentView,
+        setCurrentView,
+        isGenerating,
+        generationProgress,
+        generationError,
+        generateCareer,
+        discoveryMessages,
+        isDiscovering,
+        sendDiscoveryMessage,
+        careerSuggestions,
+        selectSuggestion,
+        activeCareer,
+        setActiveCareer,
+        userProfile,
+        loadUserProfile,
+        skillStates,
+        updateSkillState,
+        isAssessing,
+        startAssessment,
+        submitAssessmentAnswer,
+        assessmentResults,
+        learningPlan,
+        generateLearningPlan,
+        isGeneratingPlan,
+        comparisonCareers,
+        addToComparison,
+        removeFromComparison,
+        clearComparison,
+        reset,
     };
 
     return (
-        <CareerContext.Provider value={{
-            userProfile,
-            activeCareerPath,
-            isLoading,
-            error,
-            generateCareerPath,
-            selectCareerPath,
-            startSkillAssessment,
-            updateSkillProficiency
-        }}>
+        <CareerContext.Provider value={value}>
             {children}
         </CareerContext.Provider>
     );
 }
 
+// ============================================
+// HOOK
+// ============================================
+
 export function useCareer() {
     const context = useContext(CareerContext);
     if (!context) {
-        throw new Error('useCareer must be used within a CareerProvider');
+        throw new Error('useCareer must be used within CareerProvider');
     }
     return context;
 }
