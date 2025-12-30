@@ -70,11 +70,11 @@ const samplePosts: CommunityPost[] = [
     {
         id: '1',
         authorId: 'user1',
-        authorName: 'Alex Chen',
+        authorName: 'Kevin M.',
         type: 'question',
-        title: 'Best way to learn Python for data science?',
-        content: 'I want to transition into data science. Should I start with Python basics first or jump straight into pandas and numpy?',
-        tags: ['python', 'data-science', 'beginner'],
+        title: 'How do I solve quadratic equations?',
+        content: 'I\'m in Grade 9 and struggling with quadratic equations. Can someone explain the formula step by step?',
+        tags: ['math', 'grade-9', 'algebra'],
         likes: 24,
         likedBy: [],
         replyCount: 8,
@@ -87,11 +87,11 @@ const samplePosts: CommunityPost[] = [
     {
         id: '2',
         authorId: 'user2',
-        authorName: 'Sarah Miller',
+        authorName: 'Amina W.',
         type: 'discussion',
-        title: 'How is AI changing the job market in 2025?',
-        content: 'Let\'s discuss which careers are being most affected and how we can prepare ourselves.',
-        tags: ['ai', 'careers', 'future'],
+        title: 'What\'s your favorite subject and why?',
+        content: 'I love Science because we get to do experiments! What about you guys?',
+        tags: ['fun', 'school-life'],
         likes: 45,
         likedBy: [],
         replyCount: 23,
@@ -103,11 +103,11 @@ const samplePosts: CommunityPost[] = [
     {
         id: '3',
         authorId: 'user3',
-        authorName: 'James Wilson',
+        authorName: 'Brian K.',
         type: 'question',
-        title: 'How many hours per day should I study?',
-        content: 'I work full-time and want to learn programming on the side. What\'s a realistic study schedule?',
-        tags: ['study-tips', 'time-management'],
+        title: 'Tips for preparing for KCPE exams?',
+        content: 'KCPE is coming up and I\'m nervous. How do you study effectively? Any tips from those who did well?',
+        tags: ['exams', 'kcpe', 'study-tips'],
         likes: 18,
         likedBy: [],
         replyCount: 12,
@@ -120,11 +120,11 @@ const samplePosts: CommunityPost[] = [
     {
         id: '4',
         authorId: 'user4',
-        authorName: 'Maria Garcia',
+        authorName: 'Faith N.',
         type: 'resource',
-        title: 'Free Machine Learning resources I found helpful',
-        content: 'Here are some great free resources for learning ML: Fast.ai, Google ML Crash Course, and Andrew Ng\'s Coursera course.',
-        tags: ['machine-learning', 'resources', 'free'],
+        title: 'Helpful YouTube channels for learning Kiswahili',
+        content: 'I found some great channels that explain Kiswahili grammar really well. They helped me improve my grades!',
+        tags: ['kiswahili', 'resources', 'videos'],
         likes: 67,
         likedBy: [],
         replyCount: 15,
@@ -133,18 +133,36 @@ const samplePosts: CommunityPost[] = [
         savedBy: [],
         createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
     },
+    {
+        id: '5',
+        authorId: 'user5',
+        authorName: 'Dennis O.',
+        type: 'question',
+        title: 'Can someone explain photosynthesis?',
+        content: 'I\'m in Grade 7 and we\'re learning about plants. What exactly happens during photosynthesis?',
+        tags: ['science', 'biology', 'grade-7'],
+        likes: 31,
+        likedBy: [],
+        replyCount: 9,
+        views: 234,
+        saves: 15,
+        savedBy: [],
+        isAnswered: true,
+        createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
+    },
 ];
 
 const sampleGroups: StudyGroup[] = [
-    { id: 'g1', name: 'Python Learners', description: 'For everyone learning Python', topic: 'Python', icon: '🐍', memberCount: 234, memberIds: [], creatorId: 'user1', isPublic: true, lastActivityAt: new Date(), postCount: 45, createdAt: new Date() },
-    { id: 'g2', name: 'ML Study Group', description: 'Machine learning enthusiasts', topic: 'Machine Learning', icon: '🤖', memberCount: 156, memberIds: [], creatorId: 'user2', isPublic: true, lastActivityAt: new Date(), postCount: 32, createdAt: new Date() },
-    { id: 'g3', name: 'Career Changers', description: 'Support for career transitions', topic: 'Careers', icon: '🚀', memberCount: 89, memberIds: [], creatorId: 'user3', isPublic: true, lastActivityAt: new Date(), postCount: 28, createdAt: new Date() },
+    { id: 'g1', name: 'Grade 8 Study Squad', description: 'Help each other prepare for KCPE', topic: 'KCPE Prep', icon: '📚', memberCount: 234, memberIds: [], creatorId: 'user1', isPublic: true, lastActivityAt: new Date(), postCount: 45, createdAt: new Date() },
+    { id: 'g2', name: 'Math Helpers', description: 'Stuck on a math problem? Ask here!', topic: 'Mathematics', icon: '🔢', memberCount: 156, memberIds: [], creatorId: 'user2', isPublic: true, lastActivityAt: new Date(), postCount: 32, createdAt: new Date() },
+    { id: 'g3', name: 'Science Explorers', description: 'Discuss experiments and discoveries', topic: 'Science', icon: '🔬', memberCount: 89, memberIds: [], creatorId: 'user3', isPublic: true, lastActivityAt: new Date(), postCount: 28, createdAt: new Date() },
+    { id: 'g4', name: 'English Practice', description: 'Improve your English together', topic: 'English', icon: '📖', memberCount: 112, memberIds: [], creatorId: 'user4', isPublic: true, lastActivityAt: new Date(), postCount: 35, createdAt: new Date() },
 ];
 
 const sampleMembers: CommunityMember[] = [
-    { userId: 'user1', displayName: 'Alex Chen', postCount: 12, replyCount: 45, helpfulAnswers: 8, reputation: 234, isOnline: true, lastSeenAt: new Date(), groupIds: [] },
-    { userId: 'user2', displayName: 'Sarah Miller', postCount: 8, replyCount: 67, helpfulAnswers: 15, reputation: 456, isOnline: true, lastSeenAt: new Date(), groupIds: [] },
-    { userId: 'user4', displayName: 'Maria Garcia', postCount: 23, replyCount: 89, helpfulAnswers: 21, reputation: 678, isOnline: false, lastSeenAt: new Date(), groupIds: [] },
+    { userId: 'user1', displayName: 'Kevin M.', postCount: 12, replyCount: 45, helpfulAnswers: 8, reputation: 234, isOnline: true, lastSeenAt: new Date(), groupIds: [] },
+    { userId: 'user2', displayName: 'Amina W.', postCount: 8, replyCount: 67, helpfulAnswers: 15, reputation: 456, isOnline: true, lastSeenAt: new Date(), groupIds: [] },
+    { userId: 'user4', displayName: 'Faith N.', postCount: 23, replyCount: 89, helpfulAnswers: 21, reputation: 678, isOnline: false, lastSeenAt: new Date(), groupIds: [] },
 ];
 
 // ============================================
@@ -194,14 +212,14 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
 
     // Load replies for a post
     const loadPostReplies = useCallback(async (postId: string) => {
-        // Sample replies
+        // Sample replies - age appropriate for grade 4-12 students
         setActiveReplies([
             {
                 id: 'r1',
                 postId,
                 authorId: 'user2',
-                authorName: 'Sarah Miller',
-                content: 'I recommend starting with Python basics first. Understanding fundamentals will make the data science libraries much easier to learn.',
+                authorName: 'Amina W.',
+                content: 'For quadratic equations, remember the formula: x = (-b ± √(b²-4ac)) / 2a. Just plug in the numbers from your equation!',
                 likes: 12,
                 likedBy: [],
                 isAccepted: true,
@@ -211,8 +229,8 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
                 id: 'r2',
                 postId,
                 authorId: 'user3',
-                authorName: 'James Wilson',
-                content: 'Agree with Sarah. Also check out the Python for Data Science course on our platform!',
+                authorName: 'Brian K.',
+                content: 'Our teacher showed us a trick - always write out a, b, and c first before using the formula. It really helps!',
                 likes: 5,
                 likedBy: [],
                 createdAt: new Date(Date.now() - 30 * 60 * 1000),
