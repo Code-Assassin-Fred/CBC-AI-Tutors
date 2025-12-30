@@ -52,24 +52,21 @@ export default function MyCourses({ courses, isLoading }: MyCoursesProps) {
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1.5">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium border ${course.difficulty === 'beginner' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-500' :
-                                    course.difficulty === 'intermediate' ? 'bg-amber-500/5 border-amber-500/20 text-amber-500' :
-                                        'bg-rose-500/5 border-rose-500/20 text-rose-500'
-                                }`}>
-                                {course.difficulty}
-                            </span>
-                            <span className="text-white/20 text-xs">•</span>
-                            <span className="text-white/40 text-xs">{course.estimatedTime}</span>
-                        </div>
-
                         <h3 className="text-lg font-medium text-white/90 group-hover:text-sky-400 transition-colors mb-1 truncate">
                             {course.title}
                         </h3>
 
-                        <p className="text-sm text-white/40 line-clamp-1 group-hover:text-white/60 transition-colors">
+                        <p className="text-sm text-white/40 line-clamp-1 group-hover:text-white/60 transition-colors mb-2">
                             {course.description}
                         </p>
+
+                        <div className="flex items-center gap-2 text-xs text-white/30">
+                            <span>{course.lessonCount} lessons</span>
+                            <span>•</span>
+                            <span>{course.estimatedTime}</span>
+                            <span>•</span>
+                            <span className="capitalize">{course.difficulty}</span>
+                        </div>
                     </div>
 
                     {/* Action */}

@@ -270,11 +270,32 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
 
         setIsLoadingMyCourses(true);
         try {
-            const response = await fetch(`/api/courses/discover?creatorId=${user.uid}`);
-            if (response.ok) {
-                const data = await response.json();
-                setMyCourses(data.courses || []);
+            // Fetch both created courses and saved courses
+            const [createdResponse, savedResponse] = await Promise.all([
+                fetch(`/api/courses/discover?creatorId=${user.uid}`),
+                fetch(`/api/courses/my-saved?userId=${user.uid}`),
+            ]);
+
+            let allCourses: Course[] = [];
+
+            if (createdResponse.ok) {
+                const createdData = await createdResponse.json();
+                allCourses = [...(createdData.courses || [])];
             }
+
+            if (savedResponse.ok) {
+                const savedData = await savedResponse.json();
+                // Merge saved courses, avoiding duplicates
+                const savedCourses = savedData.courses || [];
+                const existingIds = new Set(allCourses.map(c => c.id));
+                for (const course of savedCourses) {
+                    if (!existingIds.has(course.id)) {
+                        allCourses.push(course);
+                    }
+                }
+            }
+
+            setMyCourses(allCourses);
         } catch (error) {
             console.error('Error loading my courses:', error);
         } finally {

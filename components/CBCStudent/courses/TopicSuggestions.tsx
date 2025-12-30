@@ -29,7 +29,7 @@ const STREAMING_TOPICS = [
     { topic: "Music Theory", category: "Music", icon: "🎼", activity: "Anna is learning" },
 ];
 
-export default function TopicSuggestions({ col_suggestions, onSelect }: TopicSuggestionsProps) {
+export default function TopicSuggestions({ suggestions, onSelect }: TopicSuggestionsProps) {
     const [stream, setStream] = useState<typeof STREAMING_TOPICS>([]);
     const [isPaused, setIsPaused] = useState(false);
 

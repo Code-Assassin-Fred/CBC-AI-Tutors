@@ -142,18 +142,17 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
 
                                 {/* Key Points */}
                                 {section.keyPoints.length > 0 && (
-                                    <div className="space-y-3">
-                                        <h5 className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Key Points</h5>
-                                        <ul className="space-y-2">
+                                    <div className="mt-4">
+                                        <p className="text-xs text-white/40 mb-2">Key points:</p>
+                                        <ul className="space-y-1.5 pl-4">
                                             {section.keyPoints.map((point, i) => (
-                                                <li key={i} className="text-xs text-white/60 flex items-start gap-2">
-                                                    <span className="text-emerald-500 mt-1">•</span>
+                                                <li key={i} className="text-xs text-white/60 list-disc">
                                                     {point}
                                                 </li>
                                             ))}
                                         </ul>
                                         {audio.isPlaying && audio.activeTextId === `${section.id}-points` && (
-                                            <div className="py-2 border-t border-white/5">
+                                            <div className="py-2 mt-2">
                                                 <VoiceVisualization isActive={true} />
                                             </div>
                                         )}
@@ -162,18 +161,18 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
 
                                 {/* Examples */}
                                 {section.examples.length > 0 && (
-                                    <div className="space-y-3">
-                                        <h5 className="text-xs font-semibold text-amber-500 uppercase tracking-wider">Examples</h5>
-                                        <div className="grid gap-3">
+                                    <div className="mt-4">
+                                        <p className="text-xs text-white/40 mb-2">Examples:</p>
+                                        <div className="space-y-3 pl-4">
                                             {section.examples.map((example, i) => (
-                                                <div key={i} className="bg-white/[0.02] p-3 rounded-lg border border-white/5">
-                                                    <p className="text-xs font-bold text-white/90">{example.title}</p>
-                                                    <p className="text-xs text-white/60 mt-1 leading-relaxed">{example.description}</p>
+                                                <div key={i}>
+                                                    <p className="text-xs font-medium text-white/70">{example.title}</p>
+                                                    <p className="text-xs text-white/50 mt-0.5 leading-relaxed">{example.description}</p>
                                                 </div>
                                             ))}
                                         </div>
                                         {audio.isPlaying && audio.activeTextId === `${section.id}-examples` && (
-                                            <div className="py-2 border-t border-white/5">
+                                            <div className="py-2 mt-2">
                                                 <VoiceVisualization isActive={true} />
                                             </div>
                                         )}

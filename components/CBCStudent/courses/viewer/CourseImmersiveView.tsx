@@ -83,10 +83,10 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
                     <div
                         key={index}
                         className={`h-1.5 rounded-full flex-1 transition-all ${index < currentChunkIndex
-                                ? 'bg-violet-500'
-                                : index === currentChunkIndex
-                                    ? 'bg-violet-500/50'
-                                    : 'bg-white/10'
+                            ? 'bg-violet-500'
+                            : index === currentChunkIndex
+                                ? 'bg-violet-500/50'
+                                : 'bg-white/10'
                             }`}
                     />
                 ))}
@@ -94,9 +94,7 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
 
             {/* Introduction (only on first chunk) */}
             {currentChunkIndex === 0 && content.introduction && (
-                <div className="bg-violet-500/10 border border-violet-500/20 rounded-lg p-4">
-                    <p className="text-violet-300 text-sm">{content.introduction}</p>
-                </div>
+                <p className="text-white/60 text-sm leading-relaxed">{content.introduction}</p>
             )}
 
             {/* Current Chunk */}
@@ -113,16 +111,14 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
                     </div>
 
                     {/* AI Explanation */}
-                    <div className="bg-white/5 rounded-xl p-5 border border-white/10">
-                        <div className="flex items-center justify-between mb-3">
-                            <span className="text-xs font-medium text-white/50 uppercase tracking-wider">
-                                Explanation
-                            </span>
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs text-white/40">Explanation</span>
                             <button
                                 onClick={handleListenExplanation}
                                 className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs transition-all ${isPlaying
-                                        ? 'bg-violet-500/20 text-violet-300'
-                                        : 'bg-white/10 text-white/60 hover:bg-white/20'
+                                    ? 'bg-white/10 text-white/80'
+                                    : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/60'
                                     }`}
                             >
                                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -131,7 +127,7 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
                                 Listen
                             </button>
                         </div>
-                        <p className="text-white/80 leading-relaxed whitespace-pre-wrap">
+                        <p className="text-white/70 leading-relaxed whitespace-pre-wrap">
                             {currentChunk.aiExplanation}
                         </p>
                     </div>
@@ -152,8 +148,8 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
                                 onClick={handleSubmitExplanation}
                                 disabled={!userExplanation.trim()}
                                 className={`px-5 py-2.5 rounded-full font-medium transition-all ${userExplanation.trim()
-                                        ? 'bg-violet-500 text-white hover:bg-violet-600'
-                                        : 'bg-white/10 text-white/30 cursor-not-allowed'
+                                    ? 'bg-violet-500 text-white hover:bg-violet-600'
+                                    : 'bg-white/10 text-white/30 cursor-not-allowed'
                                     }`}
                             >
                                 Submit Explanation
@@ -165,63 +161,34 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
 
             {/* Feedback */}
             {showFeedback && feedback && (
-                <div className={`rounded-xl p-6 border ${feedback.level === 'excellent'
-                        ? 'bg-green-500/10 border-green-500/30'
-                        : feedback.level === 'good'
-                            ? 'bg-yellow-500/10 border-yellow-500/30'
-                            : feedback.level === 'complete'
-                                ? 'bg-violet-500/10 border-violet-500/30'
-                                : 'bg-red-500/10 border-red-500/30'
-                    }`}>
-                    <div className="flex items-start gap-4">
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${feedback.level === 'excellent'
-                                ? 'bg-green-500/20'
-                                : feedback.level === 'good'
-                                    ? 'bg-yellow-500/20'
-                                    : feedback.level === 'complete'
-                                        ? 'bg-violet-500/20'
-                                        : 'bg-red-500/20'
-                            }`}>
-                            {feedback.level === 'excellent' ? (
-                                <svg className="w-6 h-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            ) : feedback.level === 'complete' ? (
-                                <svg className="w-6 h-6 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                                </svg>
+                <div className="space-y-4 pt-4 border-t border-white/10">
+                    <div className="flex items-start gap-3">
+                        <svg className="w-5 h-5 text-white/50 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            {feedback.level === 'excellent' || feedback.level === 'complete' ? (
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             ) : (
-                                <svg className="w-6 h-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             )}
-                        </div>
+                        </svg>
                         <div className="flex-1">
-                            <h4 className={`font-semibold mb-2 ${feedback.level === 'excellent'
-                                    ? 'text-green-400'
-                                    : feedback.level === 'good'
-                                        ? 'text-yellow-400'
-                                        : feedback.level === 'complete'
-                                            ? 'text-violet-400'
-                                            : 'text-red-400'
-                                }`}>
+                            <p className="text-sm font-medium text-white/80">
                                 {feedback.level === 'excellent' ? 'Excellent Work!' :
                                     feedback.level === 'good' ? 'Good Effort!' :
                                         feedback.level === 'complete' ? 'Lesson Complete!' :
                                             'Keep Trying!'}
-                            </h4>
-                            <p className="text-white/70 text-sm">
+                            </p>
+                            <p className="text-sm text-white/50 mt-1">
                                 {feedback.message}
                             </p>
                         </div>
                     </div>
 
                     {/* Action buttons */}
-                    <div className="flex justify-end gap-3 mt-6">
+                    <div className="flex justify-end gap-3">
                         {feedback.level === 'needs-work' && (
                             <button
                                 onClick={handleRetry}
-                                className="px-5 py-2 rounded-full text-sm font-medium bg-white/10 text-white/70 hover:bg-white/20 transition-colors"
+                                className="px-4 py-2 rounded-lg text-sm text-white/60 hover:text-white/80 hover:bg-white/5 transition-colors"
                             >
                                 Try Again
                             </button>
@@ -229,7 +196,7 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
                         {feedback.level !== 'complete' && (
                             <button
                                 onClick={handleContinue}
-                                className="px-5 py-2 rounded-full text-sm font-medium bg-violet-500 text-white hover:bg-violet-600 transition-colors"
+                                className="px-4 py-2 rounded-lg text-sm font-medium bg-white/10 text-white/80 hover:bg-white/15 transition-colors"
                             >
                                 {isLastChunk ? 'Complete Lesson' : 'Continue'}
                             </button>
