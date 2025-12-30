@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { ImmersiveContent, ImmersiveChunk, AssessmentResult } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
+import { useAuth } from '@/lib/context/AuthContext';
+import axios from 'axios';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
 import ConversationalModeView from './ConversationalModeView';
 import { HiOutlineMicrophone, HiOutlineStop, HiOutlineSpeakerWave, HiOutlineChatBubbleLeftRight, HiArrowsRightLeft } from 'react-icons/hi2';
@@ -17,7 +19,9 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
     const [phase, setPhase] = useState<'learning' | 'explaining' | 'feedback' | 'conversation'>('learning');
     const [userExplanation, setUserExplanation] = useState('');
     const [isAssessing, setIsAssessing] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const [assessments, setAssessments] = useState<Map<string, AssessmentResult>>(new Map());
+    const { user } = useAuth();
 
     // Update explanation from audio transcript
     // For Whisper: transcript arrives AFTER recording stops, so we check transcript changes
@@ -124,6 +128,31 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
         } else {
             // All done - show completion
             setPhase('feedback');
+            saveSessionResults();
+        }
+    };
+
+    const saveSessionResults = async () => {
+        if (!user || !context) return;
+
+        setIsSaving(true);
+        try {
+            await axios.post('/api/user/activity', {
+                userId: user.uid,
+                type: 'immersive',
+                context: {
+                    grade: context.grade,
+                    subject: context.subject,
+                    strand: context.strand,
+                    substrand: context.substrand,
+                },
+                assessmentResults: Array.from(assessments.values()),
+                chatHistory: [] // Can extend to save transcripts later
+            });
+        } catch (error) {
+            console.error('Failed to save immersive session:', error);
+        } finally {
+            setIsSaving(false);
         }
     };
 

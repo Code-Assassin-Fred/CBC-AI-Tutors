@@ -312,3 +312,43 @@ export interface ConversationalLessonContext {
     currentTopic?: string;
     textbookContent?: string;
 }
+// ============================================
+// PERSISTENCE & ANALYTICS
+// ============================================
+
+export type ActivityType = 'quiz' | 'immersive' | 'chat';
+
+export interface BaseActivity {
+    id: string;
+    userId: string;
+    type: ActivityType;
+    substrandId: string;
+    timestamp: Date;
+    context: {
+        grade: string;
+        subject: string;
+        strand: string;
+        substrand: string;
+    };
+}
+
+export interface QuizActivity extends BaseActivity {
+    type: 'quiz';
+    score: number;
+    totalQuestions: number;
+    answers: Array<{
+        questionId: string;
+        userAnswer: string;
+        isCorrect: boolean;
+    }>;
+    aiSummary?: string;
+}
+
+export interface ImmersiveActivity extends BaseActivity {
+    type: 'immersive' | 'chat';
+    chatHistory: ChatMessage[] | ConversationMessage[];
+    assessmentResults?: AssessmentResult[];
+    duration?: number; // in seconds
+}
+
+export type UserActivity = QuizActivity | ImmersiveActivity;

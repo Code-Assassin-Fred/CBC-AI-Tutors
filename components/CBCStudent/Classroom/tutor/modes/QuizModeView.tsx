@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { QuizOutput, QuizQuestion } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
+import { useAuth } from '@/lib/context/AuthContext';
+import axios from 'axios';
 
 interface QuizModeViewProps {
     quiz: QuizOutput;
@@ -13,6 +15,8 @@ interface QuizState {
     answers: Map<string, string>;
     showResult: boolean;
     showFinalResults: boolean;
+    isSaving: boolean;
+    aiSummary?: string;
 }
 
 export default function QuizModeView({ quiz }: QuizModeViewProps) {
@@ -22,7 +26,10 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
         answers: new Map(),
         showResult: false,
         showFinalResults: false,
+        isSaving: false,
     });
+    const { user } = useAuth();
+    const { context } = useTutor();
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
 
     const currentQuestion = quiz.questions[state.currentIndex];
@@ -64,10 +71,46 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
             });
             setSelectedAnswer(null);
         } else {
-            setState({
-                ...state,
-                showFinalResults: true,
+            setState(prev => ({ ...prev, showFinalResults: true, isSaving: true }));
+            saveResults();
+        }
+    };
+
+    const saveResults = async () => {
+        if (!user || !context) {
+            setState(prev => ({ ...prev, isSaving: false }));
+            return;
+        }
+
+        try {
+            const response = await axios.post('/api/user/activity', {
+                userId: user.uid,
+                type: 'quiz',
+                context: {
+                    grade: context.grade,
+                    subject: context.subject,
+                    strand: context.strand,
+                    substrand: context.substrand,
+                },
+                score,
+                totalQuestions,
+                answers: Array.from(state.answers.entries()).map(([qId, answer]) => ({
+                    questionId: qId,
+                    userAnswer: answer,
+                    isCorrect: quiz.questions.find(q => q.id === qId)?.correctAnswer === answer
+                }))
             });
+
+            if (response.data.success) {
+                setState(prev => ({
+                    ...prev,
+                    isSaving: false,
+                    aiSummary: response.data.aiSummary
+                }));
+            }
+        } catch (error) {
+            console.error('Failed to save quiz results:', error);
+            setState(prev => ({ ...prev, isSaving: false }));
         }
     };
 
@@ -99,6 +142,27 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                             <div className="text-[10px] uppercase tracking-widest text-white/40">Accuracy</div>
                         </div>
                     </div>
+
+                    {/* AI Summary */}
+                    {(state.isSaving || state.aiSummary) && (
+                        <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-left relative overflow-hidden group">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-sky-500" />
+                            <h4 className="text-[10px] font-bold text-sky-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
+                                Tutor Feedback
+                            </h4>
+                            {state.isSaving ? (
+                                <div className="space-y-2 animate-pulse">
+                                    <div className="h-2 bg-white/10 rounded w-3/4" />
+                                    <div className="h-2 bg-white/10 rounded w-1/2" />
+                                </div>
+                            ) : (
+                                <p className="text-xs text-white/70 leading-relaxed italic">
+                                    "{state.aiSummary}"
+                                </p>
+                            )}
+                        </div>
+                    )}
 
                     <div className="flex flex-col gap-3">
                         <button
@@ -179,17 +243,17 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                                 onClick={() => handleSelectAnswer(currentQuestion.type === 'multiple_choice' ? letter : option)}
                                 disabled={state.showResult}
                                 className={`w-full p-4 text-left transition-all border ${isCorrectAnswer && state.showResult
-                                        ? 'border-emerald-500 bg-emerald-500/5'
-                                        : isWrongSelected
-                                            ? 'border-red-500 bg-red-500/5'
-                                            : isSelected
-                                                ? 'border-white/40 bg-white/5'
-                                                : 'border-white/5 hover:border-white/20'
+                                    ? 'border-emerald-500 bg-emerald-500/5'
+                                    : isWrongSelected
+                                        ? 'border-red-500 bg-red-500/5'
+                                        : isSelected
+                                            ? 'border-white/40 bg-white/5'
+                                            : 'border-white/5 hover:border-white/20'
                                     }`}
                             >
                                 <div className="flex items-center gap-4">
                                     <span className={`text-[10px] font-mono ${isCorrectAnswer && state.showResult ? 'text-emerald-400' :
-                                            isWrongSelected ? 'text-red-400' : 'text-white/20'
+                                        isWrongSelected ? 'text-red-400' : 'text-white/20'
                                         }`}>
                                         {letter}
                                     </span>

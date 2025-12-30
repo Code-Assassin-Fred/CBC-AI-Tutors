@@ -1,8 +1,10 @@
 "use client";
 
 import React from 'react';
-import { useConversationalVoice, LessonContext } from '@/lib/hooks/useConversationalVoice';
+import { useConversationalVoice, LessonContext, ConversationMessage } from '@/lib/hooks/useConversationalVoice';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
+import { useAuth } from '@/lib/context/AuthContext';
+import axios from 'axios';
 import { HiOutlineMicrophone, HiOutlineStop, HiOutlineChatBubbleLeftRight, HiOutlineXMark, HiOutlineLockClosed, HiOutlineSpeakerWave } from 'react-icons/hi2';
 
 interface ConversationalModeViewProps {
@@ -11,6 +13,7 @@ interface ConversationalModeViewProps {
 }
 
 export default function ConversationalModeView({ lessonContext, onClose }: ConversationalModeViewProps) {
+    const { user } = useAuth();
     const {
         isActive,
         isListening,
@@ -23,7 +26,30 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
         endConversation,
         interruptAI,
         speak,
-    } = useConversationalVoice({ lessonContext });
+    } = useConversationalVoice({
+        lessonContext,
+        onEnd: (history) => saveChatHistory(history)
+    });
+
+    const saveChatHistory = async (history: ConversationMessage[]) => {
+        if (!user || !lessonContext || history.length === 0) return;
+
+        try {
+            await axios.post('/api/user/activity', {
+                userId: user.uid,
+                type: 'chat',
+                context: {
+                    grade: lessonContext.grade,
+                    subject: lessonContext.subject,
+                    strand: lessonContext.strand,
+                    substrand: lessonContext.substrand,
+                },
+                chatHistory: history
+            });
+        } catch (error) {
+            console.error('Failed to save chat history:', error);
+        }
+    };
 
     const [readyToExplainIds, setReadyToExplainIds] = React.useState<Set<string>>(new Set());
     const messagesEndRef = React.useRef<HTMLDivElement>(null);

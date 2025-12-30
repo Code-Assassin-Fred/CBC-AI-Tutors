@@ -47,10 +47,11 @@ interface UseConversationalVoiceOptions {
     onTranscript?: (transcript: string, isFinal: boolean) => void;
     onResponse?: (response: string) => void;
     onError?: (error: string) => void;
+    onEnd?: (history: ConversationMessage[]) => void;
 }
 
 export function useConversationalVoice(options: UseConversationalVoiceOptions = {}) {
-    const { lessonContext, onTranscript, onResponse, onError } = options;
+    const { lessonContext, onTranscript, onResponse, onError, onEnd } = options;
 
     // State
     const [state, setState] = useState<ConversationalVoiceState>({
@@ -493,7 +494,6 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
         }
     }, [connectToDeepgram, startMicrophone, speak, onError]);
 
-    // End conversation
     const endConversation = useCallback(() => {
         cleanup();
         setState(prev => ({
@@ -506,7 +506,8 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
             error: null,
         }));
         console.log('[Conversation] Ended');
-    }, [cleanup]);
+        onEnd?.(conversationHistoryRef.current);
+    }, [cleanup, onEnd]);
 
     // Clear conversation history
     const clearHistory = useCallback(() => {
