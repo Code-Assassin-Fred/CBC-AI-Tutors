@@ -121,9 +121,9 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
   }, [selectedGrade, selectedSubject, selectedStrand, onTocUpdate]);
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-[#111113] to-[#1a1a1f] overflow-hidden">
+    <div className="h-full flex flex-col bg-transparent overflow-hidden">
       {/* Selector Bar */}
-      <div className="p-5 border-b border-white/10 bg-black/20 backdrop-blur-md">
+      <div className="p-5 border-b border-white/10 bg-white/5">
         {/* <h2 className="text-lg font-semibold text-white mb-4 text-center">
           Browse Lessons
         </h2> */}

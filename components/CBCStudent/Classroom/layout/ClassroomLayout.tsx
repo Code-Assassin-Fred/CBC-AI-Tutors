@@ -25,7 +25,7 @@ export default function ClassroomLayout() {
 
   const rightClasses = useMemo(() => {
     const base =
-      "transition-all duration-300 ease-in-out relative overflow-hidden min-w-0 bg-gradient-to-br from-[#111113] to-[#1a1a1f]";
+      "transition-all duration-300 ease-in-out relative overflow-hidden min-w-0 bg-transparent";
     const width =
       view === "right" ? "w-full" : view === "both" ? "w-[40%]" : "w-0";
     return `${base} ${width}`;
@@ -33,9 +33,9 @@ export default function ClassroomLayout() {
 
   return (
     <TutorProvider>
-      <div className="relative flex flex-col h-[85vh] md:h-[87vh] lg:h-[90vh] w-full bg-[#0E0E10] text-white overflow-hidden rounded-2xl shadow-md shadow-black/20 border border-white/10">
+      <div className="relative flex flex-col h-[85vh] md:h-[87vh] lg:h-[90vh] w-full bg-[#0a0f14]/80 backdrop-blur-sm text-white overflow-hidden rounded-2xl shadow-xl shadow-black/40 border border-white/10">
         {/* Top controls */}
-        <div className="flex items-center justify-center gap-2 p-2 border-b border-white/10 bg-[#0E0E10]">
+        <div className="flex items-center justify-center gap-2 p-3 border-b border-white/10 bg-black/20">
           <div className="flex items-center gap-2">
             <button
               className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "left"

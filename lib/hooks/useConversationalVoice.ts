@@ -13,10 +13,13 @@ import { useState, useCallback, useRef, useEffect } from 'react';
  * 5. Plays TTS responses
  */
 
+export type ConversationMessageType = 'EXPLAIN' | 'TEST' | 'GRADE' | 'CHAT';
+
 export interface ConversationMessage {
     id: string;
     role: 'user' | 'assistant';
     content: string;
+    type?: ConversationMessageType;
     timestamp: Date;
 }
 
@@ -224,15 +227,27 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
             }
 
             const data = await response.json();
-            const aiResponse = data.response;
+            // Parse tag from AI response
+            let aiResponse = data.response;
+            let messageType: ConversationMessageType = 'CHAT';
 
-            console.log('[Conversation] AI response:', aiResponse.substring(0, 50) + '...');
+            // Extract the first tag for logic
+            const tagMatch = aiResponse.match(/\[(EXPLAIN|TEST|GRADE|CHAT)\]/);
+            if (tagMatch) {
+                messageType = tagMatch[1] as ConversationMessageType;
+            }
+
+            // Strip ALL tags from the displayed content
+            aiResponse = aiResponse.replace(/\[(EXPLAIN|TEST|GRADE|CHAT)\]/g, '').trim();
+
+            console.log(`[Conversation] AI response (${messageType}):`, aiResponse.substring(0, 50) + '...');
 
             // Add AI response to history
             const aiMsg: ConversationMessage = {
                 id: `msg-${Date.now() + 1}`,
                 role: 'assistant',
                 content: aiResponse,
+                type: messageType,
                 timestamp: new Date(),
             };
 
@@ -289,7 +304,7 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
                 language: 'en-US',
                 smart_format: 'true',
                 interim_results: 'true',
-                utterance_end_ms: '1500',
+                utterance_end_ms: '4000',
                 endpointing: '300'
             });
 
@@ -303,7 +318,6 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
             return new Promise<WebSocket>((resolve, reject) => {
                 ws.onopen = () => {
                     console.log('[Deepgram] WebSocket successfully connected!');
-                    setState(prev => ({ ...prev, isListening: true, error: null }));
                     resolve(ws);
                 };
 
@@ -434,8 +448,8 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
             setState(prev => ({
                 ...prev,
                 isActive: true,
+                isProcessing: true,
                 error: null,
-                conversationHistory: [],
                 currentTranscript: '',
             }));
 
@@ -445,28 +459,27 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
             // Then start microphone
             await startMicrophone();
 
-            // Initial greeting from AI (after a short delay)
-            setTimeout(async () => {
-                const context = lessonContextRef.current;
-                const greeting = context
-                    ? `Hi! I'm here to help you learn about ${context.substrand}. What would you like to know?`
-                    : "Hi! I'm your AI tutor. What would you like to learn about today?";
+            // Initial greeting from AI (immediately, no delay)
+            const context = lessonContextRef.current;
+            const greeting = context
+                ? `Hi! Let's explore "${context.substrand}" together. To start, I'll explain a concept, and then I'll ask you a quick question to see what you think. Ready to begin?`
+                : "Hi! I'm your AI tutor. I'll guide you through our lesson step-by-step. Ready to start?";
 
-                // Add greeting to history
-                const greetingMsg: ConversationMessage = {
-                    id: `msg-${Date.now()}`,
-                    role: 'assistant',
-                    content: greeting,
-                    timestamp: new Date(),
-                };
+            // Add greeting to history
+            const greetingMsg: ConversationMessage = {
+                id: `msg-${Date.now()}`,
+                role: 'assistant',
+                content: greeting,
+                type: 'CHAT',
+                timestamp: new Date(),
+            };
 
-                setState(prev => ({
-                    ...prev,
-                    conversationHistory: [greetingMsg],
-                }));
+            setState(prev => ({
+                ...prev,
+                conversationHistory: [greetingMsg],
+            }));
 
-                await speak(greeting);
-            }, 1000);
+            await speak(greeting);
 
         } catch (error: any) {
             console.error('[Conversation] Start error:', error);
@@ -483,15 +496,15 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
     // End conversation
     const endConversation = useCallback(() => {
         cleanup();
-        setState({
+        setState(prev => ({
+            ...prev,
             isActive: false,
             isListening: false,
             isSpeaking: false,
             isProcessing: false,
             currentTranscript: '',
-            conversationHistory: [],
             error: null,
-        });
+        }));
         console.log('[Conversation] Ended');
     }, [cleanup]);
 
@@ -510,5 +523,6 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
         endConversation,
         interruptAI,
         clearHistory,
+        speak,
     };
 }

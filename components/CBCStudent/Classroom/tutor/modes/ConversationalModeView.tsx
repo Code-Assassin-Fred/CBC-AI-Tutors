@@ -3,7 +3,7 @@
 import React from 'react';
 import { useConversationalVoice, LessonContext } from '@/lib/hooks/useConversationalVoice';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
-import { HiOutlineMicrophone, HiOutlineStop, HiOutlineChatBubbleLeftRight, HiOutlineXMark } from 'react-icons/hi2';
+import { HiOutlineMicrophone, HiOutlineStop, HiOutlineChatBubbleLeftRight, HiOutlineXMark, HiOutlineLockClosed, HiOutlineSpeakerWave } from 'react-icons/hi2';
 
 interface ConversationalModeViewProps {
     lessonContext?: LessonContext;
@@ -22,8 +22,10 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
         startConversation,
         endConversation,
         interruptAI,
+        speak,
     } = useConversationalVoice({ lessonContext });
 
+    const [readyToExplainIds, setReadyToExplainIds] = React.useState<Set<string>>(new Set());
     const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
     // Auto-scroll to latest message
@@ -31,10 +33,20 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [conversationHistory, currentTranscript]);
 
+    // Auto-trigger "Ready to Explain" (abstraction) when user starts speaking
+    React.useEffect(() => {
+        if (currentTranscript && currentTranscript.trim().length > 0 && conversationHistory.length > 0) {
+            const lastMessage = conversationHistory[conversationHistory.length - 1];
+            // Only auto-blur if it's an EXPLAIN message (Assessment Setup)
+            if (lastMessage.role === 'assistant' && lastMessage.type === 'EXPLAIN' && !readyToExplainIds.has(lastMessage.id)) {
+                setReadyToExplainIds(prev => new Set(prev).add(lastMessage.id));
+            }
+        }
+    }, [currentTranscript, conversationHistory, readyToExplainIds]);
+
     // Handle close
     const handleClose = () => {
         endConversation();
-        onClose?.();
     };
 
     // Not started yet - show start button
@@ -81,31 +93,74 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
                                     'Ready'}
                     </span>
                 </div>
-                <button
-                    onClick={handleClose}
-                    className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                >
-                    <HiOutlineXMark className="w-5 h-5 text-white/60" />
-                </button>
             </div>
 
             {/* Conversation History */}
             <div className="flex-1 overflow-y-auto scrollbar-hide py-4 space-y-4">
-                {conversationHistory.map((message) => (
-                    <div
-                        key={message.id}
-                        className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
+                {conversationHistory.map((message, index) => {
+                    const isAssistantMessage = message.role === 'assistant';
+                    const isLastMessage = index === conversationHistory.length - 1;
+                    const lastMessage = conversationHistory[conversationHistory.length - 1];
+
+                    // Is there currently an active assessment?
+                    const isAssessmentInProgress = lastMessage && lastMessage.role === 'assistant' && lastMessage.type === 'EXPLAIN' && (isListening || currentTranscript);
+
+                    // Only EXPLAIN messages show the assessment blur UI
+                    const isExplainMessage = isAssistantMessage && message.type === 'EXPLAIN';
+                    const isMarkedReady = readyToExplainIds.has(message.id);
+
+                    // We blur the message if:
+                    // 1. It is the active EXPLAIN message and user started speaking
+                    // 2. OR it is ANY previous message while an EXPLAIN assessment is in progress (global blur)
+                    const shouldBlur = (isExplainMessage && isMarkedReady && (isListening || currentTranscript)) ||
+                        (!isLastMessage && isAssessmentInProgress);
+
+                    return (
                         <div
-                            className={`max-w-[85%] px-4 py-3 rounded-2xl ${message.role === 'user'
-                                ? 'bg-sky-600 text-white rounded-br-md'
-                                : 'bg-white/10 text-white/90 rounded-bl-md'
-                                }`}
+                            key={message.id}
+                            className={`flex flex-col ${message.role === 'user' ? 'items-end' : 'items-start'}`}
                         >
-                            <p className="text-sm leading-relaxed">{message.content}</p>
+                            <div className="flex items-start gap-2 max-w-[85%] group">
+                                {message.role === 'assistant' && (
+                                    <button
+                                        onClick={() => speak(message.content)}
+                                        className="mt-2 p-1.5 rounded-full bg-white/5 hover:bg-white/10 text-white/30 hover:text-white transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+                                        title="Explain Again"
+                                    >
+                                        <HiOutlineSpeakerWave className="w-3.5 h-3.5" />
+                                    </button>
+                                )}
+                                <div
+                                    className={`px-4 py-3 rounded-2xl relative ${message.role === 'user'
+                                        ? 'bg-sky-600 text-white rounded-br-md shadow-lg shadow-sky-500/10'
+                                        : 'bg-white/10 text-white/90 rounded-bl-md'
+                                        } ${shouldBlur ? 'overflow-hidden' : ''}`}
+                                >
+                                    <p className={`text-sm leading-relaxed transition-all duration-500 ${shouldBlur ? 'blur-lg select-none opacity-20' : ''}`}>
+                                        {message.content}
+                                    </p>
+
+                                    {shouldBlur && (
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md transition-all">
+                                            <HiOutlineLockClosed className="w-5 h-5 text-white/60 mb-2" />
+                                            <span className="text-[10px] uppercase tracking-[0.2em] text-white/60 font-bold">Concept Hidden</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Ready to Explain Button */}
+                            {isExplainMessage && !isMarkedReady && !isProcessing && (
+                                <button
+                                    onClick={() => setReadyToExplainIds(prev => new Set(prev).add(message.id))}
+                                    className="mt-2 ml-10 px-4 py-1.5 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 text-sky-400 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all hover:scale-105"
+                                >
+                                    Ready to Explain
+                                </button>
+                            )}
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
 
                 {/* Current transcript (live) */}
                 {currentTranscript && (
@@ -135,9 +190,9 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
             </div>
 
             {/* Voice Visualization & Controls */}
-            <div className="pt-4 border-t border-white/10 space-y-4">
+            <div className="pt-2 border-t border-white/10 space-y-2">
                 {/* Voice visualization */}
-                <div className="flex items-center justify-center h-16">
+                <div className="flex items-center justify-center h-8">
                     {isListening && (
                         <VoiceVisualization isActive={true} color="bg-emerald-500" />
                     )}
@@ -146,34 +201,33 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
                     )}
                     {!isListening && !isSpeaking && (
                         <div className="text-xs text-white/40 uppercase tracking-widest">
-                            {isProcessing ? 'Processing your question...' : 'Speak to ask a question'}
+                            {isProcessing ? 'Thinking...' : 'Speak to ask a question'}
                         </div>
                     )}
                 </div>
 
-                {/* Control buttons */}
                 <div className="flex items-center justify-center gap-4">
                     {isSpeaking ? (
                         <button
                             onClick={interruptAI}
-                            className="p-4 bg-amber-600 hover:bg-amber-500 rounded-full transition-all shadow-lg"
+                            className="p-3 bg-amber-600 hover:bg-amber-500 rounded-full transition-all shadow-lg"
                             title="Interrupt AI"
                         >
-                            <HiOutlineStop className="w-6 h-6 text-white" />
+                            <HiOutlineStop className="w-5 h-5 text-white" />
                         </button>
                     ) : (
-                        <div className={`p-4 rounded-full ${isListening
+                        <div className={`p-3 rounded-full ${isListening
                             ? 'bg-emerald-600 ring-4 ring-emerald-500/30 animate-pulse'
                             : 'bg-white/10'
                             }`}>
-                            <HiOutlineMicrophone className={`w-6 h-6 ${isListening ? 'text-white' : 'text-white/40'
+                            <HiOutlineMicrophone className={`w-5 h-5 ${isListening ? 'text-white' : 'text-white/40'
                                 }`} />
                         </div>
                     )}
 
                     <button
                         onClick={handleClose}
-                        className="px-6 py-3 border border-white/20 hover:bg-white/10 rounded-full text-white/60 hover:text-white text-xs uppercase tracking-wider transition-all"
+                        className="px-4 py-2 border border-white/20 hover:bg-white/10 rounded-full text-white/60 hover:text-white text-[10px] uppercase tracking-wider transition-all"
                     >
                         End Session
                     </button>

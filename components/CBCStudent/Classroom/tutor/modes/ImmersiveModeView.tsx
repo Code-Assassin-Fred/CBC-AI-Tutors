@@ -5,7 +5,7 @@ import { ImmersiveContent, ImmersiveChunk, AssessmentResult } from '@/lib/types/
 import { useTutor } from '@/lib/context/TutorContext';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
 import ConversationalModeView from './ConversationalModeView';
-import { HiOutlineMicrophone, HiOutlineStop, HiOutlineSpeakerWave, HiOutlineChatBubbleLeftRight } from 'react-icons/hi2';
+import { HiOutlineMicrophone, HiOutlineStop, HiOutlineSpeakerWave, HiOutlineChatBubbleLeftRight, HiArrowsRightLeft } from 'react-icons/hi2';
 
 interface ImmersiveModeViewProps {
     content: ImmersiveContent;
@@ -133,23 +133,50 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
 
     return (
         <div className="flex flex-col h-full">
-            {/* Progress Header - Minimalist */}
-            <div className="mb-6">
-                <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] uppercase tracking-widest text-white/40">
-                        Section {currentChunkIndex + 1} / {totalChunks}
+            {/* Top Header with Pill Toggle */}
+            <div className="flex items-center justify-between mb-8">
+                <span className={`text-[10px] uppercase tracking-[0.2em] font-bold ${phase === 'learning' ? 'text-[#F5DEB3]' : 'text-white/40'
+                    }`}>
+                    {phase === 'conversation' ? 'Immersive Chat' : 'Immersive Learning'}
+                </span>
+
+                <div className="flex items-center gap-3">
+                    <span className="text-[10px] uppercase tracking-widest text-white font-medium">
+                        {phase === 'conversation' ? 'Switch to Immersive Learning' : 'Switch to Immersive Chat'}
                     </span>
-                    <span className="text-[10px] uppercase tracking-widest text-white/40">
-                        {Math.round(progress)}%
-                    </span>
-                </div>
-                <div className="h-1 bg-white/5 overflow-hidden">
-                    <div
-                        className="h-full bg-sky-500 transition-all duration-700"
-                        style={{ width: `${progress}%` }}
-                    />
+                    <button
+                        onClick={() => setPhase(phase === 'conversation' ? 'learning' : 'conversation')}
+                        className={`relative w-10 h-5 rounded-full transition-colors duration-200 focus:outline-none ${phase === 'conversation' ? 'bg-sky-500' : 'bg-white/10'
+                            }`}
+                        title={phase === 'conversation' ? "Switch to Immersive Learning" : "Switch to Immersive Chat"}
+                    >
+                        <div
+                            className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform duration-200 transform ${phase === 'conversation' ? 'translate-x-5' : 'translate-x-0'
+                                }`}
+                        />
+                    </button>
                 </div>
             </div>
+
+            {/* Progress Bar - Only shown for Learning/Feedback phases */}
+            {phase !== 'conversation' && !allComplete && (
+                <div className="mb-6">
+                    <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] uppercase tracking-widest text-white/40">
+                            Section {currentChunkIndex + 1} / {totalChunks}
+                        </span>
+                        <span className="text-[10px] uppercase tracking-widest text-white/40">
+                            {Math.round(progress)}%
+                        </span>
+                    </div>
+                    <div className="h-1 bg-white/5 overflow-hidden">
+                        <div
+                            className="h-full bg-sky-500 transition-all duration-700"
+                            style={{ width: `${progress}%` }}
+                        />
+                    </div>
+                </div>
+            )}
 
             {/* All Complete - Minimalist */}
             {allComplete && (
@@ -193,14 +220,6 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                             className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-medium transition-all"
                         >
                             Explain Now
-                        </button>
-
-                        <button
-                            onClick={() => setPhase('conversation')}
-                            className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-medium transition-all flex items-center gap-2"
-                        >
-                            <HiOutlineChatBubbleLeftRight className="w-4 h-4" />
-                            Chat
                         </button>
                     </div>
                 </div>
