@@ -29,8 +29,24 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
             return;
         }
 
-        // Combine all text for speaking
-        const allText = `${content.introduction}. ${content.sections.map(s => `${s.title}. ${s.content}`).join('. ')}. In summary, ${content.summary}`;
+        // Combine all text for speaking, including key points and examples
+        const sectionsText = content.sections.map(s => {
+            let text = `${s.title}. ${s.content}`;
+
+            // Add key points
+            if (s.keyPoints && s.keyPoints.length > 0) {
+                text += `. Key points: ${s.keyPoints.join('. ')}`;
+            }
+
+            // Add examples
+            if (s.examples && s.examples.length > 0) {
+                text += `. Examples: ${s.examples.map(e => `${e.title}: ${e.description}`).join('. ')}`;
+            }
+
+            return text;
+        }).join('. ');
+
+        const allText = `${content.introduction}. ${sectionsText}. In summary, ${content.summary}`;
         speak(allText);
     };
 

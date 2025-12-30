@@ -269,7 +269,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
     }, []);
 
     // ============================================
-    // PLANNER AGENT - 6 Step Process
+    // PLANNER AGENT - 6 Step Process (with caching)
     // ============================================
 
     const activateLearningMode = useCallback(async (substrandContext: SubstrandContext) => {
@@ -277,18 +277,56 @@ export function TutorProvider({ children }: TutorProviderProps) {
         setMode('loading');
         setChatMessages([]);
 
+        // First, check if cached content exists
+        try {
+            const cacheParams = new URLSearchParams({
+                grade: substrandContext.grade || '',
+                subject: substrandContext.subject || '',
+                strand: substrandContext.strand || '',
+                substrand: substrandContext.substrand || '',
+            });
+
+            const cacheCheck = await fetch(`/api/tutor/content?${cacheParams.toString()}`);
+            const cacheData = await cacheCheck.json();
+
+            if (cacheData.cached && cacheData.content) {
+                console.log('[TutorContext] Using cached content');
+                // Show brief loading for cached content
+                setLoadingProgress({
+                    type: 'planner',
+                    currentStep: 6,
+                    totalSteps: 6,
+                    steps: [
+                        { name: 'Loading saved content...', status: 'complete' },
+                    ],
+                });
+
+                // Small delay for UX
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                setPreparedContent(cacheData.content as PlannerOutput);
+                setMode('learning');
+                setLearningSubModeState('read');
+                setLoadingProgress(null);
+                return;
+            }
+        } catch (error) {
+            console.log('[TutorContext] Cache check failed, generating fresh:', error);
+            // Continue with generation if cache check fails
+        }
+
         // Initialize loading progress for 6 steps
         const initialProgress: LoadingProgress = {
             type: 'planner',
             currentStep: 0,
             totalSteps: 6,
             steps: [
-                { name: 'Analyzing content', status: 'pending' },
-                { name: 'Creating outline', status: 'pending' },
-                { name: 'Generating Read content', status: 'pending' },
-                { name: 'Generating Podcast script', status: 'pending' },
-                { name: 'Generating Immersive content', status: 'pending' },
-                { name: 'Polishing content', status: 'pending' },
+                { name: 'Reading your lesson...', status: 'pending' },
+                { name: 'Thinking...', status: 'pending' },
+                { name: 'Preparing your study guide...', status: 'pending' },
+                { name: 'Cooking something great...', status: 'pending' },
+                { name: 'Creating your experience...', status: 'pending' },
+                { name: 'Adding finishing touches...', status: 'pending' },
             ],
         };
         setLoadingProgress(initialProgress);
@@ -323,7 +361,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
                     if (line.startsWith('data: ')) {
                         try {
                             const event: StreamEvent = JSON.parse(line.slice(6));
-                            handlePlannerEvent(event, initialProgress);
+                            handlePlannerEvent(event, initialProgress, substrandContext);
                         } catch (e) {
                             console.error('Failed to parse stream event:', e);
                         }
@@ -337,7 +375,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
         }
     }, []);
 
-    const handlePlannerEvent = (event: StreamEvent, progress: LoadingProgress) => {
+    const handlePlannerEvent = (event: StreamEvent, progress: LoadingProgress, substrandContext?: SubstrandContext) => {
         switch (event.type) {
             case 'step-start':
                 if (event.stepNumber !== undefined) {
@@ -372,7 +410,27 @@ export function TutorProvider({ children }: TutorProviderProps) {
 
             case 'done':
                 if (event.data) {
-                    setPreparedContent(event.data as PlannerOutput);
+                    const content = event.data as PlannerOutput;
+                    setPreparedContent(content);
+
+                    // Save to cache (fire and forget)
+                    if (substrandContext) {
+                        fetch('/api/tutor/content', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                grade: substrandContext.grade,
+                                subject: substrandContext.subject,
+                                strand: substrandContext.strand,
+                                substrand: substrandContext.substrand,
+                                content: content,
+                            }),
+                        }).then(() => {
+                            console.log('[TutorContext] Content saved to cache');
+                        }).catch(err => {
+                            console.error('[TutorContext] Failed to save to cache:', err);
+                        });
+                    }
                 }
                 setMode('learning');
                 setLearningSubModeState('read'); // Default to Read mode

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { PodcastScript } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
+import { HiBackward, HiForward, HiPause, HiPlay } from 'react-icons/hi2';
 
 interface PodcastModeViewProps {
     script: PodcastScript;
@@ -12,17 +13,42 @@ interface PodcastModeViewProps {
 export default function PodcastModeView({ script }: PodcastModeViewProps) {
     const { speak, stopSpeaking, audio } = useTutor();
     const [currentSegmentIndex, setCurrentSegmentIndex] = useState(-1);
+    const [isPlayingSequence, setIsPlayingSequence] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const playingRef = useRef(false);
+
+    // Auto-scroll to current segment
+    useEffect(() => {
+        if (currentSegmentIndex >= 0 && segmentRefs.current[currentSegmentIndex]) {
+            segmentRefs.current[currentSegmentIndex]?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+    }, [currentSegmentIndex]);
 
     const handlePlay = async () => {
-        if (audio.isPlaying) {
+        if (isPlayingSequence) {
+            // Stop playback
+            playingRef.current = false;
             stopSpeaking();
-            setCurrentSegmentIndex(-1);
+            setIsPlayingSequence(false);
             return;
         }
 
-        // Start sequential playback
-        for (let i = 0; i < script.dialogue.length; i++) {
+        // Start from current position or beginning
+        const startIndex = currentSegmentIndex >= 0 ? currentSegmentIndex : 0;
+        await playFromIndex(startIndex);
+    };
+
+    const playFromIndex = async (startIndex: number) => {
+        setIsPlayingSequence(true);
+        playingRef.current = true;
+
+        for (let i = startIndex; i < script.dialogue.length; i++) {
+            if (!playingRef.current) break;
+
             setCurrentSegmentIndex(i);
             const segment = script.dialogue[i];
 
@@ -32,13 +58,38 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
                 voiceType: 'neural2' as any
             };
 
-            await speak(segment.text, voiceOptions);
+            try {
+                await speak(segment.text, voiceOptions);
+            } catch (error) {
+                console.error('Error speaking segment:', error);
+                break;
+            }
+        }
 
-            // wait for audio to finish before next segment
-            // (The context's audioRef onended should be handled, 
-            // but for a sequence we need a way to await completion.
-            // Simplified: we'll just handle one at a time for now, 
-            // or use a more robust sequence manager.)
+        if (playingRef.current) {
+            // Finished naturally
+            setIsPlayingSequence(false);
+            playingRef.current = false;
+        }
+    };
+
+    const handleSkipBack = () => {
+        const newIndex = Math.max(0, currentSegmentIndex - 1);
+        setCurrentSegmentIndex(newIndex);
+
+        if (isPlayingSequence) {
+            stopSpeaking();
+            playFromIndex(newIndex);
+        }
+    };
+
+    const handleSkipForward = () => {
+        const newIndex = Math.min(script.dialogue.length - 1, currentSegmentIndex + 1);
+        setCurrentSegmentIndex(newIndex);
+
+        if (isPlayingSequence) {
+            stopSpeaking();
+            playFromIndex(newIndex);
         }
     };
 
@@ -52,9 +103,6 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
                         <p className="text-xs text-white/40 mt-1">{script.duration} • {script.dialogue.length} segments</p>
                     </div>
                 </div>
-                {script.introduction && (
-                    <p className="text-xs text-white/60 mt-3 leading-relaxed italic">{script.introduction}</p>
-                )}
             </div>
 
             {/* Continuous Dialogue Flow */}
@@ -62,19 +110,18 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
                 {script.dialogue.map((segment, index) => (
                     <div
                         key={`${segment.id}-${index}`}
-                        className={`space-y-1 transition-opacity duration-500 ${currentSegmentIndex === index ? 'opacity-100' : 'opacity-40'
+                        ref={el => { segmentRefs.current[index] = el; }}
+                        className={`space-y-1 transition-all duration-300 cursor-pointer rounded-lg p-2 -mx-2 ${currentSegmentIndex === index
+                            ? 'bg-white/5 opacity-100'
+                            : 'opacity-50 hover:opacity-75'
                             }`}
+                        onClick={() => setCurrentSegmentIndex(index)}
                     >
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <span className={`text-[10px] font-bold uppercase tracking-widest ${segment.speaker === 'Teacher' ? 'text-sky-400' : 'text-amber-400'
-                                    }`}>
-                                    {segment.speaker}
-                                </span>
-                                {segment.emotion && (
-                                    <span className="text-[10px] text-white/20 italic">({segment.emotion})</span>
-                                )}
-                            </div>
+                            <span className={`text-[10px] font-bold uppercase tracking-widest ${segment.speaker === 'Teacher' ? 'text-sky-400' : 'text-amber-400'
+                                }`}>
+                                {segment.speaker}
+                            </span>
                             {currentSegmentIndex === index && audio.isPlaying && (
                                 <VoiceVisualization isActive={true} color={segment.speaker === 'Teacher' ? 'bg-sky-400' : 'bg-amber-400'} />
                             )}
@@ -95,28 +142,48 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
                 )}
             </div>
 
-            {/* Playback Controls - Minimalist */}
+            {/* Playback Controls - Compact with Skip */}
             <div className="mt-4 pt-4 border-t border-white/10">
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center gap-4">
+                    {/* Skip Back */}
+                    <button
+                        onClick={handleSkipBack}
+                        disabled={currentSegmentIndex <= 0}
+                        className="p-2 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        title="Previous segment"
+                    >
+                        <HiBackward className="w-5 h-5 text-white" />
+                    </button>
+
+                    {/* Play/Pause */}
                     <button
                         onClick={handlePlay}
-                        className="p-4 rounded-full bg-sky-500 hover:bg-sky-400 transition-all group active:scale-95 shadow-lg shadow-sky-500/20"
+                        className="p-3 rounded-full bg-sky-500 hover:bg-sky-400 transition-all active:scale-95 shadow-lg shadow-sky-500/20"
                     >
-                        {audio.isPlaying ? (
-                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                <rect x="6" y="4" width="4" height="16" />
-                                <rect x="14" y="4" width="4" height="16" />
-                            </svg>
+                        {isPlayingSequence ? (
+                            <HiPause className="w-5 h-5 text-white" />
                         ) : (
-                            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z" />
-                            </svg>
+                            <HiPlay className="w-5 h-5 text-white" />
                         )}
+                    </button>
+
+                    {/* Skip Forward */}
+                    <button
+                        onClick={handleSkipForward}
+                        disabled={currentSegmentIndex >= script.dialogue.length - 1}
+                        className="p-2 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        title="Next segment"
+                    >
+                        <HiForward className="w-5 h-5 text-white" />
                     </button>
                 </div>
 
-                <p className="text-center text-[10px] uppercase tracking-widest text-white/20 mt-4">
-                    Playback active
+                {/* Progress indicator */}
+                <p className="text-center text-[10px] uppercase tracking-widest text-white/30 mt-3">
+                    {currentSegmentIndex >= 0
+                        ? `Segment ${currentSegmentIndex + 1} of ${script.dialogue.length}`
+                        : 'Ready to play'
+                    }
                 </p>
             </div>
         </div>

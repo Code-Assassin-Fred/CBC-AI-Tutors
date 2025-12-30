@@ -13,9 +13,9 @@ export default function LoadingState({ progress }: LoadingStateProps) {
 
     const getTitle = () => {
         if (progress.type === 'planner') {
-            return 'System Preparation';
+            return 'Preparing Your Lesson';
         }
-        return 'Data Synthesis';
+        return 'Creating Your Quiz';
     };
 
     return (
@@ -24,7 +24,7 @@ export default function LoadingState({ progress }: LoadingStateProps) {
                 {/* Header */}
                 <div className="text-center space-y-2">
                     <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em]">{getTitle()}</h3>
-                    <p className="text-[10px] text-white/40 uppercase tracking-widest">Constructing learning environment</p>
+                    <p className="text-[10px] text-white/40 uppercase tracking-widest">This might take a moment...</p>
                 </div>
 
                 {/* Steps */}
