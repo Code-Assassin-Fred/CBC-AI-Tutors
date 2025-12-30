@@ -31,12 +31,7 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
     const totalChunks = content.chunks.length;
     const completedChunks = assessments.size;
 
-    // Auto-speak explanation when entering learning phase
-    React.useEffect(() => {
-        if (phase === 'learning' && currentChunk) {
-            speak(`${currentChunk.concept}. ${currentChunk.aiExplanation}`);
-        }
-    }, [phase, currentChunkIndex]);
+    // Auto-speak removed - user controls when to listen
 
     const handleStartExplaining = () => {
         setPhase('explaining');
@@ -184,30 +179,28 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                         </p>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-wrap gap-3 mt-4">
                         <button
                             onClick={() => audio.isPlaying ? stopSpeaking() : speak(currentChunk.aiExplanation)}
-                            className="w-full py-4 border border-white/10 hover:bg-white/5 text-white flex items-center justify-center gap-3 transition-all"
+                            className="px-4 py-2 border border-white/10 hover:bg-white/5 text-white flex items-center gap-2 rounded-lg transition-all text-xs"
                         >
-                            {audio.isPlaying ? <HiOutlineStop className="w-5 h-5 text-sky-500" /> : <HiOutlineSpeakerWave className="w-5 h-5" />}
-                            <span className="font-bold text-[10px] uppercase tracking-[0.2em]">
-                                {audio.isPlaying ? 'Stop Listening' : 'Listen Again'}
-                            </span>
+                            {audio.isPlaying ? <HiOutlineStop className="w-4 h-4 text-sky-500" /> : <HiOutlineSpeakerWave className="w-4 h-4" />}
+                            {audio.isPlaying ? 'Stop' : 'Listen'}
                         </button>
 
                         <button
                             onClick={handleStartExplaining}
-                            className="w-full py-4 bg-sky-600 hover:bg-sky-500 text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all"
+                            className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-medium transition-all"
                         >
                             Explain Now
                         </button>
 
                         <button
                             onClick={() => setPhase('conversation')}
-                            className="w-full py-4 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white font-bold text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
+                            className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-medium transition-all flex items-center gap-2"
                         >
                             <HiOutlineChatBubbleLeftRight className="w-4 h-4" />
-                            Chat with AI Tutor
+                            Chat
                         </button>
                     </div>
                 </div>

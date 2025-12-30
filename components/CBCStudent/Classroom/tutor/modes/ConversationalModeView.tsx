@@ -41,19 +41,16 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
     if (!isActive) {
         return (
             <div className="flex flex-col h-full items-center justify-center">
-                <div className="text-center space-y-6">
-                    <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-sky-500 to-violet-600 flex items-center justify-center">
-                        <HiOutlineChatBubbleLeftRight className="w-12 h-12 text-white" />
-                    </div>
+                <div className="text-center space-y-4">
                     <div className="space-y-2">
                         <h3 className="text-lg font-bold text-white">Voice Conversation</h3>
                         <p className="text-sm text-white/60 max-w-xs mx-auto">
-                            Have a natural voice conversation with your AI tutor. Ask questions, explore ideas, and learn at your own pace.
+                            Have a natural voice conversation with your AI tutor.
                         </p>
                     </div>
                     <button
                         onClick={startConversation}
-                        className="px-8 py-4 bg-gradient-to-r from-sky-500 to-violet-600 hover:from-sky-400 hover:to-violet-500 text-white font-bold text-sm uppercase tracking-wider rounded-full transition-all shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40"
+                        className="px-5 py-2.5 bg-sky-500 hover:bg-sky-400 text-white text-sm font-medium rounded-lg transition-all"
                     >
                         Start Conversation
                     </button>
@@ -73,9 +70,9 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div className="flex items-center gap-3">
                     <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-emerald-500 animate-pulse' :
-                            isSpeaking ? 'bg-sky-500 animate-pulse' :
-                                isProcessing ? 'bg-amber-500 animate-pulse' :
-                                    'bg-white/20'
+                        isSpeaking ? 'bg-sky-500 animate-pulse' :
+                            isProcessing ? 'bg-amber-500 animate-pulse' :
+                                'bg-white/20'
                         }`} />
                     <span className="text-xs uppercase tracking-widest text-white/60">
                         {isListening ? 'Listening...' :
@@ -101,8 +98,8 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
                     >
                         <div
                             className={`max-w-[85%] px-4 py-3 rounded-2xl ${message.role === 'user'
-                                    ? 'bg-sky-600 text-white rounded-br-md'
-                                    : 'bg-white/10 text-white/90 rounded-bl-md'
+                                ? 'bg-sky-600 text-white rounded-br-md'
+                                : 'bg-white/10 text-white/90 rounded-bl-md'
                                 }`}
                         >
                             <p className="text-sm leading-relaxed">{message.content}</p>
@@ -166,8 +163,8 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
                         </button>
                     ) : (
                         <div className={`p-4 rounded-full ${isListening
-                                ? 'bg-emerald-600 ring-4 ring-emerald-500/30 animate-pulse'
-                                : 'bg-white/10'
+                            ? 'bg-emerald-600 ring-4 ring-emerald-500/30 animate-pulse'
+                            : 'bg-white/10'
                             }`}>
                             <HiOutlineMicrophone className={`w-6 h-6 ${isListening ? 'text-white' : 'text-white/40'
                                 }`} />
