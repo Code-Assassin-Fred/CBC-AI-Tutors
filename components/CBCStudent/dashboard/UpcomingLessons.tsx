@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import Card from '../shared/Card';
 import { useSchedule } from '@/lib/context/ScheduleContext';
 import { useCourses } from '@/lib/context/CoursesContext';
@@ -14,6 +15,7 @@ interface StudyBlockDisplay {
 }
 
 export default function UpcomingLessons() {
+  const router = useRouter();
   const { daySchedules, isLoading } = useSchedule();
   const { myCourses } = useCourses();
 
@@ -148,9 +150,12 @@ export default function UpcomingLessons() {
       )}
 
       {/* Plain text CTA */}
-      <p className="mt-4 text-sm text-white/90 cursor-pointer hover:text-orange-400 transition-colors duration-300">
+      <button
+        onClick={() => router.push('/dashboard/student/schedule')}
+        className="mt-4 text-sm text-white/90 cursor-pointer hover:text-orange-400 transition-colors duration-300 bg-transparent border-none p-0"
+      >
         + Add to Calendar
-      </p>
+      </button>
     </Card>
   );
 }
