@@ -81,13 +81,13 @@ export default function TutorPanel() {
 
         {/* Mode Content */}
         <div className="flex-1 overflow-hidden mt-4">
-          {learningSubMode === 'read' && (
+          {learningSubMode === 'explanation' && (
             <ReadModeView content={preparedContent.readContent} />
           )}
           {learningSubMode === 'podcast' && (
             <PodcastModeView script={preparedContent.podcastScript} />
           )}
-          {learningSubMode === 'immersive' && (
+          {learningSubMode === 'practice' && (
             <ImmersiveModeView content={preparedContent.immersiveContent} />
           )}
         </div>

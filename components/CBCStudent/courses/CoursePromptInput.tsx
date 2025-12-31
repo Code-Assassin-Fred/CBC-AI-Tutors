@@ -38,7 +38,7 @@ export default function CoursePromptInput({
                         onChange={(e) => setTopic(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder={placeholder}
-                        className="w-full px-6 py-4 rounded-full bg-[#0b0f12] border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 transition-all text-base"
+                        className="w-full px-6 py-4 rounded-full bg-[#0b0f12] border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all text-base"
                     />
                 </div>
 
@@ -60,8 +60,8 @@ export default function CoursePromptInput({
                         type="submit"
                         disabled={!topic.trim()}
                         className={`p-3 rounded-full transition-all ${topic.trim()
-                                ? 'bg-white text-black hover:bg-white/90 active:scale-95'
-                                : 'bg-white/10 text-white/30 cursor-not-allowed'
+                            ? 'bg-white text-black hover:bg-white/90 active:scale-95'
+                            : 'bg-white/10 text-white/30 cursor-not-allowed'
                             }`}
                     >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

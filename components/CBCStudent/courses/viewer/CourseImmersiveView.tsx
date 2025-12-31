@@ -83,9 +83,9 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
                     <div
                         key={index}
                         className={`h-1.5 rounded-full flex-1 transition-all ${index < currentChunkIndex
-                            ? 'bg-violet-500'
+                            ? 'bg-emerald-500'
                             : index === currentChunkIndex
-                                ? 'bg-violet-500/50'
+                                ? 'bg-emerald-500/50'
                                 : 'bg-white/10'
                             }`}
                     />
@@ -102,7 +102,7 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
                 <div className="space-y-6">
                     {/* Concept Title */}
                     <div>
-                        <span className="text-xs font-medium text-violet-400 uppercase tracking-wider">
+                        <span className="text-xs font-medium text-sky-400 uppercase tracking-wider">
                             Concept {currentChunk.order} of {content.chunks.length}
                         </span>
                         <h3 className="text-lg font-semibold text-white mt-1">
@@ -141,14 +141,14 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
                             value={userExplanation}
                             onChange={(e) => setUserExplanation(e.target.value)}
                             placeholder="Type your explanation here..."
-                            className="w-full h-32 px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 resize-none"
+                            className="w-full h-32 px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 resize-none"
                         />
                         <div className="flex justify-end mt-3">
                             <button
                                 onClick={handleSubmitExplanation}
                                 disabled={!userExplanation.trim()}
                                 className={`px-5 py-2.5 rounded-full font-medium transition-all ${userExplanation.trim()
-                                    ? 'bg-violet-500 text-white hover:bg-violet-600'
+                                    ? 'bg-sky-500 text-white hover:bg-sky-600'
                                     : 'bg-white/10 text-white/30 cursor-not-allowed'
                                     }`}
                             >

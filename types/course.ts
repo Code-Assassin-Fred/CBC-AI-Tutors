@@ -11,7 +11,7 @@ import { ReadModeContent, PodcastScript, ImmersiveContent, QuizQuestion } from '
 // ============================================
 
 export type CourseDifficulty = 'beginner' | 'intermediate' | 'advanced';
-export type LearningMode = 'explanation' | 'podcast' | 'immersive' | 'quiz';
+export type LearningMode = 'explanation' | 'podcast' | 'practice' | 'quiz';
 
 export interface Course {
     id: string;

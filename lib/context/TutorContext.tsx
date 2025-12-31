@@ -306,7 +306,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
 
                 setPreparedContent(cacheData.content as PlannerOutput);
                 setMode('learning');
-                setLearningSubModeState('read');
+                setLearningSubModeState('explanation');
                 setLoadingProgress(null);
                 return;
             }
@@ -433,7 +433,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
                     }
                 }
                 setMode('learning');
-                setLearningSubModeState('read'); // Default to Read mode
+                setLearningSubModeState('explanation'); // Default to Explanation mode
                 setLoadingProgress(null);
                 break;
 

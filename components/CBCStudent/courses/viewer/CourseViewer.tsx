@@ -71,10 +71,36 @@ export default function CourseViewer() {
                 return (
                     <div className="prose prose-invert max-w-none">
                         {currentLesson.readContent.sections.map((section, idx) => (
-                            <div key={section.id} className="mb-8">
-                                <h2 className="text-lg font-medium text-white/90 mb-3">
-                                    {idx + 1}. {section.title}
-                                </h2>
+                            <div key={section.id} className="mb-8 group">
+                                {/* Section Header with Voice Button */}
+                                <div className="flex items-center justify-between mb-3">
+                                    <h2 className="text-lg font-medium text-white/90">
+                                        {idx + 1}. {section.title}
+                                    </h2>
+                                    <button
+                                        onClick={() => isPlaying
+                                            ? stopSpeaking()
+                                            : speak(`${section.title}. ${section.content}. ${section.keyPoints.length > 0 ? 'Key points: ' + section.keyPoints.join('. ') : ''}`)
+                                        }
+                                        className={`p-2 rounded-lg transition-all ${isPlaying
+                                                ? 'bg-sky-500/20 text-sky-400'
+                                                : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/70 opacity-0 group-hover:opacity-100'
+                                            }`}
+                                        title={isPlaying ? 'Stop reading' : 'Read aloud'}
+                                    >
+                                        {isPlaying ? (
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                                            </svg>
+                                        ) : (
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </div>
+
                                 <p className="text-white/70 leading-relaxed mb-4">
                                     {section.content}
                                 </p>
@@ -113,7 +139,7 @@ export default function CourseViewer() {
             case 'podcast':
                 return <CoursePodcastView script={currentLesson.podcastScript} />;
 
-            case 'immersive':
+            case 'practice':
                 return <CourseImmersiveView content={currentLesson.immersiveContent} />;
 
             default:
@@ -153,8 +179,8 @@ export default function CourseViewer() {
                         onClick={handleSaveCourse}
                         disabled={isSaving || isSaved}
                         className={`w-full py-2 px-4 rounded-lg text-sm font-medium transition-colors mb-6 ${isSaved
-                                ? 'bg-white/5 text-white/40 cursor-default'
-                                : 'bg-white/10 text-white/80 hover:bg-white/15'
+                            ? 'bg-white/5 text-white/40 cursor-default'
+                            : 'bg-white/10 text-white/80 hover:bg-white/15'
                             }`}
                     >
                         {isSaved ? 'Saved to My Courses' : isSaving ? 'Saving...' : 'Save to My Courses'}
@@ -172,8 +198,8 @@ export default function CourseViewer() {
                                 <button
                                     onClick={() => selectLesson(lesson.id)}
                                     className={`w-full text-left py-2.5 px-3 rounded-lg text-sm transition-colors ${isActive
-                                            ? 'bg-white/5 text-white'
-                                            : 'text-white/60 hover:text-white/80 hover:bg-white/[0.02]'
+                                        ? 'bg-white/5 text-white'
+                                        : 'text-white/60 hover:text-white/80 hover:bg-white/[0.02]'
                                         }`}
                                 >
                                     <div className="flex items-start gap-3">
@@ -187,8 +213,8 @@ export default function CourseViewer() {
                                     <button
                                         onClick={() => selectQuiz(lessonQuiz.id)}
                                         className={`w-full text-left py-2 px-3 pl-9 text-xs transition-colors ${currentQuiz?.id === lessonQuiz.id
-                                                ? 'text-white/70'
-                                                : 'text-white/40 hover:text-white/60'
+                                            ? 'text-white/70'
+                                            : 'text-white/40 hover:text-white/60'
                                             }`}
                                     >
                                         Quiz
@@ -218,16 +244,16 @@ export default function CourseViewer() {
                 {/* Mode selector */}
                 {currentLesson && learningMode !== 'quiz' && (
                     <div className="flex items-center gap-4 mb-6 pb-4 border-b border-white/10">
-                        {(['explanation', 'podcast', 'immersive'] as const).map((mode) => (
+                        {(['explanation', 'podcast', 'practice'] as const).map((mode) => (
                             <button
                                 key={mode}
                                 onClick={() => setLearningMode(mode)}
                                 className={`text-sm transition-colors ${learningMode === mode
-                                        ? 'text-white font-medium'
-                                        : 'text-white/40 hover:text-white/60'
+                                    ? 'text-white font-medium'
+                                    : 'text-white/40 hover:text-white/60'
                                     }`}
                             >
-                                {mode === 'explanation' ? 'Read' : mode === 'podcast' ? 'Listen' : 'Practice'}
+                                {mode === 'explanation' ? 'Explanation' : mode === 'podcast' ? 'Podcast' : 'Practice'}
                             </button>
                         ))}
                     </div>

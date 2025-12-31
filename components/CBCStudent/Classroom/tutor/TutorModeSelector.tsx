@@ -10,8 +10,8 @@ interface TutorModeSelectorProps {
 
 const modes: { id: LearningSubMode; label: string; description: string }[] = [
     {
-        id: 'read',
-        label: 'Read',
+        id: 'explanation',
+        label: 'Explanation',
         description: 'Interactive AI explanations'
     },
     {
@@ -20,8 +20,8 @@ const modes: { id: LearningSubMode; label: string; description: string }[] = [
         description: 'Listen & learn'
     },
     {
-        id: 'immersive',
-        label: 'Immersive',
+        id: 'practice',
+        label: 'Practice',
         description: 'Teach it back'
     },
 ];

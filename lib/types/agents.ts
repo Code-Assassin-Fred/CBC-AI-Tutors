@@ -215,7 +215,7 @@ export interface VoiceConfig {
 // ============================================
 
 export type TutorPanelMode = 'idle' | 'loading' | 'learning' | 'quiz';
-export type LearningSubMode = 'read' | 'podcast' | 'immersive';
+export type LearningSubMode = 'explanation' | 'podcast' | 'practice';
 
 export interface TutorPanelState {
     mode: TutorPanelMode;

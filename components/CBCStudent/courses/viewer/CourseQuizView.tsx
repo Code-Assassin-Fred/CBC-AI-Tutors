@@ -134,7 +134,7 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
                     {quiz.lessonId && (
                         <button
                             onClick={handleBackToLesson}
-                            className="px-6 py-2.5 rounded-full font-medium bg-violet-500 text-white hover:bg-violet-600 transition-colors"
+                            className="px-6 py-2.5 rounded-full font-medium bg-sky-500 text-white hover:bg-sky-600 transition-colors"
                         >
                             Back to Lesson
                         </button>
@@ -157,10 +157,10 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
                         <div
                             key={index}
                             className={`w-2 h-2 rounded-full ${index < state.currentIndex
-                                    ? 'bg-violet-500'
-                                    : index === state.currentIndex
-                                        ? 'bg-violet-500/50'
-                                        : 'bg-white/10'
+                                ? 'bg-emerald-500'
+                                : index === state.currentIndex
+                                    ? 'bg-emerald-500/50'
+                                    : 'bg-white/10'
                                 }`}
                         />
                     ))}
@@ -170,10 +170,10 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
             {/* Question */}
             <div className="mb-6">
                 <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-medium mb-3 ${currentQuestion.difficulty === 'easy'
-                        ? 'bg-green-500/20 text-green-400'
-                        : currentQuestion.difficulty === 'medium'
-                            ? 'bg-yellow-500/20 text-yellow-400'
-                            : 'bg-red-500/20 text-red-400'
+                    ? 'bg-green-500/20 text-green-400'
+                    : currentQuestion.difficulty === 'medium'
+                        ? 'bg-yellow-500/20 text-yellow-400'
+                        : 'bg-red-500/20 text-red-400'
                     }`}>
                     {currentQuestion.difficulty}
                 </span>
@@ -197,7 +197,7 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
                             optionClass = 'bg-red-500/20 border-red-500/50';
                         }
                     } else if (isSelected) {
-                        optionClass = 'bg-violet-500/20 border-violet-500/50';
+                        optionClass = 'bg-sky-500/20 border-sky-500/50';
                     }
 
                     return (
@@ -233,8 +233,8 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
                         onClick={handleSubmitAnswer}
                         disabled={!selectedAnswer}
                         className={`px-6 py-2.5 rounded-full font-medium transition-all ${selectedAnswer
-                                ? 'bg-violet-500 text-white hover:bg-violet-600'
-                                : 'bg-white/10 text-white/30 cursor-not-allowed'
+                            ? 'bg-sky-500 text-white hover:bg-sky-600'
+                            : 'bg-white/10 text-white/30 cursor-not-allowed'
                             }`}
                     >
                         Submit Answer
@@ -242,7 +242,7 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
                 ) : (
                     <button
                         onClick={handleNext}
-                        className="px-6 py-2.5 rounded-full font-medium bg-violet-500 text-white hover:bg-violet-600 transition-colors"
+                        className="px-6 py-2.5 rounded-full font-medium bg-sky-500 text-white hover:bg-sky-600 transition-colors"
                     >
                         {isLastQuestion ? 'See Results' : 'Next Question'}
                     </button>
