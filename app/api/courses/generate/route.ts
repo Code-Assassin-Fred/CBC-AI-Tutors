@@ -66,6 +66,19 @@ export async function POST(request: NextRequest) {
 
                     await batch.commit();
 
+                    // Auto-save to creator's "My Courses" collection
+                    const userSavedRef = adminDb
+                        .collection('users')
+                        .doc(userId)
+                        .collection('savedCourses')
+                        .doc(result.course.id);
+
+                    await userSavedRef.set({
+                        courseId: result.course.id,
+                        savedAt: new Date(),
+                        isCreator: true, // Mark as created by user (not just saved)
+                    });
+
                     // Send final success event
                     sendEvent({
                         type: 'done',
