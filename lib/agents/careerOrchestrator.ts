@@ -82,13 +82,12 @@ export class CareerOrchestrator {
             sendProgress('planning', `${detailedPlan.phases.length}-phase learning plan ready`, 30);
 
             // ========================================
-            // PHASE 3: GENERATE COURSES
+            // PHASE 3: IDENTIFY REQUIRED COURSES
             // ========================================
-            sendProgress('generating-courses', 'Generating AI-curated courses...', 35);
+            sendProgress('generating-courses', 'Designing required courses...', 35);
             const allCourses: CareerCourse[] = [];
-            const allLessons: CourseLesson[] = [];
 
-            // Generate 1-2 courses per phase to avoid overwhelming
+            // Generate course metadata for top topics
             for (let phaseIdx = 0; phaseIdx < detailedPlan.phases.length; phaseIdx++) {
                 const phase = detailedPlan.phases[phaseIdx];
                 const courseTopics = phase.courseTopics.slice(0, 2); // Max 2 courses per phase
@@ -97,7 +96,7 @@ export class CareerOrchestrator {
                     const topic = courseTopics[topicIdx];
                     const progressPercent = 35 + ((phaseIdx * courseTopics.length + topicIdx) / (detailedPlan.phases.length * 2)) * 25;
 
-                    sendProgress('generating-courses', `Creating course: ${topic}`, progressPercent);
+                    sendProgress('generating-courses', `Designing course: ${topic}`, progressPercent);
 
                     try {
                         const request: CareerCourseGenerationRequest = {
@@ -109,7 +108,7 @@ export class CareerOrchestrator {
                             targetAudience: `Someone learning ${careerTitle}`
                         };
 
-                        const { course, lessons } = await this.courseGenerator.generateCourse(
+                        const { course } = await this.courseGenerator.generateCourse(
                             request,
                             careerPathId,
                             `skill-${phaseIdx}-${topicIdx}`,
@@ -117,47 +116,46 @@ export class CareerOrchestrator {
                         );
                         course.order = allCourses.length + 1;
                         allCourses.push(course);
-                        allLessons.push(...lessons);
 
                         callbacks.onProgress({
                             type: 'course-generated',
-                            message: `Generated: ${course.title}`,
+                            message: `Designed: ${course.title}`,
                             progress: progressPercent,
                             data: { courseId: course.id, title: course.title }
                         });
                     } catch (error) {
-                        console.error(`[CareerOrchestrator] Course generation failed for ${topic}:`, error);
+                        console.error(`[CareerOrchestrator] Course design failed for ${topic}:`, error);
                     }
                 }
             }
 
-            console.log(`[CareerOrchestrator] Courses generated: ${allCourses.length}`);
-            sendProgress('generating-courses', `${allCourses.length} courses created`, 60);
+            console.log(`[CareerOrchestrator] Course outlines generated: ${allCourses.length}`);
+            sendProgress('generating-courses', `${allCourses.length} course outlines created`, 60);
 
             // ========================================
             // PHASE 4: GENERATE ASSESSMENTS
             // ========================================
             sendProgress('generating-assessments', 'Creating skill assessments...', 65);
-            const assessmentBanks: SkillAssessmentBank[] = [];
 
             // Generate assessments for top skill domains
             const importantDomains = research.skillDomains
                 .filter(d => d.importance === 'essential' || d.importance === 'important')
-                .slice(0, 6);
+                .slice(0, 12);
 
-            for (let i = 0; i < importantDomains.length; i++) {
-                const domain = importantDomains[i];
-                const progressPercent = 65 + (i / importantDomains.length) * 15;
+            sendProgress('generating-assessments', `Creating assessments for ${importantDomains.length} key skills...`, 65);
 
-                sendProgress('generating-assessments', `Assessment: ${domain.name}`, progressPercent);
-
+            const assessmentPromises = importantDomains.map(async (domain, i) => {
                 try {
                     const bank = await this.assessmentGenerator.generateAssessmentBank(domain, careerPathId, 12);
-                    assessmentBanks.push(bank);
+                    return bank;
                 } catch (error) {
                     console.error(`[CareerOrchestrator] Assessment generation failed for ${domain.name}:`, error);
+                    return null;
                 }
-            }
+            });
+
+            const results = await Promise.all(assessmentPromises);
+            const assessmentBanks: SkillAssessmentBank[] = results.filter((b): b is SkillAssessmentBank => b !== null);
 
             console.log(`[CareerOrchestrator] Assessments generated: ${assessmentBanks.length}`);
             sendProgress('generating-assessments', `${assessmentBanks.length} skill assessments ready`, 80);
@@ -214,20 +212,13 @@ export class CareerOrchestrator {
             // PHASE 6: SAVE TO FIRESTORE
             // ========================================
             sendProgress('saving', 'Saving your career path...', 90);
-            await this.saveToFirestore(careerPath, learningPlan, allCourses, allLessons, assessmentBanks);
+            await this.saveToFirestore(careerPath, learningPlan, allCourses, assessmentBanks);
             sendProgress('saving', 'All data saved', 95);
 
             // ========================================
             // COMPLETE
             // ========================================
             sendProgress('complete', 'Career path ready!', 100);
-            callbacks.onProgress({
-                type: 'complete',
-                phase: 'complete',
-                message: 'Career path generated successfully!',
-                progress: 100,
-                data: { careerPathId, courseCount: allCourses.length, assessmentCount: assessmentBanks.length }
-            });
 
             return {
                 careerPath,
@@ -356,7 +347,6 @@ export class CareerOrchestrator {
         careerPath: CareerPath,
         learningPlan: PersonalizedLearningPlan,
         courses: CareerCourse[],
-        lessons: CourseLesson[],
         assessmentBanks: SkillAssessmentBank[]
     ): Promise<void> {
         const batch = adminDb.batch();
@@ -377,19 +367,13 @@ export class CareerOrchestrator {
             lastAdaptedAt: FieldValue.serverTimestamp()
         });
 
-        // Save courses
+        // Save career courses metadata
         for (const course of courses) {
             const courseRef = adminDb.collection('careerCourses').doc(course.id);
             batch.set(courseRef, {
                 ...course,
                 createdAt: FieldValue.serverTimestamp()
             });
-        }
-
-        // Save lessons
-        for (const lesson of lessons) {
-            const lessonRef = adminDb.collection('careerCourseLessons').doc(lesson.id);
-            batch.set(lessonRef, lesson);
         }
 
         // Save assessment banks
@@ -404,7 +388,7 @@ export class CareerOrchestrator {
         // Update user's career profile
         const userCareerRef = adminDb.collection('userCareerProfiles').doc(learningPlan.userId);
         batch.set(userCareerRef, {
-            odI: learningPlan.userId,
+            id: learningPlan.userId,
             savedCareerIds: FieldValue.arrayUnion(careerPath.id),
             activeCareerPathId: careerPath.id,
             activeLearningPlanId: learningPlan.id,

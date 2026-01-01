@@ -8,7 +8,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { CareerAgentConfig, CareerResearchBrief, DetailedLearningPlan, LearningPhasePlan } from '@/types/careerAgents';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '');
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GEMINI_IMAGE_API_KEY || '');
 
 export class CareerPlannerAgent {
     private model: ReturnType<typeof genAI.getGenerativeModel>;
@@ -16,7 +16,7 @@ export class CareerPlannerAgent {
 
     constructor(config?: Partial<CareerAgentConfig>) {
         this.config = {
-            model: 'gemini-2.0-flash-exp',
+            model: 'gemini-2.0-flash',
             temperature: 0.4,
             ...config
         };

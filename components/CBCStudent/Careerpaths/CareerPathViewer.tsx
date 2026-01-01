@@ -235,10 +235,19 @@ export default function CareerPathViewer() {
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {careerCourses.slice(0, 6).map((course) => (
+                        {careerCourses.map((course) => (
                             <button
                                 key={course.id}
-                                onClick={() => router.push(`/dashboard/student/courses/${course.id}?type=career`)}
+                                onClick={() => {
+                                    // Navigate to courses page with enrollment intent
+                                    const params = new URLSearchParams();
+                                    params.set('enroll', course.title);
+                                    params.set('description', course.description);
+                                    if (course.syllabus) {
+                                        params.set('syllabus', JSON.stringify(course.syllabus));
+                                    }
+                                    router.push(`/dashboard/student/courses?${params.toString()}`);
+                                }}
                                 className="flex items-start gap-4 p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors text-left group"
                             >
                                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0ea5e9] to-[#6366f1] flex items-center justify-center flex-shrink-0">
@@ -252,7 +261,7 @@ export default function CareerPathViewer() {
                                     </h3>
                                     <p className="text-sm text-white/50 line-clamp-1">{course.description}</p>
                                     <div className="flex items-center gap-3 mt-2 text-xs text-white/40">
-                                        <span>{course.lessonCount} lessons</span>
+                                        <span>{course.lessonCount} topics</span>
                                         <span>•</span>
                                         <span>{course.estimatedTime}</span>
                                         <span>•</span>

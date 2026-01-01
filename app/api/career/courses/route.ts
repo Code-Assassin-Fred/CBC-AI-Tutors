@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
         const courseId = searchParams.get('courseId');
 
         if (courseId) {
-            // Fetch single course with lessons
+            // Fetch single course metadata
             const courseDoc = await adminDb.collection('careerCourses').doc(courseId).get();
 
             if (!courseDoc.exists) {
@@ -19,17 +19,7 @@ export async function GET(req: NextRequest) {
             }
 
             const course = courseDoc.data() as CareerCourse;
-
-            // Fetch lessons for this course
-            const lessonsSnapshot = await adminDb
-                .collection('careerCourseLessons')
-                .where('courseId', '==', courseId)
-                .orderBy('order')
-                .get();
-
-            const lessons: CourseLesson[] = lessonsSnapshot.docs.map(doc => doc.data() as CourseLesson);
-
-            return NextResponse.json({ course, lessons });
+            return NextResponse.json({ course });
         }
 
         if (careerPathId) {
@@ -54,7 +44,7 @@ export async function GET(req: NextRequest) {
     }
 }
 
-// POST: Manually trigger course generation for a skill
+// POST: Manually trigger course metadata generation for a skill
 export async function POST(req: NextRequest) {
     try {
         const { careerPathId, skillName, userId } = await req.json();
@@ -76,7 +66,7 @@ export async function POST(req: NextRequest) {
         const { CareerCourseGeneratorAgent } = await import('@/lib/agents/careerCourseGeneratorAgent');
         const generator = new CareerCourseGeneratorAgent();
 
-        const { course, lessons } = await generator.generateCourse(
+        const { course } = await generator.generateCourse(
             {
                 careerTitle: careerPath?.title || '',
                 skillName,
@@ -89,22 +79,18 @@ export async function POST(req: NextRequest) {
             1
         );
 
-        // Save to Firestore
+        // Save metadata to Firestore
         await adminDb.collection('careerCourses').doc(course.id).set(course);
-
-        for (const lesson of lessons) {
-            await adminDb.collection('careerCourseLessons').doc(lesson.id).set(lesson);
-        }
 
         // Update career path with new course ID
         await adminDb.collection('careerPaths').doc(careerPathId).update({
             courseIds: FieldValue.arrayUnion(course.id)
         });
 
-        return NextResponse.json({ course, lessonCount: lessons.length });
+        return NextResponse.json({ course });
 
     } catch (error) {
         console.error('[Career Courses API] Error:', error);
-        return NextResponse.json({ error: 'Failed to generate course' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to generate course metadata' }, { status: 500 });
     }
 }

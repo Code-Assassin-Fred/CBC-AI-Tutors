@@ -57,6 +57,9 @@ interface CoursesContextType {
 
     // Quiz Score Persistence
     saveQuizScore: (quizId: string, score: number, passed: boolean, totalQuestions: number, answers: Array<{ questionId: string; userAnswer: string; isCorrect: boolean }>) => Promise<boolean>;
+
+    // Enrollment
+    enrollInCourse: (courseId: string) => Promise<boolean>;
 }
 
 const CoursesContext = createContext<CoursesContextType | null>(null);
@@ -469,6 +472,29 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
         }
     }, [user, currentCourse]);
 
+    const enrollInCourse = useCallback(async (courseId: string): Promise<boolean> => {
+        if (!user) return false;
+
+        try {
+            const response = await fetch('/api/courses/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    courseId,
+                    userId: user.uid,
+                }),
+            });
+
+            if (response.ok) {
+                await loadMyCourses(); // Refresh my courses
+                return true;
+            }
+        } catch (error) {
+            console.error('Error enrolling in course:', error);
+        }
+        return false;
+    }, [user, loadMyCourses]);
+
     // ========================================
     // CONTEXT VALUE
     // ========================================
@@ -512,6 +538,9 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
 
         // Quiz Score Persistence
         saveQuizScore,
+
+        // Enrollment
+        enrollInCourse,
     };
 
     return (

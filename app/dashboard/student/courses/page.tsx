@@ -7,10 +7,12 @@ import CoursePromptInput from '@/components/CBCStudent/courses/CoursePromptInput
 import TopicSuggestions from '@/components/CBCStudent/courses/TopicSuggestions';
 import MyCourses from '@/components/CBCStudent/courses/MyCourses';
 import GeneratingState from '@/components/CBCStudent/courses/GeneratingState';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 function CoursesPageContent() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const {
         isGenerating,
         generationProgress,
@@ -21,9 +23,48 @@ function CoursesPageContent() {
         myCourses,
         loadMyCourses,
         isLoadingMyCourses,
+        discoverCourses,
+        enrollInCourse,
     } = useCourses();
 
     const [activeTab, setActiveTab] = useState<'create' | 'my-courses' | 'discover'>('create');
+    const [hasCheckedEnroll, setHasCheckedEnroll] = useState(false);
+
+    // Handle enrollment from career path
+    useEffect(() => {
+        const enrollTopic = searchParams.get('enroll');
+        if (enrollTopic && !hasCheckedEnroll && !isGenerating && myCourses.length >= 0) {
+            setHasCheckedEnroll(true);
+
+            const handleEnrollment = async () => {
+                // 1. Check if user already has it
+                const existingInMyCourses = myCourses.find(c => c.title.toLowerCase() === enrollTopic.toLowerCase());
+                if (existingInMyCourses) {
+                    router.push(`/dashboard/student/courses/${existingInMyCourses.id}`);
+                    return;
+                }
+
+                // 2. Check if it exists globally
+                const globalCourses = await discoverCourses(enrollTopic);
+                const exactMatch = globalCourses.find(c => c.title.toLowerCase() === enrollTopic.toLowerCase());
+
+                if (exactMatch) {
+                    // Auto-enroll and navigate
+                    const enrolled = await enrollInCourse(exactMatch.id);
+                    if (enrolled) {
+                        router.push(`/dashboard/student/courses/${exactMatch.id}`);
+                    }
+                } else {
+                    // 3. Generate it
+                    // The generateCourse API could be enhanced to use the syllabus if we pass it
+                    // For now, we'll just use the topic
+                    handleGenerate(enrollTopic);
+                }
+            };
+
+            handleEnrollment();
+        }
+    }, [searchParams, hasCheckedEnroll, isGenerating, myCourses, discoverCourses, enrollInCourse, router]);
 
     useEffect(() => {
         loadSuggestions();
@@ -152,7 +193,9 @@ export default function CoursesPage() {
     return (
         <DashboardLayout active="Courses">
             <CoursesProvider>
-                <CoursesPageContent />
+                <Suspense fallback={<div className="min-h-screen animate-pulse bg-white/5" />}>
+                    <CoursesPageContent />
+                </Suspense>
             </CoursesProvider>
         </DashboardLayout>
     );

@@ -6,10 +6,9 @@
  */
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { CareerAgentConfig, SkillAssessmentBank, AssessmentQuestion } from '@/types/careerAgents';
-import { SkillDomainBrief } from '@/types/careerAgents';
+import { CareerAgentConfig, SkillDomainBrief, SkillAssessmentBank, AssessmentQuestion, AssessmentResult } from '@/types/careerAgents';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '');
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GEMINI_IMAGE_API_KEY || '');
 
 export class AssessmentGeneratorAgent {
     private model: ReturnType<typeof genAI.getGenerativeModel>;
@@ -17,7 +16,7 @@ export class AssessmentGeneratorAgent {
 
     constructor(config?: Partial<CareerAgentConfig>) {
         this.config = {
-            model: 'gemini-2.0-flash-exp',
+            model: 'gemini-2.0-flash',
             temperature: 0.5,
             ...config
         };

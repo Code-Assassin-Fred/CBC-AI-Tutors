@@ -115,6 +115,7 @@ export interface CareerCourse {
     difficulty: CourseDifficulty;
     estimatedTime: string;
     thumbnailUrl?: string;
+    syllabus?: string[]; // Simplified lesson topics
 
     lessonCount: number;
     lessonIds: string[];

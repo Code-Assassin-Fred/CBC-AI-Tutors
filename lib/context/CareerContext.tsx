@@ -182,9 +182,9 @@ export function CareerProvider({ children }: CareerProviderProps) {
 
                         if (data.type === 'progress') {
                             setGenerationProgress({
-                                step: data.step,
+                                step: data.phase || data.step,
                                 message: data.message,
-                                percentage: data.percentage,
+                                percentage: data.progress || data.percentage || 0,
                             });
                         } else if (data.type === 'complete') {
                             career = data.data;
@@ -203,8 +203,9 @@ export function CareerProvider({ children }: CareerProviderProps) {
             return career;
         } catch (error) {
             const message = error instanceof Error ? error.message : 'Unknown error';
+            console.error('[CareerContext] Generation error:', error);
             setGenerationError(message);
-            setCurrentView('entry');
+            // Don't reset view to entry, let CareerGenerating show the error
             return null;
         } finally {
             setIsGenerating(false);

@@ -8,7 +8,11 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { CareerAgentConfig, CareerResearchBrief, SkillDomainBrief } from '@/types/careerAgents';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '');
+const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GEMINI_IMAGE_API_KEY || '';
+if (!apiKey) {
+    console.error('[CareerResearcherAgent] WARNING: No API key found in GEMINI_API_KEY, GOOGLE_API_KEY, or GEMINI_IMAGE_API_KEY');
+}
+const genAI = new GoogleGenerativeAI(apiKey);
 
 export class CareerResearcherAgent {
     private model: ReturnType<typeof genAI.getGenerativeModel>;
@@ -16,7 +20,7 @@ export class CareerResearcherAgent {
 
     constructor(config?: Partial<CareerAgentConfig>) {
         this.config = {
-            model: 'gemini-2.0-flash-exp',
+            model: 'gemini-2.0-flash',
             temperature: 0.3, // Lower temperature for factual accuracy
             ...config
         };
@@ -31,6 +35,10 @@ export class CareerResearcherAgent {
 
     async researchCareer(careerTitle: string): Promise<CareerResearchBrief> {
         console.log(`[CareerResearcherAgent] Researching career: ${careerTitle}`);
+
+        if (!apiKey) {
+            throw new Error('No Gemini API key configured. Please set GEMINI_API_KEY, GOOGLE_API_KEY, or GEMINI_IMAGE_API_KEY environment variable.');
+        }
 
         const prompt = `You are an expert career advisor and labor market analyst. Research the career "${careerTitle}" comprehensively.
 
@@ -89,7 +97,8 @@ IMPORTANT:
             // Parse and clean the response
             const jsonMatch = text.match(/\{[\s\S]*\}/);
             if (!jsonMatch) {
-                throw new Error('Failed to parse research brief');
+                console.error('[CareerResearcherAgent] Response was not valid JSON:', text.substring(0, 500));
+                throw new Error('Failed to parse research brief - AI response was not valid JSON');
             }
 
             const data = JSON.parse(jsonMatch[0]);
@@ -109,8 +118,19 @@ IMPORTANT:
             return brief;
 
         } catch (error) {
-            console.error('[CareerResearcherAgent] Error:', error);
-            throw new Error(`Failed to research career: ${careerTitle}`);
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            console.error('[CareerResearcherAgent] Error researching career:', errorMessage);
+
+            // Check for specific error types
+            if (errorMessage.includes('403') || errorMessage.includes('API_KEY')) {
+                throw new Error(`API key error: ${errorMessage}. Please verify your Gemini API key is valid.`);
+            } else if (errorMessage.includes('quota') || errorMessage.includes('429')) {
+                throw new Error(`Rate limit exceeded. Please wait a moment and try again.`);
+            } else if (errorMessage.includes('Failed to parse')) {
+                throw error; // Re-throw parsing errors as-is
+            }
+
+            throw new Error(`Failed to research career "${careerTitle}": ${errorMessage}`);
         }
     }
 

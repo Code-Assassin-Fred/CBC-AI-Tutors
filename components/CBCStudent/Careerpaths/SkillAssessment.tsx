@@ -15,7 +15,7 @@ export default function SkillAssessment() {
     // Flatten all skills from categories
     const allSkills: Skill[] = activeCareer?.skillCategories?.flatMap(
         (cat: SkillCategory) => cat.skills
-    ) || [];
+    ).filter(skill => skill.assessmentQuestions && skill.assessmentQuestions.length > 0) || [];
 
     const currentSkill = allSkills[currentSkillIndex];
     const currentQuestion = currentSkill?.assessmentQuestions?.[currentQuestionIndex];
