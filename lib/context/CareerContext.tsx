@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
 import {
     CareerPath,
     UserCareerProfile,
@@ -10,6 +10,7 @@ import {
     CareerGenerationProgress,
     UserSkillState,
 } from '@/types/career';
+import { CareerCourse, CareerGenerationPhase } from '@/types/careerAgents';
 import { useAuth } from './AuthContext';
 
 // ============================================
@@ -26,6 +27,7 @@ interface CareerContextType {
     // Career Generation
     isGenerating: boolean;
     generationProgress: CareerGenerationProgress | null;
+    generationPhase: CareerGenerationPhase | null;
     generationError: string | null;
     generateCareer: (title: string) => Promise<CareerPath | null>;
 
@@ -39,6 +41,16 @@ interface CareerContextType {
     // Active Career
     activeCareer: CareerPath | null;
     setActiveCareer: (career: CareerPath | null) => void;
+
+    // Saved Careers (persistence)
+    savedCareers: CareerPath[];
+    loadSavedCareers: () => Promise<void>;
+    saveCareerPath: (careerPathId: string) => Promise<void>;
+    removeCareerPath: (careerPathId: string) => Promise<void>;
+
+    // Career Courses
+    careerCourses: CareerCourse[];
+    fetchCareerCourses: (careerPathId: string) => Promise<void>;
 
     // User Profile
     userProfile: UserCareerProfile | null;
@@ -88,6 +100,7 @@ export function CareerProvider({ children }: CareerProviderProps) {
     // Generation State
     const [isGenerating, setIsGenerating] = useState(false);
     const [generationProgress, setGenerationProgress] = useState<CareerGenerationProgress | null>(null);
+    const [generationPhase, setGenerationPhase] = useState<CareerGenerationPhase | null>(null);
     const [generationError, setGenerationError] = useState<string | null>(null);
 
     // Discovery State
@@ -97,6 +110,12 @@ export function CareerProvider({ children }: CareerProviderProps) {
 
     // Active Career
     const [activeCareer, setActiveCareer] = useState<CareerPath | null>(null);
+
+    // Saved Careers (persistence)
+    const [savedCareers, setSavedCareers] = useState<CareerPath[]>([]);
+
+    // Career Courses
+    const [careerCourses, setCareerCourses] = useState<CareerCourse[]>([]);
 
     // User Profile
     const [userProfile, setUserProfile] = useState<UserCareerProfile | null>(null);
@@ -326,6 +345,84 @@ export function CareerProvider({ children }: CareerProviderProps) {
         setComparisonCareers([]);
     }, []);
 
+    // Load Saved Careers
+    const loadSavedCareers = useCallback(async () => {
+        if (!user) return;
+
+        try {
+            const response = await fetch(`/api/career/save?userId=${user.uid}`);
+            if (response.ok) {
+                const data = await response.json();
+                setSavedCareers(data.savedCareers || []);
+                if (data.activeCareerPathId && !activeCareer) {
+                    const activeSaved = data.savedCareers?.find((c: CareerPath) => c.id === data.activeCareerPathId);
+                    if (activeSaved) setActiveCareer(activeSaved);
+                }
+                if (data.activeLearningPlan) {
+                    setLearningPlan(data.activeLearningPlan);
+                }
+                if (data.skillStates) {
+                    setSkillStates(data.skillStates);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load saved careers:', error);
+        }
+    }, [user, activeCareer]);
+
+    // Save Career Path
+    const saveCareerPath = useCallback(async (careerPathId: string) => {
+        if (!user) return;
+
+        try {
+            await fetch('/api/career/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: user.uid, careerPathId }),
+            });
+            await loadSavedCareers();
+        } catch (error) {
+            console.error('Failed to save career path:', error);
+        }
+    }, [user, loadSavedCareers]);
+
+    // Remove Career Path
+    const removeCareerPath = useCallback(async (careerPathId: string) => {
+        if (!user) return;
+
+        try {
+            await fetch(`/api/career/save?userId=${user.uid}&careerPathId=${careerPathId}`, {
+                method: 'DELETE',
+            });
+            setSavedCareers(prev => prev.filter(c => c.id !== careerPathId));
+            if (activeCareer?.id === careerPathId) {
+                setActiveCareer(null);
+            }
+        } catch (error) {
+            console.error('Failed to remove career path:', error);
+        }
+    }, [user, activeCareer]);
+
+    // Fetch Career Courses
+    const fetchCareerCourses = useCallback(async (careerPathId: string) => {
+        try {
+            const response = await fetch(`/api/career/courses?careerPathId=${careerPathId}`);
+            if (response.ok) {
+                const data = await response.json();
+                setCareerCourses(data.courses || []);
+            }
+        } catch (error) {
+            console.error('Failed to fetch career courses:', error);
+        }
+    }, []);
+
+    // Load saved careers on mount
+    useEffect(() => {
+        if (user) {
+            loadSavedCareers();
+        }
+    }, [user, loadSavedCareers]);
+
     // Reset
     const reset = useCallback(() => {
         setCurrentView('entry');
@@ -335,6 +432,7 @@ export function CareerProvider({ children }: CareerProviderProps) {
         setAssessmentResults({});
         setLearningPlan(null);
         setGenerationError(null);
+        setCareerCourses([]);
     }, []);
 
     const value: CareerContextType = {
@@ -342,6 +440,7 @@ export function CareerProvider({ children }: CareerProviderProps) {
         setCurrentView,
         isGenerating,
         generationProgress,
+        generationPhase,
         generationError,
         generateCareer,
         discoveryMessages,
@@ -351,6 +450,12 @@ export function CareerProvider({ children }: CareerProviderProps) {
         selectSuggestion,
         activeCareer,
         setActiveCareer,
+        savedCareers,
+        loadSavedCareers,
+        saveCareerPath,
+        removeCareerPath,
+        careerCourses,
+        fetchCareerCourses,
         userProfile,
         loadUserProfile,
         skillStates,

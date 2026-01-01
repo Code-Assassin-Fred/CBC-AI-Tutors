@@ -1,107 +1,203 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import { PersonalizedLearningPlan, LearningPhase, UserSkillState } from '@/types/career';
-
-const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_IMAGE_API_KEY || process.env.GOOGLE_API_KEY || '';
-const genAI = new GoogleGenerativeAI(apiKey);
+import { adminDb, FieldValue } from '@/lib/firebaseAdmin';
+import { CareerPlannerAgent } from '@/lib/agents/careerPlannerAgent';
+import { PersonalizedLearningPlan, LearningPhase, CareerPath } from '@/types/career';
+import { CareerResearchBrief, CareerCourse } from '@/types/careerAgents';
 
 export async function POST(req: NextRequest) {
     try {
-        const { userId, careerId, skillStates, careerTitle } = await req.json();
+        const { userId, careerId, careerTitle, skillStates } = await req.json();
 
         if (!userId || !careerId) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        console.log(`[LearningPlan] Generating plan for user: ${userId}, career: ${careerId} (${careerTitle || 'Unknown Career'})`);
+        console.log(`[LearningPlan] Generating plan for user: ${userId}, career: ${careerId}`);
 
-        const model = genAI.getGenerativeModel({
-            model: 'gemini-2.0-flash-exp',
-            generationConfig: {
-                responseMimeType: "application/json",
+        // Fetch the career path from Firestore
+        const careerDoc = await adminDb.collection('careerPaths').doc(careerId).get();
+
+        let careerPath: CareerPath | null = null;
+        if (careerDoc.exists) {
+            careerPath = careerDoc.data() as CareerPath;
+        }
+
+        // Fetch existing courses for this career
+        const coursesSnapshot = await adminDb
+            .collection('careerCourses')
+            .where('careerPathId', '==', careerId)
+            .orderBy('phaseOrder')
+            .orderBy('order')
+            .get();
+
+        const courses: CareerCourse[] = coursesSnapshot.docs.map(doc => doc.data() as CareerCourse);
+
+        // If we have a career path with skill categories, use the planner agent
+        if (careerPath && careerPath.skillCategories) {
+            const planner = new CareerPlannerAgent();
+
+            // Build a research brief from the career path data
+            const researchBrief: CareerResearchBrief = {
+                careerTitle: careerPath.title,
+                overview: careerPath.description,
+                marketData: {
+                    demand: careerPath.market.demand,
+                    demandTrend: careerPath.market.demandTrend,
+                    salaryRange: careerPath.market.salaryRange,
+                    topIndustries: careerPath.market.topHiringIndustries,
+                    topLocations: careerPath.market.topLocations,
+                    growthOutlook: careerPath.market.growthOutlook
+                },
+                entryRequirements: {
+                    difficulty: careerPath.entry.difficulty,
+                    typicalBackgrounds: careerPath.entry.typicalBackground,
+                    timeToEntry: careerPath.entry.timeToEntry,
+                    certifications: careerPath.entry.certifications
+                },
+                aiImpact: careerPath.aiImpact,
+                skillDomains: careerPath.skillCategories.flatMap(cat =>
+                    cat.skills.map(skill => ({
+                        name: skill.name,
+                        category: cat.name.toLowerCase().includes('foundation') ? 'foundation' as const
+                            : cat.name.toLowerCase().includes('advanced') ? 'advanced' as const
+                                : cat.name.toLowerCase().includes('soft') ? 'soft-skill' as const
+                                    : 'core' as const,
+                        importance: skill.importance,
+                        dependencies: skill.dependencies,
+                        estimatedTimeToLearn: skill.learningResources.estimatedTimeToLearn,
+                        keyTopics: []
+                    }))
+                ),
+                relatedCareers: careerPath.relatedCareers,
+                generatedAt: new Date()
+            };
+
+            // Generate detailed learning plan
+            const detailedPlan = await planner.createLearningPlan(researchBrief);
+
+            // Build phases with course links
+            const phases: LearningPhase[] = detailedPlan.phases.map((phase, idx) => {
+                // Find courses for this phase
+                const phaseCourses = courses.filter(c => c.phaseOrder === phase.order);
+
+                return {
+                    order: phase.order,
+                    title: phase.title,
+                    description: phase.description,
+                    estimatedDuration: phase.estimatedDuration,
+                    targetSkills: phase.targetSkills,
+                    courseIds: phaseCourses.map(c => c.id),
+                    recommendedCourses: phaseCourses.map(c => c.title),
+                    externalResources: [],
+                    milestones: phase.milestones.map(m => ({
+                        id: m.id,
+                        title: m.title,
+                        type: m.type as 'course' | 'quiz' | 'project' | 'skill-level',
+                        requirement: m.requirement,
+                        completed: false
+                    })),
+                    status: idx === 0 ? 'active' as const : 'locked' as const,
+                    progress: 0
+                };
+            });
+
+            const learningPlan: PersonalizedLearningPlan = {
+                id: `plan-${Date.now()}`,
+                userId,
+                careerPathId: careerId,
+                careerTitle: careerPath.title,
+                createdAt: new Date(),
+                lastAdaptedAt: new Date(),
+                currentPhaseIndex: 0,
+                overallProgress: 0,
+                estimatedCompletion: detailedPlan.estimatedCompletion,
+                phases,
+                adaptationHistory: []
+            };
+
+            // Save to Firestore
+            await adminDb.collection('learningPlans').doc(learningPlan.id).set({
+                ...learningPlan,
+                createdAt: FieldValue.serverTimestamp(),
+                lastAdaptedAt: FieldValue.serverTimestamp()
+            });
+
+            // Update user's active learning plan
+            await adminDb.collection('userCareerProfiles').doc(userId).set({
+                activeLearningPlanId: learningPlan.id,
+                updatedAt: FieldValue.serverTimestamp()
+            }, { merge: true });
+
+            console.log(`[LearningPlan] Generated plan with ${phases.length} phases`);
+            return NextResponse.json(learningPlan);
+        }
+
+        // Fallback: Generate a simple plan without the full agent
+        const fallbackPhases: LearningPhase[] = [
+            {
+                order: 1,
+                title: 'Foundations',
+                description: `Build core knowledge and fundamental skills for ${careerTitle || 'your career'}`,
+                estimatedDuration: '4-6 weeks',
+                targetSkills: [],
+                courseIds: courses.filter(c => c.phaseOrder === 1).map(c => c.id),
+                recommendedCourses: courses.filter(c => c.phaseOrder === 1).map(c => c.title),
+                externalResources: [],
+                milestones: [
+                    { id: '1', title: 'Complete introductory courses', type: 'course', requirement: 'Finish basics', completed: false },
+                    { id: '2', title: 'Pass fundamentals quiz', type: 'quiz', requirement: 'Score 70%+', completed: false }
+                ],
+                status: 'active',
+                progress: 0
+            },
+            {
+                order: 2,
+                title: 'Core Skills',
+                description: 'Develop essential skills required for this career path',
+                estimatedDuration: '6-8 weeks',
+                targetSkills: [],
+                courseIds: courses.filter(c => c.phaseOrder === 2).map(c => c.id),
+                recommendedCourses: courses.filter(c => c.phaseOrder === 2).map(c => c.title),
+                externalResources: [],
+                milestones: [
+                    { id: '3', title: 'Build first project', type: 'project', requirement: 'Complete project', completed: false }
+                ],
+                status: 'locked',
+                progress: 0
+            },
+            {
+                order: 3,
+                title: 'Advanced Topics',
+                description: 'Master advanced concepts and specializations',
+                estimatedDuration: '4-6 weeks',
+                targetSkills: [],
+                courseIds: courses.filter(c => c.phaseOrder === 3).map(c => c.id),
+                recommendedCourses: courses.filter(c => c.phaseOrder === 3).map(c => c.title),
+                externalResources: [],
+                milestones: [
+                    { id: '4', title: 'Complete advanced course', type: 'course', requirement: 'Finish advanced material', completed: false }
+                ],
+                status: 'locked',
+                progress: 0
+            },
+            {
+                order: 4,
+                title: 'Job Ready',
+                description: 'Prepare for interviews and real-world work',
+                estimatedDuration: '4 weeks',
+                targetSkills: [],
+                courseIds: courses.filter(c => c.phaseOrder === 4).map(c => c.id),
+                recommendedCourses: courses.filter(c => c.phaseOrder === 4).map(c => c.title),
+                externalResources: [],
+                milestones: [
+                    { id: '5', title: 'Build portfolio project', type: 'project', requirement: 'Showcase-ready project', completed: false },
+                    { id: '6', title: 'Pass final assessment', type: 'quiz', requirement: 'Score 80%+', completed: false }
+                ],
+                status: 'locked',
+                progress: 0
             }
-        });
+        ];
 
-        // Build skill context from current skill states
-        const skillsContext = Object.values(skillStates as Record<string, UserSkillState>)
-            .map(skill => `- ${skill.skillName}: ${skill.proficiency}% proficiency`)
-            .join('\n') || 'No skills assessed yet';
-
-        const prompt = `You are a career learning advisor AI. Generate a personalized learning plan for someone pursuing a career as a "${careerTitle || 'professional'}" based on their current skill levels.
-
-Career Goal: ${careerTitle || 'Professional Development'}
-
-User's Current Skills:
-${skillsContext}
-
-Generate a comprehensive learning plan with 3-4 phases. Return a JSON object with this exact structure:
-{
-    "phases": [
-        {
-            "order": 1,
-            "title": "Phase Title",
-            "description": "Brief description of what this phase covers",
-            "estimatedDuration": "2-4 weeks",
-            "targetSkills": [
-                {
-                    "skillId": "skill-id",
-                    "skillName": "Skill Name",
-                    "targetProficiency": 80
-                }
-            ],
-            "recommendedCourses": ["Course 1", "Course 2"],
-            "externalResources": [
-                {
-                    "title": "Resource Title",
-                    "url": "https://example.com",
-                    "type": "article",
-                    "free": true
-                }
-            ],
-            "milestones": [
-                {
-                    "id": "milestone-1",
-                    "title": "Complete fundamentals course",
-                    "type": "course",
-                    "requirement": "Finish the introductory module",
-                    "completed": false
-                }
-            ],
-            "status": "active",
-            "progress": 0
-        }
-    ],
-    "estimatedTotalDuration": "3-6 months",
-    "overallProgress": 0
-}
-
-Focus on:
-1. Starting with foundational skills that have low proficiency
-2. Building up to more advanced skills progressively
-3. Including practical milestones and projects
-4. Providing free resources when possible
-
-Make the plan realistic and actionable.`;
-
-        const result = await model.generateContent(prompt);
-        const responseText = result.response.text();
-
-        // Parse the response
-        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) {
-            throw new Error('Failed to parse learning plan data');
-        }
-
-        const planData = JSON.parse(jsonMatch[0]);
-
-        // Set phase statuses: first is active, rest are locked
-        const phases: LearningPhase[] = planData.phases.map((phase: LearningPhase, index: number) => ({
-            ...phase,
-            status: index === 0 ? 'active' : 'locked',
-            progress: 0,
-        }));
-
-        // Create the learning plan object
         const learningPlan: PersonalizedLearningPlan = {
             id: `plan-${Date.now()}`,
             userId,
@@ -111,12 +207,17 @@ Make the plan realistic and actionable.`;
             lastAdaptedAt: new Date(),
             currentPhaseIndex: 0,
             overallProgress: 0,
-            estimatedCompletion: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000), // ~6 months
-            phases,
-            adaptationHistory: [],
+            estimatedCompletion: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000),
+            phases: fallbackPhases,
+            adaptationHistory: []
         };
 
-        console.log(`[LearningPlan] Successfully generated plan with ${phases.length} phases`);
+        // Save to Firestore
+        await adminDb.collection('learningPlans').doc(learningPlan.id).set({
+            ...learningPlan,
+            createdAt: FieldValue.serverTimestamp(),
+            lastAdaptedAt: FieldValue.serverTimestamp()
+        });
 
         return NextResponse.json(learningPlan);
 
@@ -126,5 +227,52 @@ Make the plan realistic and actionable.`;
             { error: 'Failed to generate learning plan' },
             { status: 500 }
         );
+    }
+}
+
+// GET: Fetch a learning plan
+export async function GET(req: NextRequest) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const planId = searchParams.get('planId');
+        const userId = searchParams.get('userId');
+
+        if (planId) {
+            const planDoc = await adminDb.collection('learningPlans').doc(planId).get();
+
+            if (!planDoc.exists) {
+                return NextResponse.json({ error: 'Learning plan not found' }, { status: 404 });
+            }
+
+            return NextResponse.json({ learningPlan: planDoc.data() });
+        }
+
+        if (userId) {
+            // Fetch user's active learning plan
+            const profileDoc = await adminDb.collection('userCareerProfiles').doc(userId).get();
+
+            if (!profileDoc.exists) {
+                return NextResponse.json({ learningPlan: null });
+            }
+
+            const profile = profileDoc.data();
+            if (!profile?.activeLearningPlanId) {
+                return NextResponse.json({ learningPlan: null });
+            }
+
+            const planDoc = await adminDb.collection('learningPlans').doc(profile.activeLearningPlanId).get();
+
+            if (!planDoc.exists) {
+                return NextResponse.json({ learningPlan: null });
+            }
+
+            return NextResponse.json({ learningPlan: planDoc.data() });
+        }
+
+        return NextResponse.json({ error: 'Missing planId or userId' }, { status: 400 });
+
+    } catch (error) {
+        console.error('[LearningPlan API] Error:', error);
+        return NextResponse.json({ error: 'Failed to fetch learning plan' }, { status: 500 });
     }
 }
