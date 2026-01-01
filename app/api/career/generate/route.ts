@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { CareerPath, CareerGenerationEvent } from '@/types/career';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_IMAGE_API_KEY || process.env.GOOGLE_API_KEY || '';
+const genAI = new GoogleGenerativeAI(apiKey);
 
 export async function POST(req: NextRequest) {
     try {
@@ -29,7 +30,13 @@ export async function POST(req: NextRequest) {
                         percentage: 10,
                     });
 
-                    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+                    console.log(`[CareerGen] Starting generation for: ${title}`);
+                    const model = genAI.getGenerativeModel({
+                        model: 'gemini-2.0-flash-exp',
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                        }
+                    });
 
                     // Step 2: Analyzing skills
                     sendEvent({
@@ -131,8 +138,10 @@ Return a JSON object with this exact structure (no markdown, just JSON):
 
 Generate 2-3 skills per category with 2-3 assessment questions each. Be specific and realistic.`;
 
+                    console.log(`[CareerGen] Requesting content from Gemini...`);
                     const result = await model.generateContent(prompt);
                     const responseText = result.response.text();
+                    console.log(`[CareerGen] Received response from Gemini (${responseText.length} chars)`);
 
                     // Step 4: Building path
                     sendEvent({

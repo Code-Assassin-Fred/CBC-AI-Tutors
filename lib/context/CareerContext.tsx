@@ -139,15 +139,25 @@ export function CareerProvider({ children }: CareerProviderProps) {
 
             const decoder = new TextDecoder();
             let career: CareerPath | null = null;
+            let buffer = '';
 
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
 
-                const chunk = decoder.decode(value);
-                const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
+                buffer += decoder.decode(value, { stream: true });
 
-                for (const line of lines) {
+                // Split by double newline which is the standard SSE message separator
+                const parts = buffer.split('\n\n');
+
+                // Keep the last part in the buffer if it doesn't end with a double newline
+                // (it might be an incomplete message)
+                buffer = parts.pop() || '';
+
+                for (const part of parts) {
+                    const line = part.trim();
+                    if (!line || !line.startsWith('data: ')) continue;
+
                     try {
                         const data = JSON.parse(line.slice(6));
 
@@ -164,7 +174,8 @@ export function CareerProvider({ children }: CareerProviderProps) {
                         } else if (data.type === 'error') {
                             throw new Error(data.error);
                         }
-                    } catch {
+                    } catch (e) {
+                        console.error('Error parsing SSE chunk:', e, line);
                         // Skip invalid JSON
                     }
                 }
@@ -282,6 +293,7 @@ export function CareerProvider({ children }: CareerProviderProps) {
                 body: JSON.stringify({
                     userId: user.uid,
                     careerId: activeCareer.id,
+                    careerTitle: activeCareer.title,
                     skillStates,
                 }),
             });

@@ -133,17 +133,17 @@ export default function SkillGapAnalysis() {
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col items-center gap-3">
                 <button
                     onClick={handleGeneratePlan}
                     disabled={isGeneratingPlan}
-                    className="w-full py-3 bg-[#0ea5e9] text-white rounded-xl font-medium hover:bg-[#0ea5e9]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-8 py-3 bg-[#0ea5e9] text-white rounded-xl font-medium hover:bg-[#0ea5e9]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isGeneratingPlan ? 'Generating Plan...' : 'Generate My Learning Plan'}
                 </button>
                 <button
                     onClick={() => setCurrentView('career-view')}
-                    className="w-full py-3 bg-white/5 text-white/70 rounded-xl font-medium hover:bg-white/10 transition-colors"
+                    className="px-8 py-3 bg-white/5 text-white/70 rounded-xl font-medium hover:bg-white/10 transition-colors"
                 >
                     View Full Career Details
                 </button>

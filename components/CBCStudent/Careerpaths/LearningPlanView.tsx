@@ -1,8 +1,10 @@
 "use client";
 
+import { useRouter } from 'next/navigation';
 import { useCareer } from '@/lib/context/CareerContext';
 
 export default function LearningPlanView() {
+    const router = useRouter();
     const { activeCareer, learningPlan, setCurrentView, isGeneratingPlan } = useCareer();
 
     if (isGeneratingPlan) {
@@ -16,7 +18,7 @@ export default function LearningPlanView() {
 
     // Mock learning plan if not generated yet
     const plan = learningPlan || {
-        careerTitle: activeCareer?.title || 'Career',
+        careerTitle: activeCareer?.title || '',
         estimatedCompletion: new Date(Date.now() + 180 * 24 * 60 * 60 * 1000),
         overallProgress: 0,
         phases: [
@@ -110,7 +112,7 @@ export default function LearningPlanView() {
             <div className="mb-8">
                 <h1 className="text-2xl font-bold text-white mb-2">Your Learning Plan</h1>
                 <p className="text-white/50">
-                    Path to becoming a <span className="text-[#0ea5e9]">{plan.careerTitle}</span>
+                    Path to becoming a <span className="text-[#0ea5e9]">{plan.careerTitle || activeCareer?.title}</span>
                 </p>
             </div>
 
@@ -178,8 +180,8 @@ export default function LearningPlanView() {
                                             className="flex items-center gap-3 text-sm"
                                         >
                                             <div className={`w-5 h-5 rounded flex items-center justify-center ${milestone.completed
-                                                    ? 'bg-[#10b981] text-white'
-                                                    : 'bg-white/10 text-white/30'
+                                                ? 'bg-[#10b981] text-white'
+                                                : 'bg-white/10 text-white/30'
                                                 }`}>
                                                 {milestone.completed ? (
                                                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -226,6 +228,7 @@ export default function LearningPlanView() {
                     View Career Details
                 </button>
                 <button
+                    onClick={() => router.push('/dashboard/student/courses')}
                     className="flex-1 py-3 bg-[#0ea5e9] text-white rounded-xl font-medium hover:bg-[#0ea5e9]/90 transition-colors"
                 >
                     Start Learning
