@@ -249,26 +249,28 @@ export default function CourseViewer() {
 
             {/* Main content - scrolls independently */}
             <div className="flex-1 min-w-0 overflow-y-auto">
-                {/* Mode selector */}
+                {/* Mode selector - sticky */}
                 {currentLesson && learningMode !== 'quiz' && (
-                    <div className="flex items-center gap-4 mb-6 pb-4 border-b border-white/10">
-                        {(['explanation', 'podcast', 'practice'] as const).map((mode) => (
-                            <button
-                                key={mode}
-                                onClick={() => setLearningMode(mode)}
-                                className={`text-sm transition-colors ${learningMode === mode
-                                    ? 'text-white font-medium'
-                                    : 'text-white/90 hover:text-white'
-                                    }`}
-                            >
-                                {mode === 'explanation' ? 'Explanation' : mode === 'podcast' ? 'Podcast' : 'Practice'}
-                            </button>
-                        ))}
+                    <div className="sticky top-0 z-10 bg-[#0a0f14] pb-4 mb-6">
+                        <div className="flex items-center gap-4 pb-4 border-b border-white/10">
+                            {(['explanation', 'podcast', 'practice'] as const).map((mode) => (
+                                <button
+                                    key={mode}
+                                    onClick={() => setLearningMode(mode)}
+                                    className={`text-sm transition-colors ${learningMode === mode
+                                        ? 'text-white font-medium'
+                                        : 'text-white/90 hover:text-white'
+                                        }`}
+                                >
+                                    {mode === 'explanation' ? 'Explanation' : mode === 'podcast' ? 'Podcast' : 'Practice'}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 )}
 
                 {/* Content */}
-                <div className="overflow-y-auto">
+                <div>
                     {renderContent()}
                 </div>
             </div>
