@@ -31,6 +31,7 @@ import {
     LESSON_QUIZ_PROMPT,
     FINAL_EXAM_PROMPT,
 } from '@/lib/prompts/coursePrompts';
+import { generateCourseThumbnail } from '@/lib/api/geminiImageGeneration';
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -358,13 +359,38 @@ export async function generateCourse(
         }
 
         // ========================================
-        // PHASE 4: FINALIZE
+        // PHASE 4: GENERATE THUMBNAIL
+        // ========================================
+        onEvent({
+            type: 'progress',
+            step: 'finalizing',
+            message: 'Generating course thumbnail...',
+            percentage: 92,
+        });
+
+        // Generate thumbnail (non-blocking - course still works if this fails)
+        let thumbnailUrl: string | undefined;
+        try {
+            const result = await generateCourseThumbnail({
+                courseId,
+                title: outline.title,
+                topic: request.topic,
+                tags: outline.tags,
+            });
+            thumbnailUrl = result || undefined;
+        } catch (thumbnailError) {
+            console.error('Thumbnail generation failed:', thumbnailError);
+            // Continue without thumbnail
+        }
+
+        // ========================================
+        // PHASE 5: FINALIZE
         // ========================================
         onEvent({
             type: 'progress',
             step: 'finalizing',
             message: 'Finalizing course...',
-            percentage: 95,
+            percentage: 98,
         });
 
         const course: Course = {
@@ -372,6 +398,7 @@ export async function generateCourse(
             title: outline.title,
             description: outline.description,
             topic: request.topic,
+            thumbnailUrl,
             creatorId: request.userId,
             isPublic: true, // Default to public
             tags: outline.tags,

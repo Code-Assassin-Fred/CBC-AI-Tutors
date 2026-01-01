@@ -261,3 +261,48 @@ export const TOPIC_SUGGESTIONS = [
     { id: 'ai-ethics', topic: 'AI ethics', displayName: 'Ethics in Artificial Intelligence', category: 'Technology', trending: true },
     { id: 'investing', topic: 'stock market investing', displayName: 'Stock Market Investing', category: 'Finance' },
 ];
+
+// ============================================
+// COURSE THUMBNAIL PROMPTS
+// ============================================
+
+/**
+ * Build a prompt for generating a visually striking course thumbnail
+ */
+export function buildCourseThumbnailPrompt(params: {
+    title: string;
+    topic: string;
+    tags: string[];
+}): string {
+    const { title, topic, tags } = params;
+    const tagString = tags.length > 0 ? tags.join(', ') : 'education, learning';
+
+    return `
+Create a stunning, modern course thumbnail image for an online learning platform.
+
+COURSE TOPIC: ${topic}
+COURSE TITLE: ${title}
+RELATED THEMES: ${tagString}
+
+STYLE REQUIREMENTS:
+- Modern, premium, and visually striking design
+- Rich, vibrant gradient backgrounds (deep blues, purples, teals, or warm oranges/pinks)
+- Abstract geometric shapes and visual elements representing the subject
+- Subtle glassmorphism effects for depth
+- Clean, professional aesthetic suitable for an education platform
+- NO TEXT OR WORDS in the image at all
+- Landscape orientation (16:9 aspect ratio feel)
+- High contrast and eye-catching colors
+- Elements that symbolize the topic (e.g., neurons for AI, musical notes for music, code brackets for programming)
+- Smooth gradients and soft lighting effects
+- Suitable as a course card thumbnail
+
+DO NOT include:
+- Any text, letters, numbers, or words
+- Realistic photographs of people
+- Cluttered or busy compositions
+- Low-quality or amateur-looking elements
+
+The image should instantly communicate the essence of the topic while looking premium and engaging.
+    `.trim();
+}

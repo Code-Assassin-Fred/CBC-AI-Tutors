@@ -422,3 +422,118 @@ export async function getGenerationStats(): Promise<{
         pending: total - generated
     };
 }
+
+// ============================================
+// COURSE THUMBNAIL GENERATION
+// ============================================
+
+/**
+ * Generate a course thumbnail using Gemini 2.0 Flash
+ * Returns the Firebase Storage URL or null if generation fails
+ */
+export async function generateCourseThumbnail(params: {
+    courseId: string;
+    title: string;
+    topic: string;
+    tags: string[];
+}): Promise<string | null> {
+    try {
+        console.log(`[Gemini Thumbnail] Generating thumbnail for course: ${params.courseId}`);
+
+        // Import the prompt builder dynamically to avoid circular dependencies
+        const { buildCourseThumbnailPrompt } = await import('@/lib/prompts/coursePrompts');
+        const prompt = buildCourseThumbnailPrompt({
+            title: params.title,
+            topic: params.topic,
+            tags: params.tags
+        });
+
+        console.log(`[Gemini Thumbnail] Prompt preview: ${prompt.substring(0, 100)}...`);
+
+        // Use Gemini with image generation capability
+        const model = genAI.getGenerativeModel({
+            model: IMAGE_CONFIG.model,
+            generationConfig: {
+                // @ts-ignore - Gemini SDK types may not include all options
+                responseModalities: ["image", "text"],
+            }
+        });
+
+        const result = await model.generateContent(prompt);
+        const response = result.response;
+
+        // Extract image from response
+        let imageData: string | null = null;
+
+        for (const part of response.candidates?.[0]?.content?.parts || []) {
+            if (part.inlineData?.mimeType?.startsWith("image/")) {
+                imageData = part.inlineData.data;
+                break;
+            }
+        }
+
+        if (!imageData) {
+            console.error("[Gemini Thumbnail] No image data returned from Gemini");
+            return null;
+        }
+
+        console.log(`[Gemini Thumbnail] Image generated, uploading to Firebase Storage...`);
+
+        // Upload to Firebase Storage
+        const storageUrl = await uploadCourseThumbnailToStorage(imageData, params.courseId);
+
+        console.log(`[Gemini Thumbnail] Successfully generated and uploaded: ${storageUrl}`);
+
+        return storageUrl;
+
+    } catch (error: any) {
+        console.error(`[Gemini Thumbnail] Error generating thumbnail for ${params.courseId}:`, error.message);
+        return null;
+    }
+}
+
+/**
+ * Upload course thumbnail to Firebase Storage
+ */
+async function uploadCourseThumbnailToStorage(
+    base64Data: string,
+    courseId: string
+): Promise<string> {
+    // Convert base64 to buffer
+    const buffer = Buffer.from(base64Data, "base64");
+
+    // Create storage path for course thumbnails
+    const storagePath = `course-thumbnails/${courseId}.png`;
+
+    console.log(`[Storage] Uploading course thumbnail to: ${storagePath}`);
+
+    // Get bucket
+    const bucketName = process.env.FIREBASE_STORAGE_BUCKET ||
+        process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+        `${process.env.FIREBASE_PROJECT_ID}.appspot.com`;
+    const bucket = adminStorage.bucket(bucketName);
+    const file = bucket.file(storagePath);
+
+    // Upload
+    await file.save(buffer, {
+        metadata: {
+            contentType: "image/png",
+            metadata: {
+                courseId,
+                generatedAt: new Date().toISOString(),
+                generator: "gemini-2.0-flash-exp"
+            }
+        }
+    });
+
+    // Make public
+    await file.makePublic();
+
+    // Get public URL
+    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${storagePath}`;
+
+    console.log(`[Storage] Course thumbnail upload complete: ${publicUrl}`);
+
+    return publicUrl;
+}
+

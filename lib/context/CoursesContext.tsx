@@ -366,17 +366,22 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
             const audio = new Audio(audioUrl);
             audioRef.current = audio;
 
-            audio.onended = () => {
-                setIsPlaying(false);
-                URL.revokeObjectURL(audioUrl);
-            };
+            // Wait for audio to complete before resolving
+            await new Promise<void>((resolve, reject) => {
+                audio.onended = () => {
+                    setIsPlaying(false);
+                    URL.revokeObjectURL(audioUrl);
+                    resolve();
+                };
 
-            audio.onerror = () => {
-                setIsPlaying(false);
-                URL.revokeObjectURL(audioUrl);
-            };
+                audio.onerror = () => {
+                    setIsPlaying(false);
+                    URL.revokeObjectURL(audioUrl);
+                    reject(new Error('Audio playback failed'));
+                };
 
-            await audio.play();
+                audio.play().catch(reject);
+            });
 
         } catch (error) {
             console.error('Error speaking:', error);

@@ -88,7 +88,7 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
                             {/* Speaker indicator */}
                             <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold ${segment.speaker === 'Teacher'
                                 ? 'bg-sky-500/20 text-sky-400'
-                                : 'bg-amber-500/20 text-amber-400'
+                                : 'bg-teal-500/20 text-teal-400'
                                 }`}>
                                 {segment.speaker === 'Teacher' ? 'Jo' : 'Be'}
                             </div>
@@ -98,15 +98,10 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
                                 <div className="flex items-center gap-2 mb-1">
                                     <span className={`text-xs font-medium uppercase tracking-wider ${segment.speaker === 'Teacher'
                                         ? 'text-sky-400'
-                                        : 'text-amber-400'
+                                        : 'text-teal-400'
                                         }`}>
                                         {segment.speaker === 'Teacher' ? 'Jo' : 'Beau'}
                                     </span>
-                                    {segment.emotion && (
-                                        <span className="text-[10px] text-white/30 italic">
-                                            ({segment.emotion})
-                                        </span>
-                                    )}
                                     {currentSegmentIndex === index && isPlaying && (
                                         <div className="flex items-center gap-0.5 ml-2">
                                             <div className="w-1 h-3 bg-sky-400 rounded-full animate-pulse" />
