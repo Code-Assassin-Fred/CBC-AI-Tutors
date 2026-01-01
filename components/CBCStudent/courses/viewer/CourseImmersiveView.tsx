@@ -1,104 +1,277 @@
 "use client";
 
-import { useState } from 'react';
-import { ImmersiveContent, ImmersiveChunk } from '@/lib/types/agents';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { ImmersiveContent, ImmersiveChunk, AssessmentResult } from '@/lib/types/agents';
 import { useCourses } from '@/lib/context/CoursesContext';
+import { useAuth } from '@/lib/context/AuthContext';
+import VoiceVisualization from '@/components/shared/VoiceVisualization';
+import { HiOutlineMicrophone, HiOutlineStop, HiOutlineSpeakerWave } from 'react-icons/hi2';
 
 interface CourseImmersiveViewProps {
     content: ImmersiveContent;
 }
 
 export default function CourseImmersiveView({ content }: CourseImmersiveViewProps) {
-    const { speak, isPlaying } = useCourses();
+    const { speak, isPlaying, stopSpeaking, currentCourse } = useCourses();
+    const { user } = useAuth();
     const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
     const [userExplanation, setUserExplanation] = useState('');
     const [showFeedback, setShowFeedback] = useState(false);
-    const [feedback, setFeedback] = useState<{ level: string; message: string } | null>(null);
+    const [assessment, setAssessment] = useState<AssessmentResult | null>(null);
+    const [assessments, setAssessments] = useState<Map<string, { result: AssessmentResult; response: string }>>(new Map());
+    const [isListening, setIsListening] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const recognitionRef = useRef<SpeechRecognition | null>(null);
 
     const currentChunk = content.chunks[currentChunkIndex];
     const isLastChunk = currentChunkIndex === content.chunks.length - 1;
 
+    // Initialize Web Speech API
+    useEffect(() => {
+        if (typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognitionRef.current = new SpeechRecognition();
+            recognitionRef.current.continuous = true;
+            recognitionRef.current.interimResults = true;
+            recognitionRef.current.lang = 'en-US';
+
+            recognitionRef.current.onresult = (event) => {
+                let transcript = '';
+                for (let i = 0; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                setUserExplanation(transcript);
+            };
+
+            recognitionRef.current.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                setIsListening(false);
+            };
+
+            recognitionRef.current.onend = () => {
+                setIsListening(false);
+            };
+        }
+
+        return () => {
+            if (recognitionRef.current) {
+                recognitionRef.current.stop();
+            }
+        };
+    }, []);
+
+    const startListening = useCallback(() => {
+        if (recognitionRef.current && !isListening) {
+            try {
+                recognitionRef.current.start();
+                setIsListening(true);
+            } catch (error) {
+                console.error('Failed to start speech recognition:', error);
+            }
+        }
+    }, [isListening]);
+
+    const stopListening = useCallback(() => {
+        if (recognitionRef.current && isListening) {
+            recognitionRef.current.stop();
+            setIsListening(false);
+        }
+    }, [isListening]);
+
     const handleListenExplanation = () => {
-        if (currentChunk) {
+        if (isPlaying) {
+            stopSpeaking();
+        } else if (currentChunk) {
             speak(currentChunk.aiExplanation);
         }
+    };
+
+    const assessExplanation = (chunk: ImmersiveChunk, explanation: string): AssessmentResult => {
+        const lowerExplanation = explanation.toLowerCase();
+        const matchedPoints: string[] = [];
+        const missedPoints: string[] = [];
+
+        chunk.keyPointsToCheck.forEach(point => {
+            // Simple keyword matching
+            const keywords = point.toLowerCase().split(' ').filter(w => w.length > 3);
+            const hasMatch = keywords.some(kw => lowerExplanation.includes(kw));
+
+            if (hasMatch) {
+                matchedPoints.push(point);
+            } else {
+                missedPoints.push(point);
+            }
+        });
+
+        const score = Math.round((matchedPoints.length / chunk.keyPointsToCheck.length) * 100);
+
+        let level: 'excellent' | 'good' | 'needs-work';
+        let feedback: string;
+        let shouldRetry: boolean;
+
+        if (score >= 80) {
+            level = 'excellent';
+            feedback = `Excellent! You've demonstrated a strong understanding of ${chunk.concept}. ${chunk.scoringRubric.excellent[0] || ''}`;
+            shouldRetry = false;
+        } else if (score >= 50) {
+            level = 'good';
+            feedback = `Good effort! You covered the basics of ${chunk.concept}. ${chunk.scoringRubric.good[0] || ''}`;
+            shouldRetry = false;
+        } else {
+            level = 'needs-work';
+            feedback = chunk.followUpIfStruggling || `Let's review ${chunk.concept} together.`;
+            shouldRetry = true;
+        }
+
+        return {
+            chunkId: chunk.id,
+            score,
+            level,
+            matchedKeyPoints: matchedPoints,
+            missedKeyPoints: missedPoints,
+            feedback,
+            shouldRetry,
+        };
     };
 
     const handleSubmitExplanation = () => {
         if (!userExplanation.trim() || !currentChunk) return;
 
-        // Simple assessment based on key points
-        const explanation = userExplanation.toLowerCase();
-        const matchedPoints = currentChunk.keyPointsToCheck.filter(point =>
-            explanation.includes(point.toLowerCase().split(' ')[0])
-        );
-
-        const score = matchedPoints.length / currentChunk.keyPointsToCheck.length;
-
-        let level: string;
-        let message: string;
-
-        if (score >= 0.7) {
-            level = 'excellent';
-            message = "Excellent! You've demonstrated a strong understanding of this concept.";
-        } else if (score >= 0.4) {
-            level = 'good';
-            message = "Good effort! You've covered some key points. Consider reviewing the explanation again.";
-        } else {
-            level = 'needs-work';
-            message = currentChunk.followUpIfStruggling || "Let's try again. Focus on the key concepts mentioned in the explanation.";
+        // Stop listening if active
+        if (isListening) {
+            stopListening();
         }
 
-        setFeedback({ level, message });
+        const result = assessExplanation(currentChunk, userExplanation);
+        setAssessment(result);
+        setAssessments(prev => new Map(prev).set(currentChunk.id, { result, response: userExplanation }));
         setShowFeedback(true);
+    };
+
+    // Save session results to Firebase
+    const saveSessionResults = async () => {
+        if (!user || !currentCourse) return;
+
+        setIsSaving(true);
+        try {
+            const assessmentData = Array.from(assessments.values()).map(({ result, response }) => ({
+                chunkId: result.chunkId,
+                score: result.score,
+                level: result.level,
+                matchedKeyPoints: result.matchedKeyPoints,
+                missedKeyPoints: result.missedKeyPoints,
+                studentResponse: response,
+            }));
+
+            const averageScore = assessmentData.length > 0
+                ? Math.round(assessmentData.reduce((sum, a) => sum + a.score, 0) / assessmentData.length)
+                : 0;
+
+            await fetch('/api/courses/progress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: user.uid,
+                    courseId: currentCourse.id,
+                    type: 'practice',
+                    assessments: assessmentData,
+                    averageScore,
+                    totalChunks: content.chunks.length,
+                    completedAt: new Date().toISOString(),
+                }),
+            });
+        } catch (error) {
+            console.error('Failed to save practice session:', error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const handleContinue = () => {
         if (isLastChunk) {
+            // Save session results
+            saveSessionResults();
+
             // Show completion message
-            setFeedback({
-                level: 'complete',
-                message: content.completionMessage || 'Congratulations! You have completed this immersive lesson.',
+            setAssessment({
+                chunkId: 'complete',
+                score: 100,
+                level: 'excellent',
+                matchedKeyPoints: [],
+                missedKeyPoints: [],
+                feedback: content.completionMessage || 'Congratulations! You have completed this immersive lesson.',
+                shouldRetry: false,
             });
             setShowFeedback(true);
         } else {
             setCurrentChunkIndex(prev => prev + 1);
             setUserExplanation('');
             setShowFeedback(false);
-            setFeedback(null);
+            setAssessment(null);
         }
     };
 
     const handleRetry = () => {
         setUserExplanation('');
         setShowFeedback(false);
-        setFeedback(null);
+        setAssessment(null);
     };
+
+    const progress = ((currentChunkIndex + (showFeedback ? 1 : 0)) / content.chunks.length) * 100;
+    const allComplete = assessment?.chunkId === 'complete';
 
     return (
         <div className="space-y-6">
             {/* Progress indicator */}
-            <div className="flex items-center gap-2">
-                {content.chunks.map((_, index) => (
-                    <div
-                        key={index}
-                        className={`h-1.5 rounded-full flex-1 transition-all ${index < currentChunkIndex
-                            ? 'bg-emerald-500'
-                            : index === currentChunkIndex
-                                ? 'bg-emerald-500/50'
-                                : 'bg-white/10'
-                            }`}
-                    />
-                ))}
+            <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                    <span className="text-[10px] uppercase tracking-widest text-white/40">
+                        Section {currentChunkIndex + 1} / {content.chunks.length}
+                    </span>
+                    <span className="text-[10px] uppercase tracking-widest text-white/40">
+                        {Math.round(progress)}%
+                    </span>
+                </div>
+                <div className="flex items-center gap-2">
+                    {content.chunks.map((_, index) => (
+                        <div
+                            key={index}
+                            className={`h-1.5 rounded-full flex-1 transition-all ${index < currentChunkIndex
+                                ? 'bg-emerald-500'
+                                : index === currentChunkIndex
+                                    ? 'bg-emerald-500/50'
+                                    : 'bg-white/10'
+                                }`}
+                        />
+                    ))}
+                </div>
             </div>
 
+            {/* All Complete */}
+            {allComplete && (
+                <div className="flex-1 flex items-center justify-center py-8">
+                    <div className="text-center w-full">
+                        <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">Lesson Complete</h3>
+                        <p className="text-sm text-white/60 leading-relaxed max-w-xs mx-auto mb-6">{assessment?.feedback}</p>
+                        <div className="flex gap-2 justify-center">
+                            {content.chunks.map((_, i) => (
+                                <div
+                                    key={i}
+                                    className="w-2 h-2 rounded-full bg-emerald-500"
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Introduction (only on first chunk) */}
-            {currentChunkIndex === 0 && content.introduction && (
+            {currentChunkIndex === 0 && content.introduction && !allComplete && (
                 <p className="text-white/60 text-sm leading-relaxed">{content.introduction}</p>
             )}
 
-            {/* Current Chunk */}
-            {currentChunk && !showFeedback && (
+            {/* Current Chunk - Learning Phase */}
+            {currentChunk && !showFeedback && !allComplete && (
                 <div className="space-y-6">
                     {/* Concept Title */}
                     <div>
@@ -113,37 +286,73 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
                     {/* AI Explanation */}
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                            <span className="text-xs text-white/40">Explanation</span>
+                            <span className="text-xs text-white/40">
+                                {(userExplanation.trim() || isListening) ? 'Explanation (hidden to test your understanding)' : 'Explanation'}
+                            </span>
                             <button
                                 onClick={handleListenExplanation}
-                                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs transition-all ${isPlaying
-                                    ? 'bg-white/10 text-white/80'
-                                    : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/60'
+                                disabled={userExplanation.trim().length > 0 || isListening}
+                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all ${isPlaying
+                                    ? 'bg-sky-500/20 text-sky-400'
+                                    : (userExplanation.trim() || isListening)
+                                        ? 'bg-white/5 text-white/20 cursor-not-allowed'
+                                        : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/60'
                                     }`}
                             >
-                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                                </svg>
-                                Listen
+                                {isPlaying ? (
+                                    <>
+                                        <HiOutlineStop className="w-3.5 h-3.5" />
+                                        Stop
+                                    </>
+                                ) : (
+                                    <>
+                                        <HiOutlineSpeakerWave className="w-3.5 h-3.5" />
+                                        Listen
+                                    </>
+                                )}
                             </button>
                         </div>
-                        <p className="text-white/70 leading-relaxed whitespace-pre-wrap">
+                        <p className={`leading-relaxed whitespace-pre-wrap transition-all duration-300 select-none ${(userExplanation.trim() || isListening)
+                            ? 'blur-md text-white/30 pointer-events-none'
+                            : 'text-white/70'
+                            }`}>
                             {currentChunk.aiExplanation}
                         </p>
                     </div>
 
                     {/* Student Response */}
-                    <div>
-                        <label className="block text-sm font-medium text-white/70 mb-2">
+                    <div className="space-y-3">
+                        <label className="block text-sm font-medium text-white/70">
                             {currentChunk.promptForStudent}
                         </label>
-                        <textarea
-                            value={userExplanation}
-                            onChange={(e) => setUserExplanation(e.target.value)}
-                            placeholder="Type your explanation here..."
-                            className="w-full h-32 px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 resize-none"
-                        />
-                        <div className="flex justify-end mt-3">
+                        <div className="relative">
+                            <textarea
+                                value={userExplanation}
+                                onChange={(e) => setUserExplanation(e.target.value)}
+                                placeholder="Type or speak your explanation here..."
+                                className="w-full h-32 px-4 py-3 pr-12 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 resize-none"
+                            />
+                            <button
+                                onClick={isListening ? stopListening : startListening}
+                                className={`absolute right-3 bottom-3 p-2.5 rounded-full transition-all ${isListening
+                                    ? 'bg-red-500 text-white scale-110 animate-pulse'
+                                    : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white'
+                                    }`}
+                                title={isListening ? 'Stop recording' : 'Start voice input'}
+                            >
+                                <HiOutlineMicrophone className="w-5 h-5" />
+                            </button>
+                        </div>
+
+                        {/* Recording indicator */}
+                        {isListening && (
+                            <div className="flex items-center gap-3 py-2 px-3 bg-red-500/10 rounded-lg border border-red-500/20">
+                                <VoiceVisualization isActive={true} color="bg-red-500" />
+                                <span className="text-[10px] text-red-500 uppercase font-bold tracking-widest">Recording...</span>
+                            </div>
+                        )}
+
+                        <div className="flex justify-end">
                             <button
                                 onClick={handleSubmitExplanation}
                                 disabled={!userExplanation.trim()}
@@ -160,32 +369,55 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
             )}
 
             {/* Feedback */}
-            {showFeedback && feedback && (
-                <div className="space-y-4 pt-4 border-t border-white/10">
-                    <div className="flex items-start gap-3">
-                        <svg className="w-5 h-5 text-white/50 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            {feedback.level === 'excellent' || feedback.level === 'complete' ? (
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            ) : (
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            )}
-                        </svg>
-                        <div className="flex-1">
-                            <p className="text-sm font-medium text-white/80">
-                                {feedback.level === 'excellent' ? 'Excellent Work!' :
-                                    feedback.level === 'good' ? 'Good Effort!' :
-                                        feedback.level === 'complete' ? 'Lesson Complete!' :
-                                            'Keep Trying!'}
-                            </p>
-                            <p className="text-sm text-white/50 mt-1">
-                                {feedback.message}
-                            </p>
+            {showFeedback && assessment && !allComplete && (
+                <div className="space-y-6">
+                    {/* Score Summary */}
+                    <div className="pb-4 border-b border-white/10">
+                        <div className="flex items-center justify-between mb-4">
+                            <span className="text-[10px] uppercase tracking-widest text-white/40">Assessment Result</span>
+                            <span className={`text-xl font-bold font-mono ${assessment.level === 'excellent' ? 'text-emerald-400' :
+                                assessment.level === 'good' ? 'text-sky-400' : 'text-amber-400'
+                                }`}>
+                                {assessment.score}%
+                            </span>
                         </div>
+                        <p className="text-sm text-white/80 leading-relaxed italic">{assessment.feedback}</p>
+                    </div>
+
+                    {/* Checkpoints */}
+                    <div className="space-y-4">
+                        {assessment.matchedKeyPoints.length > 0 && (
+                            <div className="space-y-2">
+                                <h5 className="text-[10px] uppercase tracking-widest text-emerald-500 font-bold">Concept Clarity</h5>
+                                <ul className="space-y-1">
+                                    {assessment.matchedKeyPoints.map((point, i) => (
+                                        <li key={i} className="text-xs text-white/60 flex items-start gap-2">
+                                            <span className="text-emerald-500">•</span>
+                                            {point}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {assessment.missedKeyPoints.length > 0 && (
+                            <div className="space-y-2">
+                                <h5 className="text-[10px] uppercase tracking-widest text-amber-500 font-bold">Points to Refine</h5>
+                                <ul className="space-y-1">
+                                    {assessment.missedKeyPoints.map((point, i) => (
+                                        <li key={i} className="text-xs text-white/60 flex items-start gap-2">
+                                            <span className="text-amber-500">•</span>
+                                            {point}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
 
                     {/* Action buttons */}
-                    <div className="flex justify-end gap-3">
-                        {feedback.level === 'needs-work' && (
+                    <div className="flex justify-end gap-3 pt-4">
+                        {assessment.shouldRetry && (
                             <button
                                 onClick={handleRetry}
                                 className="px-4 py-2 rounded-lg text-sm text-white/60 hover:text-white/80 hover:bg-white/5 transition-colors"
@@ -193,14 +425,12 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
                                 Try Again
                             </button>
                         )}
-                        {feedback.level !== 'complete' && (
-                            <button
-                                onClick={handleContinue}
-                                className="px-4 py-2 rounded-lg text-sm font-medium bg-white/10 text-white/80 hover:bg-white/15 transition-colors"
-                            >
-                                {isLastChunk ? 'Complete Lesson' : 'Continue'}
-                            </button>
-                        )}
+                        <button
+                            onClick={handleContinue}
+                            className="px-4 py-2.5 rounded-full text-sm font-medium bg-white/10 text-white/80 hover:bg-white/15 transition-colors"
+                        >
+                            {assessment.shouldRetry ? 'Refine Explanation' : isLastChunk ? 'Complete Lesson' : 'Continue'}
+                        </button>
                     </div>
                 </div>
             )}

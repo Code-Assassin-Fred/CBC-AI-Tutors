@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CourseQuiz } from '@/types/course';
 import { QuizQuestion } from '@/lib/types/agents';
 import { useCourses } from '@/lib/context/CoursesContext';
+import { useAuth } from '@/lib/context/AuthContext';
 
 interface CourseQuizViewProps {
     quiz: CourseQuiz;
@@ -14,15 +15,20 @@ interface QuizState {
     answers: Map<string, string>;
     showResult: boolean;
     showFinalResults: boolean;
+    isSaving: boolean;
+    hasSaved: boolean;
 }
 
 export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
-    const { selectLesson, currentCourse } = useCourses();
+    const { selectLesson, currentCourse, saveQuizScore } = useCourses();
+    const { user } = useAuth();
     const [state, setState] = useState<QuizState>({
         currentIndex: 0,
         answers: new Map(),
         showResult: false,
         showFinalResults: false,
+        isSaving: false,
+        hasSaved: false,
     });
 
     const currentQuestion = quiz.questions[state.currentIndex];
@@ -40,6 +46,36 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
         });
         return Math.round((correct / quiz.questions.length) * 100);
     };
+
+    const score = calculateScore();
+    const passed = score >= quiz.passingScore;
+
+    // Save quiz score when final results are shown
+    useEffect(() => {
+        if (state.showFinalResults && !state.hasSaved && user) {
+            const saveScore = async () => {
+                setState(prev => ({ ...prev, isSaving: true }));
+
+                const answers = Array.from(state.answers.entries()).map(([qId, answer]) => ({
+                    questionId: qId,
+                    userAnswer: answer,
+                    isCorrect: quiz.questions.find(q => q.id === qId)?.correctAnswer === answer,
+                }));
+
+                const success = await saveQuizScore(
+                    quiz.id,
+                    score,
+                    passed,
+                    quiz.questions.length,
+                    answers
+                );
+
+                setState(prev => ({ ...prev, isSaving: false, hasSaved: success }));
+            };
+
+            saveScore();
+        }
+    }, [state.showFinalResults, state.hasSaved, user, quiz, score, passed, saveQuizScore, state.answers]);
 
     const handleSelectAnswer = (answer: string) => {
         if (state.showResult) return;
@@ -71,6 +107,8 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
             answers: new Map(),
             showResult: false,
             showFinalResults: false,
+            isSaving: false,
+            hasSaved: false,
         });
     };
 
@@ -81,8 +119,6 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
     };
 
     const isCorrect = selectedAnswer === currentQuestion?.correctAnswer;
-    const score = calculateScore();
-    const passed = score >= quiz.passingScore;
 
     // Final Results View
     if (state.showFinalResults) {

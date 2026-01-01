@@ -90,7 +90,7 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
                                 ? 'bg-sky-500/20 text-sky-400'
                                 : 'bg-teal-500/20 text-teal-400'
                                 }`}>
-                                {segment.speaker === 'Teacher' ? 'Jo' : 'Be'}
+                                {segment.speaker === 'Teacher' ? 'Jr' : 'Be'}
                             </div>
 
                             {/* Content */}
@@ -100,7 +100,7 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
                                         ? 'text-sky-400'
                                         : 'text-teal-400'
                                         }`}>
-                                        {segment.speaker === 'Teacher' ? 'Jo' : 'Beau'}
+                                        {segment.speaker === 'Teacher' ? 'JORDAN' : 'BEAU'}
                                     </span>
                                     {currentSegmentIndex === index && isPlaying && (
                                         <div className="flex items-center gap-0.5 ml-2">

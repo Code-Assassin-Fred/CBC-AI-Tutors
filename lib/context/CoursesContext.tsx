@@ -54,6 +54,9 @@ interface CoursesContextType {
     speak: (text: string) => Promise<void>;
     stopSpeaking: () => void;
     isPlaying: boolean;
+
+    // Quiz Score Persistence
+    saveQuizScore: (quizId: string, score: number, passed: boolean, totalQuestions: number, answers: Array<{ questionId: string; userAnswer: string; isCorrect: boolean }>) => Promise<boolean>;
 }
 
 const CoursesContext = createContext<CoursesContextType | null>(null);
@@ -398,6 +401,75 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
     }, []);
 
     // ========================================
+    // QUIZ SCORE PERSISTENCE
+    // ========================================
+
+    const saveQuizScore = useCallback(async (
+        quizId: string,
+        score: number,
+        passed: boolean,
+        totalQuestions: number,
+        answers: Array<{ questionId: string; userAnswer: string; isCorrect: boolean }>
+    ): Promise<boolean> => {
+        if (!user || !currentCourse) {
+            console.error('Cannot save quiz score: no user or course');
+            return false;
+        }
+
+        try {
+            const response = await fetch('/api/courses/progress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: user.uid,
+                    courseId: currentCourse.id,
+                    quizId,
+                    score,
+                    passed,
+                    totalQuestions,
+                    answers,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save quiz score');
+            }
+
+            const data = await response.json();
+
+            // Update local progress state
+            if (data.success && currentCourse) {
+                setCurrentCourse(prev => {
+                    if (!prev) return prev;
+                    return {
+                        ...prev,
+                        progress: {
+                            ...prev.progress,
+                            userId: user.uid,
+                            courseId: prev.id,
+                            startedAt: prev.progress?.startedAt || new Date(),
+                            lastAccessedAt: new Date(),
+                            completedLessons: prev.progress?.completedLessons || [],
+                            lessonProgress: prev.progress?.lessonProgress || {},
+                            quizScores: {
+                                ...prev.progress?.quizScores,
+                                [quizId]: data.quizScore,
+                            },
+                            isCompleted: prev.progress?.isCompleted || false,
+                            overallProgress: prev.progress?.overallProgress || 0,
+                        },
+                    };
+                });
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Error saving quiz score:', error);
+            return false;
+        }
+    }, [user, currentCourse]);
+
+    // ========================================
     // CONTEXT VALUE
     // ========================================
 
@@ -437,6 +509,9 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
         speak,
         stopSpeaking,
         isPlaying,
+
+        // Quiz Score Persistence
+        saveQuizScore,
     };
 
     return (
