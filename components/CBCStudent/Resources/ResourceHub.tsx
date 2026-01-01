@@ -1,214 +1,128 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useResources } from '@/lib/context/ResourcesContext';
 import ResourceCard from './ResourceCard';
 import AIArticleViewer from './AIArticleViewer';
+import { Search, Filter, RefreshCw, Wand2 } from 'lucide-react';
+import { Resource } from '@/types/resource';
 
 export default function ResourceHub() {
     const {
+        resources,
         categories,
         activeCategory,
         setActiveCategory,
         activeSubcategory,
         setActiveSubcategory,
-        resources,
         isLoading,
         loadResources,
-        activeResource,
-        setActiveResource,
         searchQuery,
         setSearchQuery,
+        activeResource,
+        setActiveResource,
+        isSaved,
+        saveResource,
+        unsaveResource,
+        isGeneratingArticle
     } = useResources();
 
-    // Load resources when category changes
+    // Initial load
     useEffect(() => {
         loadResources({
             category: activeCategory || undefined,
             subcategory: activeSubcategory || undefined,
-            searchQuery: searchQuery || undefined,
+            searchQuery: searchQuery || undefined
         });
     }, [activeCategory, activeSubcategory, searchQuery, loadResources]);
 
-    // If viewing a specific resource
+    const handleResourceClick = (resource: Resource) => {
+        setActiveResource(resource);
+    };
+
+    const handleBack = () => {
+        setActiveResource(null);
+    };
+
+    const toggleSave = (e: React.MouseEvent, id: string) => {
+        e.stopPropagation();
+        if (isSaved(id)) {
+            unsaveResource(id);
+        } else {
+            saveResource(id);
+        }
+    };
+
+    // View: Article Viewer
     if (activeResource) {
-        return <AIArticleViewer />;
+        return <AIArticleViewer resource={activeResource} onBack={handleBack} />;
     }
 
-    const activeTab = categories.find(c => c.id === activeCategory);
-
-    // Sample resources for display
-    const sampleResources = [
-        {
-            id: '1',
-            type: 'ai-article' as const,
-            title: 'The Science of Active Recall',
-            description: 'Learn how retrieval practice can dramatically improve your learning outcomes and long-term retention.',
-            category: 'meta-learning' as const,
-            subcategory: 'active-recall',
-            tags: ['learning', 'memory', 'study-techniques'],
-            difficulty: 'beginner' as const,
-            duration: '8 min read',
-            free: true,
-            saves: 234,
-            helpfulVotes: 89,
-            relatedCareers: [],
-            relatedSkills: [],
-            createdAt: new Date(),
-        },
-        {
-            id: '2',
-            type: 'ai-article' as const,
-            title: 'Spaced Repetition: Never Forget What You Learn',
-            description: 'Master the technique that helps you remember anything for years, not just days.',
-            category: 'meta-learning' as const,
-            subcategory: 'spaced-repetition',
-            tags: ['learning', 'memory', 'anki'],
-            difficulty: 'beginner' as const,
-            duration: '10 min read',
-            free: true,
-            saves: 456,
-            helpfulVotes: 167,
-            relatedCareers: [],
-            relatedSkills: [],
-            createdAt: new Date(),
-        },
-        {
-            id: '3',
-            type: 'tool' as const,
-            title: 'Anki - Spaced Repetition Software',
-            description: 'Free flashcard app that uses spaced repetition to help you remember anything.',
-            externalUrl: 'https://apps.ankiweb.net/',
-            category: 'tools' as const,
-            subcategory: 'study-tools',
-            tags: ['flashcards', 'memory', 'free'],
-            free: true,
-            saves: 892,
-            helpfulVotes: 445,
-            relatedCareers: [],
-            relatedSkills: [],
-            createdAt: new Date(),
-        },
-        {
-            id: '4',
-            type: 'ai-article' as const,
-            title: 'Deep Work: Rules for Focused Success',
-            description: 'Learn how to achieve uninterrupted focus in a world full of distractions.',
-            category: 'meta-learning' as const,
-            subcategory: 'focus',
-            tags: ['productivity', 'focus', 'deep-work'],
-            difficulty: 'intermediate' as const,
-            duration: '12 min read',
-            free: true,
-            saves: 567,
-            helpfulVotes: 234,
-            relatedCareers: [],
-            relatedSkills: [],
-            createdAt: new Date(),
-        },
-        {
-            id: '5',
-            type: 'ai-article' as const,
-            title: 'Which Jobs Are Safe from AI?',
-            description: 'A data-driven analysis of careers that will thrive alongside artificial intelligence.',
-            category: 'ai-future' as const,
-            subcategory: 'ai-safe-careers',
-            tags: ['ai', 'careers', 'future'],
-            difficulty: 'beginner' as const,
-            duration: '15 min read',
-            free: true,
-            saves: 1234,
-            helpfulVotes: 567,
-            relatedCareers: [],
-            relatedSkills: [],
-            createdAt: new Date(),
-        },
-        {
-            id: '6',
-            type: 'tool' as const,
-            title: 'Notion - All-in-one Workspace',
-            description: 'Notes, docs, project management, and wikis in one tool. Perfect for students.',
-            externalUrl: 'https://notion.so/',
-            category: 'tools' as const,
-            subcategory: 'productivity',
-            tags: ['productivity', 'notes', 'organization'],
-            free: true,
-            saves: 2341,
-            helpfulVotes: 890,
-            relatedCareers: [],
-            relatedSkills: [],
-            createdAt: new Date(),
-        },
-    ];
-
-    const displayResources = resources.length > 0 ? resources : sampleResources.filter(r =>
-        !activeCategory || r.category === activeCategory
-    );
-
+    // View: Resource Hub Grid
     return (
-        <div className="max-w-6xl mx-auto pt-8 px-4">
-            {/* Header */}
-            <div className="mb-8">
-                <h1 className="text-2xl font-bold text-white mb-2">Resources</h1>
-                <p className="text-white/50">
-                    Curated learning resources, tools, and AI-generated articles
-                </p>
-            </div>
+        <div className="h-full flex flex-col space-y-6">
+            {/* Header Area */}
+            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold text-white mb-2">Resource Hub</h1>
+                    <p className="text-slate-400">Curated AI-generated content for your learning journey</p>
+                </div>
 
-            {/* Search */}
-            <div className="mb-6">
-                <div className="relative">
-                    <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search resources..."
-                        className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9]/50"
-                    />
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                    <div className="relative group flex-grow md:flex-grow-0">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-teal-400 transition-colors" />
+                        <input
+                            type="text"
+                            placeholder="Search resources..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-10 pr-4 py-2 bg-slate-800/50 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-teal-500/50 focus:bg-slate-800 w-full md:w-64 transition-all"
+                        />
+                    </div>
+                    {/* <button className="p-2 rounded-lg bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-white transition-colors">
+                        <Filter className="w-4 h-4" />
+                    </button> */}
                 </div>
             </div>
 
-            {/* Category Tabs */}
-            <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-                {categories.map((category) => (
+            {/* Categories */}
+            <div className="flex flex-wrap gap-2 pb-2 border-b border-slate-800/50">
+                {categories.map((cat) => (
                     <button
-                        key={category.id}
+                        key={cat.id}
                         onClick={() => {
-                            setActiveCategory(category.id);
+                            setActiveCategory(cat.id);
                             setActiveSubcategory(null);
                         }}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${activeCategory === category.id
-                                ? 'bg-[#0ea5e9] text-white'
-                                : 'bg-white/5 text-white/60 hover:bg-white/10'
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeCategory === cat.id
+                                ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/20'
+                                : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700'
                             }`}
                     >
-                        {category.label}
+                        {cat.label}
                     </button>
                 ))}
             </div>
 
-            {/* Subcategory Pills */}
-            {activeTab && activeTab.subcategories.length > 0 && (
-                <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
+            {/* Subcategories */}
+            {activeCategory && (
+                <div className="flex flex-wrap gap-2">
                     <button
                         onClick={() => setActiveSubcategory(null)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${!activeSubcategory
-                                ? 'bg-white/15 text-white'
-                                : 'bg-white/5 text-white/50 hover:bg-white/10'
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${!activeSubcategory
+                                ? 'bg-slate-100 text-slate-900 border-slate-100'
+                                : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
                             }`}
                     >
                         All
                     </button>
-                    {activeTab.subcategories.map((sub) => (
+                    {categories.find(c => c.id === activeCategory)?.subcategories.map((sub) => (
                         <button
                             key={sub.id}
                             onClick={() => setActiveSubcategory(sub.id)}
-                            className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${activeSubcategory === sub.id
-                                    ? 'bg-white/15 text-white'
-                                    : 'bg-white/5 text-white/50 hover:bg-white/10'
+                            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${activeSubcategory === sub.id
+                                    ? 'bg-teal-500/10 text-teal-400 border-teal-500/30'
+                                    : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
                                 }`}
                         >
                             {sub.label}
@@ -217,31 +131,37 @@ export default function ResourceHub() {
                 </div>
             )}
 
-            {/* Resources Grid */}
+            {/* Content Grid */}
             {isLoading ? (
-                <div className="text-center py-12">
-                    <div className="w-8 h-8 mx-auto mb-4 border-2 border-[#0ea5e9] border-t-transparent rounded-full animate-spin" />
-                    <p className="text-white/50">Loading resources...</p>
+                <div className="flex-1 flex flex-col items-center justify-center min-h-[400px]">
+                    <RefreshCw className="w-8 h-8 text-teal-500 animate-spin mb-4" />
+                    <p className="text-slate-400 animate-pulse">Scanning knowledge base...</p>
                 </div>
-            ) : displayResources.length > 0 ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {displayResources.map((resource) => (
+            ) : resources.length === 0 ? (
+                <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] text-center max-w-md mx-auto">
+                    <div className="w-16 h-16 rounded-full bg-slate-800/50 flex items-center justify-center mb-6">
+                        <Wand2 className="w-8 h-8 text-slate-600" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-2">Generating Knowledge</h3>
+                    <p className="text-slate-400 mb-6">
+                        We don't have resources for this specific topic yet, but our AI agents are researching it right now. Check back in a few moments!
+                    </p>
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-teal-500/10 text-teal-400 text-sm">
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        Agents working...
+                    </div>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
+                    {resources.map((resource) => (
                         <ResourceCard
                             key={resource.id}
                             resource={resource}
-                            onClick={() => {
-                                if (resource.type === 'ai-article') {
-                                    setActiveResource(resource);
-                                } else if (resource.externalUrl) {
-                                    window.open(resource.externalUrl, '_blank');
-                                }
-                            }}
+                            onClick={() => handleResourceClick(resource)}
+                            isSaved={isSaved(resource.id)}
+                            onToggleSave={(e) => toggleSave(e, resource.id)}
                         />
                     ))}
-                </div>
-            ) : (
-                <div className="text-center py-12">
-                    <p className="text-white/50">No resources found</p>
                 </div>
             )}
         </div>

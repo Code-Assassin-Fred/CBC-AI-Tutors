@@ -1,183 +1,106 @@
-"use client";
+import React from 'react';
+import { Resource } from '@/types/resource';
+import { ArrowLeft, Share2, Bookmark, ThumbsUp, Calendar, User, ShieldCheck } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
-import { useResources } from '@/lib/context/ResourcesContext';
+interface AIArticleViewerProps {
+    resource: Resource;
+    onBack: () => void;
+}
 
-export default function AIArticleViewer() {
-    const { activeResource, setActiveResource, isSaved, saveResource, unsaveResource } = useResources();
-
-    if (!activeResource) return null;
-
-    const saved = isSaved(activeResource.id);
-
-    // Sample article content (would come from AI generation or database)
-    const articleContent = activeResource.content || `
-## Introduction
-
-Learning how to learn is perhaps the most valuable meta-skill you can develop. In a rapidly changing world where new technologies and fields emerge constantly, the ability to quickly acquire new skills is more valuable than any single skill itself.
-
-## What is Active Recall?
-
-Active recall is a study technique that involves actively stimulating your memory during the learning process. Instead of passively reading or reviewing material, you deliberately try to retrieve information from your memory.
-
-### Why Does It Work?
-
-When you attempt to recall information, you strengthen the neural pathways associated with that information. This makes future recall easier and more reliable. Research has shown that:
-
-- Testing yourself is more effective than re-reading
-- Effortful retrieval creates stronger memories
-- Mistakes during recall are actually helpful for learning
-
-## Practical Techniques
-
-### Flashcards
-
-Create flashcards with questions on one side and answers on the other. The key is to genuinely try to recall the answer before flipping the card.
-
-### The Feynman Technique
-
-1. Choose a concept you want to learn
-2. Explain it as if teaching a child
-3. Identify gaps in your explanation
-4. Review and simplify
-
-### Self-Testing
-
-After reading a section, close the book and write down everything you remember. Then check what you missed.
-
-## Combining with Spaced Repetition
-
-Active recall becomes even more powerful when combined with spaced repetition. By testing yourself at optimal intervals, you can maximize retention while minimizing study time.
-
-## Conclusion
-
-Start implementing active recall today. It may feel harder than passive review, but that difficulty is exactly what makes it effective. Your brain learns best when it has to work for the information.
-    `;
+export default function AIArticleViewer({ resource, onBack }: AIArticleViewerProps) {
+    if (resource.type !== 'ai-article') return null;
 
     return (
-        <div className="max-w-3xl mx-auto pt-8 px-4 pb-16">
-            {/* Back button */}
-            <button
-                onClick={() => setActiveResource(null)}
-                className="flex items-center gap-2 text-white/50 hover:text-white mb-6 transition-colors"
-            >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Back to Resources
-            </button>
-
-            {/* Article Header */}
+        <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Header */}
             <div className="mb-8">
-                <div className="flex items-center gap-2 mb-3">
-                    <span className="px-2 py-1 bg-[#0ea5e9]/10 text-[#0ea5e9] rounded text-xs">
-                        AI-Generated Article
+                <button
+                    onClick={onBack}
+                    className="flex items-center gap-2 text-slate-400 hover:text-white mb-6 transition-colors"
+                >
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to Resources
+                </button>
+
+                <div className="flex items-center gap-3 mb-4">
+                    <span className="px-3 py-1 rounded-full bg-teal-500/10 text-teal-400 text-sm font-medium border border-teal-500/20">
+                        {resource.category.replace('-', ' ')}
                     </span>
-                    {activeResource.difficulty && (
-                        <span className={`px-2 py-1 rounded text-xs ${activeResource.difficulty === 'beginner'
-                                ? 'bg-[#10b981]/10 text-[#10b981]'
-                                : activeResource.difficulty === 'intermediate'
-                                    ? 'bg-[#f59e0b]/10 text-[#f59e0b]'
-                                    : 'bg-[#ef4444]/10 text-[#ef4444]'
-                            }`}>
-                            {activeResource.difficulty}
+                    {resource.verifiedAt && (
+                        <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-sm font-medium border border-blue-500/20" title={`Verified on ${new Date(resource.verifiedAt).toLocaleDateString()}`}>
+                            <ShieldCheck className="w-3 h-3" />
+                            Verified Content
                         </span>
                     )}
                 </div>
 
-                <h1 className="text-2xl font-bold text-white mb-3">
-                    {activeResource.title}
+                <h1 className="text-4xl font-bold text-white mb-4 leading-tight">
+                    {resource.title}
                 </h1>
 
-                <p className="text-white/60 mb-4">
-                    {activeResource.description}
+                <p className="text-xl text-slate-300 mb-6 leading-relaxed">
+                    {resource.description}
                 </p>
 
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-sm text-white/40">
-                        {activeResource.duration && (
-                            <span>{activeResource.duration}</span>
+                <div className="flex items-center justify-between py-6 border-y border-slate-800">
+                    <div className="flex items-center gap-6 text-sm text-slate-400">
+                        <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4" />
+                            {new Date(resource.createdAt).toLocaleDateString()}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <User className="w-4 h-4" />
+                            {resource.generatedBy === 'ai-agent' ? 'AI Researcher' : 'Staff Curator'}
+                        </div>
+                        {resource.duration && (
+                            <div className="flex items-center gap-2">
+                                <span className="w-1 h-1 rounded-full bg-slate-600" />
+                                {resource.duration}
+                            </div>
                         )}
-                        <span>{activeResource.helpfulVotes} found helpful</span>
                     </div>
 
-                    <button
-                        onClick={() => saved ? unsaveResource(activeResource.id) : saveResource(activeResource.id)}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors ${saved
-                                ? 'bg-[#0ea5e9]/10 text-[#0ea5e9]'
-                                : 'bg-white/5 text-white/60 hover:bg-white/10'
-                            }`}
-                    >
-                        <svg className="w-4 h-4" fill={saved ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                        </svg>
-                        {saved ? 'Saved' : 'Save'}
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <button className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
+                            <ThumbsUp className="w-5 h-5" />
+                        </button>
+                        <button className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
+                            <Bookmark className="w-5 h-5" />
+                        </button>
+                        <button className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
+                            <Share2 className="w-5 h-5" />
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            {/* Divider */}
-            <div className="border-t border-white/10 mb-8" />
-
-            {/* Article Content */}
-            <article className="prose prose-invert prose-sm max-w-none">
-                <div
-                    className="text-white/80 leading-relaxed space-y-4"
-                    style={{ whiteSpace: 'pre-line' }}
-                >
-                    {articleContent.split('\n\n').map((paragraph, idx) => {
-                        if (paragraph.startsWith('## ')) {
-                            return (
-                                <h2 key={idx} className="text-xl font-semibold text-white mt-8 mb-4">
-                                    {paragraph.replace('## ', '')}
-                                </h2>
-                            );
-                        }
-                        if (paragraph.startsWith('### ')) {
-                            return (
-                                <h3 key={idx} className="text-lg font-medium text-white mt-6 mb-3">
-                                    {paragraph.replace('### ', '')}
-                                </h3>
-                            );
-                        }
-                        if (paragraph.startsWith('- ')) {
-                            return (
-                                <ul key={idx} className="list-disc list-inside space-y-1 text-white/70">
-                                    {paragraph.split('\n').map((item, i) => (
-                                        <li key={i}>{item.replace('- ', '')}</li>
-                                    ))}
-                                </ul>
-                            );
-                        }
-                        if (paragraph.match(/^\d\./)) {
-                            return (
-                                <ol key={idx} className="list-decimal list-inside space-y-1 text-white/70">
-                                    {paragraph.split('\n').map((item, i) => (
-                                        <li key={i}>{item.replace(/^\d\.\s/, '')}</li>
-                                    ))}
-                                </ol>
-                            );
-                        }
-                        return (
-                            <p key={idx} className="text-white/70">
-                                {paragraph}
-                            </p>
-                        );
-                    })}
-                </div>
+            {/* Content */}
+            <article className="prose prose-invert prose-lg max-w-none prose-headings:text-teal-50 prose-a:text-teal-400 prose-strong:text-teal-200">
+                {resource.content ? (
+                    <ReactMarkdown>{resource.content}</ReactMarkdown>
+                ) : (
+                    <div className="p-8 text-center bg-slate-800/50 rounded-xl text-slate-400 italic">
+                        No content available for this resource yet.
+                    </div>
+                )}
             </article>
 
-            {/* Footer Actions */}
-            <div className="mt-12 pt-6 border-t border-white/10">
-                <p className="text-sm text-white/40 mb-4">Was this article helpful?</p>
-                <div className="flex gap-2">
-                    <button className="px-4 py-2 bg-white/5 text-white/60 rounded-lg text-sm hover:bg-white/10 transition-colors">
-                        Yes, helpful
-                    </button>
-                    <button className="px-4 py-2 bg-white/5 text-white/60 rounded-lg text-sm hover:bg-white/10 transition-colors">
-                        Not really
-                    </button>
+            {/* References / Sources */}
+            {resource.sources && resource.sources.length > 0 && (
+                <div className="mt-12 pt-8 border-t border-slate-800">
+                    <h3 className="text-xl font-bold text-white mb-4">Sources & Citations</h3>
+                    <ul className="space-y-3">
+                        {resource.sources.map((source: any, idx: number) => (
+                            <li key={idx} className="text-slate-400 text-sm bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+                                <span className="text-slate-200 font-medium">{source.title}</span>
+                                {source.author && <span className="text-slate-500"> — {source.author}</span>}
+                                {source.year && <span className="text-slate-600"> ({source.year})</span>}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

@@ -57,6 +57,13 @@ export interface Resource {
     // Timestamps
     createdAt: Date;
     updatedAt?: Date;
+
+    // Agent Verification & Metadata
+    generatedBy?: 'ai-agent' | 'manual';
+    qualityScore?: number; // 0-100
+    sources?: any[]; // SourceCitation[]
+    verifiedAt?: Date;
+    researchBrief?: string;
 }
 
 // ============================================
