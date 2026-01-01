@@ -150,13 +150,15 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
         {/* Scrollable Nav */}
         <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto no-scrollbar">
           {navItems.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = item.href === '/dashboard/student'
+              ? pathname === item.href
+              : pathname.startsWith(item.href);
             return (
               <Link
                 key={item.id}
                 href={item.href}
                 onClick={() => setActiveItem(item.id)}
-                className={`group relative flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 ease-in-out ${isActive ? 'text-[#0ea5e9]' : 'text-[#9aa6b2] hover:text-white/90'
+                className={`group relative flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 ease-in-out ${isActive ? 'text-[#0ea5e9]' : 'text-white/75 hover:text-white'
                   }`}
                 aria-label={item.label}
               >
@@ -164,7 +166,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
                   <span className="absolute inset-0 -z-10 rounded-2xl bg-[#0ea5e9]/10 shadow-[0_8px_24px_rgba(14,165,233,0.35)] transition-all duration-300" />
                 )}
                 <span
-                  className={`${isActive ? 'text-[#0ea5e9]' : 'text-[#9aa6b2] group-hover:text-white/90'
+                  className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/75 group-hover:text-white'
                     }`}
                 >
                   {item.icon}

@@ -80,11 +80,11 @@ export default function CourseViewer() {
                                     <button
                                         onClick={() => isPlaying
                                             ? stopSpeaking()
-                                            : speak(`${section.title}. ${section.content}. ${section.keyPoints.length > 0 ? 'Key points: ' + section.keyPoints.join('. ') : ''}`)
+                                            : speak(`${section.title}. ${section.content}. ${section.keyPoints.length > 0 ? 'Key points: ' + section.keyPoints.join('. ') + '. ' : ''}${section.examples.length > 0 ? 'Examples. ' + section.examples.map(e => `${e.title}: ${e.description}`).join('. ') : ''}`)
                                         }
                                         className={`p-2 rounded-lg transition-all ${isPlaying
-                                                ? 'bg-sky-500/20 text-sky-400'
-                                                : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/70 opacity-0 group-hover:opacity-100'
+                                            ? 'bg-sky-500/20 text-sky-400'
+                                            : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white/70 opacity-0 group-hover:opacity-100'
                                             }`}
                                         title={isPlaying ? 'Stop reading' : 'Read aloud'}
                                     >
@@ -101,16 +101,16 @@ export default function CourseViewer() {
                                     </button>
                                 </div>
 
-                                <p className="text-white/70 leading-relaxed mb-4">
+                                <p className="text-white leading-relaxed mb-4">
                                     {section.content}
                                 </p>
 
                                 {section.keyPoints.length > 0 && (
                                     <div className="mt-3">
-                                        <p className="text-xs text-white/40 mb-2">Key points:</p>
+                                        <p className="text-sm font-semibold text-white tracking-wide mb-2">Key points:</p>
                                         <ul className="space-y-1 pl-4">
                                             {section.keyPoints.map((point, i) => (
-                                                <li key={i} className="text-sm text-white/60 list-disc">
+                                                <li key={i} className="text-sm text-white list-disc">
                                                     {point}
                                                 </li>
                                             ))}
@@ -120,12 +120,12 @@ export default function CourseViewer() {
 
                                 {section.examples.length > 0 && (
                                     <div className="mt-3">
-                                        <p className="text-xs text-white/40 mb-2">Examples:</p>
+                                        <p className="text-sm font-semibold text-white tracking-wide mb-2">Examples:</p>
                                         <div className="space-y-2 pl-4">
                                             {section.examples.map((example, i) => (
                                                 <div key={i}>
-                                                    <p className="text-sm font-medium text-white/70">{example.title}</p>
-                                                    <p className="text-sm text-white/50">{example.description}</p>
+                                                    <p className="text-sm font-medium text-white">{example.title}</p>
+                                                    <p className="text-sm text-white/90">{example.description}</p>
                                                 </div>
                                             ))}
                                         </div>
@@ -154,7 +154,7 @@ export default function CourseViewer() {
                 {/* Back link */}
                 <Link
                     href="/dashboard/student/courses"
-                    className="flex items-center gap-2 text-sm text-white/50 hover:text-white/80 transition-colors mb-6"
+                    className="flex items-center gap-2 text-sm text-white hover:text-white/80 transition-colors mb-6"
                 >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -171,7 +171,7 @@ export default function CourseViewer() {
 
                 {/* Course title */}
                 <h1 className="text-lg font-semibold text-white mb-1">{currentCourse.title}</h1>
-                <p className="text-sm text-white/50 mb-4">{currentCourse.description}</p>
+                <p className="text-sm text-white/90 mb-4">{currentCourse.description}</p>
 
                 {/* Save button */}
                 {user && currentCourse.creatorId !== user.uid && (
@@ -198,12 +198,12 @@ export default function CourseViewer() {
                                 <button
                                     onClick={() => selectLesson(lesson.id)}
                                     className={`w-full text-left py-2.5 px-3 rounded-lg text-sm transition-colors ${isActive
-                                        ? 'bg-white/5 text-white'
-                                        : 'text-white/60 hover:text-white/80 hover:bg-white/[0.02]'
+                                        ? 'bg-white/10 text-white'
+                                        : 'text-white hover:bg-white/5'
                                         }`}
                                 >
                                     <div className="flex items-start gap-3">
-                                        <span className="text-white/30 text-xs mt-0.5">{index + 1}</span>
+                                        <span className="text-white/80 text-xs mt-0.5">{index + 1}</span>
                                         <span className="flex-1 line-clamp-2">{lesson.title}</span>
                                     </div>
                                 </button>
@@ -213,8 +213,8 @@ export default function CourseViewer() {
                                     <button
                                         onClick={() => selectQuiz(lessonQuiz.id)}
                                         className={`w-full text-left py-2 px-3 pl-9 text-xs transition-colors ${currentQuiz?.id === lessonQuiz.id
-                                            ? 'text-white/70'
-                                            : 'text-white/40 hover:text-white/60'
+                                            ? 'text-white'
+                                            : 'text-white/90 hover:text-white'
                                             }`}
                                     >
                                         Quiz
@@ -231,7 +231,7 @@ export default function CourseViewer() {
                                 const finalExam = currentCourse.quizzes.find(q => q.lessonId === 'final');
                                 if (finalExam) selectQuiz(finalExam.id);
                             }}
-                            className="w-full text-left py-2.5 px-3 rounded-lg text-sm text-white/60 hover:text-white/80 hover:bg-white/[0.02] transition-colors mt-4"
+                            className="w-full text-left py-2.5 px-3 rounded-lg text-sm text-white hover:bg-white/5 transition-colors mt-4"
                         >
                             Final Exam
                         </button>
@@ -250,7 +250,7 @@ export default function CourseViewer() {
                                 onClick={() => setLearningMode(mode)}
                                 className={`text-sm transition-colors ${learningMode === mode
                                     ? 'text-white font-medium'
-                                    : 'text-white/40 hover:text-white/60'
+                                    : 'text-white/90 hover:text-white'
                                     }`}
                             >
                                 {mode === 'explanation' ? 'Explanation' : mode === 'podcast' ? 'Podcast' : 'Practice'}
