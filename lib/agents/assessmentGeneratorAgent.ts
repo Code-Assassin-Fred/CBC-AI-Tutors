@@ -98,7 +98,8 @@ IMPORTANT GUIDELINES:
             }));
 
             const bank: SkillAssessmentBank = {
-                skillId: `skill-${skillDomain.name.toLowerCase().replace(/\s+/g, '-')}`,
+                // Sanitize skillId: remove special chars (parentheses, slashes, etc.) that break Firestore paths
+                skillId: `skill-${skillDomain.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`,
                 skillName: skillDomain.name,
                 careerPathId,
                 questions,

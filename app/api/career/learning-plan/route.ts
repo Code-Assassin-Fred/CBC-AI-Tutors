@@ -22,15 +22,21 @@ export async function POST(req: NextRequest) {
             careerPath = careerDoc.data() as CareerPath;
         }
 
-        // Fetch existing courses for this career
+        // Fetch existing courses for this career (avoiding composite index by sorting in-memory)
         const coursesSnapshot = await adminDb
             .collection('careerCourses')
             .where('careerPathId', '==', careerId)
-            .orderBy('phaseOrder')
-            .orderBy('order')
             .get();
 
-        const courses: CareerCourse[] = coursesSnapshot.docs.map(doc => doc.data() as CareerCourse);
+        const courses: CareerCourse[] = coursesSnapshot.docs
+            .map(doc => doc.data() as CareerCourse)
+            .sort((a, b) => {
+                // Sort by phaseOrder first, then by order
+                if (a.phaseOrder !== b.phaseOrder) {
+                    return (a.phaseOrder || 0) - (b.phaseOrder || 0);
+                }
+                return (a.order || 0) - (b.order || 0);
+            });
 
         // If we have a career path with skill categories, use the planner agent
         if (careerPath && careerPath.skillCategories) {
