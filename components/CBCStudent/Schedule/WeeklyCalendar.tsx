@@ -13,6 +13,7 @@ export default function WeeklyCalendar() {
         daySchedules,
         setShowBlockModal,
         setEditingBlock,
+        setModalPrefill,
     } = useSchedule();
 
     const hours = Array.from({ length: 14 }, (_, i) => i + 8); // 8 AM to 9 PM
@@ -123,7 +124,24 @@ export default function WeeklyCalendar() {
                     {/* Day Grid */}
                     <div className="flex-1 flex relative">
                         {daySchedules.map((day) => (
-                            <div key={day.date} className="flex-1 h-[1120px] border-l border-white/5 relative">
+                            <div key={day.date} className="flex-1 h-[1120px] border-l border-white/5 relative group">
+                                {/* Clickable BG for creating new blocks */}
+                                {hours.map((_, i) => (
+                                    <div
+                                        key={i}
+                                        className="absolute w-full h-20 border-b border-white/[0.02] hover:bg-white/[0.02] transition-colors cursor-pointer"
+                                        style={{ top: `${i * 80}px` }}
+                                        onClick={() => {
+                                            const hour = i + 8;
+                                            const timeString = `${hour.toString().padStart(2, '0')}:00`;
+                                            setModalPrefill({ date: day.date, startTime: timeString });
+                                            setEditingBlock(null);
+                                            setShowBlockModal(true);
+                                        }}
+                                        title={`Schedule for ${day.dayName} at ${i + 8}:00`}
+                                    />
+                                ))}
+
                                 {day.blocks.map(block => {
                                     const startH = block.startTime ? parseInt(block.startTime.split(':')[0]) : 9;
                                     const startM = block.startTime ? parseInt(block.startTime.split(':')[1]) : 0;
@@ -133,7 +151,8 @@ export default function WeeklyCalendar() {
                                     return (
                                         <div
                                             key={block.id}
-                                            onClick={() => {
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevent grid click
                                                 setEditingBlock(block);
                                                 setShowBlockModal(true);
                                             }}

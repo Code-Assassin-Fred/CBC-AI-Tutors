@@ -73,6 +73,8 @@ interface ScheduleContextType {
     setEditingBlock: (block: StudyBlock | null) => void;
     showBlockModal: boolean;
     setShowBlockModal: (show: boolean) => void;
+    modalPrefill: { date: string; startTime: string } | null;
+    setModalPrefill: (prefill: { date: string; startTime: string } | null) => void;
 }
 
 const ScheduleContext = createContext<ScheduleContextType | null>(null);
@@ -99,6 +101,7 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
     // Modal state
     const [editingBlock, setEditingBlock] = useState<StudyBlock | null>(null);
     const [showBlockModal, setShowBlockModal] = useState(false);
+    const [modalPrefill, setModalPrefill] = useState<{ date: string; startTime: string } | null>(null);
 
     // Week navigation
     const goToPreviousWeek = useCallback(() => {
@@ -376,6 +379,8 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
         setEditingBlock,
         showBlockModal,
         setShowBlockModal,
+        modalPrefill,
+        setModalPrefill,
     };
 
     return (

@@ -29,9 +29,10 @@ export default function StudyBlockModal() {
         updateBlock,
         editingBlock,
         setEditingBlock,
+        modalPrefill,
     } = useSchedule();
 
-    const { myCourses } = useCourses();
+    const { myCourses, loadMyCourses } = useCourses();
 
     // Form State
     const [source, setSource] = useState<'course' | 'classroom'>('course');
@@ -40,6 +41,13 @@ export default function StudyBlockModal() {
     const [startTime, setStartTime] = useState('');
     const [duration, setDuration] = useState('60');
     const [color, setColor] = useState<StudyBlockColor>('cyan');
+
+    // Load courses on mount
+    useEffect(() => {
+        loadMyCourses();
+    }, [loadMyCourses]);
+
+    // ... existing initialization effect ...
 
     // Course Selection
     const [selectedCourseId, setSelectedCourseId] = useState('');
@@ -78,8 +86,9 @@ export default function StudyBlockModal() {
         } else {
             // Defaults for new block
             setTopic('');
-            setDate(new Date().toISOString().split('T')[0]);
-            setStartTime('09:00');
+            // Use prefill if available, otherwise default to today/9am
+            setDate(modalPrefill?.date || new Date().toISOString().split('T')[0]);
+            setStartTime(modalPrefill?.startTime || '09:00');
             setDuration('60');
             setColor('cyan');
             setSource('course');
@@ -90,7 +99,7 @@ export default function StudyBlockModal() {
             setStrand('');
             setSubstrand('');
         }
-    }, [editingBlock, showBlockModal]);
+    }, [editingBlock, showBlockModal, modalPrefill]);
 
     // Auto-fill topic based on selection
     useEffect(() => {
@@ -275,7 +284,7 @@ export default function StudyBlockModal() {
                                     </div>
                                 )}
 
-                                {/* Time Selection */}
+                                {/* Time & Duration Selection */}
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Date</label>
@@ -287,15 +296,29 @@ export default function StudyBlockModal() {
                                             className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 transition-colors [color-scheme:dark]"
                                         />
                                     </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Time</label>
-                                        <input
-                                            type="time"
-                                            required
-                                            value={startTime}
-                                            onChange={(e) => setStartTime(e.target.value)}
-                                            className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 transition-colors [color-scheme:dark]"
-                                        />
+                                    <div className="flex gap-2">
+                                        <div className="flex-1">
+                                            <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Time</label>
+                                            <input
+                                                type="time"
+                                                required
+                                                value={startTime}
+                                                onChange={(e) => setStartTime(e.target.value)}
+                                                className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 transition-colors [color-scheme:dark]"
+                                            />
+                                        </div>
+                                        <div className="w-1/3">
+                                            <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Dur.</label>
+                                            <select
+                                                value={duration}
+                                                onChange={(e) => setDuration(e.target.value)}
+                                                className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-2 py-3 focus:outline-none focus:border-indigo-500 appearance-none text-center"
+                                            >
+                                                {[15, 30, 45, 60, 90, 120].map(m => (
+                                                    <option key={m} value={m}>{m}m</option>
+                                                ))}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
 
