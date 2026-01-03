@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import DashboardLayout from '@/components/CBCStudent/layout/DashboardLayout';
 import { CoursesProvider, useCourses } from '@/lib/context/CoursesContext';
 import CoursePromptInput from '@/components/CBCStudent/courses/CoursePromptInput';
@@ -28,15 +28,16 @@ function CoursesPageContent() {
     } = useCourses();
 
     const [activeTab, setActiveTab] = useState<'create' | 'my-courses' | 'discover'>('create');
-    const [hasCheckedEnroll, setHasCheckedEnroll] = useState(false);
+    const enrollCheckedRef = useRef(false);
 
     // Handle enrollment from career path
     useEffect(() => {
         const enrollTopic = searchParams.get('enroll');
         const careerPathId = searchParams.get('careerPathId') || undefined;
 
-        if (enrollTopic && !hasCheckedEnroll && !isGenerating && myCourses.length >= 0) {
-            setHasCheckedEnroll(true);
+        // Wait until myCourses is loaded, and only run once
+        if (enrollTopic && !enrollCheckedRef.current && !isGenerating && !isLoadingMyCourses) {
+            enrollCheckedRef.current = true;
 
             const handleEnrollment = async () => {
                 // 1. Check if user already has it
@@ -64,7 +65,7 @@ function CoursesPageContent() {
 
             handleEnrollment();
         }
-    }, [searchParams, hasCheckedEnroll, isGenerating, myCourses, discoverCourses, enrollInCourse, router]);
+    }, [searchParams, isGenerating, isLoadingMyCourses, myCourses, discoverCourses, enrollInCourse, router]);
 
     useEffect(() => {
         loadSuggestions();

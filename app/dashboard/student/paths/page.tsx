@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/CBCStudent/layout/DashboardLayout';
 import { CareerPathProvider, useCareerPath } from '@/lib/context/CareerPathContext';
+import { CoursesProvider } from '@/lib/context/CoursesContext';
+import { useAuth } from '@/lib/context/AuthContext';
 import CareerPathSelector from '@/components/CBCStudent/careerpaths/CareerPathSelector';
 import CareerPathGenerating from '@/components/CBCStudent/careerpaths/CareerPathGenerating';
 import CareerPathView from '@/components/CBCStudent/careerpaths/CareerPathView';
@@ -10,8 +12,16 @@ import MyCareerPaths from '@/components/CBCStudent/careerpaths/MyCareerPaths';
 import { CareerCourse, CareerPath } from '@/types/careerPath';
 import { useRouter } from 'next/navigation';
 
+interface CourseProgressInfo {
+    title: string;
+    enrolled: boolean;
+    isCompleted: boolean;
+    overallProgress: number;
+}
+
 function CareerPathsContent() {
     const router = useRouter();
+    const { user } = useAuth();
     const {
         currentView,
         currentPath,
@@ -27,6 +37,7 @@ function CareerPathsContent() {
 
     const [activeTab, setActiveTab] = useState<'my-paths' | 'create'>('my-paths');
     const [isLoadingPaths, setIsLoadingPaths] = useState(true);
+    const [courseProgress, setCourseProgress] = useState<CourseProgressInfo[]>([]);
 
     // Load saved paths on mount
     useEffect(() => {
@@ -37,6 +48,30 @@ function CareerPathsContent() {
         };
         load();
     }, [loadSavedPaths]);
+
+    // Fetch actual course progress when viewing a career path
+    useEffect(() => {
+        if (!currentPath || !user) {
+            setCourseProgress([]);
+            return;
+        }
+
+        const fetchProgress = async () => {
+            try {
+                const response = await fetch(
+                    `/api/career-paths/${currentPath.id}/progress?userId=${user.uid}`
+                );
+                if (response.ok) {
+                    const data = await response.json();
+                    setCourseProgress(data.progress || []);
+                }
+            } catch (err) {
+                console.error('Error fetching progress:', err);
+            }
+        };
+
+        fetchProgress();
+    }, [currentPath, user]);
 
     const handleStartCourse = (course: CareerCourse) => {
         const params = new URLSearchParams({
@@ -55,6 +90,7 @@ function CareerPathsContent() {
         return (
             <CareerPathView
                 careerPath={currentPath}
+                courseProgress={courseProgress}
                 onStartCourse={handleStartCourse}
                 onBack={reset}
             />
@@ -138,9 +174,11 @@ function CareerPathsContent() {
 export default function CareerPathsPage() {
     return (
         <DashboardLayout active="Career Paths">
-            <CareerPathProvider>
-                <CareerPathsContent />
-            </CareerPathProvider>
+            <CoursesProvider>
+                <CareerPathProvider>
+                    <CareerPathsContent />
+                </CareerPathProvider>
+            </CoursesProvider>
         </DashboardLayout>
     );
 }
