@@ -5,6 +5,7 @@ import { CourseQuiz } from '@/types/course';
 import { QuizQuestion } from '@/lib/types/agents';
 import { useCourses } from '@/lib/context/CoursesContext';
 import { useAuth } from '@/lib/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 interface CourseQuizViewProps {
     quiz: CourseQuiz;
@@ -19,7 +20,13 @@ interface QuizState {
     hasSaved: boolean;
 }
 
+interface NextCourseInfo {
+    title: string;
+    careerPathId: string;
+}
+
 export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
+    const router = useRouter();
     const { selectLesson, currentCourse, saveQuizScore } = useCourses();
     const { user } = useAuth();
     const [state, setState] = useState<QuizState>({
@@ -30,6 +37,7 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
         isSaving: false,
         hasSaved: false,
     });
+    const [nextCourse, setNextCourse] = useState<NextCourseInfo | null>(null);
 
     const currentQuestion = quiz.questions[state.currentIndex];
     const isLastQuestion = state.currentIndex === quiz.questions.length - 1;
@@ -49,6 +57,35 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
 
     const score = calculateScore();
     const passed = score >= quiz.passingScore;
+
+    // Fetch next course in career path when final exam is completed
+    useEffect(() => {
+        if (state.showFinalResults && passed && quiz.type === 'final' && currentCourse?.careerPathId) {
+            const fetchNextCourse = async () => {
+                try {
+                    const response = await fetch(`/api/career-paths/${currentCourse.careerPathId}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        const courses = data.path?.courses || [];
+                        // Find current course index and get next one
+                        const currentIndex = courses.findIndex(
+                            (c: { title: string }) => c.title.toLowerCase() === currentCourse.title.toLowerCase()
+                        );
+                        if (currentIndex !== -1 && currentIndex < courses.length - 1) {
+                            const next = courses[currentIndex + 1];
+                            setNextCourse({
+                                title: next.title,
+                                careerPathId: currentCourse.careerPathId!,
+                            });
+                        }
+                    }
+                } catch (err) {
+                    console.error('Error fetching next course:', err);
+                }
+            };
+            fetchNextCourse();
+        }
+    }, [state.showFinalResults, passed, quiz.type, currentCourse]);
 
     // Save quiz score when final results are shown
     useEffect(() => {
@@ -76,6 +113,16 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
             saveScore();
         }
     }, [state.showFinalResults, state.hasSaved, user, quiz, score, passed, saveQuizScore, state.answers]);
+
+    const handleContinueToNextCourse = () => {
+        if (nextCourse) {
+            const params = new URLSearchParams({
+                enroll: nextCourse.title,
+                careerPathId: nextCourse.careerPathId,
+            });
+            router.push(`/dashboard/student/courses?${params.toString()}`);
+        }
+    };
 
     const handleSelectAnswer = (answer: string) => {
         if (state.showResult) return;
@@ -160,21 +207,33 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
                 </div>
 
                 {/* Actions */}
-                <div className="flex justify-center gap-4">
-                    <button
-                        onClick={handleRetry}
-                        className="px-6 py-2.5 rounded-full font-medium bg-white/10 text-white hover:bg-white/20 transition-colors"
-                    >
-                        Retry Quiz
-                    </button>
-                    {quiz.lessonId && (
+                <div className="flex flex-col items-center gap-4">
+                    {/* Next Course Button - shown when passing final exam from a career path */}
+                    {passed && quiz.type === 'final' && nextCourse && (
                         <button
-                            onClick={handleBackToLesson}
-                            className="px-6 py-2.5 rounded-full font-medium bg-sky-500 text-white hover:bg-sky-600 transition-colors"
+                            onClick={handleContinueToNextCourse}
+                            className="w-full max-w-xs px-6 py-3 rounded-full font-medium bg-[#0ea5e9] text-white hover:bg-[#0ea5e9]/90 transition-colors"
                         >
-                            Back to Lesson
+                            Continue to Next Course →
                         </button>
                     )}
+
+                    <div className="flex gap-4">
+                        <button
+                            onClick={handleRetry}
+                            className="px-6 py-2.5 rounded-full font-medium bg-white/10 text-white hover:bg-white/20 transition-colors"
+                        >
+                            Retry Quiz
+                        </button>
+                        {quiz.lessonId && (
+                            <button
+                                onClick={handleBackToLesson}
+                                className="px-6 py-2.5 rounded-full font-medium bg-white/10 text-white hover:bg-white/20 transition-colors"
+                            >
+                                Back to Lesson
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         );

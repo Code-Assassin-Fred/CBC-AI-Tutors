@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/CBCStudent/layout/DashboardLayout';
 import { CareerPathProvider, useCareerPath } from '@/lib/context/CareerPathContext';
 import CareerPathSelector from '@/components/CBCStudent/careerpaths/CareerPathSelector';
 import CareerPathGenerating from '@/components/CBCStudent/careerpaths/CareerPathGenerating';
 import CareerPathView from '@/components/CBCStudent/careerpaths/CareerPathView';
-import { CareerCourse } from '@/types/careerPath';
+import MyCareerPaths from '@/components/CBCStudent/careerpaths/MyCareerPaths';
+import { CareerCourse, CareerPath } from '@/types/careerPath';
 import { useRouter } from 'next/navigation';
 
 function CareerPathsContent() {
@@ -16,19 +17,28 @@ function CareerPathsContent() {
         currentPath,
         isGenerating,
         progress,
+        savedPaths,
         generatePath,
         loadSavedPaths,
+        viewPath,
         reset,
         error
     } = useCareerPath();
 
+    const [activeTab, setActiveTab] = useState<'my-paths' | 'create'>('my-paths');
+    const [isLoadingPaths, setIsLoadingPaths] = useState(true);
+
     // Load saved paths on mount
     useEffect(() => {
-        loadSavedPaths();
+        const load = async () => {
+            setIsLoadingPaths(true);
+            await loadSavedPaths();
+            setIsLoadingPaths(false);
+        };
+        load();
     }, [loadSavedPaths]);
 
     const handleStartCourse = (course: CareerCourse) => {
-        // Navigate to courses page with enrollment + career path context
         const params = new URLSearchParams({
             enroll: course.title,
             careerPathId: currentPath?.id || '',
@@ -36,49 +46,33 @@ function CareerPathsContent() {
         router.push(`/dashboard/student/courses?${params.toString()}`);
     };
 
-    const renderContent = () => {
-        switch (currentView) {
-            case 'selector':
-                return (
-                    <CareerPathSelector
-                        onSelect={generatePath}
-                        isGenerating={isGenerating}
-                    />
-                );
-            case 'generating':
-                return (
-                    <CareerPathGenerating
-                        message={progress?.message || 'Generating...'}
-                        percentage={progress?.percentage || 0}
-                        careerTitle={currentPath?.title || 'your career path'}
-                    />
-                );
-            case 'viewing':
-                if (!currentPath) {
-                    return (
-                        <CareerPathSelector
-                            onSelect={generatePath}
-                            isGenerating={isGenerating}
-                        />
-                    );
-                }
-                return (
-                    <CareerPathView
-                        careerPath={currentPath}
-                        onStartCourse={handleStartCourse}
-                        onBack={reset}
-                    />
-                );
-            default:
-                return (
-                    <CareerPathSelector
-                        onSelect={generatePath}
-                        isGenerating={isGenerating}
-                    />
-                );
-        }
+    const handleSelectPath = (path: CareerPath) => {
+        viewPath(path);
     };
 
+    // When viewing a path
+    if (currentView === 'viewing' && currentPath) {
+        return (
+            <CareerPathView
+                careerPath={currentPath}
+                onStartCourse={handleStartCourse}
+                onBack={reset}
+            />
+        );
+    }
+
+    // When generating
+    if (currentView === 'generating') {
+        return (
+            <CareerPathGenerating
+                message={progress?.message || 'Generating...'}
+                percentage={progress?.percentage || 0}
+                careerTitle={currentPath?.title || 'your career path'}
+            />
+        );
+    }
+
+    // Selector view with tabs at top
     return (
         <div className="min-h-screen">
             {error && (
@@ -88,7 +82,55 @@ function CareerPathsContent() {
                     </div>
                 </div>
             )}
-            {renderContent()}
+
+            {/* Tabs at top */}
+            <div className="max-w-5xl mx-auto px-4 pt-6">
+                <div className="flex items-center gap-6 border-b border-white/10 mb-6">
+                    <button
+                        onClick={() => setActiveTab('my-paths')}
+                        className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'my-paths' ? 'text-[#0ea5e9]' : 'text-white/50 hover:text-white/80'
+                            }`}
+                    >
+                        My Career Paths
+                        {savedPaths.length > 0 && (
+                            <span className="ml-2 px-1.5 py-0.5 text-xs bg-white/10 rounded-full">
+                                {savedPaths.length}
+                            </span>
+                        )}
+                        {activeTab === 'my-paths' && (
+                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0ea5e9] rounded-full" />
+                        )}
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('create')}
+                        className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'create' ? 'text-[#0ea5e9]' : 'text-white/50 hover:text-white/80'
+                            }`}
+                    >
+                        Create New
+                        {activeTab === 'create' && (
+                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0ea5e9] rounded-full" />
+                        )}
+                    </button>
+                </div>
+            </div>
+
+            {/* Tab Content */}
+            {activeTab === 'my-paths' && (
+                <div className="max-w-5xl mx-auto px-4">
+                    <MyCareerPaths
+                        paths={savedPaths}
+                        isLoading={isLoadingPaths}
+                        onSelectPath={handleSelectPath}
+                    />
+                </div>
+            )}
+
+            {activeTab === 'create' && (
+                <CareerPathSelector
+                    onSelect={generatePath}
+                    isGenerating={isGenerating}
+                />
+            )}
         </div>
     );
 }
