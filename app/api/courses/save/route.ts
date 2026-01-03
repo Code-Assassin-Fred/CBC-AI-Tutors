@@ -12,7 +12,7 @@ import { FieldValue } from 'firebase-admin/firestore';
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { courseId, userId } = body;
+        const { courseId, userId, careerPathId } = body;
 
         if (!courseId || !userId) {
             return NextResponse.json(
@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
         await userSavedRef.set({
             courseId,
             savedAt: FieldValue.serverTimestamp(),
+            careerPathId: careerPathId || null,  // Link to career path if provided
         });
 
         // Update course's save count (optional, for popularity tracking)

@@ -28,10 +28,12 @@ function CareerPathsContent() {
     }, [loadSavedPaths]);
 
     const handleStartCourse = (course: CareerCourse) => {
-        // Navigate to courses page to generate/view the course
-        // For now, just log - will integrate with course system
-        console.log('Starting course:', course.title);
-        // Could navigate to: router.push(`/dashboard/student/courses?topic=${encodeURIComponent(course.title)}`);
+        // Navigate to courses page with enrollment + career path context
+        const params = new URLSearchParams({
+            enroll: course.title,
+            careerPathId: currentPath?.id || '',
+        });
+        router.push(`/dashboard/student/courses?${params.toString()}`);
     };
 
     const renderContent = () => {

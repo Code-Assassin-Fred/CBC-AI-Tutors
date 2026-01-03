@@ -33,6 +33,8 @@ function CoursesPageContent() {
     // Handle enrollment from career path
     useEffect(() => {
         const enrollTopic = searchParams.get('enroll');
+        const careerPathId = searchParams.get('careerPathId') || undefined;
+
         if (enrollTopic && !hasCheckedEnroll && !isGenerating && myCourses.length >= 0) {
             setHasCheckedEnroll(true);
 
@@ -49,16 +51,14 @@ function CoursesPageContent() {
                 const exactMatch = globalCourses.find(c => c.title.toLowerCase() === enrollTopic.toLowerCase());
 
                 if (exactMatch) {
-                    // Auto-enroll and navigate
-                    const enrolled = await enrollInCourse(exactMatch.id);
+                    // Auto-enroll and navigate (with career path link)
+                    const enrolled = await enrollInCourse(exactMatch.id, careerPathId);
                     if (enrolled) {
                         router.push(`/dashboard/student/courses/${exactMatch.id}`);
                     }
                 } else {
-                    // 3. Generate it
-                    // The generateCourse API could be enhanced to use the syllabus if we pass it
-                    // For now, we'll just use the topic
-                    handleGenerate(enrollTopic);
+                    // 3. Generate it (with career path link)
+                    handleGenerate(enrollTopic, careerPathId);
                 }
             };
 
@@ -71,8 +71,8 @@ function CoursesPageContent() {
         loadMyCourses();
     }, [loadSuggestions, loadMyCourses]);
 
-    const handleGenerate = async (topic: string) => {
-        const courseId = await generateCourse(topic);
+    const handleGenerate = async (topic: string, careerPathId?: string) => {
+        const courseId = await generateCourse(topic, careerPathId);
         if (courseId) {
             router.push(`/dashboard/student/courses/${courseId}`);
         }

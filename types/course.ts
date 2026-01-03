@@ -28,6 +28,7 @@ export interface Course {
     lessonCount: number;
     createdAt: Date;
     updatedAt?: Date;
+    careerPathId?: string;  // Links to career path if generated from one
 }
 
 export interface CourseLesson {

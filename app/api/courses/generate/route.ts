@@ -16,7 +16,7 @@ export const maxDuration = 300; // 5 minutes max for course generation
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { topic, userId, preferences } = body as CourseGenerationRequest;
+        const { topic, userId, preferences, careerPathId } = body as CourseGenerationRequest & { careerPathId?: string };
 
         if (!topic || !userId) {
             return NextResponse.json(
@@ -44,10 +44,11 @@ export async function POST(request: NextRequest) {
                     // Save to Firestore
                     const batch = adminDb.batch();
 
-                    // Save course
+                    // Save course with career path link if provided
                     const courseRef = adminDb.collection('courses').doc(result.course.id);
                     batch.set(courseRef, {
                         ...result.course,
+                        careerPathId: careerPathId || null,
                         createdAt: new Date(),
                         updatedAt: new Date(),
                     });
@@ -76,7 +77,8 @@ export async function POST(request: NextRequest) {
                     await userSavedRef.set({
                         courseId: result.course.id,
                         savedAt: new Date(),
-                        isCreator: true, // Mark as created by user (not just saved)
+                        isCreator: true,
+                        careerPathId: careerPathId || null,
                     });
 
                     // Send final success event

@@ -23,7 +23,7 @@ interface CoursesContextType {
     isGenerating: boolean;
     generationProgress: GenerationProgress | null;
     generationError: string | null;
-    generateCourse: (topic: string) => Promise<string | null>;
+    generateCourse: (topic: string, careerPathId?: string) => Promise<string | null>;
     cancelGeneration: () => void;
 
     // Current Course State
@@ -59,7 +59,7 @@ interface CoursesContextType {
     saveQuizScore: (quizId: string, score: number, passed: boolean, totalQuestions: number, answers: Array<{ questionId: string; userAnswer: string; isCorrect: boolean }>) => Promise<boolean>;
 
     // Enrollment
-    enrollInCourse: (courseId: string) => Promise<boolean>;
+    enrollInCourse: (courseId: string, careerPathId?: string) => Promise<boolean>;
 }
 
 const CoursesContext = createContext<CoursesContextType | null>(null);
@@ -103,7 +103,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
     // COURSE GENERATION
     // ========================================
 
-    const generateCourse = useCallback(async (topic: string): Promise<string | null> => {
+    const generateCourse = useCallback(async (topic: string, careerPathId?: string): Promise<string | null> => {
         if (!user) {
             setGenerationError('Please sign in to generate courses');
             return null;
@@ -127,6 +127,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
                 body: JSON.stringify({
                     topic,
                     userId: user.uid,
+                    careerPathId,
                     preferences: {
                         lessonCount: 6,
                         includeQuizzes: true,
@@ -472,7 +473,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
         }
     }, [user, currentCourse]);
 
-    const enrollInCourse = useCallback(async (courseId: string): Promise<boolean> => {
+    const enrollInCourse = useCallback(async (courseId: string, careerPathId?: string): Promise<boolean> => {
         if (!user) return false;
 
         try {
@@ -482,6 +483,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
                 body: JSON.stringify({
                     courseId,
                     userId: user.uid,
+                    careerPathId,
                 }),
             });
 
