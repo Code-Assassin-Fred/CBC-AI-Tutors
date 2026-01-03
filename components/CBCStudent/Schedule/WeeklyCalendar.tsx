@@ -208,10 +208,7 @@ export default function WeeklyCalendar() {
                                 })}
                             </div>
                         ))}
-                        {/* Current Time Line Mockup */}
-                        <div className="absolute left-0 right-0 top-[240px] border-t border-sky-500/30 z-0 pointer-events-none">
-                            <div className="absolute -left-1.5 -top-1.5 w-3 h-3 bg-sky-500 rounded-full shadow-[0_0_10px_rgba(14,165,233,0.5)]" />
-                        </div>
+
                     </div>
                 </div>
             </div>
