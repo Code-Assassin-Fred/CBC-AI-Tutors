@@ -14,7 +14,6 @@ export interface CareerPath {
     id: string;
     title: string;
     description: string;
-    estimatedDuration: string;  // e.g., "6-12 months"
     difficulty: CareerDifficulty;
     userId: string;
     createdAt: Date;
@@ -26,17 +25,7 @@ export interface CareerCourse {
     order: number;
     title: string;
     description: string;
-    duration: string;  // e.g., "2-3 weeks"
-    learningOutcomes: LearningOutcome[];
-    prerequisites: string[];  // Course titles
     generatedCourseId?: string;  // Link to full course if generated
-}
-
-export interface LearningOutcome {
-    id: string;
-    title: string;
-    description: string;
-    keyTopics: string[];
 }
 
 // ============================================
