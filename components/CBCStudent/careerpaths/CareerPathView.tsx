@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { CareerPath, CareerCourse, LearningOutcome } from '@/types/careerPath';
-import { ChevronDown, ChevronRight, Clock, BookOpen, Target, Play } from 'lucide-react';
 
 interface CareerPathViewProps {
     careerPath: CareerPath;
@@ -55,8 +54,7 @@ export default function CareerPathView({ careerPath, onStartCourse, onBack }: Ca
                     onClick={onBack}
                     className="flex items-center gap-2 text-white/50 hover:text-white mb-6 transition-colors"
                 >
-                    <ChevronRight className="w-4 h-4 rotate-180" />
-                    <span>Back to Career Selection</span>
+                    <span>← Back to Career Selection</span>
                 </button>
             )}
 
@@ -68,15 +66,12 @@ export default function CareerPathView({ careerPath, onStartCourse, onBack }: Ca
                 {/* Meta info */}
                 <div className="flex flex-wrap gap-3">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 text-sm">
-                        <Clock className="w-4 h-4" />
                         {careerPath.estimatedDuration}
                     </span>
                     <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm capitalize ${getDifficultyColor(careerPath.difficulty)}`}>
-                        <Target className="w-4 h-4" />
                         {careerPath.difficulty}
                     </span>
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 text-sm">
-                        <BookOpen className="w-4 h-4" />
                         {careerPath.courses.length} Courses
                     </span>
                 </div>
@@ -102,7 +97,7 @@ export default function CareerPathView({ careerPath, onStartCourse, onBack }: Ca
                                 className="w-full flex items-center gap-4 p-4 text-left hover:bg-white/5 transition-colors"
                             >
                                 {/* Order number */}
-                                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-[#0ea5e9]/20 to-[#8b5cf6]/20 flex items-center justify-center text-[#0ea5e9] font-bold text-sm">
+                                <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white/70 font-bold text-sm">
                                     {index + 1}
                                 </div>
 
@@ -118,9 +113,9 @@ export default function CareerPathView({ careerPath, onStartCourse, onBack }: Ca
                                 </span>
 
                                 {/* Expand icon */}
-                                <ChevronDown
-                                    className={`w-5 h-5 text-white/30 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                                />
+                                <span className={`text-white/30 transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
+                                    ▼
+                                </span>
                             </button>
 
                             {/* Expanded Content */}
@@ -161,9 +156,8 @@ export default function CareerPathView({ careerPath, onStartCourse, onBack }: Ca
                                     {onStartCourse && (
                                         <button
                                             onClick={() => onStartCourse(course)}
-                                            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-[#0ea5e9] to-[#8b5cf6] text-white rounded-lg font-medium hover:opacity-90 transition-opacity"
+                                            className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-[#0ea5e9] text-white rounded-lg font-medium hover:bg-[#0ea5e9]/90 transition-colors"
                                         >
-                                            <Play className="w-4 h-4" />
                                             Start This Course
                                         </button>
                                     )}
@@ -190,11 +184,11 @@ function OutcomeItem({ outcome, isExpanded, onToggle }: OutcomeItemProps) {
                 onClick={onToggle}
                 className="w-full flex items-center gap-3 p-3 text-left hover:bg-white/5 transition-colors"
             >
-                <div className="w-1.5 h-1.5 rounded-full bg-[#0ea5e9] flex-shrink-0" />
+                <div className="w-1.5 h-1.5 rounded-full bg-white/50 flex-shrink-0" />
                 <span className="flex-1 text-white/80 text-sm">{outcome.title}</span>
-                <ChevronRight
-                    className={`w-4 h-4 text-white/30 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
-                />
+                <span className={`text-white/30 text-xs transition-transform ${isExpanded ? 'rotate-90' : ''}`}>
+                    ▶
+                </span>
             </button>
 
             {isExpanded && (
@@ -205,7 +199,7 @@ function OutcomeItem({ outcome, isExpanded, onToggle }: OutcomeItemProps) {
                             {outcome.keyTopics.map((topic, i) => (
                                 <span
                                     key={i}
-                                    className="px-2 py-0.5 bg-[#0ea5e9]/10 border border-[#0ea5e9]/20 rounded text-[#0ea5e9] text-xs"
+                                    className="px-2 py-0.5 bg-white/5 border border-white/10 rounded text-white/60 text-xs"
                                 >
                                     {topic}
                                 </span>
