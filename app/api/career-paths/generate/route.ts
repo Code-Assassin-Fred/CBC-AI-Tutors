@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { generateCareerPath } from '@/lib/career/generateCareerPath';
-import { adminDb } from '@/lib/firebase/admin';
+import { adminDb } from '@/lib/firebaseAdmin';
 
 export async function POST(request: NextRequest) {
     try {
