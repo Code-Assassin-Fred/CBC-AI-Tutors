@@ -1,41 +1,91 @@
 "use client";
 
+import { useEffect } from 'react';
 import DashboardLayout from '@/components/CBCStudent/layout/DashboardLayout';
-import { CareerProvider, useCareer } from '@/lib/context/CareerContext';
-import CareerEntrySelector from '@/components/CBCStudent/Careerpaths/CareerEntrySelector';
-import CareerDiscoveryChat from '@/components/CBCStudent/Careerpaths/CareerDiscoveryChat';
-import CareerGenerating from '@/components/CBCStudent/Careerpaths/CareerGenerating';
-import SkillAssessment from '@/components/CBCStudent/Careerpaths/SkillAssessment';
-import SkillGapAnalysis from '@/components/CBCStudent/Careerpaths/SkillGapAnalysis';
-import CareerPathViewer from '@/components/CBCStudent/Careerpaths/CareerPathViewer';
-import LearningPlanView from '@/components/CBCStudent/Careerpaths/LearningPlanView';
+import { CareerPathProvider, useCareerPath } from '@/lib/context/CareerPathContext';
+import CareerPathSelector from '@/components/CBCStudent/careerpaths/CareerPathSelector';
+import CareerPathGenerating from '@/components/CBCStudent/careerpaths/CareerPathGenerating';
+import CareerPathView from '@/components/CBCStudent/careerpaths/CareerPathView';
+import { CareerCourse } from '@/types/careerPath';
+import { useRouter } from 'next/navigation';
 
 function CareerPathsContent() {
-    const { currentView } = useCareer();
+    const router = useRouter();
+    const {
+        currentView,
+        currentPath,
+        isGenerating,
+        progress,
+        generatePath,
+        loadSavedPaths,
+        reset,
+        error
+    } = useCareerPath();
+
+    // Load saved paths on mount
+    useEffect(() => {
+        loadSavedPaths();
+    }, [loadSavedPaths]);
+
+    const handleStartCourse = (course: CareerCourse) => {
+        // Navigate to courses page to generate/view the course
+        // For now, just log - will integrate with course system
+        console.log('Starting course:', course.title);
+        // Could navigate to: router.push(`/dashboard/student/courses?topic=${encodeURIComponent(course.title)}`);
+    };
 
     const renderContent = () => {
         switch (currentView) {
-            case 'entry':
-                return <CareerEntrySelector />;
-            case 'discovery-chat':
-                return <CareerDiscoveryChat />;
+            case 'selector':
+                return (
+                    <CareerPathSelector
+                        onSelect={generatePath}
+                        isGenerating={isGenerating}
+                    />
+                );
             case 'generating':
-                return <CareerGenerating />;
-            case 'assessment':
-                return <SkillAssessment />;
-            case 'gap-analysis':
-                return <SkillGapAnalysis />;
-            case 'career-view':
-                return <CareerPathViewer />;
-            case 'learning-plan':
-                return <LearningPlanView />;
+                return (
+                    <CareerPathGenerating
+                        message={progress?.message || 'Generating...'}
+                        percentage={progress?.percentage || 0}
+                        careerTitle={currentPath?.title || 'your career path'}
+                    />
+                );
+            case 'viewing':
+                if (!currentPath) {
+                    return (
+                        <CareerPathSelector
+                            onSelect={generatePath}
+                            isGenerating={isGenerating}
+                        />
+                    );
+                }
+                return (
+                    <CareerPathView
+                        careerPath={currentPath}
+                        onStartCourse={handleStartCourse}
+                        onBack={reset}
+                    />
+                );
             default:
-                return <CareerEntrySelector />;
+                return (
+                    <CareerPathSelector
+                        onSelect={generatePath}
+                        isGenerating={isGenerating}
+                    />
+                );
         }
     };
 
     return (
         <div className="min-h-screen">
+            {error && (
+                <div className="max-w-2xl mx-auto mt-4 px-4">
+                    <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-400">
+                        {error}
+                    </div>
+                </div>
+            )}
             {renderContent()}
         </div>
     );
@@ -44,9 +94,9 @@ function CareerPathsContent() {
 export default function CareerPathsPage() {
     return (
         <DashboardLayout active="Career Paths">
-            <CareerProvider>
+            <CareerPathProvider>
                 <CareerPathsContent />
-            </CareerProvider>
+            </CareerPathProvider>
         </DashboardLayout>
     );
 }
