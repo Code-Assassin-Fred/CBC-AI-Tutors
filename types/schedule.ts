@@ -18,9 +18,22 @@ export interface StudyBlock {
     duration: number;       // Duration in minutes
 
     // Content
-    topic: string;          // What to study
-    skillId?: string;       // Link to career skill if applicable
-    courseId?: string;      // Link to course if applicable
+    topic: string;          // Display title
+
+    // Source (one of these must be present)
+    source: 'course' | 'classroom';
+
+    // Course Metadata
+    courseId?: string;
+    lessonId?: string;
+
+    // Classroom Metadata
+    classroom?: {
+        grade: string;
+        subject: string;
+        strand: string;
+        substrand?: string;
+    };
 
     // Display
     color: StudyBlockColor;

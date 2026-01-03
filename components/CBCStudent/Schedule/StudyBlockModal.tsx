@@ -1,265 +1,324 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { Fragment, useState, useEffect } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 import { useSchedule } from '@/lib/context/ScheduleContext';
-import { StudyBlockColor } from '@/types/schedule';
+import { useCourses } from '@/lib/context/CoursesContext';
+import { StudyBlock, StudyBlockColor } from '@/types/schedule';
+import contentJson from '@/content.json';
+
+interface GradeMap {
+    [grade: string]: {
+        [subject: string]: {
+            Strands: {
+                [strand: string]: {
+                    SubStrands: {
+                        [substrand: string]: unknown
+                    }
+                }
+            }
+        }
+    }
+}
 
 export default function StudyBlockModal() {
     const {
         showBlockModal,
         setShowBlockModal,
-        editingBlock,
-        setEditingBlock,
         createBlock,
         updateBlock,
-        deleteBlock,
-        completeBlock,
-        daySchedules,
+        editingBlock,
+        setEditingBlock,
     } = useSchedule();
 
+    const { myCourses } = useCourses();
+
+    // Form State
+    const [source, setSource] = useState<'course' | 'classroom'>('course');
     const [topic, setTopic] = useState('');
     const [date, setDate] = useState('');
-    const [duration, setDuration] = useState(60);
     const [startTime, setStartTime] = useState('');
+    const [duration, setDuration] = useState('60');
     const [color, setColor] = useState<StudyBlockColor>('cyan');
-    const [notes, setNotes] = useState('');
 
-    // Populate form when editing
+    // Course Selection
+    const [selectedCourseId, setSelectedCourseId] = useState('');
+
+    // Classroom Selection
+    const [grade, setGrade] = useState('');
+    const [subject, setSubject] = useState('');
+    const [strand, setStrand] = useState('');
+    const [substrand, setSubstrand] = useState('');
+
+    // Load available grades
+    const grades = Object.keys(contentJson);
+    const subjects = grade ? Object.keys((contentJson as GradeMap)[grade] || {}) : [];
+    const strands = (grade && subject) ? Object.keys((contentJson as GradeMap)[grade][subject]?.Strands || {}) : [];
+    const substrands = (grade && subject && strand)
+        ? Object.keys((contentJson as GradeMap)[grade][subject].Strands[strand]?.SubStrands || {})
+        : [];
+
     useEffect(() => {
         if (editingBlock) {
-            setTopic(editingBlock.topic);
+            setTopic(editingBlock.topic || '');
             setDate(editingBlock.date);
-            setDuration(editingBlock.duration);
             setStartTime(editingBlock.startTime || '');
+            setDuration(editingBlock.duration.toString());
             setColor(editingBlock.color);
-            setNotes(editingBlock.notes || '');
+            setSource(editingBlock.source || 'course');
+
+            if (editingBlock.source === 'course') {
+                setSelectedCourseId(editingBlock.courseId || '');
+            } else if (editingBlock.source === 'classroom' && editingBlock.classroom) {
+                setGrade(editingBlock.classroom.grade);
+                setSubject(editingBlock.classroom.subject);
+                setStrand(editingBlock.classroom.strand);
+                setSubstrand(editingBlock.classroom.substrand || '');
+            }
         } else {
-            // Default to today
-            const today = new Date().toISOString().split('T')[0];
+            // Defaults for new block
             setTopic('');
-            setDate(today);
-            setDuration(60);
-            setStartTime('');
+            setDate(new Date().toISOString().split('T')[0]);
+            setStartTime('09:00');
+            setDuration('60');
             setColor('cyan');
-            setNotes('');
+            setSource('course');
+
+            setSelectedCourseId('');
+            setGrade('');
+            setSubject('');
+            setStrand('');
+            setSubstrand('');
         }
     }, [editingBlock, showBlockModal]);
+
+    // Auto-fill topic based on selection
+    useEffect(() => {
+        if (source === 'course' && selectedCourseId) {
+            const course = myCourses.find(c => c.id === selectedCourseId);
+            if (course) setTopic(course.title);
+        }
+    }, [source, selectedCourseId, myCourses]);
+
+    useEffect(() => {
+        if (source === 'classroom') {
+            if (substrand) setTopic(substrand);
+            else if (strand) setTopic(strand);
+        }
+    }, [source, strand, substrand]);
+
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const blockData: any = {
+            date,
+            startTime,
+            duration: parseInt(duration),
+            topic,
+            color,
+            source,
+        };
+
+        if (source === 'course') {
+            blockData.courseId = selectedCourseId;
+        } else {
+            blockData.classroom = {
+                grade,
+                subject,
+                strand,
+                substrand
+            };
+        }
+
+        if (editingBlock) {
+            await updateBlock(editingBlock.id, blockData);
+        } else {
+            await createBlock(blockData);
+        }
+
+        handleClose();
+    };
 
     const handleClose = () => {
         setShowBlockModal(false);
         setEditingBlock(null);
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!topic.trim() || !date) return;
-
-        if (editingBlock) {
-            await updateBlock(editingBlock.id, {
-                topic: topic.trim(),
-                date,
-                duration,
-                startTime: startTime || undefined,
-                color,
-                notes: notes.trim() || undefined,
-            });
-        } else {
-            await createBlock({
-                topic: topic.trim(),
-                date,
-                duration,
-                startTime: startTime || undefined,
-                color,
-                notes: notes.trim() || undefined,
-            });
-        }
-
-        handleClose();
-    };
-
-    const handleDelete = async () => {
-        if (editingBlock) {
-            await deleteBlock(editingBlock.id);
-            handleClose();
-        }
-    };
-
-    const handleComplete = async () => {
-        if (editingBlock) {
-            await completeBlock(editingBlock.id);
-            handleClose();
-        }
-    };
-
-    const colors: { value: StudyBlockColor; label: string; class: string }[] = [
-        { value: 'cyan', label: 'Default', class: 'bg-[#0ea5e9]' },
-        { value: 'emerald', label: 'Done', class: 'bg-[#10b981]' },
-        { value: 'amber', label: 'Priority', class: 'bg-[#f59e0b]' },
-        { value: 'violet', label: 'Career', class: 'bg-[#8b5cf6]' },
-        { value: 'slate', label: 'Low', class: 'bg-[#64748b]' },
-    ];
-
-    const durations = [
-        { value: 15, label: '15 min' },
-        { value: 30, label: '30 min' },
-        { value: 45, label: '45 min' },
-        { value: 60, label: '1 hour' },
-        { value: 90, label: '1.5 hrs' },
-        { value: 120, label: '2 hours' },
-        { value: 180, label: '3 hours' },
-    ];
-
-    if (!showBlockModal) return null;
-
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-            {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-black/60"
-                onClick={handleClose}
-            />
+        <Transition appear show={showBlockModal} as={Fragment}>
+            <Dialog as="div" className="relative z-50" onClose={handleClose}>
+                <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95"
+                >
+                    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+                        <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-900 border border-white/10 p-6 text-left align-middle shadow-xl transition-all">
+                            <Dialog.Title as="h3" className="text-xl font-bold text-white mb-6">
+                                {editingBlock ? 'Edit Session' : 'Schedule Session'}
+                            </Dialog.Title>
 
-            {/* Modal */}
-            <div className="relative w-full max-w-md mx-4 bg-[#0b0f12] rounded-2xl border border-white/10 overflow-hidden">
-                {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-                    <h3 className="text-lg font-semibold text-white">
-                        {editingBlock ? 'Edit Study Block' : 'Add Study Block'}
-                    </h3>
-                    <button
-                        onClick={handleClose}
-                        className="p-1 text-white/50 hover:text-white transition-colors"
-                    >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                {/* Activity Type Toggle */}
+                                <div className="flex p-1 bg-white/5 rounded-xl border border-white/10">
+                                    <button
+                                        type="button"
+                                        onClick={() => setSource('course')}
+                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${source === 'course' ? 'bg-indigo-500 text-white shadow-lg' : 'text-white/40 hover:text-white'
+                                            }`}
+                                    >
+                                        My Courses
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setSource('classroom')}
+                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${source === 'classroom' ? 'bg-indigo-500 text-white shadow-lg' : 'text-white/40 hover:text-white'
+                                            }`}
+                                    >
+                                        Classroom
+                                    </button>
+                                </div>
 
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="p-5 space-y-4">
-                    {/* Topic */}
-                    <div>
-                        <label className="block text-xs text-white/50 mb-1.5">What to study</label>
-                        <input
-                            type="text"
-                            value={topic}
-                            onChange={(e) => setTopic(e.target.value)}
-                            placeholder="e.g., Python Basics, Machine Learning..."
-                            className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9]/50"
-                            autoFocus
-                        />
+                                {source === 'course' ? (
+                                    /* Course Selection */
+                                    <div>
+                                        <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Select Course</label>
+                                        {myCourses.length > 0 ? (
+                                            <select
+                                                required
+                                                value={selectedCourseId}
+                                                onChange={(e) => setSelectedCourseId(e.target.value)}
+                                                className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 transition-colors"
+                                            >
+                                                <option value="">Choose a course...</option>
+                                                {myCourses.map(course => (
+                                                    <option key={course.id} value={course.id}>{course.title}</option>
+                                                ))}
+                                            </select>
+                                        ) : (
+                                            <div className="text-sm text-yellow-400/80 bg-yellow-400/10 p-4 rounded-xl border border-yellow-400/20">
+                                                No enrolled courses found.
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    /* Classroom Selection */
+                                    <div className="space-y-4">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Grade</label>
+                                                <select
+                                                    required
+                                                    value={grade}
+                                                    onChange={(e) => {
+                                                        setGrade(e.target.value);
+                                                        setSubject(''); setStrand(''); setSubstrand('');
+                                                    }}
+                                                    className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500"
+                                                >
+                                                    <option value="">Select Grade</option>
+                                                    {grades.map(g => <option key={g} value={g}>{g}</option>)}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Subject</label>
+                                                <select
+                                                    required
+                                                    value={subject}
+                                                    onChange={(e) => {
+                                                        setSubject(e.target.value);
+                                                        setStrand(''); setSubstrand('');
+                                                    }}
+                                                    disabled={!grade}
+                                                    className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 disabled:opacity-50"
+                                                >
+                                                    <option value="">Select Subject</option>
+                                                    {subjects.map(s => <option key={s} value={s}>{s}</option>)}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Strand</label>
+                                            <select
+                                                required
+                                                value={strand}
+                                                onChange={(e) => {
+                                                    setStrand(e.target.value);
+                                                    setSubstrand('');
+                                                }}
+                                                disabled={!subject}
+                                                className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 disabled:opacity-50"
+                                            >
+                                                <option value="">Select Strand</option>
+                                                {strands.map(s => <option key={s} value={s}>{s}</option>)}
+                                            </select>
+                                        </div>
+                                        {strands && (
+                                            <div>
+                                                <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Sub-Strand / Topic</label>
+                                                <select
+                                                    value={substrand}
+                                                    onChange={(e) => setSubstrand(e.target.value)}
+                                                    disabled={!strand}
+                                                    className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 disabled:opacity-50"
+                                                >
+                                                    <option value="">Select Specific Topic (Optional)</option>
+                                                    {substrands.map(s => <option key={s} value={s}>{s}</option>)}
+                                                </select>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Time Selection */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Date</label>
+                                        <input
+                                            type="date"
+                                            required
+                                            value={date}
+                                            onChange={(e) => setDate(e.target.value)}
+                                            className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 transition-colors [color-scheme:dark]"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-white/40 uppercase tracking-wider mb-2">Time</label>
+                                        <input
+                                            type="time"
+                                            required
+                                            value={startTime}
+                                            onChange={(e) => setStartTime(e.target.value)}
+                                            className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 transition-colors [color-scheme:dark]"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-end gap-3 mt-8 border-t border-white/10 pt-6">
+                                    <button
+                                        type="button"
+                                        onClick={handleClose}
+                                        className="px-6 py-2 rounded-xl text-white/60 hover:text-white hover:bg-white/5 font-bold transition-all"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-8 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-500/25 transition-all"
+                                    >
+                                        {editingBlock ? 'Save Changes' : 'Schedule Session'}
+                                    </button>
+                                </div>
+                            </form>
+                        </Dialog.Panel>
                     </div>
-
-                    {/* Date and Time */}
-                    <div className="grid grid-cols-2 gap-3">
-                        <div>
-                            <label className="block text-xs text-white/50 mb-1.5">Date</label>
-                            <input
-                                type="date"
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#0ea5e9]/50"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs text-white/50 mb-1.5">Start time (optional)</label>
-                            <input
-                                type="time"
-                                value={startTime}
-                                onChange={(e) => setStartTime(e.target.value)}
-                                className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#0ea5e9]/50"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Duration */}
-                    <div>
-                        <label className="block text-xs text-white/50 mb-1.5">Duration</label>
-                        <div className="flex flex-wrap gap-2">
-                            {durations.map((d) => (
-                                <button
-                                    key={d.value}
-                                    type="button"
-                                    onClick={() => setDuration(d.value)}
-                                    className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${duration === d.value
-                                            ? 'bg-[#0ea5e9] text-white'
-                                            : 'bg-white/5 text-white/60 hover:bg-white/10'
-                                        }`}
-                                >
-                                    {d.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Color */}
-                    <div>
-                        <label className="block text-xs text-white/50 mb-1.5">Color</label>
-                        <div className="flex gap-2">
-                            {colors.map((c) => (
-                                <button
-                                    key={c.value}
-                                    type="button"
-                                    onClick={() => setColor(c.value)}
-                                    className={`w-8 h-8 rounded-full ${c.class} transition-transform ${color === c.value ? 'ring-2 ring-white ring-offset-2 ring-offset-[#0b0f12] scale-110' : ''
-                                        }`}
-                                    title={c.label}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Notes */}
-                    <div>
-                        <label className="block text-xs text-white/50 mb-1.5">Notes (optional)</label>
-                        <textarea
-                            value={notes}
-                            onChange={(e) => setNotes(e.target.value)}
-                            placeholder="Any additional notes..."
-                            rows={2}
-                            className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-[#0ea5e9]/50 resize-none"
-                        />
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex gap-2 pt-2">
-                        {editingBlock && !editingBlock.completed && (
-                            <button
-                                type="button"
-                                onClick={handleComplete}
-                                className="px-4 py-2.5 bg-[#10b981] text-white rounded-lg text-sm font-medium hover:bg-[#10b981]/90 transition-colors"
-                            >
-                                Mark Complete
-                            </button>
-                        )}
-                        {editingBlock && (
-                            <button
-                                type="button"
-                                onClick={handleDelete}
-                                className="px-4 py-2.5 bg-red-500/10 text-red-400 rounded-lg text-sm font-medium hover:bg-red-500/20 transition-colors"
-                            >
-                                Delete
-                            </button>
-                        )}
-                        <div className="flex-1" />
-                        <button
-                            type="button"
-                            onClick={handleClose}
-                            className="px-4 py-2.5 bg-white/5 text-white/60 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={!topic.trim() || !date}
-                            className="px-4 py-2.5 bg-[#0ea5e9] text-white rounded-lg text-sm font-medium hover:bg-[#0ea5e9]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {editingBlock ? 'Update' : 'Create'}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                </Transition.Child>
+            </Dialog>
+        </Transition>
     );
 }

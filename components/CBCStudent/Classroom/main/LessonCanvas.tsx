@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import EmptyLessonState from "./EmptyLessonState";
 import contentJson from "@/content.json";
 import StudentTextbookRenderer, { TocItem } from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
@@ -45,14 +46,15 @@ interface LessonCanvasProps {
 }
 
 export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
+  const searchParams = useSearchParams();
   const grades = Object.keys(contentData);
   const { activateLearningMode, activateQuizMode } = useTutor();
 
-  const [selectedGrade, setSelectedGrade] = useState<string>("");
+  const [selectedGrade, setSelectedGrade] = useState<string>(searchParams.get('grade') || "");
   const [subjects, setSubjects] = useState<string[]>([]);
-  const [selectedSubject, setSelectedSubject] = useState<string>("");
+  const [selectedSubject, setSelectedSubject] = useState<string>(searchParams.get('subject') || "");
   const [strands, setStrands] = useState<string[]>([]);
-  const [selectedStrand, setSelectedStrand] = useState<string>("");
+  const [selectedStrand, setSelectedStrand] = useState<string>(searchParams.get('strand') || "");
 
   const [textbook, setTextbook] = useState<TextbookData | null>(null);
   const [loading, setLoading] = useState(false);

@@ -62,12 +62,6 @@ interface ScheduleContextType {
     deleteBlock: (blockId: string) => Promise<void>;
     completeBlock: (blockId: string) => Promise<void>;
 
-    // Learning goals
-    goals: LearningGoal[];
-    createGoal: (goal: Omit<LearningGoal, 'id' | 'userId' | 'createdAt' | 'completedHours'>) => Promise<void>;
-    updateGoal: (goalId: string, updates: Partial<LearningGoal>) => Promise<void>;
-    deleteGoal: (goalId: string) => Promise<void>;
-
     // Streak
     streak: StudyStreak | null;
 
@@ -99,7 +93,6 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
 
     // Data state
     const [blocks, setBlocks] = useState<StudyBlock[]>([]);
-    const [goals, setGoals] = useState<LearningGoal[]>([]);
     const [streak, setStreak] = useState<StudyStreak | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -166,11 +159,11 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
             weekStart: formatDate(currentWeekStart),
             weekEnd: formatDate(weekEnd),
             blocks,
-            goals,
+            goals: [],
             totalPlannedMinutes,
             totalCompletedMinutes,
         };
-    }, [currentWeekStart, blocks, goals]);
+    }, [currentWeekStart, blocks]);
 
     // Calculate reminders
     const reminders = useMemo((): UpcomingReminder[] => {
@@ -227,7 +220,6 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
             if (response.ok) {
                 const data = await response.json();
                 setBlocks(data.blocks || []);
-                setGoals(data.goals || []);
                 setStreak(data.streak || null);
             }
         } catch (error) {
@@ -243,95 +235,127 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
     ) => {
         if (!user) return;
 
-        const newBlock: StudyBlock = {
-            ...blockData,
-            id: `block-${Date.now()}`,
-            userId: user.uid,
-            completed: false,
-            createdAt: new Date(),
-        };
+        try {
+            const response = await fetch('/api/schedule', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'block',
+                    data: { ...blockData, userId: user.uid }
+                }),
+            });
 
-        setBlocks(prev => [...prev, newBlock]);
-
-        // TODO: Persist to Firestore via API
+            if (response.ok) {
+                const { block } = await response.json();
+                setBlocks(prev => [...prev, block]);
+            }
+        } catch (error) {
+            console.error('Failed to create block:', error);
+            // Fallback for local dev if API fails
+            const newBlock: StudyBlock = {
+                ...blockData,
+                id: `block-${Date.now()}`,
+                userId: user.uid,
+                completed: false,
+                createdAt: new Date(),
+            };
+            setBlocks(prev => [...prev, newBlock]);
+        }
     }, [user]);
 
     // Update block
     const updateBlock = useCallback(async (blockId: string, updates: Partial<StudyBlock>) => {
+        if (!user) return;
         setBlocks(prev => prev.map(b =>
             b.id === blockId ? { ...b, ...updates, updatedAt: new Date() } : b
         ));
-        // TODO: Persist to Firestore
-    }, []);
+
+        try {
+            await fetch('/api/schedule', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'block',
+                    id: blockId,
+                    updates,
+                    userId: user.uid
+                }),
+            });
+        } catch (error) {
+            console.error('Failed to update block:', error);
+        }
+    }, [user]);
 
     // Delete block
     const deleteBlock = useCallback(async (blockId: string) => {
+        if (!user) return;
         setBlocks(prev => prev.filter(b => b.id !== blockId));
-        // TODO: Persist to Firestore
-    }, []);
+
+        try {
+            await fetch(`/api/schedule?id=${blockId}&type=block&userId=${user.uid}`, {
+                method: 'DELETE',
+            });
+        } catch (error) {
+            console.error('Failed to delete block:', error);
+        }
+    }, [user]);
 
     // Complete block
     const completeBlock = useCallback(async (blockId: string) => {
+        if (!user) return;
         setBlocks(prev => prev.map(b =>
             b.id === blockId
                 ? { ...b, completed: true, completedAt: new Date(), color: 'emerald' as StudyBlockColor }
                 : b
         ));
 
-        // Update streak
+        try {
+            await fetch('/api/schedule', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'block',
+                    id: blockId,
+                    updates: { completed: true, completedAt: new Date().toISOString(), color: 'emerald' },
+                    userId: user.uid
+                }),
+            });
+        } catch (error) {
+            console.error('Failed to complete block:', error);
+        }
+
+        // Update streak (should also persist to Firestore ideally)
         setStreak(prev => {
-            if (!prev) {
-                return {
-                    userId: user?.uid || '',
-                    currentStreak: 1,
-                    longestStreak: 1,
-                    lastStudyDate: formatDate(new Date()),
-                    totalStudyDays: 1,
-                    weeklyStudyDays: [1, 0, 0, 0, 0, 0, 0],
-                };
-            }
-            const newStreak = prev.currentStreak + 1;
-            return {
+            const nextStreak = prev ? {
                 ...prev,
-                currentStreak: newStreak,
-                longestStreak: Math.max(prev.longestStreak, newStreak),
+                currentStreak: prev.currentStreak + 1,
+                longestStreak: Math.max(prev.longestStreak, prev.currentStreak + 1),
                 lastStudyDate: formatDate(new Date()),
                 totalStudyDays: prev.totalStudyDays + 1,
+            } : {
+                userId: user.uid,
+                currentStreak: 1,
+                longestStreak: 1,
+                lastStudyDate: formatDate(new Date()),
+                totalStudyDays: 1,
+                weeklyStudyDays: [1, 0, 0, 0, 0, 0, 0],
             };
+
+            // Persist streak
+            fetch('/api/schedule', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'streak',
+                    id: 'studyStreak',
+                    updates: nextStreak,
+                    userId: user.uid
+                }),
+            }).catch(err => console.error('Failed to persist streak:', err));
+
+            return nextStreak;
         });
     }, [user]);
-
-    // Create goal
-    const createGoal = useCallback(async (
-        goalData: Omit<LearningGoal, 'id' | 'userId' | 'createdAt' | 'completedHours'>
-    ) => {
-        if (!user) return;
-
-        const newGoal: LearningGoal = {
-            ...goalData,
-            id: `goal-${Date.now()}`,
-            userId: user.uid,
-            completedHours: 0,
-            createdAt: new Date(),
-        };
-
-        setGoals(prev => [...prev, newGoal]);
-        // TODO: Persist to Firestore
-    }, [user]);
-
-    // Update goal
-    const updateGoal = useCallback(async (goalId: string, updates: Partial<LearningGoal>) => {
-        setGoals(prev => prev.map(g =>
-            g.id === goalId ? { ...g, ...updates, updatedAt: new Date() } : g
-        ));
-        // TODO: Persist to Firestore
-    }, []);
-
-    // Delete goal
-    const deleteGoal = useCallback(async (goalId: string) => {
-        setGoals(prev => prev.filter(g => g.id !== goalId));
-        // TODO: Persist to Firestore
-    }, []);
 
     const value: ScheduleContextType = {
         currentWeekStart,
@@ -346,10 +370,6 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
         updateBlock,
         deleteBlock,
         completeBlock,
-        goals,
-        createGoal,
-        updateGoal,
-        deleteGoal,
         streak,
         reminders,
         editingBlock,
