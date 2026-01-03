@@ -15,6 +15,15 @@ interface CourseProgressInfo {
     overallProgress: number;
 }
 
+// Helper: flexible title matching
+function matchesTopic(title: string, searchTerm: string): boolean {
+    const titleLower = title.toLowerCase();
+    const searchLower = searchTerm.toLowerCase();
+    return titleLower.includes(searchLower) ||
+        searchLower.includes(titleLower) ||
+        titleLower === searchLower;
+}
+
 export async function GET(
     request: NextRequest,
     { params }: { params: { pathId: string } }
@@ -40,47 +49,47 @@ export async function GET(
         }
 
         const pathData = pathDoc.data();
-        const courses = pathData?.courses || [];
+        const careerCourses = pathData?.courses || [];
 
-        // Get user's saved courses
+        // Get user's saved courses with their details
         const savedCoursesSnapshot = await adminDb
             .collection('users')
             .doc(userId)
             .collection('savedCourses')
             .get();
 
-        const savedCourseIds = new Set(
-            savedCoursesSnapshot.docs.map(doc => doc.data().courseId)
-        );
+        const savedCourseIds = savedCoursesSnapshot.docs.map(doc => doc.data().courseId);
 
-        // Get course details and progress
+        // Get all saved course details
+        const courseDetailsMap = new Map<string, { id: string; title: string }>();
+        for (const courseId of savedCourseIds) {
+            const courseDoc = await adminDb.collection('courses').doc(courseId).get();
+            if (courseDoc.exists) {
+                const data = courseDoc.data();
+                courseDetailsMap.set(courseId, { id: courseId, title: data?.title || '' });
+            }
+        }
+
+        // Build progress list
         const progressList: CourseProgressInfo[] = [];
 
-        for (const course of courses) {
-            // Try to find matching course in database
-            const coursesSnapshot = await adminDb
-                .collection('courses')
-                .where('title', '==', course.title)
-                .limit(1)
-                .get();
+        for (const careerCourse of careerCourses) {
+            // Find matching course using flexible matching
+            let matchedCourseId: string | null = null;
+            let matchedCourseTitle: string | null = null;
 
-            if (coursesSnapshot.empty) {
-                progressList.push({
-                    title: course.title,
-                    enrolled: false,
-                    isCompleted: false,
-                    overallProgress: 0,
-                });
-                continue;
+            for (const [id, details] of courseDetailsMap.entries()) {
+                if (matchesTopic(details.title, careerCourse.title)) {
+                    matchedCourseId = id;
+                    matchedCourseTitle = details.title;
+                    break;
+                }
             }
 
-            const courseDoc = coursesSnapshot.docs[0];
-            const courseId = courseDoc.id;
-            const isEnrolled = savedCourseIds.has(courseId);
-
-            if (!isEnrolled) {
+            if (!matchedCourseId) {
+                // User hasn't enrolled in this course yet
                 progressList.push({
-                    title: course.title,
+                    title: careerCourse.title,
                     enrolled: false,
                     isCompleted: false,
                     overallProgress: 0,
@@ -91,7 +100,7 @@ export async function GET(
             // Get progress for this course
             const progressDoc = await adminDb
                 .collection('courses')
-                .doc(courseId)
+                .doc(matchedCourseId)
                 .collection('progress')
                 .doc(userId)
                 .get();
@@ -99,14 +108,15 @@ export async function GET(
             if (progressDoc.exists) {
                 const progressData = progressDoc.data();
                 progressList.push({
-                    title: course.title,
+                    title: careerCourse.title,
                     enrolled: true,
                     isCompleted: progressData?.isCompleted || false,
                     overallProgress: progressData?.overallProgress || 0,
                 });
             } else {
+                // Enrolled but no progress tracked yet
                 progressList.push({
-                    title: course.title,
+                    title: careerCourse.title,
                     enrolled: true,
                     isCompleted: false,
                     overallProgress: 0,

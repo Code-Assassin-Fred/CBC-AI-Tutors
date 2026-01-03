@@ -40,8 +40,18 @@ function CoursesPageContent() {
             enrollCheckedRef.current = true;
 
             const handleEnrollment = async () => {
-                // 1. Check if user already has it
-                const existingInMyCourses = myCourses.find(c => c.title.toLowerCase() === enrollTopic.toLowerCase());
+                const enrollTopicLower = enrollTopic.toLowerCase();
+
+                // Helper: check if course matches (contains search term or vice versa)
+                const matchesTopic = (title: string) => {
+                    const titleLower = title.toLowerCase();
+                    return titleLower.includes(enrollTopicLower) ||
+                        enrollTopicLower.includes(titleLower) ||
+                        titleLower === enrollTopicLower;
+                };
+
+                // 1. Check if user already has a matching course
+                const existingInMyCourses = myCourses.find(c => matchesTopic(c.title));
                 if (existingInMyCourses) {
                     router.push(`/dashboard/student/courses/${existingInMyCourses.id}`);
                     return;
@@ -49,13 +59,13 @@ function CoursesPageContent() {
 
                 // 2. Check if it exists globally
                 const globalCourses = await discoverCourses(enrollTopic);
-                const exactMatch = globalCourses.find(c => c.title.toLowerCase() === enrollTopic.toLowerCase());
+                const matchingCourse = globalCourses.find(c => matchesTopic(c.title));
 
-                if (exactMatch) {
+                if (matchingCourse) {
                     // Auto-enroll and navigate (with career path link)
-                    const enrolled = await enrollInCourse(exactMatch.id, careerPathId);
+                    const enrolled = await enrollInCourse(matchingCourse.id, careerPathId);
                     if (enrolled) {
-                        router.push(`/dashboard/student/courses/${exactMatch.id}`);
+                        router.push(`/dashboard/student/courses/${matchingCourse.id}`);
                     }
                 } else {
                     // 3. Generate it (with career path link)
