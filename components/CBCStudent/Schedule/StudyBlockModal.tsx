@@ -116,6 +116,19 @@ export default function StudyBlockModal() {
         }
     }, [source, strand, substrand]);
 
+    // Auto-select color based on topic
+    useEffect(() => {
+        if (!editingBlock && topic) {
+            const colors: StudyBlockColor[] = ['emerald', 'amber', 'violet', 'rose', 'slate', 'cyan'];
+            let hash = 0;
+            for (let i = 0; i < topic.length; i++) {
+                hash = topic.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            const index = Math.abs(hash) % colors.length;
+            setColor(colors[index]);
+        }
+    }, [topic, editingBlock]);
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

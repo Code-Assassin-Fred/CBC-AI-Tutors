@@ -76,13 +76,7 @@ export default function UpcomingLessons() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-lg font-semibold text-white/95">Schedule</h2>
-          <p className="text-sm text-[#9aa6b2] mt-1">
-            {hasTodaysBlocks ? "Today's sessions" : 'Suggested courses'}
-          </p>
         </div>
-        <span className="text-xs text-orange-400 hover:text-orange-300 font-medium cursor-pointer">
-          View All
-        </span>
       </div>
 
       {/* Lesson/Block Cards */}
@@ -149,13 +143,21 @@ export default function UpcomingLessons() {
         </div>
       )}
 
-      {/* Plain text CTA */}
-      <button
-        onClick={() => router.push('/dashboard/student/schedule')}
-        className="mt-4 text-sm text-white/90 cursor-pointer hover:text-orange-400 transition-colors duration-300 bg-transparent border-none p-0"
-      >
-        + Add to Calendar
-      </button>
+      {/* Footer Actions */}
+      <div className="flex items-center justify-between mt-4">
+        <button
+          onClick={() => router.push('/dashboard/student/schedule')}
+          className="text-sm text-white/60 cursor-pointer hover:text-white transition-colors duration-300 bg-transparent border-none p-0"
+        >
+          View Full Schedule
+        </button>
+        <button
+          onClick={() => router.push('/dashboard/student/schedule')}
+          className="text-sm text-sky-400 cursor-pointer hover:text-sky-300 transition-colors duration-300 bg-transparent border-none p-0"
+        >
+          + Add
+        </button>
+      </div>
     </Card>
   );
 }
