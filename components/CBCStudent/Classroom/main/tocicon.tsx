@@ -41,14 +41,14 @@ export default function TOCIcon({ toc }: TOCIconProps) {
           onClick={() => setTocOpen(false)}
         >
           <div
-            className="absolute bottom-0 left-0 w-1/2 max-h-[80%] bg-[#0a0f14] rounded-t-2xl shadow-2xl border-t border-r border-white/10 overflow-hidden transform transition-transform duration-300 ease-out"
+            className="absolute bottom-0 left-0 w-1/2 max-h-[80%] bg-[#0c4a6e] rounded-t-2xl shadow-2xl border-t border-r border-sky-400/30 overflow-hidden transform transition-transform duration-300 ease-out"
             style={{
               animation: tocOpen ? 'slideUp 0.3s ease-out' : 'none'
             }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-white/10 bg-black/20">
+            <div className="flex items-center justify-between p-6 border-b border-sky-400/20 bg-[#082f49]">
               <div className="flex items-center gap-3">
                 <h2 className="text-3x1 font-bold text-white">Table of Contents</h2>
               </div>

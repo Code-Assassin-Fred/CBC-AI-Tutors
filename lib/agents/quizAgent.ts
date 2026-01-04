@@ -153,17 +153,17 @@ export async function runQuizAgent(
   callbacks: QuizStepCallback
 ): Promise<QuizOutput> {
   // Step 1: Extract concepts
-  callbacks.onStepStart(1, 'Identifying key concepts...');
+  callbacks.onStepStart(1, 'Searching the treasure chest...');
   const concepts = await extractConcepts(context);
   callbacks.onStepComplete(1);
 
   // Step 2: Generate questions
-  callbacks.onStepStart(2, 'Creating questions...');
+  callbacks.onStepStart(2, 'Crafting challenges...');
   const questions = await generateQuestions(context, concepts);
   callbacks.onStepComplete(2);
 
   // Step 3: Validate
-  callbacks.onStepStart(3, 'Validating quiz...');
+  callbacks.onStepStart(3, 'Polishing the gems...');
   const validatedQuestions = await validateQuestions(context, questions);
   callbacks.onStepComplete(3);
 

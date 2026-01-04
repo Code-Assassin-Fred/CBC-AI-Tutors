@@ -16,7 +16,9 @@ interface QuizState {
     showResult: boolean;
     showFinalResults: boolean;
     isSaving: boolean;
+    isAssessing: boolean;
     aiSummary?: string;
+    fillBlankCorrect?: boolean; // Track if fill-blank was correct via AI
 }
 
 export default function QuizModeView({ quiz }: QuizModeViewProps) {
@@ -27,6 +29,7 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
         showResult: false,
         showFinalResults: false,
         isSaving: false,
+        isAssessing: false,
     });
     const { user } = useAuth();
     const { context } = useTutor();
@@ -47,19 +50,73 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
     const handleSelectAnswer = (answer: string) => {
         if (state.showResult) return;
         setSelectedAnswer(answer);
+
+        // Auto-submit for multiple choice and true/false questions
+        if (currentQuestion.type !== 'fill_blank') {
+            const newAnswers = new Map(state.answers);
+            newAnswers.set(currentQuestion.id, answer);
+
+            setState({
+                ...state,
+                answers: newAnswers,
+                showResult: true,
+            });
+        }
     };
 
-    const handleSubmitAnswer = () => {
+    const handleSubmitAnswer = async () => {
         if (!selectedAnswer) return;
 
-        const newAnswers = new Map(state.answers);
-        newAnswers.set(currentQuestion.id, selectedAnswer);
+        // For fill-blank questions, use AI assessment
+        if (currentQuestion.type === 'fill_blank') {
+            setState(prev => ({ ...prev, isAssessing: true }));
 
-        setState({
-            ...state,
-            answers: newAnswers,
-            showResult: true,
-        });
+            try {
+                const response = await axios.post('/api/tutor/assess', {
+                    studentAnswer: selectedAnswer,
+                    concept: currentQuestion.concept,
+                    keyPointsToCheck: [currentQuestion.correctAnswer],
+                    rubric: {
+                        excellent: ['Correct answer or semantically equivalent'],
+                        good: ['Partially correct'],
+                        needsWork: ['Incorrect answer'],
+                    },
+                    promptForStudent: currentQuestion.question,
+                });
+
+                const isCorrectByAI = response.data.score >= 70;
+                const newAnswers = new Map(state.answers);
+                // Store the correct answer if AI says it's correct (for scoring)
+                newAnswers.set(currentQuestion.id, isCorrectByAI ? currentQuestion.correctAnswer : selectedAnswer);
+
+                setState(prev => ({
+                    ...prev,
+                    answers: newAnswers,
+                    showResult: true,
+                    isAssessing: false,
+                    fillBlankCorrect: isCorrectByAI,
+                }));
+            } catch (error) {
+                console.error('Fill-blank assessment failed:', error);
+                const newAnswers = new Map(state.answers);
+                newAnswers.set(currentQuestion.id, selectedAnswer);
+                setState(prev => ({
+                    ...prev,
+                    answers: newAnswers,
+                    showResult: true,
+                    isAssessing: false,
+                }));
+            }
+        } else {
+            const newAnswers = new Map(state.answers);
+            newAnswers.set(currentQuestion.id, selectedAnswer);
+
+            setState({
+                ...state,
+                answers: newAnswers,
+                showResult: true,
+            });
+        }
     };
 
     const handleNext = () => {
@@ -117,7 +174,12 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
         }
     };
 
-    const isCorrect = state.showResult && selectedAnswer === currentQuestion.correctAnswer;
+    // For fill-blank, use AI assessment result; for others, use exact match
+    const isCorrect = state.showResult && (
+        currentQuestion.type === 'fill_blank'
+            ? state.fillBlankCorrect ?? false
+            : selectedAnswer === currentQuestion.correctAnswer
+    );
     const score = Math.round((correctAnswers / totalQuestions) * 100);
     const passed = score >= quiz.passingScore;
 
@@ -176,6 +238,7 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                                     showResult: false,
                                     showFinalResults: false,
                                     isSaving: false,
+                                    isAssessing: false,
                                 });
                                 setSelectedAnswer(null);
                             }}
@@ -225,9 +288,6 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                     <p className="text-sm text-white leading-relaxed font-medium">
                         {currentQuestion.question}
                     </p>
-                    {currentQuestion.hint && !state.showResult && (
-                        <p className="text-[10px] text-sky-400 uppercase tracking-widest italic">Hint: {currentQuestion.hint}</p>
-                    )}
                 </div>
 
                 {/* Options - Minimalist */}
@@ -270,14 +330,26 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
 
                 {/* Fill Blank - Minimalist */}
                 {currentQuestion.type === 'fill_blank' && (
-                    <input
-                        type="text"
-                        value={selectedAnswer || ''}
-                        onChange={(e) => setSelectedAnswer(e.target.value)}
-                        disabled={state.showResult}
-                        placeholder="Type answer..."
-                        className="w-full bg-transparent border-b border-white/20 p-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-white/40 transition-all"
-                    />
+                    <div className="space-y-4">
+                        <input
+                            type="text"
+                            value={selectedAnswer || ''}
+                            onChange={(e) => setSelectedAnswer(e.target.value)}
+                            disabled={state.showResult || state.isAssessing}
+                            placeholder="Type answer..."
+                            className="w-full bg-transparent border-b border-white/20 p-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-white/40 transition-all"
+                            onKeyDown={(e) => e.key === 'Enter' && !state.showResult && handleSubmitAnswer()}
+                        />
+                        {!state.showResult && (
+                            <button
+                                onClick={handleSubmitAnswer}
+                                disabled={!selectedAnswer || state.isAssessing}
+                                className="w-full py-3 bg-sky-600 hover:bg-sky-500 disabled:bg-white/5 disabled:text-white/20 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-all"
+                            >
+                                {state.isAssessing ? 'Checking...' : 'Submit Answer'}
+                            </button>
+                        )}
+                    </div>
                 )}
 
                 {/* Explanation Area */}
@@ -292,26 +364,16 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
             </div>
 
             {/* Navigation - Minimalist */}
-            <div className="mt-8 pt-4 border-t border-white/10 flex gap-2">
-                {!state.showResult ? (
+            {state.showResult && (
+                <div className="mt-8 pt-4 border-t border-white/10 flex gap-2">
                     <button
-                        onClick={handleSubmitAnswer}
-                        disabled={!selectedAnswer}
-                        className="flex-1 py-4 bg-sky-600 hover:bg-sky-500 disabled:bg-white/5 disabled:text-white/20 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-all"
+                        onClick={handleNext}
+                        className="flex-1 py-4 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-all"
                     >
-                        Verify Answer
+                        {state.currentIndex < totalQuestions - 1 ? 'Next Phase' : 'Finalize'}
                     </button>
-                ) : (
-                    <>
-                        <button
-                            onClick={handleNext}
-                            className="flex-1 py-4 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-all"
-                        >
-                            {state.currentIndex < totalQuestions - 1 ? 'Next Phase' : 'Finalize'}
-                        </button>
-                    </>
-                )}
-            </div>
+                </div>
+            )}
         </div>
     );
 }

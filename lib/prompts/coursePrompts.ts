@@ -80,7 +80,7 @@ export const LESSON_PODCAST_PROMPT = (
     readContent: string,
     keyConcepts: string[]
 ) => `
-You are creating an educational podcast script with two hosts: Jo (the expert/teacher) and Beau (the curious learner).
+You are creating an educational podcast script with two hosts: Jordan (the expert teacher) and Beau (the curious learner).
 
 LESSON: "${lessonTitle}"
 KEY CONCEPTS: ${keyConcepts.join(', ')}
@@ -89,12 +89,14 @@ CONTENT TO COVER:
 ${readContent.slice(0, 4000)}
 
 Create an engaging conversational podcast script where:
-- Beau asks curious questions a learner would ask
-- Jo explains concepts clearly with analogies
+- Beau (the Student) asks curious questions a learner would ask
+- Jordan (the Teacher) explains concepts clearly with analogies
 - The conversation feels natural, not scripted
 - Complex topics are broken down through dialogue
 - Include moments of humor and connection
 - Duration: 8-12 minutes of dialogue
+
+IMPORTANT: Use "Teacher" for Jordan and "Student" for Beau in the speaker field.
 
 Respond with ONLY a JSON object:
 {
@@ -104,13 +106,13 @@ Respond with ONLY a JSON object:
     "dialogue": [
         {
             "id": "d1",
-            "speaker": "Beau",
+            "speaker": "Student",
             "text": "What they say...",
             "emotion": "curious" | "excited" | "thoughtful" | "encouraging"
         },
         {
             "id": "d2", 
-            "speaker": "Jo",
+            "speaker": "Teacher",
             "text": "Response...",
             "emotion": "encouraging"
         }

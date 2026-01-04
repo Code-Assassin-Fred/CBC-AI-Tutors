@@ -315,18 +315,18 @@ export function TutorProvider({ children }: TutorProviderProps) {
             // Continue with generation if cache check fails
         }
 
-        // Initialize loading progress for 6 steps
+        // Initialize loading progress for 6 steps with creative, abstract names
         const initialProgress: LoadingProgress = {
             type: 'planner',
             currentStep: 0,
             totalSteps: 6,
             steps: [
-                { name: 'Reading your lesson...', status: 'pending' },
-                { name: 'Thinking...', status: 'pending' },
-                { name: 'Preparing your study guide...', status: 'pending' },
-                { name: 'Cooking something great...', status: 'pending' },
-                { name: 'Creating your experience...', status: 'pending' },
-                { name: 'Adding finishing touches...', status: 'pending' },
+                { name: 'Gathering ingredients...', status: 'pending' },
+                { name: 'Mixing the magic...', status: 'pending' },
+                { name: 'Sprinkling knowledge...', status: 'pending' },
+                { name: 'Brewing something special...', status: 'pending' },
+                { name: 'Adding a dash of wisdom...', status: 'pending' },
+                { name: 'Final taste test...', status: 'pending' },
             ],
         };
         setLoadingProgress(initialProgress);
@@ -453,15 +453,15 @@ export function TutorProvider({ children }: TutorProviderProps) {
         setContext(substrandContext);
         setMode('loading');
 
-        // Initialize loading progress for 3 steps
+        // Initialize loading progress for 3 steps with creative, abstract names
         const initialProgress: LoadingProgress = {
             type: 'quiz',
             currentStep: 0,
             totalSteps: 3,
             steps: [
-                { name: 'Identifying key concepts', status: 'pending' },
-                { name: 'Creating questions', status: 'pending' },
-                { name: 'Validating quiz', status: 'pending' },
+                { name: 'Searching the treasure chest...', status: 'pending' },
+                { name: 'Crafting challenges...', status: 'pending' },
+                { name: 'Polishing the gems...', status: 'pending' },
             ],
         };
         setLoadingProgress(initialProgress);

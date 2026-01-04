@@ -54,63 +54,47 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
 
         setIsAssessing(true);
 
-        // Simple client-side assessment (in production, this would call an API)
-        const assessment = assessExplanation(currentChunk, userExplanation);
+        try {
+            // Call AI assessment API for semantic evaluation
+            const response = await axios.post('/api/tutor/assess', {
+                studentAnswer: userExplanation,
+                concept: currentChunk.concept,
+                keyPointsToCheck: currentChunk.keyPointsToCheck,
+                rubric: currentChunk.scoringRubric,
+                promptForStudent: currentChunk.promptForStudent,
+            });
 
-        setAssessments(prev => new Map(prev).set(currentChunk.id, assessment));
-        setPhase('feedback');
-        setIsAssessing(false);
+            const assessment: AssessmentResult = {
+                chunkId: currentChunk.id,
+                score: response.data.score,
+                level: response.data.level,
+                matchedKeyPoints: response.data.matchedKeyPoints,
+                missedKeyPoints: response.data.missedKeyPoints,
+                feedback: response.data.feedback,
+                shouldRetry: response.data.shouldRetry,
+            };
 
-        // Clear transcript for next input
-        setAudioState(prev => ({ ...prev, transcript: '' }));
-    };
-
-    const assessExplanation = (chunk: ImmersiveChunk, explanation: string): AssessmentResult => {
-        const lowerExplanation = explanation.toLowerCase();
-        const matchedPoints: string[] = [];
-        const missedPoints: string[] = [];
-
-        chunk.keyPointsToCheck.forEach(point => {
-            // Simple keyword matching (in production, use AI)
-            const keywords = point.toLowerCase().split(' ').filter(w => w.length > 3);
-            const hasMatch = keywords.some(kw => lowerExplanation.includes(kw));
-
-            if (hasMatch) {
-                matchedPoints.push(point);
-            } else {
-                missedPoints.push(point);
-            }
-        });
-
-        const score = Math.round((matchedPoints.length / chunk.keyPointsToCheck.length) * 100);
-
-        let level: 'excellent' | 'good' | 'needs-work';
-        let feedback: string;
-        let shouldRetry: boolean;
-
-        if (score >= 80) {
-            level = 'excellent';
-            feedback = `Excellent! You've demonstrated a strong understanding of ${chunk.concept}. ${chunk.scoringRubric.excellent[0] || ''}`;
-            shouldRetry = false;
-        } else if (score >= 50) {
-            level = 'good';
-            feedback = `Good effort! You covered the basics of ${chunk.concept}. ${chunk.scoringRubric.good[0] || ''}`;
-            shouldRetry = false;
-        } else {
-            level = 'needs-work';
-            feedback = chunk.followUpIfStruggling || `Let's review ${chunk.concept} together.`;
-            shouldRetry = true;
+            setAssessments(prev => new Map(prev).set(currentChunk.id, assessment));
+            setPhase('feedback');
+        } catch (error) {
+            console.error('Assessment failed:', error);
+            // Fallback: show error and allow retry
+            const fallbackAssessment: AssessmentResult = {
+                chunkId: currentChunk.id,
+                score: 0,
+                level: 'needs-work',
+                matchedKeyPoints: [],
+                missedKeyPoints: currentChunk.keyPointsToCheck,
+                feedback: 'Unable to assess your explanation. Please try again.',
+                shouldRetry: true,
+            };
+            setAssessments(prev => new Map(prev).set(currentChunk.id, fallbackAssessment));
+            setPhase('feedback');
+        } finally {
+            setIsAssessing(false);
+            // Clear transcript for next input
+            setAudioState(prev => ({ ...prev, transcript: '' }));
         }
-
-        return {
-            chunkId: chunk.id,
-            score,
-            level,
-            matchedKeyPoints: matchedPoints,
-            missedKeyPoints: missedPoints,
-            feedback,
-            shouldRetry,
-        };
     };
 
     const handleContinue = () => {

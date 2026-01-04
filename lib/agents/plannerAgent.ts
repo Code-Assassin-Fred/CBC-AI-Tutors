@@ -327,32 +327,32 @@ export async function runPlannerAgent(
   callbacks: PlannerStepCallback
 ): Promise<PlannerOutput> {
   // Step 1: Analyze
-  callbacks.onStepStart(1, 'Analyzing content...');
+  callbacks.onStepStart(1, 'Gathering ingredients...');
   const analysis = await analyzeContent(context);
   callbacks.onStepComplete(1);
 
   // Step 2: Outline
-  callbacks.onStepStart(2, 'Creating lesson outline...');
+  callbacks.onStepStart(2, 'Mixing the magic...');
   const outlines = await createOutlines(context, analysis);
   callbacks.onStepComplete(2);
 
   // Step 3a: Generate Read
-  callbacks.onStepStart(3, 'Writing Read mode content...');
+  callbacks.onStepStart(3, 'Sprinkling knowledge...');
   const readContent = await generateReadContent(context, analysis, outlines);
   callbacks.onStepComplete(3);
 
   // Step 3b: Generate Podcast
-  callbacks.onStepStart(4, 'Writing Podcast script...');
+  callbacks.onStepStart(4, 'Brewing something special...');
   const podcastScript = await generatePodcastScript(context, analysis, outlines);
   callbacks.onStepComplete(4);
 
   // Step 3c: Generate Immersive
-  callbacks.onStepStart(5, 'Creating Immersive chunks...');
+  callbacks.onStepStart(5, 'Adding a dash of wisdom...');
   const immersiveContent = await generateImmersiveContent(context, analysis, outlines);
   callbacks.onStepComplete(5);
 
   // Step 4: Refine
-  callbacks.onStepStart(6, 'Polishing content...');
+  callbacks.onStepStart(6, 'Final taste test...');
   const refined = await refineContent(context, analysis, readContent, podcastScript, immersiveContent);
   callbacks.onStepComplete(6);
 
