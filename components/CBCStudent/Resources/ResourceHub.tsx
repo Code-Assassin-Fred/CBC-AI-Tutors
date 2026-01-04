@@ -36,6 +36,25 @@ export default function ResourceHub() {
         });
     }, [activeCategory, activeSubcategory, searchQuery, loadResources]);
 
+    // Polling for background generation
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+
+        if (!isLoading && resources.length === 0 && activeCategory) {
+            interval = setInterval(() => {
+                loadResources({
+                    category: activeCategory || undefined,
+                    subcategory: activeSubcategory || undefined,
+                    searchQuery: searchQuery || undefined
+                }, true); // Silent update
+            }, 5000);
+        }
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [isLoading, resources.length, activeCategory, activeSubcategory, searchQuery, loadResources]);
+
     const handleResourceClick = (resource: Resource) => {
         setActiveResource(resource);
     };
@@ -95,8 +114,8 @@ export default function ResourceHub() {
                             setActiveSubcategory(null);
                         }}
                         className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeCategory === cat.id
-                                ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/20'
-                                : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700'
+                            ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/20'
+                            : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700'
                             }`}
                     >
                         {cat.label}
@@ -110,8 +129,8 @@ export default function ResourceHub() {
                     <button
                         onClick={() => setActiveSubcategory(null)}
                         className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${!activeSubcategory
-                                ? 'bg-slate-100 text-slate-900 border-slate-100'
-                                : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
+                            ? 'bg-slate-100 text-slate-900 border-slate-100'
+                            : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
                             }`}
                     >
                         All
@@ -121,8 +140,8 @@ export default function ResourceHub() {
                             key={sub.id}
                             onClick={() => setActiveSubcategory(sub.id)}
                             className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${activeSubcategory === sub.id
-                                    ? 'bg-teal-500/10 text-teal-400 border-teal-500/30'
-                                    : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
+                                ? 'bg-teal-500/10 text-teal-400 border-teal-500/30'
+                                : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
                                 }`}
                         >
                             {sub.label}

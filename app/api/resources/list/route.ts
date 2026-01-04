@@ -47,15 +47,16 @@ export async function GET(req: NextRequest) {
             console.log(`[API] No resources found for ${filter.category}/${filter.subcategory}. Triggering generation...`);
 
             // Trigger generation
-            const orchestrator = new AgentOrchestrator();
-            // Generate 1 immediately to show the user
-            const generatedIds = await orchestrator.generateResourcesForCategory(filter.category!, filter.subcategory!, 1);
-
-            if (generatedIds.length > 0) {
-                // Fetch the newly generated resources
-                const newDocs = await Promise.all(generatedIds.map(id => adminDb.collection('resources').doc(id).get()));
-                resources = newDocs.map(d => d.data() as Resource);
-            }
+            // Trigger background generation (Fire and Forget)
+            (async () => {
+                try {
+                    const orchestrator = new AgentOrchestrator();
+                    await orchestrator.generateResourcesForCategory(filter.category!, filter.subcategory!, 2);
+                    console.log(`[API] Background generation completed for ${filter.category}/${filter.subcategory}`);
+                } catch (err) {
+                    console.error('[API] Background generation failed:', err);
+                }
+            })();
         }
 
         // Sort by helpfulness/saves

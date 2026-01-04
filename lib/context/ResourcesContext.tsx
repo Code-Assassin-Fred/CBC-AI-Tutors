@@ -26,7 +26,7 @@ interface ResourcesContextType {
     // Resources
     resources: Resource[];
     isLoading: boolean;
-    loadResources: (filter?: ResourceFilter) => Promise<void>;
+    loadResources: (filter?: ResourceFilter, silent?: boolean) => Promise<void>;
 
     // AI Article Generation
     isGeneratingArticle: boolean;
@@ -88,8 +88,8 @@ export function ResourcesProvider({ children }: ResourcesProviderProps) {
     const [savedResources, setSavedResources] = useState<string[]>([]);
 
     // Load Resources
-    const loadResources = useCallback(async (filter?: ResourceFilter) => {
-        setIsLoading(true);
+    const loadResources = useCallback(async (filter?: ResourceFilter, silent: boolean = false) => {
+        if (!silent) setIsLoading(true);
 
         try {
             const params = new URLSearchParams();
@@ -107,7 +107,7 @@ export function ResourcesProvider({ children }: ResourcesProviderProps) {
         } catch (error) {
             console.error('Failed to load resources:', error);
         } finally {
-            setIsLoading(false);
+            if (!silent) setIsLoading(false);
         }
     }, []);
 
