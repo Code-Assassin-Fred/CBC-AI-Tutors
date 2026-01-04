@@ -99,7 +99,8 @@ export default function WeeklyCalendar() {
             <div className="px-6 py-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
                 <div>
                     <h2 className="text-xl font-bold text-white mb-1">Weekly Plan</h2>
-                    <p className="text-white/40 text-sm font-medium">{formatWeekRange()}</p>
+                    <p className="text-white/40 text-sm font-medium mb-1">{formatWeekRange()}</p>
+                    <p className="text-sky-400 text-xs font-medium">Click any empty slot to schedule</p>
                 </div>
                 <div className="flex items-center bg-white/5 rounded-2xl p-1 border border-white/5">
                     <button onClick={goToPreviousWeek} className="p-2 hover:bg-white/5 rounded-xl text-white/40 hover:text-white transition-all">
