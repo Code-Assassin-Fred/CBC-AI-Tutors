@@ -4,14 +4,11 @@
  * Generates brief, encouraging AI summaries for quiz and learning results.
  */
 
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { QuizActivity } from '@/lib/types/agents';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
-const MODEL = 'gpt-4o-mini';
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_IMAGE_API_KEY || '');
+const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
 export async function generateQuizSummary(activity: Partial<QuizActivity>): Promise<string> {
     const prompt = `You are a supportive CBC (Competency Based Curriculum) tutor in Kenya.
@@ -30,16 +27,12 @@ export async function generateQuizSummary(activity: Partial<QuizActivity>): Prom
   Do NOT use emojis. Respond with only the summary text.`;
 
     try {
-        const response = await openai.chat.completions.create({
-            model: MODEL,
-            messages: [{ role: 'user', content: prompt }],
-            temperature: 0.7,
-            max_tokens: 150,
-        });
-
-        return response.choices[0]?.message?.content || "Great effort on completing the quiz! Keep reviewing the material to strengthen your understanding.";
+        const result = await model.generateContent(prompt);
+        const response = result.response;
+        return response.text() || "Great effort on completing the quiz! Keep reviewing the material to strengthen your understanding.";
     } catch (error) {
         console.error('Summary Agent error:', error);
         return "Well done on completing the quiz. Continue practicing to master these concepts.";
     }
 }
+

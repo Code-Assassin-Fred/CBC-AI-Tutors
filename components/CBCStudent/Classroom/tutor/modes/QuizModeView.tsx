@@ -107,9 +107,12 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                     isSaving: false,
                     aiSummary: response.data.aiSummary
                 }));
+            } else {
+                // API returned but without success - still complete the UI
+                setState(prev => ({ ...prev, isSaving: false }));
             }
-        } catch (error: any) {
-            console.error('Failed to save quiz results:', error.response?.data || error.message);
+        } catch {
+            // Silently fail - quiz completion should still work without saving
             setState(prev => ({ ...prev, isSaving: false }));
         }
     };

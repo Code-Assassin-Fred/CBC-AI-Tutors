@@ -53,6 +53,15 @@ export default function StudentTextbookRenderer({
   const { formattedHtml, toc } = useMemo(() => {
     if (!content) return { formattedHtml: "", toc: [] as TocItem[] };
 
+    // Convert ALL CAPS text to title case, preserve mixed case
+    function toTitleCase(text: string): string {
+      const letters = text.replace(/[^a-zA-Z]/g, '');
+      if (letters.length > 0 && letters === letters.toUpperCase()) {
+        return text.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+      }
+      return text;
+    }
+
     // Remove markdown artifacts and code block wrappers
     let html = content
       // Remove markdown code block wrappers (```html, ```, etc.)
@@ -186,15 +195,15 @@ export default function StudentTextbookRenderer({
         h.id = id;
         h.className = "substrand-heading text-2xl font-bold text-white mt-8 mb-4 scroll-mt-24 flex items-center justify-between";
 
-        // Create number span (no blue badge, just plain number)
+        // Create number span (same color as title)
         const numberSpan = document.createElement("span");
-        numberSpan.className = "text-white/50 font-bold mr-3";
+        numberSpan.className = "font-bold mr-3";
         numberSpan.textContent = `${h2Count}`;
 
-        // Create title span
+        // Create title span (lowercase)
         const titleSpan = document.createElement("span");
         titleSpan.className = "flex-1";
-        titleSpan.textContent = text;
+        titleSpan.textContent = toTitleCase(text);
 
         // Create Learn with AI text link (not a button)
         const learnLink = document.createElement("a");
@@ -246,7 +255,7 @@ export default function StudentTextbookRenderer({
         const id = `section-${h2Count}-${h3Count}-${slugify(text)}`;
         h.id = id;
         h.className = "text-lg font-bold text-sky-400 mt-6 mb-3 scroll-mt-24";
-        h.innerHTML = `<span class="text-white/50 mr-2">${h2Count}.${h3Count}</span> ${h.innerHTML}`;
+        h.innerHTML = `<span class="text-sky-400 mr-2">${h2Count}.${h3Count}</span> ${toTitleCase(text)}`;
         tocItems.push({ id, title: text, level: 3 });
         return;
       }
@@ -257,7 +266,7 @@ export default function StudentTextbookRenderer({
         const id = `sub-${h2Count}-${h3Count}-${h4Count}-${slugify(text)}`;
         h.id = id;
         h.className = "text-base font-semibold text-teal-400 mt-5 mb-2 scroll-mt-24";
-        h.innerHTML = `<span class="text-white/40 mr-2">${h2Count}.${h3Count}.${h4Count}</span> ${h.innerHTML}`;
+        h.innerHTML = `<span class="text-teal-400 mr-2">${h2Count}.${h3Count}.${h4Count}</span> ${toTitleCase(text)}`;
         tocItems.push({ id, title: text, level: 4 });
       }
     });
@@ -447,6 +456,7 @@ export default function StudentTextbookRenderer({
       document.removeEventListener('click', handleQuizClick);
     };
   }, [onLearnWithAI, onTakeQuiz]);
+
 
   function slugify(text: string) {
     return text.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").slice(0, 60);

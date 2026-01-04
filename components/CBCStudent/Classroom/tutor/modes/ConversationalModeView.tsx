@@ -46,8 +46,8 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
                 },
                 chatHistory: history
             });
-        } catch (error) {
-            console.error('Failed to save chat history:', error);
+        } catch {
+            // Silently fail - this is a background save and shouldn't affect UX
         }
     };
 

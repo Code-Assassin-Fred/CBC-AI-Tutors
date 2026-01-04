@@ -27,7 +27,7 @@ function CoursesPageContent() {
         enrollInCourse,
     } = useCourses();
 
-    const [activeTab, setActiveTab] = useState<'create' | 'my-courses' | 'discover'>('create');
+    const [activeTab, setActiveTab] = useState<'create' | 'my-courses'>('create');
     const enrollCheckedRef = useRef(false);
 
     // Handle enrollment from career path
@@ -160,18 +160,6 @@ function CoursesPageContent() {
                             <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-sky-400 rounded-full" />
                         )}
                     </button>
-                    <button
-                        onClick={() => setActiveTab('discover')}
-                        className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'discover'
-                            ? 'text-sky-400'
-                            : 'text-white/50 hover:text-white/80'
-                            }`}
-                    >
-                        Discover
-                        {activeTab === 'discover' && (
-                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-sky-400 rounded-full" />
-                        )}
-                    </button>
                 </div>
 
                 {/* Content */}
@@ -187,13 +175,6 @@ function CoursesPageContent() {
                         courses={myCourses}
                         isLoading={isLoadingMyCourses}
                     />
-                )}
-
-                {activeTab === 'discover' && (
-                    <div className="text-center py-12 text-white/50">
-                        <p>Discover courses from other learners</p>
-                        <p className="text-sm mt-2">Coming soon...</p>
-                    </div>
                 )}
             </div>
         </div>
