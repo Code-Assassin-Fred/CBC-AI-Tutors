@@ -4,7 +4,6 @@ import React from 'react';
 import Card from '../shared/Card';
 import ProgressCircle from '../shared/ProgressCircle';
 import { useCourses } from '@/lib/context/CoursesContext';
-import { useSchedule } from '@/lib/context/ScheduleContext';
 import { useRouter } from 'next/navigation';
 
 interface ProgressSummaryProps {
@@ -13,29 +12,33 @@ interface ProgressSummaryProps {
 
 export default function ProgressSummary({ isLoading = false }: ProgressSummaryProps) {
   const { myCourses, currentCourse } = useCourses();
-  const { streak, weeklySchedule } = useSchedule();
   const router = useRouter();
 
   // Calculate progress metrics from real data
   const totalCourses = myCourses.length;
 
-  // For now, use lessonCount as a proxy for progress
-  // In a real implementation, we'd track CourseProgress per user
+  // Count courses with lessons as "active"
   const inProgressCount = myCourses.filter(c => c.lessonCount > 0).length;
-  const completedCount = 0; // Would come from CourseProgress.isCompleted
 
-  // Study streak
-  const currentStreak = streak?.currentStreak || 0;
-  const longestStreak = streak?.longestStreak || 0;
+  // Calculate total lessons across all courses
+  const totalLessons = myCourses.reduce((sum, course) => sum + (course.lessonCount || 0), 0);
 
-  // Weekly study time
-  const plannedMinutes = weeklySchedule?.totalPlannedMinutes || 0;
-  const completedMinutes = weeklySchedule?.totalCompletedMinutes || 0;
-  const weeklyProgress = plannedMinutes > 0
-    ? Math.min(100, Math.round((completedMinutes / plannedMinutes) * 100))
+  // For lessons completed, we'd need to fetch CourseProgress for each course
+  // For now, estimate based on current course progress if available
+  const lessonsCompleted = currentCourse?.progress?.completedLessons?.length || 0;
+  const lessonProgress = totalLessons > 0
+    ? Math.min(100, Math.round((lessonsCompleted / totalLessons) * 100))
     : 0;
 
-  // Progress circles data - now showing more meaningful metrics
+  // Calculate average quiz score from current course progress
+  const quizScores = currentCourse?.progress?.quizScores || {};
+  const quizScoreValues = Object.values(quizScores);
+  const averageQuizScore = quizScoreValues.length > 0
+    ? Math.round(quizScoreValues.reduce((sum, q) => sum + (q.bestScore || 0), 0) / quizScoreValues.length)
+    : 0;
+  const totalQuizzesTaken = quizScoreValues.length;
+
+  // Progress circles data - showing learning-focused metrics
   const progressData = [
     {
       value: totalCourses > 0 ? Math.round((inProgressCount / Math.max(totalCourses, 1)) * 100) : 0,
@@ -45,17 +48,17 @@ export default function ProgressSummary({ isLoading = false }: ProgressSummaryPr
       color: '#10b981'
     },
     {
-      value: currentStreak > 0 ? Math.min(100, currentStreak * 14) : 0, // Scale: 7 days = 100%
-      label: 'Streak',
-      count: currentStreak,
-      unit: 'days',
+      value: lessonProgress,
+      label: 'Lessons',
+      count: lessonsCompleted,
+      unit: 'completed',
       color: '#06b6d4'
     },
     {
-      value: weeklyProgress,
-      label: 'Weekly Goal',
-      count: Math.round(completedMinutes / 60),
-      unit: 'hours',
+      value: averageQuizScore,
+      label: 'Quiz Score',
+      count: averageQuizScore,
+      unit: totalQuizzesTaken > 0 ? `avg (${totalQuizzesTaken})` : 'no quizzes',
       color: '#f59e0b'
     }
   ];
