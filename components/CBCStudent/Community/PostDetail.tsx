@@ -18,6 +18,7 @@ export default function PostDetail() {
 
     const [replyContent, setReplyContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [replyingTo, setReplyingTo] = useState<{ id: string; authorName: string; content: string } | null>(null);
 
     useEffect(() => {
         if (activePost) {
@@ -43,47 +44,55 @@ export default function PostDetail() {
     const handleSubmitReply = async () => {
         if (!replyContent.trim()) return;
         setIsSubmitting(true);
-        await createReply(activePost.id, replyContent.trim());
+        await createReply(activePost.id, replyContent.trim(), replyingTo?.id);
         setReplyContent('');
+        setReplyingTo(null);
         setIsSubmitting(false);
     };
 
+    const getTypeBadge = () => {
+        switch (activePost.type) {
+            case 'question':
+                return activePost.isAnswered
+                    ? { label: 'Answered', color: 'bg-emerald-500' }
+                    : { label: 'Question', color: 'bg-amber-500' };
+            case 'discussion':
+                return { label: 'Discussion', color: 'bg-sky-500' };
+            case 'resource':
+                return { label: 'Resource', color: 'bg-violet-500' };
+            default:
+                return { label: '', color: 'bg-white/20' };
+        }
+    };
+
+    const badge = getTypeBadge();
+
     return (
-        <div>
+        <div className="rounded-2xl bg-gradient-to-br from-[#0a0f14] to-[#0b1113] border border-white/8 ring-1 ring-white/5 shadow-[0_8px_24px_rgba(0,0,0,0.45)] p-6">
             {/* Back button */}
             <button
                 onClick={() => setActivePost(null)}
-                className="flex items-center gap-2 text-white/50 hover:text-white mb-6 transition-colors"
+                className="flex items-center gap-2 text-[#9aa6b2] hover:text-white mb-6 transition-colors text-sm"
             >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Back to Feed
+                ← Back to Feed
             </button>
 
             {/* Post header */}
-            <div className="mb-6">
+            <div className="mb-6 pb-6 border-b border-white/6">
                 <div className="flex items-center gap-2 mb-3">
-                    <span className={`text-xs font-medium ${activePost.type === 'question'
-                            ? activePost.isAnswered ? 'text-[#10b981]' : 'text-[#f59e0b]'
-                            : 'text-[#0ea5e9]'
-                        }`}>
-                        {activePost.type === 'question'
-                            ? activePost.isAnswered ? 'Answered' : 'Question'
-                            : activePost.type.charAt(0).toUpperCase() + activePost.type.slice(1)
-                        }
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${badge.color} text-white shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset]`}>
+                        {badge.label}
                     </span>
-                    <span className="text-white/20">•</span>
-                    <span className="text-xs text-white/40">{activePost.authorName}</span>
-                    <span className="text-white/20">•</span>
-                    <span className="text-xs text-white/40">{formatTime(activePost.createdAt)}</span>
+                    <span className="text-xs text-[#9aa6b2]">{activePost.authorName}</span>
+                    <span className="text-[#9aa6b2]/50">•</span>
+                    <span className="text-xs text-[#9aa6b2]">{formatTime(activePost.createdAt)}</span>
                 </div>
 
                 <h1 className="text-xl font-semibold text-white mb-4">
                     {activePost.title}
                 </h1>
 
-                <p className="text-white/70 leading-relaxed mb-4">
+                <p className="text-[#9aa6b2] leading-relaxed mb-4">
                     {activePost.content}
                 </p>
 
@@ -92,7 +101,7 @@ export default function PostDetail() {
                     {activePost.tags.map((tag) => (
                         <span
                             key={tag}
-                            className="px-2 py-0.5 text-xs text-white/50 bg-white/5 rounded"
+                            className="px-2 py-0.5 text-xs text-[#9aa6b2] bg-white/5 rounded"
                         >
                             {tag}
                         </span>
@@ -100,38 +109,32 @@ export default function PostDetail() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-4 text-sm text-white/50 pt-4 border-t border-white/5">
+                <div className="flex gap-4 text-sm text-[#9aa6b2]">
                     <button
                         onClick={() => likePost(activePost.id)}
-                        className="flex items-center gap-1.5 hover:text-[#0ea5e9] transition-colors"
+                        className="hover:text-[#0ea5e9] transition-colors"
                     >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                        {activePost.likes} likes
+                        ♥ {activePost.likes} likes
                     </button>
                     <button
                         onClick={() => savePost(activePost.id)}
-                        className="flex items-center gap-1.5 hover:text-[#0ea5e9] transition-colors"
+                        className="hover:text-[#0ea5e9] transition-colors"
                     >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                        </svg>
-                        Save
+                        🔖 Save
                     </button>
-                    <span className="flex items-center gap-1.5">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        {activePost.views} views
-                    </span>
+                    <span>👁 {activePost.views} views</span>
+                    <button
+                        onClick={() => navigator.clipboard.writeText(window.location.href)}
+                        className="hover:text-[#0ea5e9] transition-colors ml-auto"
+                    >
+                        🔗 Share
+                    </button>
                 </div>
             </div>
 
             {/* Replies */}
             <div className="mb-6">
-                <h2 className="text-sm font-medium text-white mb-4">
+                <h2 className="text-sm font-semibold text-white/95 mb-4">
                     {activeReplies.length} Replies
                 </h2>
 
@@ -139,42 +142,49 @@ export default function PostDetail() {
                     {activeReplies.map((reply) => (
                         <div
                             key={reply.id}
-                            className={`py-4 border-l-2 pl-4 ${reply.isAccepted
-                                    ? 'border-[#10b981] bg-[#10b981]/5'
-                                    : 'border-white/10'
+                            id={`reply-${reply.id}`}
+                            className={`p-4 rounded-xl border-l-2 ${reply.isAccepted
+                                    ? 'border-emerald-500 bg-emerald-500/5'
+                                    : 'border-white/10 bg-white/[0.02]'
                                 }`}
                         >
                             {reply.isAccepted && (
-                                <div className="flex items-center gap-1 text-xs text-[#10b981] mb-2">
-                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Accepted Answer
+                                <div className="flex items-center gap-1 text-xs text-emerald-500 mb-2 font-medium">
+                                    ✓ Accepted Answer
                                 </div>
                             )}
 
                             <div className="flex items-center gap-2 mb-2">
-                                <span className="text-sm text-white/70">{reply.authorName}</span>
-                                <span className="text-white/20">•</span>
-                                <span className="text-xs text-white/40">{formatTime(reply.createdAt)}</span>
+                                <span className="text-sm font-medium text-white/90">{reply.authorName}</span>
+                                <span className="text-[#9aa6b2]/50">•</span>
+                                <span className="text-xs text-[#9aa6b2]">{formatTime(reply.createdAt)}</span>
                             </div>
 
-                            <p className="text-white/60 text-sm mb-3">{reply.content}</p>
+                            <p className="text-[#9aa6b2] text-sm mb-3">{reply.content}</p>
 
-                            <div className="flex items-center gap-4 text-xs text-white/40">
+                            <div className="flex items-center gap-4 text-xs text-[#9aa6b2]">
                                 <button
                                     onClick={() => likeReply(reply.id)}
-                                    className="flex items-center gap-1 hover:text-[#0ea5e9] transition-colors"
+                                    className="hover:text-[#0ea5e9] transition-colors"
                                 >
-                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                    </svg>
-                                    {reply.likes}
+                                    ♥ {reply.likes}
+                                </button>
+                                <button
+                                    onClick={() => setReplyingTo({ id: reply.id, authorName: reply.authorName, content: reply.content })}
+                                    className="hover:text-[#0ea5e9] transition-colors"
+                                >
+                                    Reply
+                                </button>
+                                <button
+                                    onClick={() => navigator.clipboard.writeText(`${window.location.href}#reply-${reply.id}`)}
+                                    className="hover:text-[#0ea5e9] transition-colors"
+                                >
+                                    Link
                                 </button>
                                 {activePost.type === 'question' && !activePost.isAnswered && (
                                     <button
                                         onClick={() => acceptReply(activePost.id, reply.id)}
-                                        className="hover:text-[#10b981] transition-colors"
+                                        className="hover:text-emerald-500 transition-colors ml-auto"
                                     >
                                         Mark as Answer
                                     </button>
@@ -186,20 +196,36 @@ export default function PostDetail() {
             </div>
 
             {/* Reply form */}
-            <div className="pt-4 border-t border-white/10">
-                <h3 className="text-sm font-medium text-white mb-3">Add a Reply</h3>
+            <div className="pt-4 border-t border-white/6">
+                <h3 className="text-sm font-semibold text-white/95 mb-3">Add a Reply</h3>
+
+                {replyingTo && (
+                    <div className="flex items-center justify-between bg-white/5 px-3 py-2 rounded-t-xl border border-white/8 border-b-0 mb-0">
+                        <div className="text-sm text-[#9aa6b2] truncate">
+                            Replying to <span className="text-[#0ea5e9]">@{replyingTo.authorName}</span>
+                        </div>
+                        <button
+                            onClick={() => setReplyingTo(null)}
+                            className="text-[#9aa6b2] hover:text-white"
+                        >
+                            ✕
+                        </button>
+                    </div>
+                )}
+
                 <textarea
                     value={replyContent}
                     onChange={(e) => setReplyContent(e.target.value)}
                     placeholder="Share your thoughts..."
                     rows={3}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#0ea5e9]/50 resize-none"
+                    className={`w-full px-4 py-3 bg-[#0b1113] border border-white/8 text-white placeholder-[#9aa6b2] text-sm focus:outline-none focus:ring-2 focus:ring-[#0ea5e9]/40 resize-none ${replyingTo ? 'rounded-b-xl rounded-t-none' : 'rounded-xl'
+                        }`}
                 />
                 <div className="flex justify-end mt-3">
                     <button
                         onClick={handleSubmitReply}
                         disabled={!replyContent.trim() || isSubmitting}
-                        className="px-4 py-2 bg-[#0ea5e9] text-white rounded-lg text-sm font-medium hover:bg-[#0ea5e9]/90 disabled:opacity-50 transition-colors"
+                        className="px-4 py-2 bg-[#0ea5e9] text-white rounded-lg text-sm font-medium hover:bg-[#0ea5e9]/90 disabled:opacity-50 transition-colors shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset]"
                     >
                         {isSubmitting ? 'Posting...' : 'Post Reply'}
                     </button>

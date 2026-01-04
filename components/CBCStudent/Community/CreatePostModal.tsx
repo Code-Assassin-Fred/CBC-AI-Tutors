@@ -62,17 +62,15 @@ export default function CreatePostModal() {
             />
 
             {/* Modal */}
-            <div className="relative w-full max-w-lg bg-[#0b0f12] rounded-2xl border border-white/10 overflow-hidden">
+            <div className="relative w-full max-w-lg rounded-2xl bg-gradient-to-br from-[#0a0f14] to-[#0b1113] border border-white/8 ring-1 ring-white/5 shadow-[0_8px_24px_rgba(0,0,0,0.45)] overflow-hidden">
                 {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+                <div className="flex items-center justify-between px-5 py-4 border-b border-white/6">
                     <h3 className="text-lg font-semibold text-white">New Post</h3>
                     <button
                         onClick={handleClose}
-                        className="p-1 text-white/50 hover:text-white transition-colors"
+                        className="p-1 text-[#9aa6b2] hover:text-white transition-colors"
                     >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        ✕
                     </button>
                 </div>
 
@@ -80,16 +78,16 @@ export default function CreatePostModal() {
                 <form onSubmit={handleSubmit} className="p-5 space-y-4">
                     {/* Type */}
                     <div>
-                        <label className="block text-xs text-white/50 mb-2">Post type</label>
+                        <label className="block text-xs text-[#9aa6b2] mb-2">Post type</label>
                         <div className="flex gap-2">
                             {types.map((t) => (
                                 <button
                                     key={t.value}
                                     type="button"
                                     onClick={() => setType(t.value)}
-                                    className={`flex-1 py-2 px-3 rounded-lg text-sm transition-colors ${type === t.value
-                                            ? 'bg-[#0ea5e9] text-white'
-                                            : 'bg-white/5 text-white/60 hover:bg-white/10'
+                                    className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${type === t.value
+                                            ? 'bg-[#0ea5e9] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset]'
+                                            : 'bg-white/5 text-[#9aa6b2] hover:bg-white/10'
                                         }`}
                                 >
                                     {t.label}
@@ -100,45 +98,45 @@ export default function CreatePostModal() {
 
                     {/* Title */}
                     <div>
-                        <label className="block text-xs text-white/50 mb-1.5">Title</label>
+                        <label className="block text-xs text-[#9aa6b2] mb-1.5">Title</label>
                         <input
                             type="text"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             placeholder={type === 'question' ? 'What do you want to know?' : 'Give your post a title'}
-                            className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#0ea5e9]/50"
+                            className="w-full px-3 py-2.5 bg-[#0b1113] border border-white/8 rounded-lg text-white placeholder-[#9aa6b2]/50 text-sm focus:outline-none focus:ring-2 focus:ring-[#0ea5e9]/40"
                             autoFocus
                         />
                     </div>
 
                     {/* Content */}
                     <div>
-                        <label className="block text-xs text-white/50 mb-1.5">Content</label>
+                        <label className="block text-xs text-[#9aa6b2] mb-1.5">Content</label>
                         <textarea
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             placeholder="Provide more details..."
                             rows={4}
-                            className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#0ea5e9]/50 resize-none"
+                            className="w-full px-3 py-2.5 bg-[#0b1113] border border-white/8 rounded-lg text-white placeholder-[#9aa6b2]/50 text-sm focus:outline-none focus:ring-2 focus:ring-[#0ea5e9]/40 resize-none"
                         />
                     </div>
 
                     {/* Tags */}
                     <div>
-                        <label className="block text-xs text-white/50 mb-1.5">
-                            Tags <span className="text-white/30">(press Enter to add)</span>
+                        <label className="block text-xs text-[#9aa6b2] mb-1.5">
+                            Tags <span className="text-[#9aa6b2]/50">(press Enter to add)</span>
                         </label>
                         <div className="flex flex-wrap gap-2 mb-2">
                             {tags.map((tag) => (
                                 <span
                                     key={tag}
-                                    className="inline-flex items-center gap-1 px-2 py-1 bg-white/10 text-white/70 rounded text-xs"
+                                    className="inline-flex items-center gap-1 px-2 py-1 bg-white/10 text-[#9aa6b2] rounded text-xs"
                                 >
                                     {tag}
                                     <button
                                         type="button"
                                         onClick={() => removeTag(tag)}
-                                        className="text-white/40 hover:text-white"
+                                        className="text-[#9aa6b2]/50 hover:text-white"
                                     >
                                         ×
                                     </button>
@@ -151,7 +149,7 @@ export default function CreatePostModal() {
                             onChange={(e) => setTagInput(e.target.value)}
                             onKeyDown={handleAddTag}
                             placeholder="Add tags..."
-                            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 text-sm focus:outline-none focus:border-[#0ea5e9]/50"
+                            className="w-full px-3 py-2 bg-[#0b1113] border border-white/8 rounded-lg text-white placeholder-[#9aa6b2]/50 text-sm focus:outline-none focus:ring-2 focus:ring-[#0ea5e9]/40"
                             disabled={tags.length >= 5}
                         />
                     </div>
@@ -161,14 +159,14 @@ export default function CreatePostModal() {
                         <button
                             type="button"
                             onClick={handleClose}
-                            className="px-4 py-2.5 bg-white/5 text-white/60 rounded-lg text-sm hover:bg-white/10 transition-colors"
+                            className="px-4 py-2.5 bg-white/5 text-[#9aa6b2] rounded-lg text-sm hover:bg-white/10 transition-colors"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={!title.trim() || !content.trim() || isSubmitting}
-                            className="px-4 py-2.5 bg-[#0ea5e9] text-white rounded-lg text-sm font-medium hover:bg-[#0ea5e9]/90 disabled:opacity-50 transition-colors"
+                            className="px-4 py-2.5 bg-[#0ea5e9] text-white rounded-lg text-sm font-medium hover:bg-[#0ea5e9]/90 disabled:opacity-50 transition-colors shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset]"
                         >
                             {isSubmitting ? 'Posting...' : 'Post'}
                         </button>

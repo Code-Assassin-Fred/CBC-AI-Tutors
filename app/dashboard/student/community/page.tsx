@@ -11,15 +11,15 @@ function CommunityContent() {
     const { activePost } = useCommunity();
 
     return (
-        <div className="max-w-5xl mx-auto pt-8 px-4 pb-16">
+        <div className="max-w-7xl mx-auto pt-8 px-4 pb-16">
             {/* Header */}
             <div className="mb-8">
                 <h1 className="text-2xl font-bold text-white mb-2">Community</h1>
-                <p className="text-white/50">Connect with learners, ask questions, and share knowledge</p>
+                <p className="text-[#9aa6b2]">Connect with learners, ask questions, and share knowledge</p>
             </div>
 
             {/* Main layout */}
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="grid lg:grid-cols-3 gap-6">
                 {/* Main content */}
                 <div className="lg:col-span-2">
                     {activePost ? (
