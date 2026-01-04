@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
-import { collection, doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
+import { adminDb } from '@/lib/firebaseAdmin';
+import { Timestamp } from 'firebase-admin/firestore';
 
 /**
  * Tutor Content Cache API
@@ -11,7 +11,8 @@ import { collection, doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 
 // Helper to create a consistent cache key from substrand info
 function createCacheKey(grade: string, subject: string, strand: string, substrand: string): string {
-    return `${grade}-${subject}-${strand}-${substrand}`.toLowerCase().replace(/\s+/g, '_');
+    // Sanitize by replacing non-alphanumeric characters (except hyphens) with underscores to ensure valid doc ID
+    return `${grade}-${subject}-${strand}-${substrand}`.toLowerCase().replace(/[^a-z0-9-]/g, '_');
 }
 
 // GET - Check for cached content
@@ -31,16 +32,16 @@ export async function GET(request: NextRequest) {
         }
 
         const cacheKey = createCacheKey(grade, subject, strand, substrand);
-        const docRef = doc(db, 'tutorContent', cacheKey);
-        const docSnap = await getDoc(docRef);
+        const docRef = adminDb.collection('tutorContent').doc(cacheKey);
+        const docSnap = await docRef.get();
 
-        if (docSnap.exists()) {
+        if (docSnap.exists) {
             const data = docSnap.data();
             return NextResponse.json({
                 cached: true,
-                content: data.content,
-                createdAt: data.createdAt?.toDate?.() || data.createdAt,
-                createdBy: data.createdBy,
+                content: data?.content,
+                createdAt: data?.createdAt?.toDate?.() || data?.createdAt,
+                createdBy: data?.createdBy,
             });
         }
 
@@ -68,11 +69,11 @@ export async function POST(request: NextRequest) {
         }
 
         const cacheKey = createCacheKey(grade, subject, strand, substrand);
-        const docRef = doc(db, 'tutorContent', cacheKey);
+        const docRef = adminDb.collection('tutorContent').doc(cacheKey);
 
         // Check if it exists already
-        const existing = await getDoc(docRef);
-        if (existing.exists()) {
+        const existing = await docRef.get();
+        if (existing.exists) {
             // Already cached, don't overwrite
             return NextResponse.json({
                 success: true,
@@ -82,7 +83,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Save new content
-        await setDoc(docRef, {
+        await docRef.set({
             grade,
             subject,
             strand,

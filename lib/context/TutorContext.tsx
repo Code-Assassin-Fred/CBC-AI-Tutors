@@ -286,18 +286,19 @@ export function TutorProvider({ children }: TutorProviderProps) {
                 substrand: substrandContext.substrand || '',
             });
 
+            console.log('[TutorContext] Checking cache for:', substrandContext.substrand);
             const cacheCheck = await fetch(`/api/tutor/content?${cacheParams.toString()}`);
             const cacheData = await cacheCheck.json();
 
             if (cacheData.cached && cacheData.content) {
-                console.log('[TutorContext] Using cached content');
+                console.log('[TutorContext] Using cached content from:', cacheData.createdAt);
                 // Show brief loading for cached content
                 setLoadingProgress({
                     type: 'planner',
                     currentStep: 6,
                     totalSteps: 6,
                     steps: [
-                        { name: 'Loading saved content...', status: 'complete' },
+                        { name: 'Almost ready...', status: 'complete' },
                     ],
                 });
 
@@ -309,6 +310,8 @@ export function TutorProvider({ children }: TutorProviderProps) {
                 setLearningSubModeState('explanation');
                 setLoadingProgress(null);
                 return;
+            } else {
+                console.log('[TutorContext] No cache found, will generate fresh content');
             }
         } catch (error) {
             console.log('[TutorContext] Cache check failed, generating fresh:', error);
