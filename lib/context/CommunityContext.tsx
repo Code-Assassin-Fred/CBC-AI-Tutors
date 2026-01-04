@@ -9,6 +9,7 @@ import {
     FeedFilter,
     FeedSort,
     PostType,
+    Attachment,
 } from '@/types/community';
 import { useAuth } from './AuthContext';
 
@@ -35,14 +36,16 @@ interface CommunityContextType {
     loadPostReplies: (postId: string) => Promise<void>;
 
     // Post actions
-    createPost: (type: PostType, title: string, content: string, tags: string[]) => Promise<void>;
+    createPost: (type: PostType, title: string, content: string, tags: string[], attachments?: Attachment[]) => Promise<void>;
     likePost: (postId: string) => Promise<void>;
     savePost: (postId: string) => Promise<void>;
+    deletePost: (postId: string) => Promise<void>;
 
     // Reply actions
     createReply: (postId: string, content: string, parentReplyId?: string) => Promise<void>;
     likeReply: (replyId: string) => Promise<void>;
     acceptReply: (postId: string, replyId: string) => Promise<void>;
+    deleteReply: (postId: string, replyId: string) => Promise<void>;
 
     // Groups
     groups: StudyGroup[];
@@ -58,99 +61,15 @@ interface CommunityContextType {
     showCreateModal: boolean;
     setShowCreateModal: (show: boolean) => void;
     isSubmitting: boolean;
+    showingSaved: boolean;
+    setShowingSaved: (show: boolean) => void;
 }
 
 const CommunityContext = createContext<CommunityContextType | null>(null);
 
 // ============================================
-// SAMPLE DATA
+// SAMPLE DATA (for groups/members - not persisted yet)
 // ============================================
-
-const samplePosts: CommunityPost[] = [
-    {
-        id: '1',
-        authorId: 'user1',
-        authorName: 'Kevin M.',
-        type: 'question',
-        title: 'How do I solve quadratic equations?',
-        content: 'I\'m in Grade 9 and struggling with quadratic equations. Can someone explain the formula step by step?',
-        tags: ['math', 'grade-9', 'algebra'],
-        likes: 24,
-        likedBy: [],
-        replyCount: 8,
-        views: 156,
-        saves: 12,
-        savedBy: [],
-        isAnswered: true,
-        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-    },
-    {
-        id: '2',
-        authorId: 'user2',
-        authorName: 'Amina W.',
-        type: 'discussion',
-        title: 'What\'s your favorite subject and why?',
-        content: 'I love Science because we get to do experiments! What about you guys?',
-        tags: ['fun', 'school-life'],
-        likes: 45,
-        likedBy: [],
-        replyCount: 23,
-        views: 412,
-        saves: 34,
-        savedBy: [],
-        createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
-    },
-    {
-        id: '3',
-        authorId: 'user3',
-        authorName: 'Brian K.',
-        type: 'question',
-        title: 'Tips for preparing for KCPE exams?',
-        content: 'KCPE is coming up and I\'m nervous. How do you study effectively? Any tips from those who did well?',
-        tags: ['exams', 'kcpe', 'study-tips'],
-        likes: 18,
-        likedBy: [],
-        replyCount: 12,
-        views: 89,
-        saves: 8,
-        savedBy: [],
-        isAnswered: false,
-        createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
-    },
-    {
-        id: '4',
-        authorId: 'user4',
-        authorName: 'Faith N.',
-        type: 'resource',
-        title: 'Helpful YouTube channels for learning Kiswahili',
-        content: 'I found some great channels that explain Kiswahili grammar really well. They helped me improve my grades!',
-        tags: ['kiswahili', 'resources', 'videos'],
-        likes: 67,
-        likedBy: [],
-        replyCount: 15,
-        views: 523,
-        saves: 89,
-        savedBy: [],
-        createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-    },
-    {
-        id: '5',
-        authorId: 'user5',
-        authorName: 'Dennis O.',
-        type: 'question',
-        title: 'Can someone explain photosynthesis?',
-        content: 'I\'m in Grade 7 and we\'re learning about plants. What exactly happens during photosynthesis?',
-        tags: ['science', 'biology', 'grade-7'],
-        likes: 31,
-        likedBy: [],
-        replyCount: 9,
-        views: 234,
-        saves: 15,
-        savedBy: [],
-        isAnswered: true,
-        createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000),
-    },
-];
 
 const sampleGroups: StudyGroup[] = [
     { id: 'g1', name: 'Grade 8 Study Squad', description: 'Help each other prepare for KCPE', topic: 'KCPE Prep', icon: '📚', memberCount: 234, memberIds: [], creatorId: 'user1', isPublic: true, lastActivityAt: new Date(), postCount: 45, createdAt: new Date() },
@@ -177,7 +96,7 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
     const { user } = useAuth();
 
     // Feed state
-    const [posts, setPosts] = useState<CommunityPost[]>(samplePosts);
+    const [posts, setPosts] = useState<CommunityPost[]>([]);
     const [filter, setFilter] = useState<FeedFilter>('all');
     const [sort, setSort] = useState<FeedSort>('recent');
     const [searchQuery, setSearchQuery] = useState('');
@@ -198,124 +117,281 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
     // UI
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showingSaved, setShowingSaved] = useState(false);
 
-    // Load posts
+    // Load posts from API
     const loadPosts = useCallback(async () => {
+        if (!user && showingSaved) {
+            setPosts([]);
+            return;
+        }
         setIsLoadingFeed(true);
         try {
-            // TODO: Fetch from API
-            await new Promise(r => setTimeout(r, 300));
+            const params = new URLSearchParams();
+            if (filter !== 'all') params.set('filter', filter);
+            if (sort !== 'recent') params.set('sort', sort);
+            if (searchQuery) params.set('q', searchQuery);
+            if (showingSaved && user) params.set('savedBy', user.uid);
+
+            const response = await fetch(`/api/community?${params.toString()}`);
+            if (response.ok) {
+                const data = await response.json();
+                setPosts(data.posts || []);
+            }
+        } catch (error) {
+            console.error('Error loading posts:', error);
         } finally {
             setIsLoadingFeed(false);
         }
-    }, []);
+    }, [filter, sort, searchQuery, showingSaved, user]);
 
     // Load replies for a post
     const loadPostReplies = useCallback(async (postId: string) => {
-        // Sample replies - age appropriate for grade 4-12 students
-        setActiveReplies([
-            {
-                id: 'r1',
-                postId,
-                authorId: 'user2',
-                authorName: 'Amina W.',
-                content: 'For quadratic equations, remember the formula: x = (-b ± √(b²-4ac)) / 2a. Just plug in the numbers from your equation!',
-                likes: 12,
-                likedBy: [],
-                isAccepted: true,
-                createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
-            },
-            {
-                id: 'r2',
-                postId,
-                authorId: 'user3',
-                authorName: 'Brian K.',
-                content: 'Our teacher showed us a trick - always write out a, b, and c first before using the formula. It really helps!',
-                likes: 5,
-                likedBy: [],
-                createdAt: new Date(Date.now() - 30 * 60 * 1000),
-            },
-        ]);
+        try {
+            const response = await fetch(`/api/community?postId=${postId}`);
+            if (response.ok) {
+                const data = await response.json();
+                setActiveReplies(data.replies || []);
+            }
+        } catch (error) {
+            console.error('Error loading replies:', error);
+        }
     }, []);
 
     // Create post
-    const createPost = useCallback(async (type: PostType, title: string, content: string, tags: string[]) => {
+    const createPost = useCallback(async (type: PostType, title: string, content: string, tags: string[], attachments?: Attachment[]) => {
         if (!user) return;
         setIsSubmitting(true);
         try {
-            const newPost: CommunityPost = {
-                id: `post-${Date.now()}`,
-                authorId: user.uid,
-                authorName: user.displayName || 'Anonymous',
-                type,
-                title,
-                content,
-                tags,
-                likes: 0,
-                likedBy: [],
-                replyCount: 0,
-                views: 0,
-                saves: 0,
-                savedBy: [],
-                createdAt: new Date(),
-            };
-            setPosts(prev => [newPost, ...prev]);
-            setShowCreateModal(false);
+            const response = await fetch('/api/community', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'post',
+                    data: {
+                        authorId: user.uid,
+                        authorName: user.displayName || 'Anonymous',
+                        type,
+                        title,
+                        content,
+                        tags,
+                        attachments: attachments || [],
+                    },
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setPosts(prev => [data.post, ...prev]);
+                setShowCreateModal(false);
+            }
+        } catch (error) {
+            console.error('Error creating post:', error);
         } finally {
             setIsSubmitting(false);
         }
     }, [user]);
 
-    // Like post
+    // Like/Unlike post
     const likePost = useCallback(async (postId: string) => {
-        setPosts(prev => prev.map(p =>
-            p.id === postId ? { ...p, likes: p.likes + 1 } : p
-        ));
-    }, []);
+        if (!user) return;
 
-    // Save post
+        // Find the post to check if already liked
+        const post = posts.find(p => p.id === postId) || activePost;
+        const isLiked = post?.likedBy?.includes(user.uid);
+        const action = isLiked ? 'unlike' : 'like';
+
+        try {
+            const response = await fetch('/api/community', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action,
+                    postId,
+                    userId: user.uid,
+                }),
+            });
+
+            if (response.ok) {
+                const delta = isLiked ? -1 : 1;
+                const updateLikedBy = isLiked
+                    ? (arr: string[]) => arr.filter(id => id !== user.uid)
+                    : (arr: string[]) => [...arr, user.uid];
+
+                setPosts(prev => prev.map(p =>
+                    p.id === postId ? { ...p, likes: p.likes + delta, likedBy: updateLikedBy(p.likedBy || []) } : p
+                ));
+                if (activePost?.id === postId) {
+                    setActivePost(prev => prev ? { ...prev, likes: prev.likes + delta, likedBy: updateLikedBy(prev.likedBy || []) } : null);
+                }
+            }
+        } catch (error) {
+            console.error('Error toggling like:', error);
+        }
+    }, [user, activePost, posts]);
+
+    // Save/Unsave post
     const savePost = useCallback(async (postId: string) => {
-        setPosts(prev => prev.map(p =>
-            p.id === postId ? { ...p, saves: p.saves + 1 } : p
-        ));
-    }, []);
+        if (!user) return;
+
+        // Find the post to check if already saved
+        const post = posts.find(p => p.id === postId) || activePost;
+        const isSaved = post?.savedBy?.includes(user.uid);
+        const action = isSaved ? 'unsave' : 'save';
+
+        try {
+            const response = await fetch('/api/community', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action,
+                    postId,
+                    userId: user.uid,
+                }),
+            });
+
+            if (response.ok) {
+                const delta = isSaved ? -1 : 1;
+                const updateSavedBy = isSaved
+                    ? (arr: string[]) => arr.filter(id => id !== user.uid)
+                    : (arr: string[]) => [...arr, user.uid];
+
+                setPosts(prev => prev.map(p =>
+                    p.id === postId ? { ...p, saves: p.saves + delta, savedBy: updateSavedBy(p.savedBy || []) } : p
+                ));
+                if (activePost?.id === postId) {
+                    setActivePost(prev => prev ? { ...prev, saves: prev.saves + delta, savedBy: updateSavedBy(prev.savedBy || []) } : null);
+                }
+            }
+        } catch (error) {
+            console.error('Error toggling save:', error);
+        }
+    }, [user, activePost, posts]);
+
+    // Delete post
+    const deletePost = useCallback(async (postId: string) => {
+        if (!user) return;
+        try {
+            const response = await fetch(`/api/community?postId=${postId}&userId=${user.uid}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                setPosts(prev => prev.filter(p => p.id !== postId));
+                if (activePost?.id === postId) {
+                    setActivePost(null);
+                }
+            }
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        }
+    }, [user, activePost]);
 
     // Create reply
     const createReply = useCallback(async (postId: string, content: string, parentReplyId?: string) => {
         if (!user) return;
-        const newReply: PostReply = {
-            id: `reply-${Date.now()}`,
-            postId,
-            authorId: user.uid,
-            authorName: user.displayName || 'Anonymous',
-            content,
-            parentReplyId,
-            likes: 0,
-            likedBy: [],
-            createdAt: new Date(),
-        };
-        setActiveReplies(prev => [...prev, newReply]);
-        setPosts(prev => prev.map(p =>
-            p.id === postId ? { ...p, replyCount: p.replyCount + 1 } : p
-        ));
+        try {
+            const response = await fetch('/api/community', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'reply',
+                    data: {
+                        postId,
+                        authorId: user.uid,
+                        authorName: user.displayName || 'Anonymous',
+                        content,
+                        parentReplyId,
+                    },
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setActiveReplies(prev => [...prev, data.reply]);
+                setPosts(prev => prev.map(p =>
+                    p.id === postId ? { ...p, replyCount: p.replyCount + 1 } : p
+                ));
+            }
+        } catch (error) {
+            console.error('Error creating reply:', error);
+        }
     }, [user]);
 
     // Like reply
     const likeReply = useCallback(async (replyId: string) => {
-        setActiveReplies(prev => prev.map(r =>
-            r.id === replyId ? { ...r, likes: r.likes + 1 } : r
-        ));
-    }, []);
+        if (!user || !activePost) return;
+        try {
+            const response = await fetch('/api/community', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'like',
+                    postId: activePost.id,
+                    replyId,
+                    userId: user.uid,
+                }),
+            });
+
+            if (response.ok) {
+                setActiveReplies(prev => prev.map(r =>
+                    r.id === replyId ? { ...r, likes: r.likes + 1 } : r
+                ));
+            }
+        } catch (error) {
+            console.error('Error liking reply:', error);
+        }
+    }, [user, activePost]);
 
     // Accept reply (mark as answer)
     const acceptReply = useCallback(async (postId: string, replyId: string) => {
-        setPosts(prev => prev.map(p =>
-            p.id === postId ? { ...p, isAnswered: true, acceptedReplyId: replyId } : p
-        ));
-        setActiveReplies(prev => prev.map(r =>
-            r.id === replyId ? { ...r, isAccepted: true } : { ...r, isAccepted: false }
-        ));
-    }, []);
+        if (!user) return;
+        try {
+            const response = await fetch('/api/community', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'accept',
+                    postId,
+                    replyId,
+                    userId: user.uid,
+                }),
+            });
+
+            if (response.ok) {
+                setPosts(prev => prev.map(p =>
+                    p.id === postId ? { ...p, isAnswered: true, acceptedReplyId: replyId } : p
+                ));
+                setActiveReplies(prev => prev.map(r =>
+                    r.id === replyId ? { ...r, isAccepted: true } : { ...r, isAccepted: false }
+                ));
+                if (activePost?.id === postId) {
+                    setActivePost(prev => prev ? { ...prev, isAnswered: true, acceptedReplyId: replyId } : null);
+                }
+            }
+        } catch (error) {
+            console.error('Error accepting reply:', error);
+        }
+    }, [user, activePost]);
+
+    // Delete reply
+    const deleteReply = useCallback(async (postId: string, replyId: string) => {
+        if (!user) return;
+        try {
+            const response = await fetch(`/api/community?postId=${postId}&replyId=${replyId}&userId=${user.uid}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                setActiveReplies(prev => prev.filter(r => r.id !== replyId));
+                setPosts(prev => prev.map(p =>
+                    p.id === postId ? { ...p, replyCount: Math.max(0, p.replyCount - 1) } : p
+                ));
+            }
+        } catch (error) {
+            console.error('Error deleting reply:', error);
+        }
+    }, [user]);
 
     // Join group
     const joinGroup = useCallback(async (groupId: string) => {
@@ -330,36 +406,10 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
         setMyGroups(prev => prev.filter(g => g.id !== groupId));
     }, []);
 
-    // Filtered posts
+    // Filtered posts (already filtered by API, but apply local search for instant feedback)
     const filteredPosts = useMemo(() => {
-        let result = [...posts];
-
-        // Apply filter
-        if (filter === 'questions') {
-            result = result.filter(p => p.type === 'question');
-        } else if (filter === 'discussions') {
-            result = result.filter(p => p.type === 'discussion');
-        }
-
-        // Apply search
-        if (searchQuery) {
-            const q = searchQuery.toLowerCase();
-            result = result.filter(p =>
-                p.title.toLowerCase().includes(q) ||
-                p.content.toLowerCase().includes(q) ||
-                p.tags.some(t => t.toLowerCase().includes(q))
-            );
-        }
-
-        // Apply sort
-        if (sort === 'popular') {
-            result.sort((a, b) => b.likes - a.likes);
-        } else if (sort === 'unanswered') {
-            result = result.filter(p => p.type === 'question' && !p.isAnswered);
-        }
-
-        return result;
-    }, [posts, filter, sort, searchQuery]);
+        return posts;
+    }, [posts]);
 
     const value: CommunityContextType = {
         posts: filteredPosts,
@@ -378,9 +428,11 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
         createPost,
         likePost,
         savePost,
+        deletePost,
         createReply,
         likeReply,
         acceptReply,
+        deleteReply,
         groups,
         myGroups,
         joinGroup,
@@ -390,6 +442,8 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
         showCreateModal,
         setShowCreateModal,
         isSubmitting,
+        showingSaved,
+        setShowingSaved,
     };
 
     return (

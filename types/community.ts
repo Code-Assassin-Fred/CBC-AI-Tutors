@@ -10,6 +10,18 @@
 
 export type PostType = 'question' | 'discussion' | 'announcement' | 'resource';
 
+export type AttachmentType = 'image' | 'video' | 'document' | 'link';
+
+export interface Attachment {
+    id: string;
+    type: AttachmentType;
+    url: string;
+    name: string;
+    mimeType?: string;
+    size?: number; // bytes
+    thumbnailUrl?: string; // for videos/images
+}
+
 export interface CommunityPost {
     id: string;
     authorId: string;
@@ -21,6 +33,7 @@ export interface CommunityPost {
     title: string;
     content: string;
     tags: string[];
+    attachments?: Attachment[]; // For resource sharing
 
     // For questions
     isAnswered?: boolean;

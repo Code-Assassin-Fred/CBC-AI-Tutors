@@ -11,17 +11,11 @@ function CommunityContent() {
     const { activePost } = useCommunity();
 
     return (
-        <div className="max-w-7xl mx-auto pt-8 px-4 pb-16">
-            {/* Header */}
-            <div className="mb-8">
-                <h1 className="text-2xl font-bold text-white mb-2">Community</h1>
-                <p className="text-[#9aa6b2]">Connect with learners, ask questions, and share knowledge</p>
-            </div>
-
-            {/* Main layout */}
-            <div className="grid lg:grid-cols-3 gap-6">
-                {/* Main content */}
-                <div className="lg:col-span-2">
+        <div className="max-w-7xl mx-auto pt-8 px-4 pb-4">
+            {/* Main layout with independent scrolling */}
+            <div className="flex gap-6 h-[calc(100vh-120px)]">
+                {/* Main content - scrolls independently */}
+                <div className="flex-1 min-w-0 overflow-y-auto pr-2">
                     {activePost ? (
                         <PostDetail />
                     ) : (
@@ -29,8 +23,8 @@ function CommunityContent() {
                     )}
                 </div>
 
-                {/* Sidebar */}
-                <div className="lg:col-span-1">
+                {/* Sidebar - scrolls independently */}
+                <div className="w-80 flex-shrink-0 overflow-y-auto pl-2 hidden lg:block">
                     <CommunitySidebar />
                 </div>
             </div>

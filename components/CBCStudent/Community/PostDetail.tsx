@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useCommunity } from '@/lib/context/CommunityContext';
+import { useAuth } from '@/lib/context/AuthContext';
 
 export default function PostDetail() {
+    const { user } = useAuth();
     const {
         activePost,
         setActivePost,
@@ -14,11 +16,15 @@ export default function PostDetail() {
         acceptReply,
         likePost,
         savePost,
+        deletePost,
+        deleteReply,
     } = useCommunity();
 
     const [replyContent, setReplyContent] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [replyingTo, setReplyingTo] = useState<{ id: string; authorName: string; content: string } | null>(null);
+
+    const isPostAuthor = user?.uid === activePost?.authorId;
 
     useEffect(() => {
         if (activePost) {
@@ -48,6 +54,18 @@ export default function PostDetail() {
         setReplyContent('');
         setReplyingTo(null);
         setIsSubmitting(false);
+    };
+
+    const handleDeletePost = async () => {
+        if (confirm('Are you sure you want to delete this post?')) {
+            await deletePost(activePost.id);
+        }
+    };
+
+    const handleDeleteReply = async (replyId: string) => {
+        if (confirm('Are you sure you want to delete this reply?')) {
+            await deleteReply(activePost.id, replyId);
+        }
     };
 
     const getTypeBadge = () => {
@@ -86,6 +104,16 @@ export default function PostDetail() {
                     <span className="text-xs text-[#9aa6b2]">{activePost.authorName}</span>
                     <span className="text-[#9aa6b2]/50">•</span>
                     <span className="text-xs text-[#9aa6b2]">{formatTime(activePost.createdAt)}</span>
+
+                    {/* Delete button for author */}
+                    {isPostAuthor && (
+                        <button
+                            onClick={handleDeletePost}
+                            className="ml-auto text-xs text-[#9aa6b2] hover:text-red-400 transition-colors"
+                        >
+                            Delete Post
+                        </button>
+                    )}
                 </div>
 
                 <h1 className="text-xl font-semibold text-white mb-4">
@@ -95,6 +123,59 @@ export default function PostDetail() {
                 <p className="text-[#9aa6b2] leading-relaxed mb-4">
                     {activePost.content}
                 </p>
+
+                {/* Attachments */}
+                {activePost.attachments && activePost.attachments.length > 0 && (
+                    <div className="mb-4 space-y-2">
+                        {/* Images */}
+                        {activePost.attachments.filter(a => a.type === 'image').length > 0 && (
+                            <div className="grid grid-cols-2 gap-2">
+                                {activePost.attachments.filter(a => a.type === 'image').map(att => (
+                                    <a
+                                        key={att.id}
+                                        href={att.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block overflow-hidden rounded-lg"
+                                    >
+                                        <img
+                                            src={att.url}
+                                            alt={att.name}
+                                            className="w-full h-40 object-cover hover:opacity-80 transition-opacity"
+                                        />
+                                    </a>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Videos */}
+                        {activePost.attachments.filter(a => a.type === 'video').map(att => (
+                            <video
+                                key={att.id}
+                                src={att.url}
+                                controls
+                                className="w-full rounded-lg max-h-64"
+                            />
+                        ))}
+
+                        {/* Documents and Links */}
+                        {activePost.attachments.filter(a => a.type === 'document' || a.type === 'link').map(att => (
+                            <a
+                                key={att.id}
+                                href={att.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
+                            >
+                                <span className="text-base">{att.type === 'link' ? '🔗' : '📄'}</span>
+                                <span className="flex-1 text-sm text-[#0ea5e9] truncate">{att.name}</span>
+                                {att.size && (
+                                    <span className="text-xs text-[#9aa6b2]">{(att.size / 1024).toFixed(0)}KB</span>
+                                )}
+                            </a>
+                        ))}
+                    </div>
+                )}
 
                 {/* Tags */}
                 <div className="flex gap-2 mb-4">
@@ -112,22 +193,15 @@ export default function PostDetail() {
                 <div className="flex gap-4 text-sm text-[#9aa6b2]">
                     <button
                         onClick={() => likePost(activePost.id)}
-                        className="hover:text-[#0ea5e9] transition-colors"
+                        className={`transition-colors ${user && activePost.likedBy?.includes(user.uid) ? 'text-red-400' : 'hover:text-[#0ea5e9]'}`}
                     >
-                        ♥ {activePost.likes} likes
+                        {user && activePost.likedBy?.includes(user.uid) ? '❤️' : '♥'} {activePost.likes} likes
                     </button>
                     <button
                         onClick={() => savePost(activePost.id)}
-                        className="hover:text-[#0ea5e9] transition-colors"
+                        className={`transition-colors ${user && activePost.savedBy?.includes(user.uid) ? 'text-[#0ea5e9]' : 'hover:text-[#0ea5e9]'}`}
                     >
-                        🔖 Save
-                    </button>
-                    <span>👁 {activePost.views} views</span>
-                    <button
-                        onClick={() => navigator.clipboard.writeText(window.location.href)}
-                        className="hover:text-[#0ea5e9] transition-colors ml-auto"
-                    >
-                        🔗 Share
+                        {user && activePost.savedBy?.includes(user.uid) ? '✓ Saved' : '🔖 Save'}
                     </button>
                 </div>
             </div>
@@ -139,59 +213,72 @@ export default function PostDetail() {
                 </h2>
 
                 <div className="space-y-4">
-                    {activeReplies.map((reply) => (
-                        <div
-                            key={reply.id}
-                            id={`reply-${reply.id}`}
-                            className={`p-4 rounded-xl border-l-2 ${reply.isAccepted
+                    {activeReplies.map((reply) => {
+                        const isReplyAuthor = user?.uid === reply.authorId;
+                        return (
+                            <div
+                                key={reply.id}
+                                id={`reply-${reply.id}`}
+                                className={`p-4 rounded-xl border-l-2 ${reply.isAccepted
                                     ? 'border-emerald-500 bg-emerald-500/5'
                                     : 'border-white/10 bg-white/[0.02]'
-                                }`}
-                        >
-                            {reply.isAccepted && (
-                                <div className="flex items-center gap-1 text-xs text-emerald-500 mb-2 font-medium">
-                                    ✓ Accepted Answer
-                                </div>
-                            )}
-
-                            <div className="flex items-center gap-2 mb-2">
-                                <span className="text-sm font-medium text-white/90">{reply.authorName}</span>
-                                <span className="text-[#9aa6b2]/50">•</span>
-                                <span className="text-xs text-[#9aa6b2]">{formatTime(reply.createdAt)}</span>
-                            </div>
-
-                            <p className="text-[#9aa6b2] text-sm mb-3">{reply.content}</p>
-
-                            <div className="flex items-center gap-4 text-xs text-[#9aa6b2]">
-                                <button
-                                    onClick={() => likeReply(reply.id)}
-                                    className="hover:text-[#0ea5e9] transition-colors"
-                                >
-                                    ♥ {reply.likes}
-                                </button>
-                                <button
-                                    onClick={() => setReplyingTo({ id: reply.id, authorName: reply.authorName, content: reply.content })}
-                                    className="hover:text-[#0ea5e9] transition-colors"
-                                >
-                                    Reply
-                                </button>
-                                <button
-                                    onClick={() => navigator.clipboard.writeText(`${window.location.href}#reply-${reply.id}`)}
-                                    className="hover:text-[#0ea5e9] transition-colors"
-                                >
-                                    Link
-                                </button>
-                                {activePost.type === 'question' && !activePost.isAnswered && (
-                                    <button
-                                        onClick={() => acceptReply(activePost.id, reply.id)}
-                                        className="hover:text-emerald-500 transition-colors ml-auto"
-                                    >
-                                        Mark as Answer
-                                    </button>
+                                    }`}
+                            >
+                                {reply.isAccepted && (
+                                    <div className="flex items-center gap-1 text-xs text-emerald-500 mb-2 font-medium">
+                                        ✓ Accepted Answer
+                                    </div>
                                 )}
+
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-sm font-medium text-white/90">{reply.authorName}</span>
+                                    <span className="text-[#9aa6b2]/50">•</span>
+                                    <span className="text-xs text-[#9aa6b2]">{formatTime(reply.createdAt)}</span>
+
+                                    {/* Delete button for reply author */}
+                                    {isReplyAuthor && (
+                                        <button
+                                            onClick={() => handleDeleteReply(reply.id)}
+                                            className="ml-auto text-xs text-[#9aa6b2] hover:text-red-400 transition-colors"
+                                        >
+                                            Delete
+                                        </button>
+                                    )}
+                                </div>
+
+                                <p className="text-[#9aa6b2] text-sm mb-3">{reply.content}</p>
+
+                                <div className="flex items-center gap-4 text-xs text-[#9aa6b2]">
+                                    <button
+                                        onClick={() => likeReply(reply.id)}
+                                        className="hover:text-[#0ea5e9] transition-colors"
+                                    >
+                                        ♥ {reply.likes}
+                                    </button>
+                                    <button
+                                        onClick={() => setReplyingTo({ id: reply.id, authorName: reply.authorName, content: reply.content })}
+                                        className="hover:text-[#0ea5e9] transition-colors"
+                                    >
+                                        Reply
+                                    </button>
+                                    <button
+                                        onClick={() => navigator.clipboard.writeText(`${window.location.href}#reply-${reply.id}`)}
+                                        className="hover:text-[#0ea5e9] transition-colors"
+                                    >
+                                        Link
+                                    </button>
+                                    {activePost.type === 'question' && !activePost.isAnswered && isPostAuthor && (
+                                        <button
+                                            onClick={() => acceptReply(activePost.id, reply.id)}
+                                            className="hover:text-emerald-500 transition-colors ml-auto"
+                                        >
+                                            Mark as Answer
+                                        </button>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
 

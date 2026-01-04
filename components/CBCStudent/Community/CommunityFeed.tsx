@@ -17,6 +17,8 @@ export default function CommunityFeed() {
         loadPosts,
         setShowCreateModal,
         setActivePost,
+        showingSaved,
+        setShowingSaved,
     } = useCommunity();
 
     useEffect(() => {
@@ -59,8 +61,11 @@ export default function CommunityFeed() {
                     {filters.map((f) => (
                         <button
                             key={f.value}
-                            onClick={() => setFilter(f.value)}
-                            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filter === f.value
+                            onClick={() => {
+                                setFilter(f.value);
+                                setShowingSaved(false);
+                            }}
+                            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filter === f.value && !showingSaved
                                     ? 'bg-[#0ea5e9] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset]'
                                     : 'text-[#9aa6b2] hover:text-white hover:bg-white/5'
                                 }`}
@@ -68,6 +73,15 @@ export default function CommunityFeed() {
                             {f.label}
                         </button>
                     ))}
+                    <button
+                        onClick={() => setShowingSaved(true)}
+                        className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${showingSaved
+                                ? 'bg-[#0ea5e9] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset]'
+                                : 'text-[#9aa6b2] hover:text-white hover:bg-white/5'
+                            }`}
+                    >
+                        🔖 Saved
+                    </button>
                 </div>
                 <select
                     value={sort}
@@ -97,7 +111,7 @@ export default function CommunityFeed() {
                 </div>
             ) : (
                 <div className="text-center py-12 text-[#9aa6b2]">
-                    <p>No posts found</p>
+                    <p>{showingSaved ? 'No saved posts' : 'No posts found'}</p>
                     {searchQuery && (
                         <button
                             onClick={() => setSearchQuery('')}

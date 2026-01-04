@@ -2,6 +2,7 @@
 
 import { CommunityPost } from '@/types/community';
 import { useCommunity } from '@/lib/context/CommunityContext';
+import { useAuth } from '@/lib/context/AuthContext';
 
 interface PostItemProps {
     post: CommunityPost;
@@ -9,7 +10,12 @@ interface PostItemProps {
 }
 
 export default function PostItem({ post, onClick }: PostItemProps) {
-    const { likePost, savePost } = useCommunity();
+    const { user } = useAuth();
+    const { likePost, savePost, deletePost } = useCommunity();
+
+    const isAuthor = user?.uid === post.authorId;
+    const isLiked = user && post.likedBy?.includes(user.uid);
+    const isSaved = user && post.savedBy?.includes(user.uid);
 
     const formatTime = (date: Date) => {
         const now = new Date();
@@ -39,6 +45,13 @@ export default function PostItem({ post, onClick }: PostItemProps) {
         }
     };
 
+    const handleDelete = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (confirm('Are you sure you want to delete this post?')) {
+            await deletePost(post.id);
+        }
+    };
+
     const badge = getTypeBadge();
 
     return (
@@ -51,6 +64,16 @@ export default function PostItem({ post, onClick }: PostItemProps) {
                 <span className="text-xs text-[#9aa6b2]">{post.authorName}</span>
                 <span className="text-[#9aa6b2]/50">•</span>
                 <span className="text-xs text-[#9aa6b2]">{formatTime(post.createdAt)}</span>
+
+                {/* Delete button for author */}
+                {isAuthor && (
+                    <button
+                        onClick={handleDelete}
+                        className="ml-auto text-xs text-[#9aa6b2] hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                    >
+                        Delete
+                    </button>
+                )}
             </div>
 
             {/* Title */}
@@ -89,9 +112,9 @@ export default function PostItem({ post, onClick }: PostItemProps) {
                             e.stopPropagation();
                             likePost(post.id);
                         }}
-                        className="hover:text-[#0ea5e9] transition-colors"
+                        className={`transition-colors ${isLiked ? 'text-red-400' : 'hover:text-[#0ea5e9]'}`}
                     >
-                        ♥ {post.likes}
+                        {isLiked ? '❤️' : '♥'} {post.likes}
                     </button>
                     <button
                         onClick={onClick}
@@ -104,9 +127,9 @@ export default function PostItem({ post, onClick }: PostItemProps) {
                             e.stopPropagation();
                             savePost(post.id);
                         }}
-                        className="hover:text-[#0ea5e9] transition-colors"
+                        className={`transition-colors ${isSaved ? 'text-[#0ea5e9]' : 'hover:text-[#0ea5e9]'}`}
                     >
-                        🔖 {post.saves}
+                        {isSaved ? '✓ Saved' : '🔖'}
                     </button>
                 </div>
             </div>
