@@ -25,7 +25,7 @@ function shuffleArray<T>(array: T[]): T[] {
 export async function GET(request: NextRequest) {
     try {
         const searchParams = request.nextUrl.searchParams;
-        const limit = Math.min(parseInt(searchParams.get('limit') || '8'), 20);
+        const limit = Math.min(parseInt(searchParams.get('limit') || '8'), 100);
         const category = searchParams.get('category');
         const trendingOnly = searchParams.get('trending') === 'true';
         const includeGenerated = searchParams.get('includeGenerated') !== 'false';

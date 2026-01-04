@@ -60,6 +60,9 @@ interface CoursesContextType {
 
     // Enrollment
     enrollInCourse: (courseId: string, careerPathId?: string) => Promise<boolean>;
+
+    // Deletion
+    deleteCourse: (courseId: string, isCreator: boolean) => Promise<boolean>;
 }
 
 const CoursesContext = createContext<CoursesContextType | null>(null);
@@ -333,7 +336,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
 
     const loadSuggestions = useCallback(async () => {
         try {
-            const response = await fetch('/api/courses/suggestions?limit=8');
+            const response = await fetch('/api/courses/suggestions?limit=100');
             if (response.ok) {
                 const data = await response.json();
                 setSuggestions(data.suggestions || []);
@@ -497,6 +500,34 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
         return false;
     }, [user, loadMyCourses]);
 
+    const deleteCourse = useCallback(async (courseId: string, isCreator: boolean): Promise<boolean> => {
+        if (!user) return false;
+
+        try {
+            let response;
+
+            if (isCreator) {
+                // Delete the course completely if user is creator
+                response = await fetch(`/api/courses/${courseId}`, {
+                    method: 'DELETE',
+                });
+            } else {
+                // Unsave the course if user just saved it
+                response = await fetch(`/api/courses/save?courseId=${courseId}&userId=${user.uid}`, {
+                    method: 'DELETE',
+                });
+            }
+
+            if (response.ok) {
+                await loadMyCourses(); // Refresh list
+                return true;
+            }
+        } catch (error) {
+            console.error('Error deleting course:', error);
+        }
+        return false;
+    }, [user, loadMyCourses]);
+
     // ========================================
     // CONTEXT VALUE
     // ========================================
@@ -543,6 +574,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
 
         // Enrollment
         enrollInCourse,
+        deleteCourse,
     };
 
     return (
