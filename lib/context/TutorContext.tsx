@@ -342,7 +342,8 @@ export function TutorProvider({ children }: TutorProviderProps) {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to generate lesson plan');
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || 'Failed to generate lesson plan');
             }
 
             // Handle streaming response

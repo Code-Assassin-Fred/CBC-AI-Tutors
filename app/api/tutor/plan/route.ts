@@ -12,10 +12,19 @@ export async function POST(request: NextRequest) {
     try {
         const context: SubstrandContext = await request.json();
 
-        // Validate required fields
-        if (!context.grade || !context.subject || !context.strand || !context.substrand) {
+        // Validate API Key
+        if (!process.env.OPENAI_API_KEY) {
+            console.error('Missing OPENAI_API_KEY');
             return new Response(
-                JSON.stringify({ error: 'Missing required fields' }),
+                JSON.stringify({ error: 'Server misconfiguration: Missing API Key' }),
+                { status: 500, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
+
+        // Validate required fields
+        if (!context.grade || !context.subject || !context.strand || !context.substrand || !context.textbookContent) {
+            return new Response(
+                JSON.stringify({ error: 'Missing required fields (including textbookContent)' }),
                 { status: 400, headers: { 'Content-Type': 'application/json' } }
             );
         }

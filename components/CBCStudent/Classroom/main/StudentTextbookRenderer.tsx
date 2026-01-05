@@ -423,16 +423,34 @@ export default function StudentTextbookRenderer({
 
   // Handle button clicks
   useEffect(() => {
+    // Helper to extract content between headings
+    const extractContent = (headingId: string): string => {
+      const heading = document.getElementById(headingId);
+      if (!heading) return '';
+
+      let content = '';
+      let next = heading.nextElementSibling;
+
+      // Collect all elements until the next H1 or H2
+      while (next && !['H1', 'H2'].includes(next.tagName)) {
+        // Skip the "Take Quiz" container if it exists, to avoid circular content
+        if (!next.classList.contains('take-quiz-container')) {
+          content += next.outerHTML;
+        }
+        next = next.nextElementSibling;
+      }
+
+      return content || heading.innerText; // Fallback to heading text if no content
+    };
+
     const handleLearnClick = (e: MouseEvent) => {
       const btn = e.target as HTMLElement;
       const learnBtn = btn.closest('.learn-with-ai-btn') as HTMLElement;
       if (learnBtn && onLearnWithAI) {
         const id = learnBtn.getAttribute('data-substrand-id') || '';
         const title = learnBtn.getAttribute('data-substrand-title') || '';
-        // Get the substrand card content
-        const card = document.getElementById(id);
-        const bodyContent = card?.querySelector('.p-5')?.innerHTML || '';
-        onLearnWithAI({ id, title, content: bodyContent });
+        const content = extractContent(id);
+        onLearnWithAI({ id, title, content });
       }
     };
 
@@ -442,9 +460,8 @@ export default function StudentTextbookRenderer({
       if (quizBtn && onTakeQuiz) {
         const id = quizBtn.getAttribute('data-substrand-id') || '';
         const title = quizBtn.getAttribute('data-substrand-title') || '';
-        const card = document.getElementById(id);
-        const bodyContent = card?.querySelector('.p-5')?.innerHTML || '';
-        onTakeQuiz({ id, title, content: bodyContent });
+        const content = extractContent(id);
+        onTakeQuiz({ id, title, content });
       }
     };
 
