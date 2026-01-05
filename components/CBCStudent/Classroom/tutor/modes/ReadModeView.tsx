@@ -3,6 +3,8 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ReadModeContent } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
+import { useGamification } from '@/lib/context/GamificationContext';
+import { XP_CONFIG } from '@/types/gamification';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
 import { HiOutlineSpeakerWave, HiOutlineStop, HiBackward, HiForward } from 'react-icons/hi2';
 
@@ -26,10 +28,12 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
         stopSpeaking,
         audio
     } = useTutor();
+    const { addXP, showXPPopup } = useGamification();
     const [inputValue, setInputValue] = useState('');
     const [isSending, setIsSending] = useState(false);
     const [currentSegmentIndex, setCurrentSegmentIndex] = useState(-1);
     const [isPlayingAll, setIsPlayingAll] = useState(false);
+    const [hasAwardedXP, setHasAwardedXP] = useState(false);
     const playingRef = useRef(false);
     const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -125,7 +129,12 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
         }
 
         if (playingRef.current) {
-            // Finished naturally
+            // Finished naturally - award XP for completing the lesson
+            if (!hasAwardedXP) {
+                setHasAwardedXP(true);
+                await addXP(XP_CONFIG.lesson, 'lesson', 'Completed lesson in Read Mode');
+                showXPPopup(XP_CONFIG.lesson);
+            }
             setIsPlayingAll(false);
             playingRef.current = false;
         }
@@ -250,8 +259,8 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                                 key={segment.id}
                                 onClick={() => handleProgressClick(idx)}
                                 className={`flex-1 transition-all hover:brightness-125 ${idx <= currentSegmentIndex
-                                        ? 'bg-sky-500'
-                                        : 'bg-white/10 hover:bg-white/20'
+                                    ? 'bg-sky-500'
+                                    : 'bg-white/10 hover:bg-white/20'
                                     } ${idx === currentSegmentIndex && audio.isPlaying ? 'animate-pulse' : ''}`}
                                 title={segment.label}
                             />

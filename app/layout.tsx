@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/context/AuthContext";
 import { SidebarProvider } from "@/lib/context/SidebarContext";
+import { GamificationProvider } from "@/lib/context/GamificationContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,10 +32,13 @@ export default function RootLayout({
       >
         <AuthProvider>
           <SidebarProvider>
-            {children}
+            <GamificationProvider>
+              {children}
+            </GamificationProvider>
           </SidebarProvider>
         </AuthProvider>
       </body>
     </html>
   );
 }
+

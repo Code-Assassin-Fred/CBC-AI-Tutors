@@ -3,6 +3,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { PodcastScript } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
+import { useGamification } from '@/lib/context/GamificationContext';
+import { XP_CONFIG } from '@/types/gamification';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
 import { HiBackward, HiForward, HiPause, HiPlay } from 'react-icons/hi2';
 
@@ -12,8 +14,10 @@ interface PodcastModeViewProps {
 
 export default function PodcastModeView({ script }: PodcastModeViewProps) {
     const { speak, stopSpeaking, audio } = useTutor();
+    const { addXP, showXPPopup } = useGamification();
     const [currentSegmentIndex, setCurrentSegmentIndex] = useState(-1);
     const [isPlayingSequence, setIsPlayingSequence] = useState(false);
+    const [hasAwardedXP, setHasAwardedXP] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
     const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
     const playingRef = useRef(false);
@@ -67,7 +71,12 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
         }
 
         if (playingRef.current) {
-            // Finished naturally
+            // Finished naturally - award XP for completing the podcast
+            if (!hasAwardedXP) {
+                setHasAwardedXP(true);
+                await addXP(XP_CONFIG.podcast, 'podcast', 'Completed podcast lesson');
+                showXPPopup(XP_CONFIG.podcast);
+            }
             setIsPlayingSequence(false);
             playingRef.current = false;
         }

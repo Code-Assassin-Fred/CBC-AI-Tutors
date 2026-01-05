@@ -4,6 +4,8 @@ import React from 'react';
 import { useConversationalVoice, LessonContext, ConversationMessage } from '@/lib/hooks/useConversationalVoice';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
 import { useAuth } from '@/lib/context/AuthContext';
+import { useGamification } from '@/lib/context/GamificationContext';
+import { XP_CONFIG } from '@/types/gamification';
 import axios from 'axios';
 import { HiOutlineMicrophone, HiOutlineStop, HiOutlineChatBubbleLeftRight, HiOutlineXMark, HiOutlineLockClosed, HiOutlineSpeakerWave } from 'react-icons/hi2';
 
@@ -14,6 +16,8 @@ interface ConversationalModeViewProps {
 
 export default function ConversationalModeView({ lessonContext, onClose }: ConversationalModeViewProps) {
     const { user } = useAuth();
+    const { addXP, showXPPopup } = useGamification();
+    const [sessionStartTime, setSessionStartTime] = React.useState<number | null>(null);
     const {
         isActive,
         isListening,
@@ -33,6 +37,15 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
 
     const saveChatHistory = async (history: ConversationMessage[]) => {
         if (!user || !lessonContext || history.length === 0) return;
+
+        // Check if session was long enough for XP (5+ minutes)
+        if (sessionStartTime) {
+            const sessionDuration = (Date.now() - sessionStartTime) / 1000 / 60; // minutes
+            if (sessionDuration >= 5) {
+                await addXP(XP_CONFIG.conversational, 'conversational', 'Conversational session (5+ minutes)');
+                showXPPopup(XP_CONFIG.conversational);
+            }
+        }
 
         try {
             await axios.post('/api/user/activity', {
@@ -87,7 +100,10 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
                         </p>
                     </div>
                     <button
-                        onClick={startConversation}
+                        onClick={() => {
+                            setSessionStartTime(Date.now());
+                            startConversation();
+                        }}
                         className="px-5 py-2.5 bg-sky-500 hover:bg-sky-400 text-white text-sm font-medium rounded-lg transition-all"
                     >
                         Start Conversation

@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { ImmersiveContent, ImmersiveChunk, AssessmentResult } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
 import { useAuth } from '@/lib/context/AuthContext';
+import { useGamification } from '@/lib/context/GamificationContext';
+import { XP_CONFIG } from '@/types/gamification';
 import axios from 'axios';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
 import ConversationalModeView from './ConversationalModeView';
@@ -15,6 +17,7 @@ interface ImmersiveModeViewProps {
 
 export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
     const { audio, speak, stopSpeaking, startListening, stopListening, setAudioState, context } = useTutor();
+    const { addXP, showXPPopup } = useGamification();
     const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
     const [phase, setPhase] = useState<'learning' | 'explaining' | 'feedback' | 'conversation'>('learning');
     const [userExplanation, setUserExplanation] = useState('');
@@ -76,6 +79,13 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
 
             setAssessments(prev => new Map(prev).set(currentChunk.id, assessment));
             setPhase('feedback');
+
+            // Award XP for completing chunk (more XP for better scores)
+            const xpAmount = assessment.level === 'excellent' ? XP_CONFIG.immersiveChunk + 3 :
+                assessment.level === 'good' ? XP_CONFIG.immersiveChunk + 1 :
+                    XP_CONFIG.immersiveChunk;
+            await addXP(xpAmount, 'immersive', `Completed immersive chunk: ${currentChunk.concept}`);
+            showXPPopup(xpAmount);
         } catch (error) {
             console.error('Assessment failed:', error);
             // Fallback: show error and allow retry

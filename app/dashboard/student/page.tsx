@@ -6,6 +6,7 @@ import DashboardLayout from '@/components/CBCStudent/layout/DashboardLayout';
 import LearningOverviewCard from '@/components/CBCStudent/dashboard/LearningOverviewCard';
 import ProgressSummary from '@/components/CBCStudent/dashboard/ProgressSummary';
 import UpcomingLessons from '@/components/CBCStudent/dashboard/UpcomingLessons';
+import { GamificationHeader } from '@/components/gamification';
 import { useAuth } from '@/lib/context/AuthContext';
 import { ScheduleProvider, useSchedule } from '@/lib/context/ScheduleContext';
 import { CoursesProvider, useCourses } from '@/lib/context/CoursesContext';
@@ -53,6 +54,11 @@ function DashboardContent() {
                         {dateText}
                     </span>
                 </div>
+            </div>
+
+            {/* Gamification Header - XP, Level, Streak, Neurons */}
+            <div className="max-w-7xl mx-auto mb-6">
+                <GamificationHeader />
             </div>
 
             {/* Main dashboard grid */}

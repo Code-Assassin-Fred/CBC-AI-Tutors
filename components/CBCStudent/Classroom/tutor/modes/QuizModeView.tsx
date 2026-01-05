@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useState } from 'react';
-import { QuizOutput, QuizQuestion } from '@/lib/types/agents';
+import React, { useState, useCallback } from 'react';
+import { QuizOutput } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
 import { useAuth } from '@/lib/context/AuthContext';
+import { useGamification } from '@/lib/context/GamificationContext';
+import { ComboIndicator, XPPopup } from '@/components/gamification';
+import { getComboMultiplier, XP_CONFIG } from '@/types/gamification';
 import axios from 'axios';
 
 interface QuizModeViewProps {
@@ -18,11 +21,25 @@ interface QuizState {
     isSaving: boolean;
     isAssessing: boolean;
     aiSummary?: string;
-    fillBlankCorrect?: boolean; // Track if fill-blank was correct via AI
+    fillBlankCorrect?: boolean;
+    // Gamification
+    combo: number;
+    xpEarned: number;
+}
+
+interface XPPopupData {
+    amount: number;
+    x: number;
+    y: number;
+    id: number;
 }
 
 export default function QuizModeView({ quiz }: QuizModeViewProps) {
     const { exitMode } = useTutor();
+    const { user } = useAuth();
+    const { context } = useTutor();
+    const { addXP, showXPPopup } = useGamification();
+
     const [state, setState] = useState<QuizState>({
         currentIndex: 0,
         answers: new Map(),
@@ -30,10 +47,11 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
         showFinalResults: false,
         isSaving: false,
         isAssessing: false,
+        combo: 0,
+        xpEarned: 0,
     });
-    const { user } = useAuth();
-    const { context } = useTutor();
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+    const [localXPPopup, setLocalXPPopup] = useState<XPPopupData | null>(null);
 
     const currentQuestion = quiz.questions[state.currentIndex];
     const totalQuestions = quiz.questions.length;
@@ -47,20 +65,62 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
     const wrongAnswers = state.answers.size - correctAnswers;
     const progress = ((state.currentIndex + (state.showResult ? 1 : 0)) / totalQuestions) * 100;
 
-    const handleSelectAnswer = (answer: string) => {
+    // Award XP for correct answer
+    const awardQuestionXP = useCallback(async (isCorrect: boolean, isHard: boolean) => {
+        if (!isCorrect) {
+            // Reset combo on wrong answer
+            setState(prev => ({ ...prev, combo: 0 }));
+            return;
+        }
+
+        const newCombo = state.combo + 1;
+        const multiplier = getComboMultiplier(newCombo);
+        const baseXP = isHard ? XP_CONFIG.quizCorrectHard : XP_CONFIG.quizCorrect;
+        const xpAmount = Math.floor(baseXP * multiplier);
+
+        // Update local state
+        setState(prev => ({
+            ...prev,
+            combo: newCombo,
+            xpEarned: prev.xpEarned + xpAmount,
+        }));
+
+        // Show XP popup
+        setLocalXPPopup({
+            amount: xpAmount,
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2 - 50,
+            id: Date.now(),
+        });
+
+        // Award XP via context
+        await addXP(baseXP, 'quiz', `Quiz question correct`, multiplier);
+
+        // Clear popup after animation
+        setTimeout(() => setLocalXPPopup(null), 1500);
+    }, [state.combo, addXP]);
+
+    const handleSelectAnswer = async (answer: string) => {
         if (state.showResult) return;
         setSelectedAnswer(answer);
 
         // Auto-submit for multiple choice and true/false questions
         if (currentQuestion.type !== 'fill_blank') {
+            const isCorrect = answer === currentQuestion.correctAnswer ||
+                String.fromCharCode(65 + (currentQuestion.options?.indexOf(currentQuestion.correctAnswer) ?? -1)) === answer;
+            const isHard = currentQuestion.difficulty === 'hard';
+
             const newAnswers = new Map(state.answers);
             newAnswers.set(currentQuestion.id, answer);
 
-            setState({
-                ...state,
+            setState(prev => ({
+                ...prev,
                 answers: newAnswers,
                 showResult: true,
-            });
+            }));
+
+            // Award XP after state update
+            await awardQuestionXP(isCorrect, isHard);
         }
     };
 
@@ -96,6 +156,9 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                     isAssessing: false,
                     fillBlankCorrect: isCorrectByAI,
                 }));
+
+                // Award XP for fill-blank
+                await awardQuestionXP(isCorrectByAI, currentQuestion.difficulty === 'hard');
             } catch (error) {
                 console.error('Fill-blank assessment failed:', error);
                 const newAnswers = new Map(state.answers);
@@ -119,7 +182,7 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
         }
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (state.currentIndex < totalQuestions - 1) {
             setState({
                 ...state,
@@ -128,7 +191,19 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
             });
             setSelectedAnswer(null);
         } else {
-            setState(prev => ({ ...prev, showFinalResults: true, isSaving: true }));
+            // Check for perfect quiz bonus
+            const isPerfect = correctAnswers === totalQuestions;
+            if (isPerfect) {
+                await addXP(XP_CONFIG.perfectQuizBonus, 'quiz', 'Perfect quiz bonus!');
+                setState(prev => ({
+                    ...prev,
+                    showFinalResults: true,
+                    isSaving: true,
+                    xpEarned: prev.xpEarned + XP_CONFIG.perfectQuizBonus,
+                }));
+            } else {
+                setState(prev => ({ ...prev, showFinalResults: true, isSaving: true }));
+            }
             saveResults();
         }
     };
@@ -197,14 +272,18 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                         </p>
                     </div>
 
-                    <div className="flex justify-center gap-12 py-8 border-y border-white/10">
+                    <div className="flex justify-center gap-8 py-8 border-y border-white/10">
                         <div className="space-y-1">
                             <div className="text-3xl font-bold font-mono text-white">{score}%</div>
-                            <div className="text-[10px] uppercase tracking-widest text-white/40">Efficiency</div>
+                            <div className="text-[10px] uppercase tracking-widest text-white/40">Score</div>
                         </div>
                         <div className="space-y-1">
                             <div className="text-3xl font-bold font-mono text-emerald-400">{correctAnswers}</div>
-                            <div className="text-[10px] uppercase tracking-widest text-white/40">Accuracy</div>
+                            <div className="text-[10px] uppercase tracking-widest text-white/40">Correct</div>
+                        </div>
+                        <div className="space-y-1">
+                            <div className="text-3xl font-bold font-mono text-cyan-400">+{state.xpEarned}</div>
+                            <div className="text-[10px] uppercase tracking-widest text-white/40">XP Earned</div>
                         </div>
                     </div>
 
@@ -239,6 +318,8 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                                     showFinalResults: false,
                                     isSaving: false,
                                     isAssessing: false,
+                                    combo: 0,
+                                    xpEarned: 0,
                                 });
                                 setSelectedAnswer(null);
                             }}
@@ -259,14 +340,31 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
     }
 
     return (
-        <div className="flex flex-col h-full">
-            {/* Header - Minimalist */}
+        <div className="flex flex-col h-full relative">
+            {/* XP Popup */}
+            {localXPPopup && (
+                <XPPopup
+                    key={localXPPopup.id}
+                    amount={localXPPopup.amount}
+                    x={localXPPopup.x}
+                    y={localXPPopup.y}
+                />
+            )}
+
+            {/* Header */}
             <div className="mb-8">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">{quiz.title}</h3>
-                    <div className="flex items-center gap-4 text-[10px] uppercase tracking-widest font-mono">
-                        <span className="text-white/40">ERR: {wrongAnswers}</span>
-                        <span className="text-emerald-500">COR: {correctAnswers}</span>
+                    <div className="flex items-center gap-4">
+                        {/* Combo Indicator */}
+                        <ComboIndicator streak={state.combo} size="sm" />
+
+                        {/* Stats */}
+                        <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest font-mono">
+                            <span className="text-cyan-400">+{state.xpEarned} XP</span>
+                            <span className="text-white/20">|</span>
+                            <span className="text-emerald-500">{correctAnswers}/{totalQuestions}</span>
+                        </div>
                     </div>
                 </div>
 
