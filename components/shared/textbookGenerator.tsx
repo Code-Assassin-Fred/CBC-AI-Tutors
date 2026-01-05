@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import TextbookRenderer from "@/components/admin/TextbookRenderer";
+import StudentTextbookRenderer from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
 import GenerationProgress from "@/components/admin/GenerationProgress";
 import contentJson from "@/content.json";
 import { useAuth } from "@/lib/context/AuthContext";
@@ -135,219 +136,205 @@ export default function GeneratePage() {
 
   // ---- Render ----
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Header */}
-      <header className="bg-black/30 backdrop-blur-sm border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-teal-500 to-emerald-600 rounded-lg shadow-lg">
-                <BookIcon />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold tracking-tight text-white">AI Content Generator</h1>
-                <p className="text-white/50 text-sm">Kenyan Curriculum Materials</p>
-              </div>
-            </div>
+    <div className="max-w-7xl mx-auto space-y-6">
+      {/* Toolbar */}
+      <div className="bg-[#0b0f12]/60 backdrop-blur-xl rounded-2xl border border-white/8 p-5 shadow-2xl">
+        <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5">
+          <div className="flex items-center gap-2 text-sm text-[#9aa6b2]">
+            {selectedGrade && selectedSubject && selectedStrand ? (
+              <>
+                <span className="font-medium text-white/70">{selectedGrade}</span>
+                <span className="opacity-30">→</span>
+                <span className="font-medium text-white/70">{selectedSubject}</span>
+                <span className="opacity-30">→</span>
+                <span className="font-medium text-sky-400">{selectedStrand}</span>
+              </>
+            ) : (
+              <span>Select curriculum parameters to begin generation</span>
+            )}
+          </div>
 
-            {/* Streaming toggle */}
-            <div className="flex items-center gap-3">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <span className="text-sm text-white/60">Show AI Progress</span>
-                <div className="relative">
-                  <input
-                    type="checkbox"
-                    checked={useStreaming}
-                    onChange={(e) => setUseStreaming(e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-10 h-5 bg-white/10 rounded-full peer peer-checked:bg-teal-600 transition-colors" />
-                  <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
-                </div>
+          {/* Streaming toggle */}
+          <div className="flex items-center gap-3">
+            <label className="flex items-center gap-2 cursor-pointer group">
+              <span className="text-xs font-medium text-[#9aa6b2] group-hover:text-white/80 transition-colors">Show AI Progress</span>
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  checked={useStreaming}
+                  onChange={(e) => setUseStreaming(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-5 bg-white/5 rounded-full peer peer-checked:bg-sky-500/80 transition-all border border-white/10" />
+                <div className="absolute left-1 top-1 w-3 h-3 bg-white/90 rounded-full transition-all peer-checked:translate-x-4 shadow-sm" />
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div className="flex flex-col lg:flex-row lg:items-end gap-5">
+          {/* Dropdowns */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1">
+            {/* Grade */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#9aa6b2]">
+                <GraduationIcon />
+                Grade
               </label>
+              <select
+                value={selectedGrade}
+                onChange={(e) => setSelectedGrade(e.target.value)}
+                disabled={isGenerating}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500/40 transition-all duration-200 hover:bg-white/10 disabled:opacity-50 appearance-none cursor-pointer"
+              >
+                {grades.map((g) => (
+                  <option key={g} value={g} className="bg-[#12171c]">{g}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Subject */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#9aa6b2]">
+                <BookIcon />
+                Subject
+              </label>
+              <select
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
+                disabled={isGenerating}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500/40 transition-all duration-200 hover:bg-white/10 disabled:opacity-50 appearance-none cursor-pointer"
+              >
+                {subjects.map((s) => (
+                  <option key={s} value={s} className="bg-[#12171c]">{s}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Strand */}
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#9aa6b2]">
+                <LayersIcon />
+                Strand
+              </label>
+              <select
+                value={selectedStrand}
+                onChange={(e) => setSelectedStrand(e.target.value)}
+                disabled={isGenerating}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500/40 transition-all duration-200 hover:bg-white/10 disabled:opacity-50 appearance-none cursor-pointer"
+              >
+                {strands.map((s) => (
+                  <option key={s} value={s} className="bg-[#12171c]">{s}</option>
+                ))}
+              </select>
             </div>
           </div>
+
+          {/* Generate Button */}
+          <button
+            onClick={startGeneration}
+            disabled={isGenerating}
+            className="flex items-center justify-center gap-2 bg-[#0ea5e9] hover:bg-[#0284c7] text-white px-8 py-3.5 rounded-xl font-bold shadow-[0_8px_24px_rgba(14,165,233,0.3)] disabled:opacity-50 disabled:shadow-none transition-all duration-300 min-w-[200px]"
+          >
+            {isGenerating ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>AI Working...</span>
+              </>
+            ) : (
+              <>
+                <SparklesIcon />
+                <span>Generate Content</span>
+              </>
+            )}
+          </button>
         </div>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-6 space-y-6">
-        {/* Toolbar */}
-        <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-5">
-          {/* Breadcrumb */}
-          {selectedGrade && selectedSubject && selectedStrand && (
-            <div className="flex items-center gap-2 text-sm text-white/50 mb-4 pb-4 border-b border-white/10">
-              <span className="font-medium text-white/70">{selectedGrade}</span>
-              <span>→</span>
-              <span className="font-medium text-white/70">{selectedSubject}</span>
-              <span>→</span>
-              <span className="font-medium text-teal-400">{selectedStrand}</span>
-            </div>
-          )}
+      {/* Generation Progress */}
+      {useStreaming && (
+        <GenerationProgress
+          isGenerating={isGenerating}
+          grade={selectedGrade}
+          subject={selectedSubject}
+          strand={selectedStrand}
+          generatedBy={user?.uid}
+          onComplete={handleGenerationComplete}
+        />
+      )}
 
-          <div className="flex flex-col lg:flex-row lg:items-end gap-5">
-            {/* Dropdowns */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1">
-              {/* Grade */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-semibold text-white/70">
-                  <span className="p-1.5 bg-white/10 rounded-md text-white/60">
-                    <GraduationIcon />
-                  </span>
-                  Grade
-                </label>
-                <select
-                  value={selectedGrade}
-                  onChange={(e) => setSelectedGrade(e.target.value)}
-                  disabled={isGenerating}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 hover:border-white/20 disabled:opacity-50"
-                >
-                  {grades.map((g) => (
-                    <option key={g} value={g} className="bg-slate-800">{g}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Subject */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-semibold text-white/70">
-                  <span className="p-1.5 bg-white/10 rounded-md text-white/60">
-                    <BookIcon />
-                  </span>
-                  Subject
-                </label>
-                <select
-                  value={selectedSubject}
-                  onChange={(e) => setSelectedSubject(e.target.value)}
-                  disabled={isGenerating}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 hover:border-white/20 disabled:opacity-50"
-                >
-                  {subjects.map((s) => (
-                    <option key={s} value={s} className="bg-slate-800">{s}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Strand */}
-              <div className="space-y-2">
-                <label className="flex items-center gap-2 text-sm font-semibold text-white/70">
-                  <span className="p-1.5 bg-white/10 rounded-md text-white/60">
-                    <LayersIcon />
-                  </span>
-                  Strand
-                </label>
-                <select
-                  value={selectedStrand}
-                  onChange={(e) => setSelectedStrand(e.target.value)}
-                  disabled={isGenerating}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white font-medium focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 hover:border-white/20 disabled:opacity-50"
-                >
-                  {strands.map((s) => (
-                    <option key={s} value={s} className="bg-slate-800">{s}</option>
-                  ))}
-                </select>
-              </div>
+      {/* Content Area */}
+      {hasContent && !isGenerating && (
+        <div className="bg-[#0b0f12]/60 backdrop-blur-xl rounded-2xl border border-white/8 overflow-hidden shadow-2xl">
+          {/* Mode Toggle Header */}
+          <div className="flex items-center justify-between px-6 py-4 bg-white/5 border-b border-white/5">
+            <div className="flex items-center gap-1.5 p-1 bg-[#0b1113] rounded-xl border border-white/5">
+              <button
+                onClick={() => setMode("Learner")}
+                className={`px-5 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${mode === "Learner"
+                  ? "bg-[#0ea5e9] text-white shadow-lg"
+                  : "text-[#9aa6b2] hover:text-white"
+                  }`}
+              >
+                Learner's Book
+              </button>
+              <button
+                onClick={() => setMode("Teacher")}
+                className={`px-5 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${mode === "Teacher"
+                  ? "bg-[#0ea5e9] text-white shadow-lg"
+                  : "text-[#9aa6b2] hover:text-white"
+                  }`}
+              >
+                Teacher's Guide
+              </button>
             </div>
 
-            {/* Generate Button */}
-            <button
-              onClick={startGeneration}
-              disabled={isGenerating}
-              className="flex items-center justify-center gap-2 bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-teal-500/25 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-200 min-w-[180px]"
-            >
-              {isGenerating ? (
-                <>
-                  <RobotIcon />
-                  <span>AI Working...</span>
-                </>
-              ) : (
-                <>
-                  <SparklesIcon />
-                  <span>Generate Strand</span>
-                </>
-              )}
-            </button>
+            {/* Export buttons */}
+            <div className="flex items-center gap-3">
+              <button className="px-4 py-2 text-xs font-bold text-[#9aa6b2] hover:text-white hover:bg-white/5 rounded-lg border border-white/5 transition-all">
+                Export PDF
+              </button>
+              <button className="px-4 py-2 text-xs font-bold text-white bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-all">
+                Print Guide
+              </button>
+            </div>
           </div>
-        </div>
 
-        {/* Generation Progress */}
-        {useStreaming && (
-          <GenerationProgress
-            isGenerating={isGenerating}
-            grade={selectedGrade}
-            subject={selectedSubject}
-            strand={selectedStrand}
-            generatedBy={user?.uid}
-            onComplete={handleGenerationComplete}
-          />
-        )}
-
-        {/* Content Area */}
-        {hasContent && !isGenerating && (
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 overflow-hidden">
-            {/* Mode Toggle Header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-black/20 border-b border-white/10">
-              <div className="flex items-center gap-1 p-1 bg-white/10 rounded-lg">
-                <button
-                  onClick={() => setMode("Learner")}
-                  className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${mode === "Learner"
-                    ? "bg-white/20 text-white shadow-sm"
-                    : "text-white/60 hover:text-white"
-                    }`}
-                >
-                  Learner's Book
-                </button>
-                <button
-                  onClick={() => setMode("Teacher")}
-                  className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${mode === "Teacher"
-                    ? "bg-white/20 text-white shadow-sm"
-                    : "text-white/60 hover:text-white"
-                    }`}
-                >
-                  Teacher's Guide
-                </button>
-              </div>
-
-              {/* Export buttons */}
-              <div className="flex items-center gap-2">
-                <button className="px-3 py-2 text-sm font-medium text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
-                  Print
-                </button>
-                <button className="px-3 py-2 text-sm font-medium text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
-                  Export PDF
-                </button>
-              </div>
-            </div>
-
-            {/* Rendered Content */}
-            <div className="p-8 overflow-auto max-h-[80vh] bg-gradient-to-br from-[#0E0E10] to-[#1a1a1c]">
+          {/* Rendered Content */}
+          <div className={`p-8 lg:p-12 overflow-auto max-h-[80vh] ${mode === "Learner" ? "bg-[#0a0f14]" : "bg-gradient-to-br from-[#12171c] to-[#0a0f14]"}`}>
+            {mode === "Learner" ? (
+              <StudentTextbookRenderer
+                content={learnerHtml}
+                images={images}
+              />
+            ) : (
               <TextbookRenderer
-                content={mode === "Learner" ? learnerHtml : teacherHtml}
+                content={teacherHtml}
                 images={images}
                 showImageDescriptions={true}
               />
-            </div>
+            )}
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Empty State */}
-        {!hasContent && !isGenerating && (
-          <div className="bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 p-12 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 rounded-full mb-4">
-              <BookIcon />
-            </div>
-            <h3 className="text-lg font-semibold text-white mb-2">No Content Generated</h3>
-            <p className="text-white/50 max-w-md mx-auto">
-              Select a grade, subject, and strand from the options above, then click "Generate Strand" to create curriculum content with real-time AI progress.
-            </p>
+      {/* Empty State */}
+      {!hasContent && !isGenerating && (
+        <div className="bg-[#0b0f12]/40 backdrop-blur-md rounded-2xl border border-dashed border-white/10 p-20 text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-sky-500/10 rounded-3xl mb-6 ring-1 ring-sky-500/20">
+            <BookIcon />
           </div>
-        )}
-      </main>
+          <h3 className="text-xl font-bold text-white mb-2">Ready to curate curriculum?</h3>
+          <p className="text-[#9aa6b2] max-w-md mx-auto text-sm leading-relaxed">
+            Select a grade and subject from the control panel to generate high-quality, CBC-aligned curriculum materials for both students and teachers.
+          </p>
+        </div>
+      )}
 
       {/* Footer */}
-      <footer className="max-w-7xl mx-auto px-6 py-6 mt-auto">
-        <div className="text-center text-sm text-white/30">
-          Content aligned with Kenya's Competency-Based Curriculum
+      <footer className="py-8">
+        <div className="text-center text-xs font-medium text-[#9aa6b2]/40 tracking-widest uppercase">
+          Kenyan Competency-Based Curriculum Framework • AI Integration v2.0
         </div>
       </footer>
     </div>
