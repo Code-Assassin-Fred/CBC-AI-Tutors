@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import contentJson from '@/content.json';
 import Link from 'next/link';
 import TeacherTextbookRenderer from './TeacherTextbookRenderer';
@@ -40,6 +40,7 @@ export default function TeachersGuideLayout() {
         if (!selectedGrade) return;
         const subjectsList = Object.keys((contentJson as GradeMap)[selectedGrade] || {});
         setSubjects(subjectsList);
+        // Reset to first subject if available, or empty
         setSelectedSubject(subjectsList[0] || "");
     }, [selectedGrade]);
 
@@ -55,18 +56,13 @@ export default function TeachersGuideLayout() {
         const strandsObj = subjectData.Strands;
         const strandsList = Object.keys(strandsObj || {});
         setStrands(strandsList);
+        // Reset to first strand if available, or empty
         setSelectedStrand(strandsList[0] || "");
     }, [selectedGrade, selectedSubject]);
 
-    // Reset content when selection changes
-    useEffect(() => {
-        setGuideContent(null);
-        setGuideImages([]);
-        setError(null);
-    }, [selectedGrade, selectedSubject, selectedStrand]);
-
-    const handleViewGuide = async () => {
-        if (!selectedGrade || !selectedSubject || !selectedStrand) return;
+    // Fetch guide function
+    const fetchGuide = useCallback(async (grade: string, subject: string, strand: string) => {
+        if (!grade || !subject || !strand) return;
 
         setLoading(true);
         setError(null);
@@ -74,7 +70,7 @@ export default function TeachersGuideLayout() {
 
         try {
             const res = await fetch(
-                `/api/textbook?grade=${encodeURIComponent(selectedGrade)}&subject=${encodeURIComponent(selectedSubject)}&strand=${encodeURIComponent(selectedStrand)}`
+                `/api/textbook?grade=${encodeURIComponent(grade)}&subject=${encodeURIComponent(subject)}&strand=${encodeURIComponent(strand)}`
             );
 
             const data = await res.json();
@@ -97,7 +93,20 @@ export default function TeachersGuideLayout() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    // Effect to trigger fetch when selections are stable and valid
+    useEffect(() => {
+        if (selectedGrade && selectedSubject && selectedStrand) {
+            fetchGuide(selectedGrade, selectedSubject, selectedStrand);
+        } else {
+            // Clear content if selection is incomplete
+            setGuideContent(null);
+            setGuideImages([]);
+            setError(null);
+        }
+    }, [selectedGrade, selectedSubject, selectedStrand, fetchGuide]);
+
 
     return (
         <div className="h-full flex flex-col space-y-6">
@@ -105,52 +114,42 @@ export default function TeachersGuideLayout() {
             <div className="bg-[#0b1113]/60 backdrop-blur-xl rounded-2xl border border-white/8 p-5 shadow-lg">
                 <h2 className="text-xl font-bold text-white mb-4">Teacher's Guide Library</h2>
 
-                <div className="flex flex-col lg:flex-row gap-4 items-end">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1 w-full">
-                        {/* Grade */}
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-bold uppercase tracking-wider text-[#9aa6b2]">Grade</label>
-                            <select
-                                value={selectedGrade}
-                                onChange={(e) => setSelectedGrade(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/40"
-                            >
-                                {grades.map(g => <option key={g} value={g} className="bg-[#12171c]">{g}</option>)}
-                            </select>
-                        </div>
-
-                        {/* Subject */}
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-bold uppercase tracking-wider text-[#9aa6b2]">Subject</label>
-                            <select
-                                value={selectedSubject}
-                                onChange={(e) => setSelectedSubject(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/40"
-                            >
-                                {subjects.map(s => <option key={s} value={s} className="bg-[#12171c]">{s}</option>)}
-                            </select>
-                        </div>
-
-                        {/* Strand */}
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-bold uppercase tracking-wider text-[#9aa6b2]">Strand</label>
-                            <select
-                                value={selectedStrand}
-                                onChange={(e) => setSelectedStrand(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/40"
-                            >
-                                {strands.map(s => <option key={s} value={s} className="bg-[#12171c]">{s}</option>)}
-                            </select>
-                        </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+                    {/* Grade */}
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[#9aa6b2]">Grade</label>
+                        <select
+                            value={selectedGrade}
+                            onChange={(e) => setSelectedGrade(e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                        >
+                            {grades.map(g => <option key={g} value={g} className="bg-[#12171c]">{g}</option>)}
+                        </select>
                     </div>
 
-                    <button
-                        onClick={handleViewGuide}
-                        disabled={loading}
-                        className="w-full lg:w-auto px-8 py-3 bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-bold rounded-xl transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {loading ? 'Loading...' : 'View Guide'}
-                    </button>
+                    {/* Subject */}
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[#9aa6b2]">Subject</label>
+                        <select
+                            value={selectedSubject}
+                            onChange={(e) => setSelectedSubject(e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                        >
+                            {subjects.map(s => <option key={s} value={s} className="bg-[#12171c]">{s}</option>)}
+                        </select>
+                    </div>
+
+                    {/* Strand */}
+                    <div className="space-y-1.5">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[#9aa6b2]">Strand</label>
+                        <select
+                            value={selectedStrand}
+                            onChange={(e) => setSelectedStrand(e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                        >
+                            {strands.map(s => <option key={s} value={s} className="bg-[#12171c]">{s}</option>)}
+                        </select>
+                    </div>
                 </div>
             </div>
 
