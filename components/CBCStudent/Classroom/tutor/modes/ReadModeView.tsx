@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { ReadModeContent } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
 import { useGamification } from '@/lib/context/GamificationContext';
@@ -12,12 +12,15 @@ interface ReadModeViewProps {
     content: ReadModeContent;
 }
 
-// Build a flat list of all readable segments
+// Build a flat list of all readable segments - now combining related content
 interface ReadableSegment {
     id: string;
     label: string;
     text: string;
-    type: 'intro' | 'section' | 'keypoints' | 'examples' | 'summary' | 'questions';
+    type: 'intro' | 'section' | 'summary' | 'questions';
+    // For sections, include visual data for key points and examples
+    keyPoints?: string[];
+    examples?: Array<{ title: string; description: string }>;
 }
 
 export default function ReadModeView({ content }: ReadModeViewProps) {
@@ -38,6 +41,7 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
     const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     // Build flat list of all segments for sequential reading
+    // Now combines section content with key points and examples for smoother flow
     const segments = useMemo((): ReadableSegment[] => {
         const result: ReadableSegment[] = [];
 
@@ -49,33 +53,28 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
             type: 'intro'
         });
 
-        // Sections with their subsections
+        // Sections - now combine content, key points, and examples into one segment
         content.sections.forEach((section, idx) => {
-            result.push({
-                id: section.id,
-                label: `${idx + 1}. ${section.title}`,
-                text: `${section.title}. ${section.content}`,
-                type: 'section'
-            });
+            // Build combined text for reading (flows naturally)
+            let combinedText = `${section.title}. ${section.content}`;
 
             if (section.keyPoints.length > 0) {
-                result.push({
-                    id: `${section.id}-points`,
-                    label: `Key points`,
-                    text: `Key points: ${section.keyPoints.join('. ')}`,
-                    type: 'keypoints'
-                });
+                combinedText += `. Key points: ${section.keyPoints.join('. ')}`;
             }
 
             if (section.examples.length > 0) {
                 const examplesText = section.examples.map(e => `${e.title}: ${e.description}`).join('. ');
-                result.push({
-                    id: `${section.id}-examples`,
-                    label: `Examples`,
-                    text: `Examples: ${examplesText}`,
-                    type: 'examples'
-                });
+                combinedText += `. Examples: ${examplesText}`;
             }
+
+            result.push({
+                id: section.id,
+                label: `${idx + 1}. ${section.title}`,
+                text: combinedText,
+                type: 'section',
+                keyPoints: section.keyPoints,
+                examples: section.examples
+            });
         });
 
         // Summary
@@ -135,6 +134,8 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                 await addXP(XP_CONFIG.lesson, 'lesson', 'Completed lesson in Read Mode');
                 showXPPopup(XP_CONFIG.lesson);
             }
+            // Reset to initial state after completion
+            setCurrentSegmentIndex(-1);
             setIsPlayingAll(false);
             playingRef.current = false;
         }
@@ -196,13 +197,14 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
         }
     };
 
-    // Calculate progress percentage
-    const progressPercent = segments.length > 0
-        ? ((currentSegmentIndex + 1) / segments.length) * 100
-        : 0;
-
     // Helper to get segment index for a given content section
     const findSegmentIndex = (id: string) => segments.findIndex(s => s.id === id);
+
+    // Check if a segment is currently active (for highlighting the entire block)
+    const isSegmentActive = (id: string) => {
+        const idx = findSegmentIndex(id);
+        return currentSegmentIndex === idx;
+    };
 
     return (
         <div className="flex flex-col h-full">
@@ -279,60 +281,51 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                 {/* Introduction */}
                 <div
                     ref={el => { segmentRefs.current[findSegmentIndex('intro')] = el; }}
-                    className={`pb-4 border-b border-white/10 cursor-pointer transition-all rounded-lg p-3 -mx-3 ${currentSegmentIndex === findSegmentIndex('intro')
+                    className={`pb-4 border-b border-white/10 cursor-pointer transition-all rounded-lg p-3 -mx-3 ${isSegmentActive('intro')
                         ? 'bg-white/5'
                         : 'hover:bg-white/[0.02]'
                         }`}
                     onClick={() => handleProgressClick(findSegmentIndex('intro'))}
                 >
                     <h4 className="text-sm font-semibold text-sky-400 uppercase tracking-wider mb-2">Introduction</h4>
-                    <p className={`text-sm leading-relaxed transition-colors ${currentSegmentIndex === findSegmentIndex('intro') ? 'text-white' : 'text-white/80'
-                        }`}>{content.introduction}</p>
+                    <p className={`text-sm leading-relaxed transition-colors ${isSegmentActive('intro') ? 'text-white' : 'text-white/80'}`}>
+                        {content.introduction}
+                    </p>
                 </div>
 
-                {/* Sections */}
+                {/* Sections - now rendered as unified blocks */}
                 {content.sections.map((section, index) => {
-                    const sectionIdx = findSegmentIndex(section.id);
-                    const keyPointsIdx = findSegmentIndex(`${section.id}-points`);
-                    const examplesIdx = findSegmentIndex(`${section.id}-examples`);
+                    const segmentIdx = findSegmentIndex(section.id);
+                    const isActive = currentSegmentIndex === segmentIdx;
 
                     return (
                         <div
                             key={`${section.id}-${index}`}
-                            className="space-y-4"
+                            ref={el => { segmentRefs.current[segmentIdx] = el; }}
+                            className={`cursor-pointer transition-all rounded-lg p-3 -mx-3 space-y-4 ${isActive
+                                ? 'bg-white/5'
+                                : 'hover:bg-white/[0.02]'
+                                }`}
+                            onClick={() => handleProgressClick(segmentIdx)}
                         >
-                            {/* Section Content */}
-                            <div
-                                ref={el => { segmentRefs.current[sectionIdx] = el; }}
-                                className={`cursor-pointer transition-all rounded-lg p-3 -mx-3 ${currentSegmentIndex === sectionIdx
-                                    ? 'bg-white/5'
-                                    : 'hover:bg-white/[0.02]'
-                                    }`}
-                                onClick={() => handleProgressClick(sectionIdx)}
-                            >
+                            {/* Section Title & Content */}
+                            <div>
                                 <span className="text-sm font-bold text-white flex items-center gap-2 mb-2">
                                     <span className="text-white/40">{index + 1}.</span>
                                     {section.title}
                                 </span>
-                                <p className={`text-sm leading-relaxed transition-colors ${currentSegmentIndex === sectionIdx ? 'text-white' : 'text-white/70'
-                                    }`}>{section.content}</p>
+                                <p className={`text-sm leading-relaxed transition-colors ${isActive ? 'text-white' : 'text-white/70'}`}>
+                                    {section.content}
+                                </p>
                             </div>
 
-                            {/* Key Points */}
+                            {/* Key Points - visually nested but part of same segment */}
                             {section.keyPoints.length > 0 && (
-                                <div
-                                    ref={el => { segmentRefs.current[keyPointsIdx] = el; }}
-                                    className={`ml-4 cursor-pointer transition-all rounded-lg p-3 -mx-3 ${currentSegmentIndex === keyPointsIdx
-                                        ? 'bg-white/5'
-                                        : 'hover:bg-white/[0.02]'
-                                        }`}
-                                    onClick={() => handleProgressClick(keyPointsIdx)}
-                                >
+                                <div className={`ml-4 pl-3 border-l-2 transition-colors ${isActive ? 'border-sky-500/50' : 'border-white/10'}`}>
                                     <p className="text-xs text-white/40 mb-2">Key points:</p>
                                     <ul className="space-y-1.5 pl-4">
                                         {section.keyPoints.map((point, i) => (
-                                            <li key={i} className={`text-xs list-disc transition-colors ${currentSegmentIndex === keyPointsIdx ? 'text-white/80' : 'text-white/60'
-                                                }`}>
+                                            <li key={i} className={`text-xs list-disc transition-colors ${isActive ? 'text-white/80' : 'text-white/60'}`}>
                                                 {point}
                                             </li>
                                         ))}
@@ -340,24 +333,19 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                                 </div>
                             )}
 
-                            {/* Examples */}
+                            {/* Examples - visually nested but part of same segment */}
                             {section.examples.length > 0 && (
-                                <div
-                                    ref={el => { segmentRefs.current[examplesIdx] = el; }}
-                                    className={`ml-4 cursor-pointer transition-all rounded-lg p-3 -mx-3 ${currentSegmentIndex === examplesIdx
-                                        ? 'bg-white/5'
-                                        : 'hover:bg-white/[0.02]'
-                                        }`}
-                                    onClick={() => handleProgressClick(examplesIdx)}
-                                >
+                                <div className={`ml-4 pl-3 border-l-2 transition-colors ${isActive ? 'border-cyan-500/50' : 'border-white/10'}`}>
                                     <p className="text-xs text-white/40 mb-2">Examples:</p>
                                     <div className="space-y-3 pl-4">
                                         {section.examples.map((example, i) => (
                                             <div key={i}>
-                                                <p className={`text-xs font-medium transition-colors ${currentSegmentIndex === examplesIdx ? 'text-white/90' : 'text-white/70'
-                                                    }`}>{example.title}</p>
-                                                <p className={`text-xs mt-0.5 leading-relaxed transition-colors ${currentSegmentIndex === examplesIdx ? 'text-white/70' : 'text-white/50'
-                                                    }`}>{example.description}</p>
+                                                <p className={`text-xs font-medium transition-colors ${isActive ? 'text-white/90' : 'text-white/70'}`}>
+                                                    {example.title}
+                                                </p>
+                                                <p className={`text-xs mt-0.5 leading-relaxed transition-colors ${isActive ? 'text-white/70' : 'text-white/50'}`}>
+                                                    {example.description}
+                                                </p>
                                             </div>
                                         ))}
                                     </div>
@@ -370,22 +358,23 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                 {/* Summary */}
                 <div
                     ref={el => { segmentRefs.current[findSegmentIndex('summary')] = el; }}
-                    className={`pt-6 border-t border-white/10 cursor-pointer transition-all rounded-lg p-3 -mx-3 ${currentSegmentIndex === findSegmentIndex('summary')
+                    className={`pt-6 border-t border-white/10 cursor-pointer transition-all rounded-lg p-3 -mx-3 ${isSegmentActive('summary')
                         ? 'bg-white/5'
                         : 'hover:bg-white/[0.02]'
                         }`}
                     onClick={() => handleProgressClick(findSegmentIndex('summary'))}
                 >
                     <h4 className="text-sm font-semibold text-sky-400 uppercase tracking-wider mb-2">Summary</h4>
-                    <p className={`text-sm leading-relaxed transition-colors ${currentSegmentIndex === findSegmentIndex('summary') ? 'text-white' : 'text-white/80'
-                        }`}>{content.summary}</p>
+                    <p className={`text-sm leading-relaxed transition-colors ${isSegmentActive('summary') ? 'text-white' : 'text-white/80'}`}>
+                        {content.summary}
+                    </p>
                 </div>
 
                 {/* Review Questions */}
                 {content.reviewQuestions.length > 0 && (
                     <div
                         ref={el => { segmentRefs.current[findSegmentIndex('questions')] = el; }}
-                        className={`pt-6 pb-4 cursor-pointer transition-all rounded-lg p-3 -mx-3 ${currentSegmentIndex === findSegmentIndex('questions')
+                        className={`pt-6 pb-4 cursor-pointer transition-all rounded-lg p-3 -mx-3 ${isSegmentActive('questions')
                             ? 'bg-white/5'
                             : 'hover:bg-white/[0.02]'
                             }`}
@@ -394,8 +383,7 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
                         <h4 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider mb-4">Think About It</h4>
                         <ul className="space-y-3">
                             {content.reviewQuestions.map((q, i) => (
-                                <li key={i} className={`text-xs flex items-start gap-3 transition-colors ${currentSegmentIndex === findSegmentIndex('questions') ? 'text-white/80' : 'text-white/60'
-                                    }`}>
+                                <li key={i} className={`text-xs flex items-start gap-3 transition-colors ${isSegmentActive('questions') ? 'text-white/80' : 'text-white/60'}`}>
                                     <span className="text-cyan-500 font-bold">{i + 1}.</span>
                                     {q}
                                 </li>
