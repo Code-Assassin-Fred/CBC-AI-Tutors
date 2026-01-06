@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/lib/firebaseAdmin";
 
-interface Params {
-  uid: string;
-}
-
-export async function GET(req: NextRequest, context: { params: Params }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ uid: string }> }) {
   try {
     // Always unwrap the params
-    const params = await Promise.resolve(context.params); 
+    const params = await context.params;
     const uid = params?.uid;
 
     if (!uid) {

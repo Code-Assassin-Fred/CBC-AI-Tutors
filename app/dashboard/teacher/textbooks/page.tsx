@@ -2,19 +2,17 @@
 
 import { useDashboardProtection } from '@/hooks/useDashboardProtection';
 import DashboardLayout from '@/components/CBCTeacher/layout/DashboardLayout';
-import GeneratePage from '@/components/shared/textbookGenerator';
+import { CustomTextbooksProvider } from '@/lib/context/CustomTextbooksContext';
+import CustomTextbooksPage from '@/components/CBCTeacher/CustomTextbooks/CustomTextbooksPage';
 
-export default function TextbookGeneratorPage() {
+export default function TextbooksRoute() {
     useDashboardProtection(['teacher']);
-
-    // We wrap GeneratePage in a div to ensure it doesn't conflict with layout styles if it has absolute positioning
-    // But usually it's fine.
 
     return (
         <DashboardLayout active="Custom Textbooks">
-            <div className="h-full">
-                <GeneratePage />
-            </div>
+            <CustomTextbooksProvider>
+                <CustomTextbooksPage />
+            </CustomTextbooksProvider>
         </DashboardLayout>
     );
 }
