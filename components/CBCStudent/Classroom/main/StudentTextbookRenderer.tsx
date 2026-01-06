@@ -62,6 +62,13 @@ export default function StudentTextbookRenderer({
       return text;
     }
 
+    // Strip leading numbers like "1.", "2.", "3.1", "3.1.2" from text
+    // Used to avoid double numbering when renderer adds its own numbering
+    function stripLeadingNumber(text: string): string {
+      // Match patterns like "1.", "2.", "1.2", "1.2.3", "1.2.3." at the start
+      return text.replace(/^[\d.]+\.?\s*/, '').trim();
+    }
+
     // Remove markdown artifacts and code block wrappers
     let html = content
       // Remove markdown code block wrappers (```html, ```, etc.)
@@ -255,7 +262,7 @@ export default function StudentTextbookRenderer({
         const id = `section-${h2Count}-${h3Count}-${slugify(text)}`;
         h.id = id;
         h.className = "text-lg font-bold text-sky-400 mt-6 mb-3 scroll-mt-24";
-        h.innerHTML = `<span class="text-sky-400 mr-2">${h2Count}.${h3Count}</span> ${toTitleCase(text)}`;
+        h.innerHTML = `<span class="text-sky-400 mr-2">${h2Count}.${h3Count}</span> ${toTitleCase(stripLeadingNumber(text))}`;
         tocItems.push({ id, title: text, level: 3 });
         return;
       }
@@ -266,7 +273,7 @@ export default function StudentTextbookRenderer({
         const id = `sub-${h2Count}-${h3Count}-${h4Count}-${slugify(text)}`;
         h.id = id;
         h.className = "text-base font-semibold text-teal-400 mt-5 mb-2 scroll-mt-24";
-        h.innerHTML = `<span class="text-teal-400 mr-2">${h2Count}.${h3Count}.${h4Count}</span> ${toTitleCase(text)}`;
+        h.innerHTML = `<span class="text-teal-400 mr-2">${h2Count}.${h3Count}.${h4Count}</span> ${toTitleCase(stripLeadingNumber(text))}`;
         tocItems.push({ id, title: text, level: 4 });
       }
     });
