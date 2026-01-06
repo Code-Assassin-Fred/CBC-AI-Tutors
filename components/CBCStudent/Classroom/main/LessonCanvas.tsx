@@ -133,7 +133,7 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
           <select
             value={selectedGrade}
             onChange={(e) => setSelectedGrade(e.target.value)}
-            className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all"
+            className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all [&>option]:bg-[#1a1f25] [&>option]:text-white"
           >
             <option value="">Select Grade</option>
             {grades.map((g) => (
@@ -145,7 +145,7 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
             disabled={!subjects.length}
-            className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50"
+            className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
           >
             <option value="">Select Subject</option>
             {subjects.map((s) => (
@@ -157,7 +157,7 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
             value={selectedStrand}
             onChange={(e) => setSelectedStrand(e.target.value)}
             disabled={!strands.length}
-            className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50"
+            className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
           >
             <option value="">Select Strand</option>
             {strands.map((s) => (

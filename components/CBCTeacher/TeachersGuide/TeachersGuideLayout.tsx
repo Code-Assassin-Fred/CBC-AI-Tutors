@@ -145,7 +145,7 @@ export default function TeachersGuideLayout() {
                 <div className="flex items-center gap-2">
                     <button
                         className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "left"
-                            ? "bg-[#10b981] hover:bg-[#059669]"
+                            ? "bg-[#228B22] hover:bg-[#1a6b1a]"
                             : "bg-white/10 hover:bg-white/20"
                             }`}
                         onClick={() => setView("left")}
@@ -155,7 +155,7 @@ export default function TeachersGuideLayout() {
 
                     <button
                         className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "both"
-                            ? "bg-[#10b981] hover:bg-[#059669]"
+                            ? "bg-[#228B22] hover:bg-[#1a6b1a]"
                             : "bg-white/10 hover:bg-white/20"
                             }`}
                         onClick={() => setView("both")}
@@ -165,7 +165,7 @@ export default function TeachersGuideLayout() {
 
                     <button
                         className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "right"
-                            ? "bg-[#10b981] hover:bg-[#059669]"
+                            ? "bg-[#228B22] hover:bg-[#1a6b1a]"
                             : "bg-white/10 hover:bg-white/20"
                             }`}
                         onClick={() => setView("right")}
@@ -193,7 +193,7 @@ export default function TeachersGuideLayout() {
                                     <select
                                         value={selectedGrade}
                                         onChange={(e) => setSelectedGrade(e.target.value)}
-                                        className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all"
+                                        className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all [&>option]:bg-[#1a1f25] [&>option]:text-white"
                                     >
                                         <option value="">Select Grade</option>
                                         {grades.map((g) => (
@@ -205,7 +205,7 @@ export default function TeachersGuideLayout() {
                                         value={selectedSubject}
                                         onChange={(e) => setSelectedSubject(e.target.value)}
                                         disabled={!subjects.length}
-                                        className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50"
+                                        className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
                                     >
                                         <option value="">Select Subject</option>
                                         {subjects.map((s) => (
@@ -217,7 +217,7 @@ export default function TeachersGuideLayout() {
                                         value={selectedStrand}
                                         onChange={(e) => setSelectedStrand(e.target.value)}
                                         disabled={!strands.length}
-                                        className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50"
+                                        className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
                                     >
                                         <option value="">Select Strand</option>
                                         {strands.map((s) => (

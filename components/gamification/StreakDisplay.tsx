@@ -54,7 +54,7 @@ export default function StreakDisplay({ size = 'md', showLabel = false, classNam
             </span>
             {showLabel && (
                 <span className={`${sizes[size].text} text-white/50`}>
-                    day{streak.current !== 1 ? 's' : ''}
+                    day{streak.current !== 1 ? 's' : ''} streak
                 </span>
             )}
         </div>

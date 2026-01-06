@@ -49,14 +49,14 @@ export default function XPBar({ showLabel = true, size = 'md', className = '' }:
             <div className={`w-full ${heights[size]} bg-white/10 rounded-full overflow-hidden`}>
                 <div
                     className={`h-full rounded-full transition-all duration-500 ease-out ${isMaxLevel
-                            ? 'bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500'
-                            : 'bg-gradient-to-r from-emerald-500 to-cyan-400'
+                        ? 'bg-amber-500'
+                        : ''
                         }`}
-                    style={{ width: `${isMaxLevel ? 100 : levelProgress}%` }}
-                >
-                    {/* Shimmer effect */}
-                    <div className="h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
-                </div>
+                    style={{
+                        width: `${isMaxLevel ? 100 : levelProgress}%`,
+                        backgroundColor: isMaxLevel ? undefined : '#228B22' // Forest green
+                    }}
+                />
             </div>
         </div>
     );
