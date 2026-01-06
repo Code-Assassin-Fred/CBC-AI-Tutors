@@ -17,10 +17,10 @@ function parseId(id: string) {
 // GET – fetch by composite ID (already covered by /api/textbooks, but kept for consistency)
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const parsed = parseId(id);
     if (!parsed) {
       return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
@@ -47,10 +47,10 @@ export async function GET(
 // DELETE – permanently delete a textbook
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const docRef = adminDb.collection("textbooks").doc(id);
     const doc = await docRef.get();
@@ -75,10 +75,10 @@ export async function DELETE(
 // PATCH – replace entire textbook (useful for "regenerate and overwrite")
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await req.json();
 
     const { student_html, teacher_html } = body;
