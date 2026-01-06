@@ -52,6 +52,12 @@ export default function TeacherTextbookRenderer({
             return text;
         }
 
+        // Strip leading numbers like "1.", "5. ", "1.2 ", "1.2.3 " from heading text
+        function stripLeadingNumbers(text: string): string {
+            // Remove patterns like "1.", "1.2", "1.2.3", "5. ", etc. from the start
+            return text.replace(/^[\d.]+\.?\s*/g, '').trim();
+        }
+
         // Remove markdown artifacts and code block wrappers
         let html = content
             // Remove markdown code block wrappers (```html, ```, etc.)
@@ -159,7 +165,9 @@ export default function TeacherTextbookRenderer({
 
         headings.forEach((h) => {
             const level = parseInt(h.tagName.charAt(1), 10);
-            const text = h.textContent?.trim() || "";
+            const rawText = h.textContent?.trim() || "";
+            // Strip any existing leading numbers to avoid double numbering
+            const text = stripLeadingNumbers(rawText);
 
             // H1/H2 - Substrand heading (no card, just styled heading)
             if (level === 1 || level === 2) {

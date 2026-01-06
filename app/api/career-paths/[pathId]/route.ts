@@ -10,10 +10,10 @@ import { adminDb } from '@/lib/firebaseAdmin';
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { pathId: string } }
+    { params }: { params: Promise<{ pathId: string }> }
 ) {
     try {
-        const { pathId } = params;
+        const { pathId } = await params;
 
         if (!pathId) {
             return NextResponse.json(

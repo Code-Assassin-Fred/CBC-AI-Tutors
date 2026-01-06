@@ -26,10 +26,10 @@ function matchesTopic(title: string, searchTerm: string): boolean {
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { pathId: string } }
+    { params }: { params: Promise<{ pathId: string }> }
 ) {
     try {
-        const { pathId } = params;
+        const { pathId } = await params;
         const userId = request.nextUrl.searchParams.get('userId');
 
         if (!pathId || !userId) {
