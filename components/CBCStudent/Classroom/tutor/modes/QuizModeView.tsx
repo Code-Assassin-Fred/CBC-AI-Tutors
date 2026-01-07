@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
-import { QuizOutput } from '@/lib/types/agents';
+import React, { useState, useEffect } from 'react';
+import { QuizOutput, QuizQuestion, AssessmentResult } from '@/lib/types/agents';
 import { useTutor } from '@/lib/context/TutorContext';
 import { useAuth } from '@/lib/context/AuthContext';
 import { useGamification } from '@/lib/context/GamificationContext';
-import { ComboIndicator, XPPopup } from '@/components/gamification';
-import { getComboMultiplier, XP_CONFIG } from '@/types/gamification';
+import { XP_CONFIG } from '@/types/gamification';
 import axios from 'axios';
+import VoiceVisualization from '@/components/shared/VoiceVisualization';
+import { HiOutlineMicrophone, HiOutlineStop } from 'react-icons/hi2';
 
 interface QuizModeViewProps {
     quiz: QuizOutput;
@@ -18,320 +19,315 @@ interface QuizState {
     answers: Map<string, string>;
     showResult: boolean;
     showFinalResults: boolean;
-    isSaving: boolean;
     isAssessing: boolean;
-    aiSummary?: string;
-    fillBlankCorrect?: boolean;
-    // Gamification
-    combo: number;
-    xpEarned: number;
-}
-
-interface XPPopupData {
-    amount: number;
-    x: number;
-    y: number;
-    id: number;
+    isSaving: boolean;
+    hasSaved: boolean;
+    explanationAssessments: Map<string, AssessmentResult>;
 }
 
 export default function QuizModeView({ quiz }: QuizModeViewProps) {
-    const { exitMode } = useTutor();
-    const { user } = useAuth();
-    const { context } = useTutor();
+    const { audio, startListening, stopListening, setAudioState, context, exitMode } = useTutor();
     const { addXP, showXPPopup } = useGamification();
+    const { user } = useAuth();
 
     const [state, setState] = useState<QuizState>({
         currentIndex: 0,
         answers: new Map(),
         showResult: false,
         showFinalResults: false,
-        isSaving: false,
         isAssessing: false,
-        combo: 0,
-        xpEarned: 0,
+        isSaving: false,
+        hasSaved: false,
+        explanationAssessments: new Map(),
     });
-    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-    const [localXPPopup, setLocalXPPopup] = useState<XPPopupData | null>(null);
+    const [userExplanation, setUserExplanation] = useState('');
+    const [streakMultiplier, setStreakMultiplier] = useState(1);
+    const [correctStreak, setCorrectStreak] = useState(0);
 
     const currentQuestion = quiz.questions[state.currentIndex];
-    const totalQuestions = quiz.questions.length;
+    const isLastQuestion = state.currentIndex === quiz.questions.length - 1;
+    const selectedAnswer = state.answers.get(currentQuestion?.id);
+    const isExplanationQuestion = currentQuestion?.type === 'explanation';
 
-    // Calculate scores
-    const correctAnswers = Array.from(state.answers.entries()).filter(([qId, answer]) => {
-        const question = quiz.questions.find(q => q.id === qId);
-        return question?.correctAnswer === answer;
-    }).length;
-
-    const wrongAnswers = state.answers.size - correctAnswers;
-    const progress = ((state.currentIndex + (state.showResult ? 1 : 0)) / totalQuestions) * 100;
-
-    // Award XP for correct answer
-    const awardQuestionXP = useCallback(async (isCorrect: boolean, isHard: boolean) => {
-        if (!isCorrect) {
-            // Reset combo on wrong answer
-            setState(prev => ({ ...prev, combo: 0 }));
-            return;
+    // Update explanation from audio transcript
+    useEffect(() => {
+        if (audio.transcript) {
+            setUserExplanation(audio.transcript);
         }
+    }, [audio.transcript]);
 
-        const newCombo = state.combo + 1;
-        const multiplier = getComboMultiplier(newCombo);
-        const baseXP = isHard ? XP_CONFIG.quizCorrectHard : XP_CONFIG.quizCorrect;
-        const xpAmount = Math.floor(baseXP * multiplier);
+    // Calculate score
+    const calculateScore = () => {
+        let correct = 0;
+        let total = quiz.questions.length;
 
-        // Update local state
-        setState(prev => ({
-            ...prev,
-            combo: newCombo,
-            xpEarned: prev.xpEarned + xpAmount,
-        }));
-
-        // Show XP popup
-        setLocalXPPopup({
-            amount: xpAmount,
-            x: window.innerWidth / 2,
-            y: window.innerHeight / 2 - 50,
-            id: Date.now(),
+        quiz.questions.forEach((q) => {
+            if (q.type === 'explanation') {
+                const assessment = state.explanationAssessments.get(q.id);
+                if (assessment) {
+                    // Count as correct if score >= 60%
+                    if (assessment.score >= 60) correct++;
+                }
+            } else {
+                const answer = state.answers.get(q.id);
+                if (answer === q.correctAnswer) {
+                    correct++;
+                }
+            }
         });
 
-        // Award XP via context
-        await addXP(baseXP, 'quiz', `Quiz question correct`, multiplier);
+        return Math.round((correct / total) * 100);
+    };
 
-        // Clear popup after animation
-        setTimeout(() => setLocalXPPopup(null), 1500);
-    }, [state.combo, addXP]);
+    const score = calculateScore();
+    const passed = score >= quiz.passingScore;
 
-    const handleSelectAnswer = async (answer: string) => {
+    // Handle choice question answer selection
+    const handleSelectAnswer = (answer: string) => {
         if (state.showResult) return;
-        setSelectedAnswer(answer);
+        setState(prev => ({
+            ...prev,
+            answers: new Map(prev.answers).set(currentQuestion.id, answer),
+        }));
+    };
 
-        // Auto-submit for multiple choice and true/false questions
-        if (currentQuestion.type !== 'fill_blank') {
-            const isCorrect = answer === currentQuestion.correctAnswer ||
-                String.fromCharCode(65 + (currentQuestion.options?.indexOf(currentQuestion.correctAnswer) ?? -1)) === answer;
-            const isHard = currentQuestion.difficulty === 'hard';
+    // Submit choice question answer
+    const handleSubmitChoiceAnswer = () => {
+        const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
 
-            const newAnswers = new Map(state.answers);
-            newAnswers.set(currentQuestion.id, answer);
+        if (isCorrect) {
+            const newStreak = correctStreak + 1;
+            setCorrectStreak(newStreak);
+            if (newStreak >= 3 && streakMultiplier < 2) {
+                setStreakMultiplier(1.25);
+            } else if (newStreak >= 5) {
+                setStreakMultiplier(1.5);
+            }
+        } else {
+            setCorrectStreak(0);
+            setStreakMultiplier(1);
+        }
+
+        setState(prev => ({ ...prev, showResult: true }));
+    };
+
+    // Submit explanation question answer
+    const handleSubmitExplanation = async () => {
+        if (!userExplanation.trim()) return;
+
+        // Stop listening if still active
+        if (audio.isListening) {
+            stopListening();
+        }
+
+        setState(prev => ({ ...prev, isAssessing: true }));
+
+        try {
+            // Call AI assessment API
+            const response = await axios.post('/api/tutor/assess', {
+                studentAnswer: userExplanation,
+                concept: currentQuestion.concept,
+                keyPointsToCheck: currentQuestion.expectedKeyPoints || [],
+                rubric: currentQuestion.scoringRubric || {
+                    excellent: ['Complete understanding', 'Clear explanation'],
+                    good: ['Partial understanding'],
+                    needsWork: ['Missing key concepts']
+                },
+                promptForStudent: currentQuestion.question,
+            });
+
+            const assessment: AssessmentResult = {
+                chunkId: currentQuestion.id,
+                score: response.data.score,
+                level: response.data.level,
+                matchedKeyPoints: response.data.matchedKeyPoints,
+                missedKeyPoints: response.data.missedKeyPoints,
+                feedback: response.data.feedback,
+                shouldRetry: response.data.shouldRetry,
+            };
 
             setState(prev => ({
                 ...prev,
-                answers: newAnswers,
+                explanationAssessments: new Map(prev.explanationAssessments).set(currentQuestion.id, assessment),
                 showResult: true,
+                isAssessing: false,
             }));
 
-            // Award XP after state update
-            await awardQuestionXP(isCorrect, isHard);
-        }
-    };
-
-    const handleSubmitAnswer = async () => {
-        if (!selectedAnswer) return;
-
-        // For fill-blank questions, use AI assessment
-        if (currentQuestion.type === 'fill_blank') {
-            setState(prev => ({ ...prev, isAssessing: true }));
-
-            try {
-                const response = await axios.post('/api/tutor/assess', {
-                    studentAnswer: selectedAnswer,
-                    concept: currentQuestion.concept,
-                    keyPointsToCheck: [currentQuestion.correctAnswer],
-                    rubric: {
-                        excellent: ['Correct answer or semantically equivalent'],
-                        good: ['Partially correct'],
-                        needsWork: ['Incorrect answer'],
-                    },
-                    promptForStudent: currentQuestion.question,
-                });
-
-                const isCorrectByAI = response.data.score >= 70;
-                const newAnswers = new Map(state.answers);
-                // Store the correct answer if AI says it's correct (for scoring)
-                newAnswers.set(currentQuestion.id, isCorrectByAI ? currentQuestion.correctAnswer : selectedAnswer);
-
-                setState(prev => ({
-                    ...prev,
-                    answers: newAnswers,
-                    showResult: true,
-                    isAssessing: false,
-                    fillBlankCorrect: isCorrectByAI,
-                }));
-
-                // Award XP for fill-blank
-                await awardQuestionXP(isCorrectByAI, currentQuestion.difficulty === 'hard');
-            } catch (error) {
-                console.error('Fill-blank assessment failed:', error);
-                const newAnswers = new Map(state.answers);
-                newAnswers.set(currentQuestion.id, selectedAnswer);
-                setState(prev => ({
-                    ...prev,
-                    answers: newAnswers,
-                    showResult: true,
-                    isAssessing: false,
-                }));
-            }
-        } else {
-            const newAnswers = new Map(state.answers);
-            newAnswers.set(currentQuestion.id, selectedAnswer);
-
-            setState({
-                ...state,
-                answers: newAnswers,
-                showResult: true,
-            });
-        }
-    };
-
-    const handleNext = async () => {
-        if (state.currentIndex < totalQuestions - 1) {
-            setState({
-                ...state,
-                currentIndex: state.currentIndex + 1,
-                showResult: false,
-            });
-            setSelectedAnswer(null);
-        } else {
-            // Check for perfect quiz bonus
-            const isPerfect = correctAnswers === totalQuestions;
-            if (isPerfect) {
-                await addXP(XP_CONFIG.perfectQuizBonus, 'quiz', 'Perfect quiz bonus!');
-                setState(prev => ({
-                    ...prev,
-                    showFinalResults: true,
-                    isSaving: true,
-                    xpEarned: prev.xpEarned + XP_CONFIG.perfectQuizBonus,
-                }));
+            // Update streak based on score
+            if (assessment.score >= 60) {
+                const newStreak = correctStreak + 1;
+                setCorrectStreak(newStreak);
+                if (newStreak >= 3 && streakMultiplier < 2) {
+                    setStreakMultiplier(1.25);
+                } else if (newStreak >= 5) {
+                    setStreakMultiplier(1.5);
+                }
             } else {
-                setState(prev => ({ ...prev, showFinalResults: true, isSaving: true }));
+                setCorrectStreak(0);
+                setStreakMultiplier(1);
             }
+        } catch (error) {
+            console.error('Assessment failed:', error);
+            // Fallback assessment
+            const fallbackAssessment: AssessmentResult = {
+                chunkId: currentQuestion.id,
+                score: 50,
+                level: 'needs-work',
+                matchedKeyPoints: [],
+                missedKeyPoints: currentQuestion.expectedKeyPoints || [],
+                feedback: 'Unable to assess your explanation. Please try again.',
+                shouldRetry: true,
+            };
+            setState(prev => ({
+                ...prev,
+                explanationAssessments: new Map(prev.explanationAssessments).set(currentQuestion.id, fallbackAssessment),
+                showResult: true,
+                isAssessing: false,
+            }));
+        } finally {
+            // Clear transcript for next input
+            setAudioState(prev => ({ ...prev, transcript: '' }));
+        }
+    };
+
+    // Move to next question
+    const handleNext = async () => {
+        if (isLastQuestion) {
+            setState(prev => ({ ...prev, showFinalResults: true }));
+            // Award XP for completing quiz
+            const xpAmount = Math.round(XP_CONFIG.quizComplete * streakMultiplier);
+            await addXP(xpAmount, 'quiz', `Completed quiz: ${quiz.title}`);
+            showXPPopup(xpAmount);
+        } else {
+            setState(prev => ({
+                ...prev,
+                currentIndex: prev.currentIndex + 1,
+                showResult: false,
+            }));
+            setUserExplanation('');
+        }
+    };
+
+    // Retry quiz
+    const handleRetry = () => {
+        setState({
+            currentIndex: 0,
+            answers: new Map(),
+            showResult: false,
+            showFinalResults: false,
+            isAssessing: false,
+            isSaving: false,
+            hasSaved: false,
+            explanationAssessments: new Map(),
+        });
+        setUserExplanation('');
+        setStreakMultiplier(1);
+        setCorrectStreak(0);
+    };
+
+    // Save results when final results shown
+    useEffect(() => {
+        if (state.showFinalResults && !state.hasSaved && user && context) {
+            const saveResults = async () => {
+                setState(prev => ({ ...prev, isSaving: true }));
+                try {
+                    const answers = quiz.questions.map(q => ({
+                        questionId: q.id,
+                        userAnswer: q.type === 'explanation'
+                            ? (state.explanationAssessments.get(q.id)?.feedback || '')
+                            : (state.answers.get(q.id) || ''),
+                        isCorrect: q.type === 'explanation'
+                            ? (state.explanationAssessments.get(q.id)?.score || 0) >= 60
+                            : state.answers.get(q.id) === q.correctAnswer,
+                    }));
+
+                    await axios.post('/api/user/activity', {
+                        userId: user.uid,
+                        type: 'quiz',
+                        context: {
+                            grade: context.grade,
+                            subject: context.subject,
+                            strand: context.strand,
+                            substrand: context.substrand,
+                        },
+                        score,
+                        totalQuestions: quiz.questions.length,
+                        answers,
+                    });
+                    setState(prev => ({ ...prev, isSaving: false, hasSaved: true }));
+                } catch (error) {
+                    console.error('Failed to save quiz results:', error);
+                    setState(prev => ({ ...prev, isSaving: false }));
+                }
+            };
             saveResults();
         }
-    };
+    }, [state.showFinalResults, state.hasSaved, user, context, quiz, score, state.answers, state.explanationAssessments]);
 
-    const saveResults = async () => {
-        if (!user || !context) {
-            setState(prev => ({ ...prev, isSaving: false }));
-            return;
-        }
+    const isCorrect = !isExplanationQuestion && selectedAnswer === currentQuestion?.correctAnswer;
+    const currentAssessment = isExplanationQuestion ? state.explanationAssessments.get(currentQuestion?.id) : null;
+    const isExplanationCorrect = currentAssessment && currentAssessment.score >= 60;
 
-        try {
-            const response = await axios.post('/api/user/activity', {
-                userId: user.uid,
-                type: 'quiz',
-                context: {
-                    grade: context.grade,
-                    subject: context.subject,
-                    strand: context.strand,
-                    substrand: context.substrand,
-                },
-                score,
-                totalQuestions,
-                answers: Array.from(state.answers.entries()).map(([qId, answer]) => ({
-                    questionId: qId,
-                    userAnswer: answer,
-                    isCorrect: quiz.questions.find(q => q.id === qId)?.correctAnswer === answer
-                }))
-            });
-
-            if (response.data.success) {
-                setState(prev => ({
-                    ...prev,
-                    isSaving: false,
-                    aiSummary: response.data.aiSummary
-                }));
-            } else {
-                // API returned but without success - still complete the UI
-                setState(prev => ({ ...prev, isSaving: false }));
-            }
-        } catch {
-            // Silently fail - quiz completion should still work without saving
-            setState(prev => ({ ...prev, isSaving: false }));
-        }
-    };
-
-    // For fill-blank, use AI assessment result; for others, use exact match
-    const isCorrect = state.showResult && (
-        currentQuestion.type === 'fill_blank'
-            ? state.fillBlankCorrect ?? false
-            : selectedAnswer === currentQuestion.correctAnswer
-    );
-    const score = Math.round((correctAnswers / totalQuestions) * 100);
-    const passed = score >= quiz.passingScore;
-
-    // Final Results Screen - Minimalist
+    // Final Results View
     if (state.showFinalResults) {
         return (
-            <div className="flex flex-col h-full items-center justify-center p-4">
-                <div className="w-full max-w-sm space-y-8 text-center">
-                    <div className="space-y-2">
-                        <h2 className="text-sm font-bold text-white uppercase tracking-[0.2em]">
-                            {passed ? 'Quiz Complete' : 'Session Incomplete'}
-                        </h2>
-                        <p className="text-xs text-white/40 uppercase tracking-widest">
-                            {passed ? 'Requirement Met' : `Target: ${quiz.passingScore}%`}
-                        </p>
+            <div className="flex flex-col h-full overflow-y-auto scrollbar-hide">
+                <div className="text-center py-6">
+                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${passed ? 'bg-green-500/20' : 'bg-red-500/20'
+                        }`}>
+                        {passed ? (
+                            <svg className="w-8 h-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        ) : (
+                            <svg className="w-8 h-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        )}
                     </div>
 
-                    <div className="flex justify-center gap-8 py-8 border-y border-white/10">
-                        <div className="space-y-1">
-                            <div className="text-3xl font-bold font-mono text-white">{score}%</div>
-                            <div className="text-[10px] uppercase tracking-widest text-white/40">Score</div>
+                    <h2 className="text-lg font-bold text-white mb-1">
+                        {passed ? 'Excellent Work!' : 'Keep Practicing!'}
+                    </h2>
+                    <p className="text-sm text-white/60 mb-4">
+                        {passed
+                            ? `You scored ${score}% on this quiz`
+                            : `You scored ${score}%. You need ${quiz.passingScore}% to pass.`}
+                    </p>
+
+                    {/* Score display */}
+                    <div className="inline-flex items-center gap-4 px-4 py-3 rounded-xl bg-white/5 border border-white/10 mb-6">
+                        <div className="text-center">
+                            <p className="text-2xl font-bold text-white">{score}%</p>
+                            <p className="text-[10px] text-white/40 uppercase tracking-wider">Your Score</p>
                         </div>
-                        <div className="space-y-1">
-                            <div className="text-3xl font-bold font-mono text-emerald-400">{correctAnswers}</div>
-                            <div className="text-[10px] uppercase tracking-widest text-white/40">Correct</div>
-                        </div>
-                        <div className="space-y-1">
-                            <div className="text-3xl font-bold font-mono text-cyan-400">+{state.xpEarned}</div>
-                            <div className="text-[10px] uppercase tracking-widest text-white/40">XP Earned</div>
+                        <div className="w-px h-8 bg-white/10" />
+                        <div className="text-center">
+                            <p className="text-2xl font-bold text-white/50">{quiz.passingScore}%</p>
+                            <p className="text-[10px] text-white/40 uppercase tracking-wider">Passing</p>
                         </div>
                     </div>
 
-                    {/* AI Summary */}
-                    {(state.isSaving || state.aiSummary) && (
-                        <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-left relative overflow-hidden group">
-                            <div className="absolute top-0 left-0 w-1 h-full bg-sky-500" />
-                            <h4 className="text-[10px] font-bold text-sky-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
-                                Tutor Feedback
-                            </h4>
-                            {state.isSaving ? (
-                                <div className="space-y-2 animate-pulse">
-                                    <div className="h-2 bg-white/10 rounded w-3/4" />
-                                    <div className="h-2 bg-white/10 rounded w-1/2" />
-                                </div>
-                            ) : (
-                                <p className="text-xs text-white/70 leading-relaxed italic">
-                                    "{state.aiSummary}"
-                                </p>
-                            )}
+                    {/* Streak bonus if applicable */}
+                    {streakMultiplier > 1 && (
+                        <div className="mb-4 px-3 py-2 bg-amber-500/10 border border-amber-500/30 rounded-lg inline-block">
+                            <span className="text-xs text-amber-400">🔥 {streakMultiplier}x Streak Bonus Applied!</span>
                         </div>
                     )}
 
+                    {/* Actions */}
                     <div className="flex flex-col gap-3">
                         <button
-                            onClick={() => {
-                                setState({
-                                    currentIndex: 0,
-                                    answers: new Map(),
-                                    showResult: false,
-                                    showFinalResults: false,
-                                    isSaving: false,
-                                    isAssessing: false,
-                                    combo: 0,
-                                    xpEarned: 0,
-                                });
-                                setSelectedAnswer(null);
-                            }}
-                            className="w-full py-4 border border-white/10 hover:bg-white/5 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-all"
+                            onClick={handleRetry}
+                            className="px-6 py-2.5 rounded-full font-medium bg-white/10 text-white hover:bg-white/20 transition-colors text-sm"
                         >
-                            Restart Quiz
+                            Retry Quiz
                         </button>
                         <button
                             onClick={exitMode}
-                            className="w-full py-4 bg-sky-600 hover:bg-sky-500 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-all"
+                            className="px-6 py-2.5 rounded-full font-medium bg-sky-500 text-white hover:bg-sky-600 transition-colors text-sm"
                         >
-                            Resume Lesson
+                            Back to Lesson
                         </button>
                     </div>
                 </div>
@@ -339,139 +335,254 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
         );
     }
 
+    // Question View
     return (
-        <div className="flex flex-col h-full relative">
-            {/* XP Popup */}
-            {localXPPopup && (
-                <XPPopup
-                    key={localXPPopup.id}
-                    amount={localXPPopup.amount}
-                    x={localXPPopup.x}
-                    y={localXPPopup.y}
-                />
-            )}
-
-            {/* Header */}
-            <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">{quiz.title}</h3>
-                    <div className="flex items-center gap-4">
-                        {/* Combo Indicator */}
-                        <ComboIndicator streak={state.combo} size="sm" />
-
-                        {/* Stats */}
-                        <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest font-mono">
-                            <span className="text-cyan-400">+{state.xpEarned} XP</span>
-                            <span className="text-white/20">|</span>
-                            <span className="text-emerald-500">{correctAnswers}/{totalQuestions}</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Progress Indicator */}
-                <div className="h-[2px] bg-white/5 w-full overflow-hidden">
-                    <div
-                        className="h-full bg-sky-500 transition-all duration-500"
-                        style={{ width: `${progress}%` }}
-                    />
+        <div className="flex flex-col h-full">
+            {/* Progress Bar */}
+            <div className="flex items-center justify-between mb-4">
+                <span className="text-[10px] uppercase tracking-widest text-white/40">
+                    Question {state.currentIndex + 1} / {quiz.questions.length}
+                </span>
+                <div className="flex items-center gap-2">
+                    {streakMultiplier > 1 && (
+                        <span className="text-xs text-amber-400 font-medium">
+                            🔥 {streakMultiplier}x
+                        </span>
+                    )}
+                    <span className="text-xs text-white/60">
+                        +{Math.round((isExplanationQuestion ? 12 : 8) * streakMultiplier)} XP
+                    </span>
                 </div>
             </div>
 
-            {/* Question Area */}
-            <div className="flex-1 overflow-y-auto scrollbar-hide space-y-8 pr-2">
-                <div className="space-y-3">
-                    <span className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">
-                        Question {state.currentIndex + 1} / {totalQuestions}
+            {/* Progress dots */}
+            <div className="flex gap-1 mb-4">
+                {quiz.questions.map((_, index) => (
+                    <div
+                        key={index}
+                        className={`flex-1 h-1 rounded-full ${index < state.currentIndex
+                                ? 'bg-emerald-500'
+                                : index === state.currentIndex
+                                    ? 'bg-sky-500'
+                                    : 'bg-white/10'
+                            }`}
+                    />
+                ))}
+            </div>
+
+            {/* Scrollable content area */}
+            <div className="flex-1 overflow-y-auto scrollbar-hide">
+                {/* Question */}
+                <div className="mb-4">
+                    <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-medium mb-2 ${currentQuestion.difficulty === 'easy'
+                            ? 'bg-green-500/20 text-green-400'
+                            : currentQuestion.difficulty === 'medium'
+                                ? 'bg-yellow-500/20 text-yellow-400'
+                                : 'bg-red-500/20 text-red-400'
+                        }`}>
+                        {currentQuestion.difficulty}
                     </span>
-                    <p className="text-sm text-white leading-relaxed font-medium">
+                    {isExplanationQuestion && (
+                        <span className="inline-block px-2 py-0.5 rounded text-[10px] font-medium mb-2 ml-2 bg-purple-500/20 text-purple-400">
+                            Explanation
+                        </span>
+                    )}
+                    <h3 className="text-sm font-medium text-white leading-relaxed">
                         {currentQuestion.question}
-                    </p>
+                    </h3>
                 </div>
 
-                {/* Options - Minimalist */}
-                <div className="space-y-3">
-                    {(currentQuestion.options || ['True', 'False']).map((option, index) => {
-                        const letter = String.fromCharCode(65 + index); // A, B, C, D
-                        const isSelected = selectedAnswer === option || selectedAnswer === letter;
-                        const isCorrectAnswer = state.showResult && (
-                            option === currentQuestion.correctAnswer ||
-                            letter === currentQuestion.correctAnswer
-                        );
-                        const isWrongSelected = state.showResult && isSelected && !isCorrectAnswer;
+                {/* Choice Options (for multiple_choice and true_false) */}
+                {!isExplanationQuestion && (
+                    <div className="space-y-2 mb-4">
+                        {currentQuestion.options?.map((option, index) => {
+                            const optionLetter = option.charAt(0);
+                            const isSelected = selectedAnswer === optionLetter;
+                            const isCorrectOption = optionLetter === currentQuestion.correctAnswer;
 
-                        return (
+                            let optionClass = 'bg-white/5 border-white/10 hover:bg-white/10';
+                            if (state.showResult) {
+                                if (isCorrectOption) {
+                                    optionClass = 'bg-green-500/20 border-green-500/50';
+                                } else if (isSelected && !isCorrectOption) {
+                                    optionClass = 'bg-red-500/20 border-red-500/50';
+                                }
+                            } else if (isSelected) {
+                                optionClass = 'bg-sky-500/20 border-sky-500/50';
+                            }
+
+                            return (
+                                <button
+                                    key={index}
+                                    onClick={() => handleSelectAnswer(optionLetter)}
+                                    disabled={state.showResult}
+                                    className={`w-full text-left px-3 py-2.5 rounded-lg border transition-all text-sm ${optionClass}`}
+                                >
+                                    <span className="text-white/80">{option}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
+
+                {/* Explanation Input (for explanation type questions) */}
+                {isExplanationQuestion && !state.showResult && (
+                    <div className="space-y-3 mb-4">
+                        <div className="relative">
+                            <textarea
+                                value={userExplanation}
+                                onChange={(e) => setUserExplanation(e.target.value)}
+                                placeholder="Type or speak your explanation here..."
+                                className="w-full h-32 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-white/30 resize-none focus:outline-none focus:border-sky-500/50 transition-colors p-3 pr-12"
+                            />
                             <button
-                                key={index}
-                                onClick={() => handleSelectAnswer(currentQuestion.type === 'multiple_choice' ? letter : option)}
-                                disabled={state.showResult}
-                                className={`w-full p-4 text-left transition-all border ${isCorrectAnswer && state.showResult
-                                    ? 'border-emerald-500 bg-emerald-500/5'
-                                    : isWrongSelected
-                                        ? 'border-red-500 bg-red-500/5'
-                                        : isSelected
-                                            ? 'border-white/40 bg-white/5'
-                                            : 'border-white/5 hover:border-white/20'
+                                onClick={audio.isListening ? stopListening : startListening}
+                                className={`absolute right-3 bottom-3 p-2 rounded-full transition-all ${audio.isListening
+                                        ? 'bg-red-500 text-white scale-110 animate-pulse'
+                                        : 'bg-white/10 text-white/60 hover:text-white hover:bg-white/20'
                                     }`}
                             >
-                                <div className="flex items-center gap-4">
-                                    <span className={`text-[10px] font-mono ${isCorrectAnswer && state.showResult ? 'text-emerald-400' :
-                                        isWrongSelected ? 'text-red-400' : 'text-white/20'
-                                        }`}>
-                                        {letter}
-                                    </span>
-                                    <span className={`text-sm ${isSelected ? 'text-white' : 'text-white/60'}`}>{option}</span>
-                                </div>
+                                {audio.isListening ? (
+                                    <HiOutlineStop className="w-4 h-4" />
+                                ) : (
+                                    <HiOutlineMicrophone className="w-4 h-4" />
+                                )}
                             </button>
-                        );
-                    })}
-                </div>
+                        </div>
 
-                {/* Fill Blank - Minimalist */}
-                {currentQuestion.type === 'fill_blank' && (
-                    <div className="space-y-4">
-                        <input
-                            type="text"
-                            value={selectedAnswer || ''}
-                            onChange={(e) => setSelectedAnswer(e.target.value)}
-                            disabled={state.showResult || state.isAssessing}
-                            placeholder="Type answer..."
-                            className="w-full bg-transparent border-b border-white/20 p-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-white/40 transition-all"
-                            onKeyDown={(e) => e.key === 'Enter' && !state.showResult && handleSubmitAnswer()}
-                        />
-                        {!state.showResult && (
-                            <button
-                                onClick={handleSubmitAnswer}
-                                disabled={!selectedAnswer || state.isAssessing}
-                                className="w-full py-3 bg-sky-600 hover:bg-sky-500 disabled:bg-white/5 disabled:text-white/20 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-all"
-                            >
-                                {state.isAssessing ? 'Checking...' : 'Submit Answer'}
-                            </button>
+                        {audio.isListening && (
+                            <div className="flex items-center gap-3 py-2 px-3 bg-red-500/10 rounded-lg border border-red-500/20">
+                                <VoiceVisualization isActive={true} color="bg-red-500" />
+                                <span className="text-[10px] text-red-500 uppercase font-bold tracking-widest">Recording...</span>
+                            </div>
+                        )}
+
+                        {audio.isTranscribing && (
+                            <div className="flex items-center gap-3 py-2 px-3 bg-sky-500/10 rounded-lg border border-sky-500/20">
+                                <div className="w-4 h-4 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
+                                <span className="text-[10px] text-sky-500 uppercase font-bold tracking-widest">Transcribing...</span>
+                            </div>
+                        )}
+
+                        {currentQuestion.hint && (
+                            <p className="text-xs text-white/40 italic">
+                                💡 Hint: {currentQuestion.hint}
+                            </p>
                         )}
                     </div>
                 )}
 
-                {/* Explanation Area */}
-                {state.showResult && (
-                    <div className="pt-6 border-t border-white/10">
-                        <h4 className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${isCorrect ? 'text-emerald-400' : 'text-red-400'}`}>
-                            {isCorrect ? "Validated" : "Correction Required"}
-                        </h4>
-                        <p className="text-xs text-white/50 leading-relaxed italic">{currentQuestion.explanation}</p>
+                {/* Choice Question Result */}
+                {state.showResult && !isExplanationQuestion && (
+                    <div className={`p-3 rounded-lg mb-4 ${isCorrect ? 'bg-green-500/10 border border-green-500/30' : 'bg-red-500/10 border border-red-500/30'
+                        }`}>
+                        <p className={`font-medium mb-1 text-sm ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
+                            {isCorrect ? '✓ Correct!' : '✗ Incorrect'}
+                        </p>
+                        <p className="text-white/70 text-xs leading-relaxed">
+                            {currentQuestion.explanation}
+                        </p>
+                    </div>
+                )}
+
+                {/* Explanation Question Result */}
+                {state.showResult && isExplanationQuestion && currentAssessment && (
+                    <div className="space-y-3 mb-4">
+                        {/* Score */}
+                        <div className={`p-3 rounded-lg ${isExplanationCorrect ? 'bg-green-500/10 border border-green-500/30' : 'bg-amber-500/10 border border-amber-500/30'
+                            }`}>
+                            <div className="flex items-center justify-between mb-2">
+                                <span className={`font-medium text-sm ${isExplanationCorrect ? 'text-green-400' : 'text-amber-400'
+                                    }`}>
+                                    {currentAssessment.level === 'excellent' ? '🌟 Excellent!' :
+                                        currentAssessment.level === 'good' ? '👍 Good!' : '📚 Keep Learning'}
+                                </span>
+                                <span className={`text-lg font-bold ${currentAssessment.level === 'excellent' ? 'text-emerald-400' :
+                                        currentAssessment.level === 'good' ? 'text-sky-400' : 'text-amber-400'
+                                    }`}>
+                                    {currentAssessment.score}%
+                                </span>
+                            </div>
+                            <p className="text-white/70 text-xs leading-relaxed italic">
+                                {currentAssessment.feedback}
+                            </p>
+                        </div>
+
+                        {/* Key Points */}
+                        {currentAssessment.matchedKeyPoints.length > 0 && (
+                            <div className="space-y-1">
+                                <h5 className="text-[10px] uppercase tracking-widest text-emerald-500 font-bold">You got right:</h5>
+                                <ul className="space-y-1">
+                                    {currentAssessment.matchedKeyPoints.map((point, i) => (
+                                        <li key={i} className="text-xs text-white/60 flex items-start gap-2">
+                                            <span className="text-emerald-500">✓</span>
+                                            {point}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {currentAssessment.missedKeyPoints.length > 0 && (
+                            <div className="space-y-1">
+                                <h5 className="text-[10px] uppercase tracking-widest text-amber-500 font-bold">To improve:</h5>
+                                <ul className="space-y-1">
+                                    {currentAssessment.missedKeyPoints.map((point, i) => (
+                                        <li key={i} className="text-xs text-white/60 flex items-start gap-2">
+                                            <span className="text-amber-500">•</span>
+                                            {point}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {/* Model Answer */}
+                        <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+                            <h5 className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-1">Model Answer:</h5>
+                            <p className="text-xs text-white/70 leading-relaxed">
+                                {currentQuestion.correctAnswer}
+                            </p>
+                        </div>
                     </div>
                 )}
             </div>
 
-            {/* Navigation - Minimalist */}
-            {state.showResult && (
-                <div className="mt-8 pt-4 border-t border-white/10 flex gap-2">
+            {/* Actions */}
+            <div className="pt-4 border-t border-white/10">
+                {!state.showResult ? (
+                    isExplanationQuestion ? (
+                        <button
+                            onClick={handleSubmitExplanation}
+                            disabled={!userExplanation.trim() || state.isAssessing}
+                            className={`w-full py-3 rounded-lg font-medium text-sm transition-all ${userExplanation.trim() && !state.isAssessing
+                                    ? 'bg-sky-500 text-white hover:bg-sky-600'
+                                    : 'bg-white/10 text-white/30 cursor-not-allowed'
+                                }`}
+                        >
+                            {state.isAssessing ? 'Assessing...' : 'Submit Explanation'}
+                        </button>
+                    ) : (
+                        <button
+                            onClick={handleSubmitChoiceAnswer}
+                            disabled={!selectedAnswer}
+                            className={`w-full py-3 rounded-lg font-medium text-sm transition-all ${selectedAnswer
+                                    ? 'bg-sky-500 text-white hover:bg-sky-600'
+                                    : 'bg-white/10 text-white/30 cursor-not-allowed'
+                                }`}
+                        >
+                            Submit Answer
+                        </button>
+                    )
+                ) : (
                     <button
                         onClick={handleNext}
-                        className="flex-1 py-4 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-all"
+                        className="w-full py-3 rounded-lg font-medium bg-sky-500 text-white hover:bg-sky-600 transition-colors text-sm"
                     >
-                        {state.currentIndex < totalQuestions - 1 ? 'Next Phase' : 'Finalize'}
+                        {isLastQuestion ? 'See Results' : 'Next Question →'}
                     </button>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }

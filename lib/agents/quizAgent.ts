@@ -88,10 +88,17 @@ ${context.textbookContent.slice(0, 5000)}
 
 QUESTION REQUIREMENTS:
 1. Mix of difficulty levels (3 easy, 4 medium, 3 hard)
-2. Mix of question types (7 multiple choice, 2 true/false, 1 fill blank)
+2. QUESTION TYPE DISTRIBUTION (VERY IMPORTANT):
+   - 7 choice-based questions (5 multiple_choice + 2 true_false)
+   - 3 explanation questions where students must type/speak to explain a concept
 3. Every question MUST have a detailed explanation
 4. Questions should test understanding, not just memorization
 5. Use Kenyan context and examples where appropriate
+
+CRITICAL - RANDOMIZE CORRECT ANSWERS:
+For multiple_choice questions, the correct answer MUST be randomly distributed across A, B, C, and D.
+Do NOT make most correct answers B or any single letter. Ensure variety: some A, some B, some C, some D.
+Example distribution for 5 multiple choice: A, C, D, B, A (not B, B, B, B, B)
 
 Respond with ONLY a JSON object:
 {
@@ -101,16 +108,32 @@ Respond with ONLY a JSON object:
       "type": "multiple_choice",
       "question": "Question text?",
       "options": ["A. Option 1", "B. Option 2", "C. Option 3", "D. Option 4"],
-      "correctAnswer": "B",
-      "explanation": "Detailed explanation of why B is correct...",
+      "correctAnswer": "C",
+      "explanation": "Detailed explanation of why C is correct...",
       "difficulty": "easy",
       "concept": "Concept being tested",
       "hint": "Optional hint for struggling students"
+    },
+    {
+      "id": "q8",
+      "type": "explanation",
+      "question": "Explain in your own words how [concept] works and give an example.",
+      "correctAnswer": "Model answer that covers the key points",
+      "explanation": "A complete explanation should mention...",
+      "expectedKeyPoints": ["Key point 1 to check", "Key point 2 to check", "Key point 3 to check"],
+      "scoringRubric": {
+        "excellent": ["Mentions all key concepts", "Provides relevant example", "Shows deep understanding"],
+        "good": ["Mentions most key concepts", "Basic example given"],
+        "needsWork": ["Missing key concepts", "No example", "Shows confusion"]
+      },
+      "difficulty": "medium",
+      "concept": "Concept being tested",
+      "hint": "Think about what happens when..."
     }
   ]
 }
 
-Create exactly 10 varied, educational questions.`;
+Create exactly 10 questions: 7 choice-based (multiple_choice/true_false) and 3 explanation type.`;
 
   const response = await openai.chat.completions.create({
     model: MODEL,

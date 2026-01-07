@@ -166,7 +166,7 @@ export interface ExtractedConcepts {
 }
 
 // Step 2 & 3: Quiz Questions
-export type QuestionType = 'multiple_choice' | 'true_false' | 'fill_blank';
+export type QuestionType = 'multiple_choice' | 'true_false' | 'fill_blank' | 'explanation';
 
 export interface QuizQuestion {
     id: string;
@@ -178,6 +178,13 @@ export interface QuizQuestion {
     difficulty: 'easy' | 'medium' | 'hard';
     concept: string;
     hint?: string;
+    // For explanation-type questions
+    expectedKeyPoints?: string[];
+    scoringRubric?: {
+        excellent: string[];
+        good: string[];
+        needsWork: string[];
+    };
 }
 
 export interface QuizOutput {
