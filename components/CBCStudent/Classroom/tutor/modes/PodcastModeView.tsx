@@ -151,28 +151,41 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
                 )}
             </div>
 
-            {/* Playback Controls - Compact with Skip */}
+            {/* Playback Controls - Like Explanation Mode with Progress Bar */}
             <div className="mt-4 pt-4 border-t border-white/10">
-                <div className="flex items-center justify-center gap-4">
+                {/* Progress info */}
+                <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-xs text-white/40 truncate flex-1">
+                        {currentSegmentIndex >= 0
+                            ? script.dialogue[currentSegmentIndex]?.speaker
+                            : 'Ready to play'}
+                    </span>
+                    <span className="text-xs text-white/20">
+                        {currentSegmentIndex >= 0 ? currentSegmentIndex + 1 : 0} / {script.dialogue.length}
+                    </span>
+                </div>
+
+                {/* Progress bar + controls inline */}
+                <div className="flex items-center gap-3">
                     {/* Skip Back */}
                     <button
                         onClick={handleSkipBack}
                         disabled={currentSegmentIndex <= 0}
-                        className="p-2 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         title="Previous segment"
                     >
-                        <HiBackward className="w-5 h-5 text-white" />
+                        <HiBackward className="w-4 h-4 text-white" />
                     </button>
 
                     {/* Play/Pause */}
                     <button
                         onClick={handlePlay}
-                        className="p-3 rounded-full bg-sky-500 hover:bg-sky-400 transition-all active:scale-95 shadow-lg shadow-sky-500/20"
+                        className="p-2 rounded-full bg-sky-500 hover:bg-sky-400 transition-all active:scale-95 shadow-lg shadow-sky-500/20"
                     >
                         {isPlayingSequence ? (
-                            <HiPause className="w-5 h-5 text-white" />
+                            <HiPause className="w-4 h-4 text-white" />
                         ) : (
-                            <HiPlay className="w-5 h-5 text-white" />
+                            <HiPlay className="w-4 h-4 text-white" />
                         )}
                     </button>
 
@@ -180,20 +193,35 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
                     <button
                         onClick={handleSkipForward}
                         disabled={currentSegmentIndex >= script.dialogue.length - 1}
-                        className="p-2 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                        className="p-1.5 rounded-full bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                         title="Next segment"
                     >
-                        <HiForward className="w-5 h-5 text-white" />
+                        <HiForward className="w-4 h-4 text-white" />
                     </button>
-                </div>
 
-                {/* Progress indicator */}
-                <p className="text-center text-[10px] uppercase tracking-widest text-white/30 mt-3">
-                    {currentSegmentIndex >= 0
-                        ? `Segment ${currentSegmentIndex + 1} of ${script.dialogue.length}`
-                        : 'Ready to play'
-                    }
-                </p>
+                    {/* Progress bar */}
+                    <div className="flex-1 flex gap-0.5 h-1.5 rounded-full overflow-hidden bg-white/5">
+                        {script.dialogue.map((segment, idx) => (
+                            <button
+                                key={`${segment.id}-${idx}`}
+                                onClick={() => {
+                                    setCurrentSegmentIndex(idx);
+                                    if (isPlayingSequence) {
+                                        stopSpeaking();
+                                        playFromIndex(idx);
+                                    }
+                                }}
+                                className={`flex-1 transition-all hover:brightness-125 ${idx < currentSegmentIndex
+                                        ? 'bg-sky-500'
+                                        : idx === currentSegmentIndex
+                                            ? audio.isPlaying ? 'bg-sky-500 animate-pulse' : 'bg-sky-500'
+                                            : 'bg-white/10 hover:bg-white/20'
+                                    }`}
+                                title={`${segment.speaker}: ${segment.text.substring(0, 30)}...`}
+                            />
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );

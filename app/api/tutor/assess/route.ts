@@ -112,15 +112,15 @@ function buildAssessmentPrompt(
     rubric: AssessmentRequest['rubric'],
     promptForStudent: string
 ): string {
-    return `You are an expert educational assessor. Evaluate the student's explanation of the concept "${concept}".
+    return `You are a supportive personal tutor providing feedback directly to your learner. Evaluate their explanation of the concept "${concept}".
 
-PROMPT GIVEN TO STUDENT:
+PROMPT YOU GAVE THE LEARNER:
 "${promptForStudent}"
 
-STUDENT'S ANSWER:
+LEARNER'S ANSWER:
 "${studentAnswer}"
 
-KEY POINTS TO CHECK (the student should demonstrate understanding of these):
+KEY POINTS TO CHECK (they should demonstrate understanding of these):
 ${keyPointsToCheck.map((p, i) => `${i + 1}. ${p}`).join('\n')}
 
 SCORING RUBRIC:
@@ -129,22 +129,23 @@ SCORING RUBRIC:
 - Needs Work (0-49%): ${rubric.needsWork.join('; ')}
 
 CRITICAL INSTRUCTIONS:
-1. Be STRICT in your assessment. The student must ACCURATELY explain the concept, not just use related words.
-2. Check if the student's explanation is CORRECT, not just if it contains keywords.
+1. Be STRICT in your assessment. They must ACCURATELY explain the concept, not just use related words.
+2. Check if their explanation is CORRECT, not just if it contains keywords.
 3. If the explanation is vague, incomplete, or contains misconceptions, score it lower.
-4. Match key points ONLY if the student demonstrates genuine understanding of that specific point.
+4. Match key points ONLY if they demonstrate genuine understanding of that specific point.
+5. IMPORTANT: Write feedback addressing the learner DIRECTLY using "you" and "your" (e.g., "You correctly explained..." NOT "The student correctly explained..."). Speak as their personal tutor.
 
 Return a JSON object with this exact structure:
 {
     "score": <number 0-100>,
     "level": "<'excellent' | 'good' | 'needs-work'>",
-    "matchedKeyPoints": [<array of key points the student correctly covered>],
-    "missedKeyPoints": [<array of key points the student missed or got wrong>],
-    "feedback": "<constructive feedback explaining the score, what was good, and what to improve>",
+    "matchedKeyPoints": [<array of key points correctly covered>],
+    "missedKeyPoints": [<array of key points missed or incorrect>],
+    "feedback": "<constructive feedback addressing the learner directly with 'you/your', explaining the score, what was good, and what to improve>",
     "shouldRetry": <boolean - true if score < 50>
 }
 
-Be fair but rigorous. A genuinely good explanation should score well, but vague or incorrect explanations should NOT receive high scores.`;
+Be fair but rigorous. A genuinely good explanation should score well, but vague or incorrect explanations should NOT receive high scores. Remember: speak directly to your learner as their supportive tutor.`;
 }
 
 export async function OPTIONS() {

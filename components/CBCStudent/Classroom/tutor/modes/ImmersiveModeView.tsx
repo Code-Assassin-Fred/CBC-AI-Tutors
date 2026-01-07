@@ -188,9 +188,6 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
                         <span className="text-[10px] uppercase tracking-widest text-white/40">
                             Section {currentChunkIndex + 1} / {totalChunks}
                         </span>
-                        <span className="text-[10px] uppercase tracking-widest text-white/40">
-                            {Math.round(progress)}%
-                        </span>
                     </div>
                     <div className="h-1 bg-white/5 overflow-hidden">
                         <div
