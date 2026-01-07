@@ -190,16 +190,6 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
                                     )}
                                 </div>
                             </div>
-
-                            {/* Ready to Explain Button */}
-                            {isExplainMessage && !isMarkedReady && !isProcessing && (
-                                <button
-                                    onClick={() => setReadyToExplainIds(prev => new Set(prev).add(message.id))}
-                                    className="mt-2 ml-10 px-4 py-1.5 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/30 text-sky-400 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all hover:scale-105"
-                                >
-                                    Ready to Explain
-                                </button>
-                            )}
                         </div>
                     );
                 })}

@@ -299,14 +299,14 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
             const { apiKey } = await tokenResponse.json();
             console.log('[Deepgram] Got API key, connecting to WebSocket...');
 
-            // Build WebSocket URL with config
+            // Build WebSocket URL with config - tuned for natural conversation
             const params = new URLSearchParams({
                 model: 'nova-3',
                 language: 'en-US',
                 smart_format: 'true',
                 interim_results: 'true',
-                utterance_end_ms: '4000',
-                endpointing: '300'
+                utterance_end_ms: '1500',  // 1.5s - more natural pause detection
+                endpointing: '600'          // 600ms - avoid mid-sentence cuts
             });
 
             // Use the recommended subprotocol approach for Deepgram in the browser
@@ -356,9 +356,9 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
                                     clearTimeout(silenceTimeoutRef.current);
                                 }
 
-                                // If speech is final, process after short delay
+                                // If speech is final, process after longer delay for natural pauses
                                 if (speechFinal) {
-                                    silenceTimeoutRef.current = setTimeout(handleSpeechEnd, 800);
+                                    silenceTimeoutRef.current = setTimeout(handleSpeechEnd, 1500);
                                 }
                             }
                         } else if (data.type === 'UtteranceEnd') {
@@ -369,7 +369,10 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
                             handleSpeechEnd();
                         } else if (data.type === 'SpeechStarted') {
                             console.log('[Deepgram] Speech started');
-                            interruptAI();
+                            // Only interrupt if AI is actively speaking (not during processing)
+                            if (isSpeakingRef.current) {
+                                interruptAI();
+                            }
                         } else if (data.type === 'Error') {
                             console.error('[Deepgram] Server error:', data);
                         }
