@@ -92,7 +92,7 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
     };
 
     // Submit choice question answer
-    const handleSubmitChoiceAnswer = () => {
+    const handleSubmitChoiceAnswer = async () => {
         const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
 
         if (isCorrect) {
@@ -103,6 +103,10 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
             } else if (newStreak >= 5) {
                 setStreakMultiplier(1.5);
             }
+            // Award XP for correct multiple choice answer
+            const xpAmount = Math.round(XP_CONFIG.quizCorrect * streakMultiplier);
+            await addXP(xpAmount, 'quiz', `Correct answer: ${currentQuestion.question.substring(0, 30)}...`);
+            showXPPopup(xpAmount);
         } else {
             setCorrectStreak(0);
             setStreakMultiplier(1);
@@ -166,6 +170,14 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                 setCorrectStreak(0);
                 setStreakMultiplier(1);
             }
+
+            // Award XP based on explanation score (higher than multiple choice)
+            // Excellent (80%+): 15 XP, Good (60-79%): 10 XP, Needs Work (<60%): 5 XP
+            const baseXP = assessment.level === 'excellent' ? 15 :
+                assessment.level === 'good' ? 10 : 5;
+            const xpAmount = Math.round(baseXP * streakMultiplier);
+            await addXP(xpAmount, 'quiz', `Explanation: ${currentQuestion.concept || currentQuestion.question.substring(0, 30)}...`);
+            showXPPopup(xpAmount);
         } catch (error) {
             console.error('Assessment failed:', error);
             // Fallback assessment
@@ -350,7 +362,7 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                         </span>
                     )}
                     <span className="text-xs text-white/60">
-                        +{Math.round((isExplanationQuestion ? 12 : 8) * streakMultiplier)} XP
+                        +{Math.round((isExplanationQuestion ? 15 : XP_CONFIG.quizCorrect) * streakMultiplier)} XP
                     </span>
                 </div>
             </div>
@@ -361,10 +373,10 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                     <div
                         key={index}
                         className={`flex-1 h-1 rounded-full ${index < state.currentIndex
-                                ? 'bg-emerald-500'
-                                : index === state.currentIndex
-                                    ? 'bg-sky-500'
-                                    : 'bg-white/10'
+                            ? 'bg-emerald-500'
+                            : index === state.currentIndex
+                                ? 'bg-sky-500'
+                                : 'bg-white/10'
                             }`}
                     />
                 ))}
@@ -375,10 +387,10 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                 {/* Question */}
                 <div className="mb-4">
                     <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-medium mb-2 ${currentQuestion.difficulty === 'easy'
-                            ? 'bg-green-500/20 text-green-400'
-                            : currentQuestion.difficulty === 'medium'
-                                ? 'bg-yellow-500/20 text-yellow-400'
-                                : 'bg-red-500/20 text-red-400'
+                        ? 'bg-green-500/20 text-green-400'
+                        : currentQuestion.difficulty === 'medium'
+                            ? 'bg-yellow-500/20 text-yellow-400'
+                            : 'bg-red-500/20 text-red-400'
                         }`}>
                         {currentQuestion.difficulty}
                     </span>
@@ -438,8 +450,8 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                             <button
                                 onClick={audio.isListening ? stopListening : startListening}
                                 className={`absolute right-3 bottom-3 p-2 rounded-full transition-all ${audio.isListening
-                                        ? 'bg-red-500 text-white scale-110 animate-pulse'
-                                        : 'bg-white/10 text-white/60 hover:text-white hover:bg-white/20'
+                                    ? 'bg-red-500 text-white scale-110 animate-pulse'
+                                    : 'bg-white/10 text-white/60 hover:text-white hover:bg-white/20'
                                     }`}
                             >
                                 {audio.isListening ? (
@@ -498,7 +510,7 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                                         currentAssessment.level === 'good' ? '👍 Good!' : '📚 Keep Learning'}
                                 </span>
                                 <span className={`text-lg font-bold ${currentAssessment.level === 'excellent' ? 'text-emerald-400' :
-                                        currentAssessment.level === 'good' ? 'text-sky-400' : 'text-amber-400'
+                                    currentAssessment.level === 'good' ? 'text-sky-400' : 'text-amber-400'
                                     }`}>
                                     {currentAssessment.score}%
                                 </span>
@@ -537,9 +549,9 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                             </div>
                         )}
 
-                        {/* Model Answer */}
+                        {/* 100% Score Response */}
                         <div className="p-3 bg-white/5 rounded-lg border border-white/10">
-                            <h5 className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-1">Model Answer:</h5>
+                            <h5 className="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-1">100% Score Response:</h5>
                             <p className="text-xs text-white/70 leading-relaxed">
                                 {currentQuestion.correctAnswer}
                             </p>
@@ -556,8 +568,8 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                             onClick={handleSubmitExplanation}
                             disabled={!userExplanation.trim() || state.isAssessing}
                             className={`w-full py-3 rounded-lg font-medium text-sm transition-all ${userExplanation.trim() && !state.isAssessing
-                                    ? 'bg-sky-500 text-white hover:bg-sky-600'
-                                    : 'bg-white/10 text-white/30 cursor-not-allowed'
+                                ? 'bg-sky-500 text-white hover:bg-sky-600'
+                                : 'bg-white/10 text-white/30 cursor-not-allowed'
                                 }`}
                         >
                             {state.isAssessing ? 'Assessing...' : 'Submit Explanation'}
@@ -567,8 +579,8 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                             onClick={handleSubmitChoiceAnswer}
                             disabled={!selectedAnswer}
                             className={`w-full py-3 rounded-lg font-medium text-sm transition-all ${selectedAnswer
-                                    ? 'bg-sky-500 text-white hover:bg-sky-600'
-                                    : 'bg-white/10 text-white/30 cursor-not-allowed'
+                                ? 'bg-sky-500 text-white hover:bg-sky-600'
+                                : 'bg-white/10 text-white/30 cursor-not-allowed'
                                 }`}
                         >
                             Submit Answer
@@ -577,7 +589,7 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                 ) : (
                     <button
                         onClick={handleNext}
-                        className="w-full py-3 rounded-lg font-medium bg-sky-500 text-white hover:bg-sky-600 transition-colors text-sm"
+                        className="w-full py-2.5 rounded-lg font-medium bg-sky-500 text-white hover:bg-sky-600 transition-colors text-xs"
                     >
                         {isLastQuestion ? 'See Results' : 'Next Question →'}
                     </button>

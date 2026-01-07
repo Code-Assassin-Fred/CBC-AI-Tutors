@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useTutor } from '@/lib/context/TutorContext';
+import { useGamification } from '@/lib/context/GamificationContext';
 import LoadingState from './LoadingState';
 import IdleState from './IdleState';
 import TutorModeSelector from './TutorModeSelector';
@@ -9,6 +10,7 @@ import ReadModeView from './modes/ReadModeView';
 import PodcastModeView from './modes/PodcastModeView';
 import ImmersiveModeView from './modes/ImmersiveModeView';
 import QuizModeView from './modes/QuizModeView';
+import XPPopup from '@/components/gamification/XPPopup';
 
 export default function TutorPanel() {
   const {
@@ -21,12 +23,24 @@ export default function TutorPanel() {
     setLearningSubMode,
     exitMode,
   } = useTutor();
+  const { xpPopup, hideXPPopup } = useGamification();
+
+  // XP Popup wrapper - renders XP animation on top of any mode
+  const xpPopupElement = xpPopup && (
+    <XPPopup
+      amount={xpPopup.amount}
+      x={xpPopup.x}
+      y={xpPopup.y}
+      onComplete={hideXPPopup}
+    />
+  );
 
   // Loading state
   if (mode === 'loading' && loadingProgress) {
     return (
       <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
         <LoadingState progress={loadingProgress} />
+        {xpPopupElement}
       </div>
     );
   }
@@ -51,6 +65,7 @@ export default function TutorPanel() {
         <div className="flex-1 overflow-hidden mt-4">
           <QuizModeView quiz={quizContent} />
         </div>
+        {xpPopupElement}
       </div>
     );
   }
@@ -91,6 +106,7 @@ export default function TutorPanel() {
             <ImmersiveModeView content={preparedContent.immersiveContent} />
           )}
         </div>
+        {xpPopupElement}
       </div>
     );
   }
@@ -102,6 +118,7 @@ export default function TutorPanel() {
         <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">AI Tutor</h3>
       </div>
       <IdleState />
+      {xpPopupElement}
     </div>
   );
 }

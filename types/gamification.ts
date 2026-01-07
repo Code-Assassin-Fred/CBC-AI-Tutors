@@ -154,6 +154,7 @@ export const XP_CONFIG = {
     quizCorrect: 2,
     quizCorrectHard: 4,
     perfectQuizBonus: 15,
+    quizComplete: 20,
     immersiveChunk: 5,
     podcast: 8,
     conversational: 10,
