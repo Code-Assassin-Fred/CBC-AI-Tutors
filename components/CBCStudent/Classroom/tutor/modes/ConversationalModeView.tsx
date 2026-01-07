@@ -64,24 +64,12 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
         }
     };
 
-    const [readyToExplainIds, setReadyToExplainIds] = React.useState<Set<string>>(new Set());
     const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
     // Auto-scroll to latest message
     React.useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [conversationHistory, currentTranscript]);
-
-    // Auto-trigger "Ready to Explain" (abstraction) when user starts speaking
-    React.useEffect(() => {
-        if (currentTranscript && currentTranscript.trim().length > 0 && conversationHistory.length > 0) {
-            const lastMessage = conversationHistory[conversationHistory.length - 1];
-            // Only auto-blur if it's an EXPLAIN message (Assessment Setup)
-            if (lastMessage.role === 'assistant' && lastMessage.type === 'EXPLAIN' && !readyToExplainIds.has(lastMessage.id)) {
-                setReadyToExplainIds(prev => new Set(prev).add(lastMessage.id));
-            }
-        }
-    }, [currentTranscript, conversationHistory, readyToExplainIds]);
 
     // Handle close
     const handleClose = () => {
@@ -140,22 +128,17 @@ export default function ConversationalModeView({ lessonContext, onClose }: Conve
             {/* Conversation History */}
             <div className="flex-1 overflow-y-auto scrollbar-hide py-4 space-y-4">
                 {conversationHistory.map((message, index) => {
-                    const isAssistantMessage = message.role === 'assistant';
                     const isLastMessage = index === conversationHistory.length - 1;
-                    const lastMessage = conversationHistory[conversationHistory.length - 1];
+                    const lastAssistantMessage = conversationHistory.filter(m => m.role === 'assistant').pop();
 
-                    // Is there currently an active assessment?
-                    const isAssessmentInProgress = lastMessage && lastMessage.role === 'assistant' && lastMessage.type === 'EXPLAIN' && (isListening || currentTranscript);
+                    // Is user currently responding to an EXPLAIN? (user started speaking after an EXPLAIN)
+                    const isUserResponding = isListening || !!currentTranscript;
+                    const lastMessageWasExplain = lastAssistantMessage?.type === 'EXPLAIN';
+                    const isActiveAssessment = isUserResponding && lastMessageWasExplain;
 
-                    // Only EXPLAIN messages show the assessment blur UI
-                    const isExplainMessage = isAssistantMessage && message.type === 'EXPLAIN';
-                    const isMarkedReady = readyToExplainIds.has(message.id);
-
-                    // We blur the message if:
-                    // 1. It is the active EXPLAIN message and user started speaking
-                    // 2. OR it is ANY previous message while an EXPLAIN assessment is in progress (global blur)
-                    const shouldBlur = (isExplainMessage && isMarkedReady && (isListening || currentTranscript)) ||
-                        (!isLastMessage && isAssessmentInProgress);
+                    // Blur ALL messages when user is responding to an EXPLAIN assessment
+                    // This prevents them from reading the concept while explaining
+                    const shouldBlur = isActiveAssessment && !isLastMessage;
 
                     return (
                         <div

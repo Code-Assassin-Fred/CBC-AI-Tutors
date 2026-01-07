@@ -120,7 +120,7 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
             const segment = segments[i];
 
             try {
-                await speak(segment.text, { textId: segment.id });
+                await speak(segment.text);
             } catch (error) {
                 console.error('Error speaking segment:', error);
                 break;

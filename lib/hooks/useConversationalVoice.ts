@@ -13,7 +13,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
  * 5. Plays TTS responses
  */
 
-export type ConversationMessageType = 'EXPLAIN' | 'TEST' | 'GRADE' | 'CHAT';
+export type ConversationMessageType = 'EXPLAIN' | 'TEST' | 'GRADE' | 'CHAT' | 'FAREWELL';
 
 export interface ConversationMessage {
     id: string;
@@ -233,13 +233,13 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
             let messageType: ConversationMessageType = 'CHAT';
 
             // Extract the first tag for logic
-            const tagMatch = aiResponse.match(/\[(EXPLAIN|TEST|GRADE|CHAT)\]/);
+            const tagMatch = aiResponse.match(/\[(EXPLAIN|TEST|GRADE|CHAT|FAREWELL)\]/);
             if (tagMatch) {
                 messageType = tagMatch[1] as ConversationMessageType;
             }
 
             // Strip ALL tags from the displayed content
-            aiResponse = aiResponse.replace(/\[(EXPLAIN|TEST|GRADE|CHAT)\]/g, '').trim();
+            aiResponse = aiResponse.replace(/\[(EXPLAIN|TEST|GRADE|CHAT|FAREWELL)\]/g, '').trim();
 
             console.log(`[Conversation] AI response (${messageType}):`, aiResponse.substring(0, 50) + '...');
 
@@ -262,6 +262,22 @@ export function useConversationalVoice(options: UseConversationalVoiceOptions = 
 
             // Speak the response
             await speak(aiResponse);
+
+            // If it was a farewell message, end the session after speaking
+            if (messageType === 'FAREWELL') {
+                console.log('[Conversation] Farewell detected, ending session...');
+                setTimeout(() => {
+                    cleanup();
+                    setState(prev => ({
+                        ...prev,
+                        isActive: false,
+                        isListening: false,
+                        isSpeaking: false,
+                        isProcessing: false,
+                    }));
+                    onEnd?.(conversationHistoryRef.current);
+                }, 500); // Small delay to ensure audio finishes
+            }
 
         } catch (error: any) {
             console.error('[Conversation] AI Error:', error);
