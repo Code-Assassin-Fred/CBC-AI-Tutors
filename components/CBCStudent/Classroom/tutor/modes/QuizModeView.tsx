@@ -82,13 +82,34 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
     const score = calculateScore();
     const passed = score >= quiz.passingScore;
 
-    // Handle choice question answer selection
-    const handleSelectAnswer = (answer: string) => {
+    // Handle choice question answer selection - auto-submit on selection
+    const handleSelectAnswer = async (answer: string) => {
         if (state.showResult) return;
+
+        // Set the answer
         setState(prev => ({
             ...prev,
             answers: new Map(prev.answers).set(currentQuestion.id, answer),
         }));
+
+        // Auto-submit for choice questions
+        const isCorrect = answer === currentQuestion.correctAnswer;
+
+        if (isCorrect) {
+            const newStreak = correctStreak + 1;
+            setCorrectStreak(newStreak);
+            const newMultiplier = newStreak >= 5 ? 1.5 : newStreak >= 3 ? 1.25 : streakMultiplier;
+            setStreakMultiplier(newMultiplier);
+            // Award XP for correct multiple choice answer
+            const xpAmount = Math.round(XP_CONFIG.quizCorrect * newMultiplier);
+            await addXP(xpAmount, 'quiz', `Correct answer: ${currentQuestion.question.substring(0, 30)}...`);
+            showXPPopup(xpAmount);
+        } else {
+            setCorrectStreak(0);
+            setStreakMultiplier(1);
+        }
+
+        setState(prev => ({ ...prev, showResult: true }));
     };
 
     // Submit choice question answer
@@ -561,35 +582,24 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
             </div>
 
             {/* Actions */}
-            <div className="pt-4 border-t border-white/10">
+            <div className="pt-4 border-t border-white/10 flex justify-center">
                 {!state.showResult ? (
-                    isExplanationQuestion ? (
+                    isExplanationQuestion && (
                         <button
                             onClick={handleSubmitExplanation}
                             disabled={!userExplanation.trim() || state.isAssessing}
-                            className={`w-full py-3 rounded-lg font-medium text-sm transition-all ${userExplanation.trim() && !state.isAssessing
+                            className={`px-6 py-2.5 rounded-lg font-medium text-xs transition-all ${userExplanation.trim() && !state.isAssessing
                                 ? 'bg-sky-500 text-white hover:bg-sky-600'
                                 : 'bg-white/10 text-white/30 cursor-not-allowed'
                                 }`}
                         >
                             {state.isAssessing ? 'Assessing...' : 'Submit Explanation'}
                         </button>
-                    ) : (
-                        <button
-                            onClick={handleSubmitChoiceAnswer}
-                            disabled={!selectedAnswer}
-                            className={`w-full py-3 rounded-lg font-medium text-sm transition-all ${selectedAnswer
-                                ? 'bg-sky-500 text-white hover:bg-sky-600'
-                                : 'bg-white/10 text-white/30 cursor-not-allowed'
-                                }`}
-                        >
-                            Submit Answer
-                        </button>
                     )
                 ) : (
                     <button
                         onClick={handleNext}
-                        className="w-full py-2.5 rounded-lg font-medium bg-sky-500 text-white hover:bg-sky-600 transition-colors text-xs"
+                        className="px-6 py-2.5 rounded-lg font-medium bg-sky-500 text-white hover:bg-sky-600 transition-colors text-xs"
                     >
                         {isLastQuestion ? 'See Results' : 'Next Question →'}
                     </button>
