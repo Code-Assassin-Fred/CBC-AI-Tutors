@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
 import {
     TutorPanelMode,
     LearningSubMode,
@@ -13,6 +13,15 @@ import {
     AudioState,
     VoiceConfig,
 } from '@/lib/types/agents';
+
+// LocalStorage key for persisting tutor state
+const TUTOR_STATE_KEY = 'curio_tutor_state';
+
+interface PersistedTutorState {
+    mode: TutorPanelMode;
+    learningSubMode: LearningSubMode | null;
+    context: SubstrandContext | null;
+}
 
 // No global types needed - using MediaRecorder + Google Cloud STT
 
@@ -76,7 +85,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
     const streamRef = React.useRef<MediaStream | null>(null);
 
     // Initialize audio ref on mount
-    React.useEffect(() => {
+    useEffect(() => {
         audioRef.current = new Audio();
         audioRef.current.onended = () => {
             setAudioState(prev => ({ ...prev, isPlaying: false, activeTextId: undefined }));
@@ -95,6 +104,76 @@ export function TutorProvider({ children }: TutorProviderProps) {
             }
         };
     }, []);
+
+    // Restore state from localStorage on mount
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        try {
+            const stored = localStorage.getItem(TUTOR_STATE_KEY);
+            if (!stored) return;
+
+            const state: PersistedTutorState = JSON.parse(stored);
+            console.log('[TutorContext] Restoring state:', state.mode);
+
+            if (state.mode === 'learning' && state.context) {
+                // Auto-restore learning mode by loading cached content
+                setContext(state.context);
+                if (state.learningSubMode) {
+                    setLearningSubModeState(state.learningSubMode);
+                }
+                // Load the cached content
+                activateLearningModeFromCache(state.context, state.learningSubMode || 'explanation');
+            }
+        } catch (e) {
+            console.error('[TutorContext] Failed to restore state:', e);
+        }
+    }, []);
+
+    // Helper to restore from cache without triggering loading state
+    const activateLearningModeFromCache = async (substrandContext: SubstrandContext, subMode: LearningSubMode) => {
+        try {
+            const cacheParams = new URLSearchParams({
+                grade: substrandContext.grade || '',
+                subject: substrandContext.subject || '',
+                strand: substrandContext.strand || '',
+                substrand: substrandContext.substrand || '',
+            });
+
+            const cacheCheck = await fetch(`/api/tutor/content?${cacheParams.toString()}`);
+            const cacheData = await cacheCheck.json();
+
+            if (cacheData.cached && cacheData.content) {
+                console.log('[TutorContext] Restored from cache');
+                setPreparedContent(cacheData.content as PlannerOutput);
+                setMode('learning');
+                setLearningSubModeState(subMode);
+            } else {
+                // No cache, clear persisted state
+                localStorage.removeItem(TUTOR_STATE_KEY);
+            }
+        } catch (error) {
+            console.error('[TutorContext] Cache restore failed:', error);
+            localStorage.removeItem(TUTOR_STATE_KEY);
+        }
+    };
+
+    // Persist state to localStorage when it changes
+    useEffect(() => {
+        if (typeof window === 'undefined') return;
+        if (mode === 'idle' || mode === 'loading') return;
+
+        try {
+            const state: PersistedTutorState = {
+                mode,
+                learningSubMode,
+                context,
+            };
+            localStorage.setItem(TUTOR_STATE_KEY, JSON.stringify(state));
+        } catch (e) {
+            console.error('[TutorContext] Failed to persist state:', e);
+        }
+    }, [mode, learningSubMode, context]);
 
     // ============================================
     // SPEECH (TTS)
@@ -623,6 +702,12 @@ export function TutorProvider({ children }: TutorProviderProps) {
         setQuizContent(null);
         setLoadingProgress(null);
         setChatMessages([]);
+        // Clear persisted state
+        try {
+            localStorage.removeItem(TUTOR_STATE_KEY);
+        } catch (e) {
+            console.error('[TutorContext] Failed to clear persisted state:', e);
+        }
     }, [stopSpeaking, stopListening]);
 
     const clearChat = useCallback(() => {

@@ -30,6 +30,7 @@ interface ContentJson {
 }
 
 const contentData = contentJson as ContentJson;
+const LESSON_STATE_KEY = 'curio_lesson_selection';
 
 interface TextbookData {
   exists: boolean;
@@ -45,20 +46,63 @@ interface LessonCanvasProps {
   onTocUpdate?: (toc: TocItem[]) => void; // New prop to lift TOC
 }
 
+// Get initial state from localStorage or URL params
+function getInitialState(key: string, urlParam: string | null): string {
+  if (urlParam) return urlParam;
+  if (typeof window === 'undefined') return '';
+  try {
+    const stored = localStorage.getItem(LESSON_STATE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return parsed[key] || '';
+    }
+  } catch (e) {
+    console.error('Failed to load lesson state:', e);
+  }
+  return '';
+}
+
 export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
   const searchParams = useSearchParams();
   const grades = Object.keys(contentData);
   const { activateLearningMode, activateQuizMode } = useTutor();
 
-  const [selectedGrade, setSelectedGrade] = useState<string>(searchParams.get('grade') || "");
+  const [selectedGrade, setSelectedGrade] = useState<string>("");
   const [subjects, setSubjects] = useState<string[]>([]);
-  const [selectedSubject, setSelectedSubject] = useState<string>(searchParams.get('subject') || "");
+  const [selectedSubject, setSelectedSubject] = useState<string>("");
   const [strands, setStrands] = useState<string[]>([]);
-  const [selectedStrand, setSelectedStrand] = useState<string>(searchParams.get('strand') || "");
+  const [selectedStrand, setSelectedStrand] = useState<string>("");
 
   const [textbook, setTextbook] = useState<TextbookData | null>(null);
   const [loading, setLoading] = useState(false);
   const [toc, setToc] = useState<TocItem[]>([]); // Local TOC
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Initialize from localStorage or URL params on mount
+  useEffect(() => {
+    const grade = getInitialState('grade', searchParams.get('grade'));
+    const subject = getInitialState('subject', searchParams.get('subject'));
+    const strand = getInitialState('strand', searchParams.get('strand'));
+
+    if (grade) setSelectedGrade(grade);
+    if (subject) setSelectedSubject(subject);
+    if (strand) setSelectedStrand(strand);
+    setIsInitialized(true);
+  }, [searchParams]);
+
+  // Save to localStorage when selection changes
+  useEffect(() => {
+    if (!isInitialized) return;
+    try {
+      localStorage.setItem(LESSON_STATE_KEY, JSON.stringify({
+        grade: selectedGrade,
+        subject: selectedSubject,
+        strand: selectedStrand,
+      }));
+    } catch (e) {
+      console.error('Failed to save lesson state:', e);
+    }
+  }, [selectedGrade, selectedSubject, selectedStrand, isInitialized]);
 
   // Update subjects when grade changes
   useEffect(() => {
