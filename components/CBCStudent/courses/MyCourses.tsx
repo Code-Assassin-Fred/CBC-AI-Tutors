@@ -38,14 +38,14 @@ export default function MyCourses({ courses, isLoading }: MyCoursesProps) {
 
     if (courses.length === 0) {
         return (
-            <div className="text-center py-16">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/5 mb-4">
-                    <svg className="w-8 h-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="text-center py-10 sm:py-16">
+                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white/5 mb-3 sm:mb-4">
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                     </svg>
                 </div>
-                <h3 className="text-white/70 font-medium mb-2">No courses yet</h3>
-                <p className="text-white/40 text-sm">
+                <h3 className="text-white/70 font-medium mb-1 sm:mb-2 text-sm sm:text-base">No courses yet</h3>
+                <p className="text-white/40 text-xs sm:text-sm">
                     Generate your first course using the topic stream
                 </p>
             </div>
@@ -58,10 +58,10 @@ export default function MyCourses({ courses, isLoading }: MyCoursesProps) {
                 <div key={course.id} className="relative group">
                     <Link
                         href={`/dashboard/student/courses/${course.id}`}
-                        className="flex items-center gap-6 py-5 px-4 hover:bg-white/[0.02] transition-all pr-16"
+                        className="flex items-center gap-3 sm:gap-6 py-3 sm:py-5 px-2 sm:px-4 hover:bg-white/[0.02] transition-all pr-10 sm:pr-16"
                     >
                         {/* Thumbnail */}
-                        <div className="flex-shrink-0 w-20 h-20 rounded-lg bg-[#14191f] border border-white/10 flex items-center justify-center overflow-hidden group-hover:border-sky-500/30 transition-colors">
+                        <div className="flex-shrink-0 w-14 h-14 sm:w-20 sm:h-20 rounded-lg bg-[#14191f] border border-white/10 flex items-center justify-center overflow-hidden group-hover:border-sky-500/30 transition-colors">
                             {course.thumbnailUrl ? (
                                 <img
                                     src={course.thumbnailUrl}
@@ -69,7 +69,7 @@ export default function MyCourses({ courses, isLoading }: MyCoursesProps) {
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <svg className="w-8 h-8 text-white/20 group-hover:text-sky-500/50 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white/20 group-hover:text-sky-500/50 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                                 </svg>
                             )}
@@ -77,20 +77,20 @@ export default function MyCourses({ courses, isLoading }: MyCoursesProps) {
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">
-                            <h3 className="text-lg font-medium text-white/90 group-hover:text-sky-400 transition-colors mb-1 truncate">
+                            <h3 className="text-sm sm:text-lg font-medium text-white/90 group-hover:text-sky-400 transition-colors mb-0.5 sm:mb-1 truncate">
                                 {course.title}
                             </h3>
 
-                            <p className="text-sm text-white/40 line-clamp-1 group-hover:text-white/60 transition-colors mb-2">
+                            <p className="text-xs sm:text-sm text-white/40 line-clamp-1 group-hover:text-white/60 transition-colors mb-1 sm:mb-2 hidden sm:block">
                                 {course.description}
                             </p>
 
-                            <div className="flex items-center gap-2 text-xs text-white/30">
+                            <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-white/30">
                                 <span>{course.lessonCount} lessons</span>
                                 <span>•</span>
                                 <span>{course.estimatedTime}</span>
-                                <span>•</span>
-                                <span className="capitalize">{course.difficulty}</span>
+                                <span className="hidden sm:inline">•</span>
+                                <span className="capitalize hidden sm:inline">{course.difficulty}</span>
                             </div>
                         </div>
                     </Link>

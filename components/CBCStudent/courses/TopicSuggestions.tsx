@@ -49,12 +49,12 @@ export default function TopicSuggestions({ suggestions, onSelect }: TopicSuggest
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
-            <div className="flex items-center gap-2 mb-4 px-2">
-                <div className="flex h-2 w-2 relative">
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 px-1 sm:px-2">
+                <div className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 relative">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-sky-500"></span>
                 </div>
-                <span className="text-xs font-mono text-sky-500 uppercase tracking-wider">Trending Topics</span>
+                <span className="text-[10px] sm:text-xs font-mono text-sky-500 uppercase tracking-wider">Trending Topics</span>
             </div>
 
             <div className="relative">
@@ -63,32 +63,32 @@ export default function TopicSuggestions({ suggestions, onSelect }: TopicSuggest
                         <button
                             key={`${item.id}-${index}`}
                             onClick={() => onSelect(item.topic)}
-                            className="group relative flex items-center gap-6 py-4 px-4 border-b border-white/5 hover:bg-white/[0.02] transition-all text-left animate-in fade-in slide-in-from-top-4 duration-700"
+                            className="group relative flex items-center gap-3 sm:gap-6 py-3 sm:py-4 px-2 sm:px-4 border-b border-white/5 hover:bg-white/[0.02] transition-all text-left animate-in fade-in slide-in-from-top-4 duration-700"
                         >
                             {/* Trend/Arrow Indicator */}
                             <div className="text-white/20 group-hover:text-sky-400 transition-colors">
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                                 </svg>
                             </div>
 
                             {/* Main Content */}
                             <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <span className="text-xs font-medium text-white/40 uppercase tracking-wide group-hover:text-sky-400/60 transition-colors">
+                                <div className="flex items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+                                    <span className="text-[10px] sm:text-xs font-medium text-white/40 uppercase tracking-wide group-hover:text-sky-400/60 transition-colors">
                                         {item.category}
                                     </span>
                                     {item.trending && (
                                         <>
-                                            <span className="text-[10px] text-white/20">•</span>
-                                            <span className="text-[10px] text-amber-400/80">
+                                            <span className="text-[8px] sm:text-[10px] text-white/20">•</span>
+                                            <span className="text-[9px] sm:text-[10px] text-amber-400/80">
                                                 Trending
                                             </span>
                                         </>
                                     )}
                                 </div>
 
-                                <h3 className="text-base font-medium text-white/90 group-hover:text-white transition-colors">
+                                <h3 className="text-sm sm:text-base font-medium text-white/90 group-hover:text-white transition-colors truncate">
                                     {item.displayName || item.topic}
                                 </h3>
                             </div>

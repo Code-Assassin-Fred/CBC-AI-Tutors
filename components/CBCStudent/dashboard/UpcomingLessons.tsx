@@ -73,48 +73,48 @@ export default function UpcomingLessons() {
   return (
     <Card>
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div>
-          <h2 className="text-lg font-semibold text-white/95">Schedule</h2>
+          <h2 className="text-sm sm:text-lg font-semibold text-white/95">Schedule</h2>
         </div>
       </div>
 
       {/* Lesson/Block Cards */}
       {hasContent ? (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {displayBlocks.map((block) => (
             <div
               key={block.id}
-              className={`group rounded-xl bg-[#0b0f12] p-4 border border-white/8 ring-1 ring-white/5 hover:border-white/15 hover:bg-[#0d1318] transition-colors duration-300 cursor-pointer ${block.completed ? 'opacity-60' : ''
+              className={`group rounded-xl bg-[#0b0f12] p-3 sm:p-4 border border-white/8 ring-1 ring-white/5 hover:border-white/15 hover:bg-[#0d1318] transition-colors duration-300 cursor-pointer ${block.completed ? 'opacity-60' : ''
                 }`}
             >
               {/* Subject Tag */}
-              <div className="flex flex-wrap gap-2 mb-3">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3">
                 {block.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${getTagColor(tag.label)} text-white shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset]`}
+                    className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium ${getTagColor(tag.label)} text-white shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset]`}
                   >
                     {tag.label}
                   </span>
                 ))}
                 {block.completed && (
-                  <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  <span className="px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
                     ✓ Done
                   </span>
                 )}
               </div>
 
               {/* Title */}
-              <h3 className={`text-sm font-semibold mb-2 line-clamp-1 transition-colors duration-300 group-hover:text-[#0ea5e9] ${block.completed ? 'text-white/60 line-through' : 'text-white/95'
+              <h3 className={`text-xs sm:text-sm font-semibold mb-1.5 sm:mb-2 line-clamp-1 transition-colors duration-300 group-hover:text-[#0ea5e9] ${block.completed ? 'text-white/60 line-through' : 'text-white/95'
                 }`}>
                 {block.title}
               </h3>
 
               {/* Time */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <svg
-                  className="w-4 h-4 text-white/80"
+                  className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -126,7 +126,7 @@ export default function UpcomingLessons() {
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span className="text-xs text-white/90">{block.time}</span>
+                <span className="text-[10px] sm:text-xs text-white/90">{block.time}</span>
               </div>
             </div>
           ))}
@@ -144,16 +144,16 @@ export default function UpcomingLessons() {
       )}
 
       {/* Footer Actions */}
-      <div className="flex items-center justify-between mt-4">
+      <div className="flex items-center justify-between mt-3 sm:mt-4">
         <button
           onClick={() => router.push('/dashboard/student/schedule')}
-          className="text-sm text-white/60 cursor-pointer hover:text-white transition-colors duration-300 bg-transparent border-none p-0"
+          className="text-xs sm:text-sm text-white/60 cursor-pointer hover:text-white transition-colors duration-300 bg-transparent border-none p-0"
         >
           View Full Schedule
         </button>
         <button
           onClick={() => router.push('/dashboard/student/schedule')}
-          className="text-sm text-sky-400 cursor-pointer hover:text-sky-300 transition-colors duration-300 bg-transparent border-none p-0"
+          className="text-xs sm:text-sm text-sky-400 cursor-pointer hover:text-sky-300 transition-colors duration-300 bg-transparent border-none p-0"
         >
           + Add
         </button>

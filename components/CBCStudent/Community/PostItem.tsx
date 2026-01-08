@@ -55,21 +55,21 @@ export default function PostItem({ post, onClick }: PostItemProps) {
     const badge = getTypeBadge();
 
     return (
-        <article className="group p-4 rounded-xl bg-[#0b0f12] border border-white/8 ring-1 ring-white/5 hover:border-white/15 hover:bg-[#0d1318] transition-colors cursor-pointer">
+        <article className="group p-3 sm:p-4 rounded-lg sm:rounded-xl bg-[#0b0f12] border border-white/8 ring-1 ring-white/5 hover:border-white/15 hover:bg-[#0d1318] transition-colors cursor-pointer">
             {/* Type Badge and Meta */}
-            <div className="flex items-center gap-2 mb-2">
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${badge.color} text-white shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset]`}>
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2 flex-wrap">
+                <span className={`px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium ${badge.color} text-white shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset]`}>
                     {badge.label}
                 </span>
-                <span className="text-xs text-[#9aa6b2]">{post.authorName}</span>
-                <span className="text-[#9aa6b2]/50">•</span>
-                <span className="text-xs text-[#9aa6b2]">{formatTime(post.createdAt)}</span>
+                <span className="text-[10px] sm:text-xs text-[#9aa6b2]">{post.authorName}</span>
+                <span className="text-[#9aa6b2]/50 hidden sm:inline">•</span>
+                <span className="text-[10px] sm:text-xs text-[#9aa6b2] hidden sm:inline">{formatTime(post.createdAt)}</span>
 
                 {/* Delete button for author */}
                 {isAuthor && (
                     <button
                         onClick={handleDelete}
-                        className="ml-auto text-xs text-[#9aa6b2] hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
+                        className="ml-auto text-[10px] sm:text-xs text-[#9aa6b2] hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100"
                     >
                         Delete
                     </button>
@@ -81,13 +81,13 @@ export default function PostItem({ post, onClick }: PostItemProps) {
                 onClick={onClick}
                 className="text-left w-full"
             >
-                <h3 className="text-sm font-semibold text-white/95 group-hover:text-[#0ea5e9] mb-1.5 line-clamp-2 transition-colors">
+                <h3 className="text-xs sm:text-sm font-semibold text-white/95 group-hover:text-[#0ea5e9] mb-1 sm:mb-1.5 line-clamp-2 transition-colors">
                     {post.title}
                 </h3>
             </button>
 
             {/* Preview content */}
-            <p className="text-sm text-[#9aa6b2] line-clamp-2 mb-3">
+            <p className="text-[11px] sm:text-sm text-[#9aa6b2] line-clamp-2 mb-2 sm:mb-3">
                 {post.content}
             </p>
 

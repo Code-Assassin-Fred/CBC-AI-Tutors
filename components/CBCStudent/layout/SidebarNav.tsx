@@ -134,112 +134,148 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
     }
   ];
 
+  // Mobile nav items - only show the most important ones
+  const mobileNavItems = navItems.slice(0, 5);
+
   return (
-    <div
-      className={`sticky top-0 h-screen flex flex-col items-center pt-8 transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-72'
-        }`}
-    >
-      {/* Logo */}
-      <div className={`flex items-center gap-2.5 mb-5 px-2 ${isCollapsed ? 'justify-center' : ''}`}>
-        <img
-          src="/logo1.jpg"
-          alt="Curio Logo"
-          className="w-7 h-7 rounded-lg object-cover flex-shrink-0"
-        />
-        <span
-          className={`text-lg font-semibold text-white/95 transition-all duration-300 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
-            }`}
-        >
-          Curio
-        </span>
+    <>
+      {/* Desktop/Tablet Sidebar - hidden on mobile */}
+      <div
+        className={`hidden md:flex sticky top-0 h-screen flex-col items-center pt-8 transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'lg:w-72 w-20'
+          }`}
+      >
+        {/* Logo */}
+        <div className={`flex items-center gap-2.5 mb-5 px-2 ${isCollapsed ? 'justify-center' : ''}`}>
+          <img
+            src="/logo1.jpg"
+            alt="Curio Logo"
+            className="w-7 h-7 rounded-lg object-cover flex-shrink-0"
+          />
+          <span
+            className={`text-lg font-semibold text-white/95 transition-all duration-300 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
+              }`}
+          >
+            Curio
+          </span>
+        </div>
+
+        {/* Sidebar */}
+        <aside className="flex flex-col flex-1 w-[90%] bg-linear-to-b from-[#0b0f12] to-[#0c1116] rounded-t-2xl border-t border-l border-r border-white/10 shadow-[inset_-1px_0_0_rgba(255,255,255,0.06)] overflow-hidden">
+          {/* Scrollable Nav */}
+          <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto no-scrollbar">
+            {navItems.map((item) => {
+              const isActive = item.href === '/dashboard/student'
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  className={`group relative flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 ease-in-out ${isActive ? 'text-[#0ea5e9]' : 'text-white/75 hover:text-white'
+                    } ${isCollapsed ? 'justify-center px-2' : ''}`}
+                  aria-label={item.label}
+                  title={isCollapsed ? item.label : undefined}
+                >
+                  {isActive && (
+                    <span className="absolute inset-0 -z-10 rounded-2xl bg-[#0ea5e9]/10 shadow-[0_8px_24px_rgba(14,165,233,0.35)] transition-all duration-300" />
+                  )}
+                  <span
+                    className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/75 group-hover:text-white'}`}
+                  >
+                    {item.icon}
+                  </span>
+                  <span
+                    className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
+                      } ${isActive ? 'text-[#0ea5e9]' : ''}`}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Collapse Toggle Icon */}
+          <div
+            className="p-4 border-t border-white/10 flex justify-center cursor-pointer hover:bg-white/5 transition-colors"
+            onClick={toggleSidebar}
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <svg
+              className="w-5 h-5 text-white/60 hover:text-white/90 transition-all duration-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {isCollapsed ? (
+                /* Expand icon >> */
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                />
+              ) : (
+                /* Collapse icon << */
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+                />
+              )}
+            </svg>
+          </div>
+
+          {/* Promo Card - Hide when collapsed */}
+          <div className={`transition-all duration-300 overflow-hidden ${isCollapsed ? 'h-0 p-0 opacity-0' : 'p-4 opacity-100'}`}>
+            <div className="p-4 rounded-xl bg-linear-to-br from-[#0a0f14] to-[#0b1113] border border-white/8 ring-1 ring-white/5">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <p className="text-sm font-medium text-white/95">Free Trial</p>
+                  <p className="text-xs text-[#9aa6b2] mt-1">7 days left</p>
+                </div>
+              </div>
+              <button
+                className="w-full px-3 py-2 text-xs font-medium rounded-md border border-[#f59e0b] text-[#f59e0b] hover:bg-[#f59e0b] hover:text-white transition-colors"
+                aria-label="Upgrade now"
+              >
+                Upgrade Now
+              </button>
+            </div>
+          </div>
+        </aside>
       </div>
 
-      {/* Sidebar */}
-      <aside className="flex flex-col flex-1 w-[90%] bg-linear-to-b from-[#0b0f12] to-[#0c1116] rounded-t-2xl border-t border-l border-r border-white/10 shadow-[inset_-1px_0_0_rgba(255,255,255,0.06)] overflow-hidden">
-        {/* Scrollable Nav */}
-        <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto no-scrollbar">
-          {navItems.map((item) => {
+      {/* Mobile Bottom Navigation - visible only on mobile */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0b0f12]/95 backdrop-blur-xl border-t border-white/10 safe-area-inset-bottom">
+        <div className="flex items-center justify-around h-16 px-2">
+          {mobileNavItems.map((item) => {
             const isActive = item.href === '/dashboard/student'
               ? pathname === item.href
               : pathname.startsWith(item.href);
+
             return (
               <Link
                 key={item.id}
                 href={item.href}
-                className={`group relative flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 ease-in-out ${isActive ? 'text-[#0ea5e9]' : 'text-white/75 hover:text-white'
-                  } ${isCollapsed ? 'justify-center px-2' : ''}`}
+                className={`flex flex-col items-center justify-center gap-1 py-2 px-3 min-w-[56px] rounded-xl transition-colors ${isActive
+                    ? 'text-[#0ea5e9] bg-[#0ea5e9]/10'
+                    : 'text-white/60 hover:text-white/90'
+                  }`}
                 aria-label={item.label}
-                title={isCollapsed ? item.label : undefined}
               >
-                {isActive && (
-                  <span className="absolute inset-0 -z-10 rounded-2xl bg-[#0ea5e9]/10 shadow-[0_8px_24px_rgba(14,165,233,0.35)] transition-all duration-300" />
-                )}
-                <span
-                  className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/75 group-hover:text-white'}`}
-                >
+                <span className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
                   {item.icon}
                 </span>
-                <span
-                  className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
-                    } ${isActive ? 'text-[#0ea5e9]' : ''}`}
-                >
-                  {item.label}
+                <span className={`text-[10px] font-medium ${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
+                  {item.label.length > 8 ? item.label.substring(0, 6) + '..' : item.label}
                 </span>
               </Link>
             );
           })}
-        </nav>
-
-        {/* Collapse Toggle Icon */}
-        <div
-          className="p-4 border-t border-white/10 flex justify-center cursor-pointer hover:bg-white/5 transition-colors"
-          onClick={toggleSidebar}
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          <svg
-            className="w-5 h-5 text-white/60 hover:text-white/90 transition-all duration-300"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            {isCollapsed ? (
-              /* Expand icon >> */
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 5l7 7-7 7M5 5l7 7-7 7"
-              />
-            ) : (
-              /* Collapse icon << */
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-              />
-            )}
-          </svg>
         </div>
-
-        {/* Promo Card - Hide when collapsed */}
-        <div className={`transition-all duration-300 overflow-hidden ${isCollapsed ? 'h-0 p-0 opacity-0' : 'p-4 opacity-100'}`}>
-          <div className="p-4 rounded-xl bg-linear-to-br from-[#0a0f14] to-[#0b1113] border border-white/8 ring-1 ring-white/5">
-            <div className="flex items-start justify-between mb-3">
-              <div>
-                <p className="text-sm font-medium text-white/95">Free Trial</p>
-                <p className="text-xs text-[#9aa6b2] mt-1">7 days left</p>
-              </div>
-            </div>
-            <button
-              className="w-full px-3 py-2 text-xs font-medium rounded-md border border-[#f59e0b] text-[#f59e0b] hover:bg-[#f59e0b] hover:text-white transition-colors"
-              aria-label="Upgrade now"
-            >
-              Upgrade Now
-            </button>
-          </div>
-        </div>
-      </aside>
-    </div>
+      </nav>
+    </>
   );
 }

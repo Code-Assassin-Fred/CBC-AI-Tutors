@@ -36,13 +36,13 @@ export default function GamificationHeader({ className = '' }: GamificationHeade
 
     return (
         <>
-            <div className={`bg-white/5 border border-white/10 rounded-xl p-4 ${className}`}>
-                <div className="flex items-center justify-between mb-3">
+            <div className={`bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 ${className}`}>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-3">
                     {/* Left: Level Badge */}
                     <LevelBadge size="md" showTitle={true} />
 
                     {/* Right: Streak + Neurons */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3 sm:gap-4">
                         <StreakDisplay size="md" showLabel={true} />
                         <div className="w-px h-4 bg-white/20" />
                         <NeuronBalance size="md" />

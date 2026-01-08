@@ -40,33 +40,33 @@ export default function CareerPathView({
     const inProgressCount = courseProgress.filter(p => p.enrolled && !p.isCompleted).length;
 
     return (
-        <div className="max-w-4xl mx-auto pt-6 px-4 pb-12">
+        <div className="max-w-4xl mx-auto pt-4 sm:pt-6 px-3 sm:px-4 pb-8 sm:pb-12">
             {/* Back button */}
             {onBack && (
                 <button
                     onClick={onBack}
-                    className="text-white/50 hover:text-white mb-6 transition-colors"
+                    className="text-xs sm:text-sm text-white/50 hover:text-white mb-4 sm:mb-6 transition-colors"
                 >
                     ← Back
                 </button>
             )}
 
             {/* Header */}
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-white mb-3">{careerPath.title}</h1>
-                <p className="text-white/60 mb-4">{careerPath.description}</p>
+            <div className="mb-6 sm:mb-8">
+                <h1 className="text-xl sm:text-3xl font-bold text-white mb-2 sm:mb-3">{careerPath.title}</h1>
+                <p className="text-sm sm:text-base text-white/60 mb-3 sm:mb-4">{careerPath.description}</p>
 
-                <div className="flex items-center gap-3">
-                    <span className="inline-flex px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 text-sm">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <span className="inline-flex px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 text-xs sm:text-sm">
                         {careerPath.courses.length} Courses
                     </span>
                     {inProgressCount > 0 && (
-                        <span className="inline-flex px-3 py-1.5 rounded-lg bg-[#0ea5e9]/10 border border-[#0ea5e9]/20 text-[#0ea5e9] text-sm">
+                        <span className="inline-flex px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-[#0ea5e9]/10 border border-[#0ea5e9]/20 text-[#0ea5e9] text-xs sm:text-sm">
                             {inProgressCount} In Progress
                         </span>
                     )}
                     {completedCount > 0 && (
-                        <span className="inline-flex px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">
+                        <span className="inline-flex px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs sm:text-sm">
                             {completedCount} Completed
                         </span>
                     )}
@@ -85,30 +85,30 @@ export default function CareerPathView({
                     return (
                         <div
                             key={course.id}
-                            className={`flex items-center gap-4 p-4 border rounded-xl transition-all ${completed
-                                    ? 'bg-emerald-500/5 border-emerald-500/20'
-                                    : inProgress
-                                        ? 'bg-[#0ea5e9]/5 border-[#0ea5e9]/20'
-                                        : unlocked
-                                            ? 'bg-[#0b0f12] border-white/10'
-                                            : 'bg-[#0b0f12]/50 border-white/5 opacity-60'
+                            className={`flex items-center gap-2 sm:gap-4 p-3 sm:p-4 border rounded-xl transition-all ${completed
+                                ? 'bg-emerald-500/5 border-emerald-500/20'
+                                : inProgress
+                                    ? 'bg-[#0ea5e9]/5 border-[#0ea5e9]/20'
+                                    : unlocked
+                                        ? 'bg-[#0b0f12] border-white/10'
+                                        : 'bg-[#0b0f12]/50 border-white/5 opacity-60'
                                 }`}
                         >
                             {/* Order number / Status */}
-                            <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${completed
-                                    ? 'bg-emerald-500/20 text-emerald-400'
-                                    : inProgress
-                                        ? 'bg-[#0ea5e9]/20 text-[#0ea5e9]'
-                                        : unlocked
-                                            ? 'bg-white/10 text-white/70'
-                                            : 'bg-white/5 text-white/30'
+                            <div className={`flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center font-bold text-xs sm:text-sm ${completed
+                                ? 'bg-emerald-500/20 text-emerald-400'
+                                : inProgress
+                                    ? 'bg-[#0ea5e9]/20 text-[#0ea5e9]'
+                                    : unlocked
+                                        ? 'bg-white/10 text-white/70'
+                                        : 'bg-white/5 text-white/30'
                                 }`}>
                                 {completed ? (
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                     </svg>
                                 ) : inProgress ? (
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
@@ -119,11 +119,11 @@ export default function CareerPathView({
 
                             {/* Course info */}
                             <div className="flex-1 min-w-0">
-                                <h3 className={`font-medium truncate ${completed ? 'text-emerald-400' : inProgress ? 'text-[#0ea5e9]' : unlocked ? 'text-white' : 'text-white/50'
+                                <h3 className={`text-sm sm:text-base font-medium truncate ${completed ? 'text-emerald-400' : inProgress ? 'text-[#0ea5e9]' : unlocked ? 'text-white' : 'text-white/50'
                                     }`}>
                                     {course.title}
                                 </h3>
-                                <p className={`text-sm truncate ${completed ? 'text-emerald-400/60' : inProgress ? 'text-[#0ea5e9]/60' : 'text-white/40'
+                                <p className={`text-xs sm:text-sm truncate hidden sm:block ${completed ? 'text-emerald-400/60' : inProgress ? 'text-[#0ea5e9]/60' : 'text-white/40'
                                     }`}>
                                     {course.description}
                                 </p>

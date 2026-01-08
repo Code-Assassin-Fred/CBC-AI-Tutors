@@ -97,25 +97,37 @@ export default function ProgressSummary({ isLoading = false }: ProgressSummaryPr
     <Card className="flex-1 min-w-0">
       {/* Header */}
       <div className="mb-4">
-        <h2 className="text-base font-semibold text-white/95">Progress</h2>
-        <p className="text-xs text-[#9aa6b2] mt-0.5">Your learning journey</p>
+        <h2 className="text-sm sm:text-base font-semibold text-white/95">Progress</h2>
+        <p className="text-[10px] sm:text-xs text-[#9aa6b2] mt-0.5">Your learning journey</p>
       </div>
 
-      {/* Two-column layout: Circles (60%) | Continue Learning (40%) */}
+      {/* Mobile/Tablet: Stack, Desktop: Two-column layout */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-stretch">
         {/* Progress Circles - left side */}
         <div className="lg:col-span-3 min-w-0 h-full flex items-center">
-          <div className="flex items-start justify-between gap-3 w-full">
+          <div className="flex items-start justify-between sm:justify-around gap-2 sm:gap-3 w-full">
             {progressData.map((item, index) => (
-              <div key={index} className="flex flex-col items-center min-w-0">
-                <ProgressCircle
-                  value={item.value}
-                  size={80}
-                  strokeWidth={5}
-                  color={item.color}
-                />
-                <p className="text-xs font-medium text-white/90 mt-2">{item.label}</p>
-                <p className="text-[11px] text-[#9aa6b2] mt-0.5">
+              <div key={index} className="flex flex-col items-center min-w-0 flex-1">
+                {/* Mobile size - smaller circle */}
+                <div className="sm:hidden">
+                  <ProgressCircle
+                    value={item.value}
+                    size={60}
+                    strokeWidth={4}
+                    color={item.color}
+                  />
+                </div>
+                {/* Desktop size - larger circle */}
+                <div className="hidden sm:block">
+                  <ProgressCircle
+                    value={item.value}
+                    size={80}
+                    strokeWidth={5}
+                    color={item.color}
+                  />
+                </div>
+                <p className="text-[10px] sm:text-xs font-medium text-white/90 mt-2">{item.label}</p>
+                <p className="text-[9px] sm:text-[11px] text-[#9aa6b2] mt-0.5 text-center">
                   {item.count} {item.unit}
                 </p>
               </div>
@@ -127,16 +139,16 @@ export default function ProgressSummary({ isLoading = false }: ProgressSummaryPr
         <div className="lg:col-span-2 border-t lg:border-t-0 lg:border-l border-white/8 pt-4 lg:pt-0 lg:pl-5 min-w-0 h-full flex flex-col">
           <div className="flex items-center justify-between mb-3 gap-3">
             <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-semibold text-white/95 leading-tight">
+              <h3 className="text-xs sm:text-sm font-semibold text-white/95 leading-tight">
                 {recentCourse ? 'Continue learning' : 'Get started'}
               </h3>
-              <p className="text-[11px] text-[#9aa6b2] mt-0.5 leading-tight">
+              <p className="text-[10px] sm:text-[11px] text-[#9aa6b2] mt-0.5 leading-tight">
                 {recentCourse ? 'Resume your course' : 'Create your first course'}
               </p>
             </div>
             <button
               onClick={handleContinue}
-              className="px-2.5 py-1.5 rounded-lg border border-[#f59e0b] text-[#f59e0b] font-medium text-[11px] shrink-0 hover:bg-linear-to-r hover:from-[#d97706] hover:to-[#f59e0b] hover:text-white hover:border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400/40"
+              className="px-2 sm:px-2.5 py-1.5 rounded-lg border border-[#f59e0b] text-[#f59e0b] font-medium text-[10px] sm:text-[11px] shrink-0 hover:bg-linear-to-r hover:from-[#d97706] hover:to-[#f59e0b] hover:text-white hover:border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400/40"
               aria-label="Continue learning"
             >
               {recentCourse ? 'Continue →' : 'Browse →'}

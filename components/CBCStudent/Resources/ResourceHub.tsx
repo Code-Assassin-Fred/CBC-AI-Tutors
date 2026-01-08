@@ -79,32 +79,29 @@ export default function ResourceHub() {
 
     // View: Resource Hub Grid
     return (
-        <div className="h-full flex flex-col space-y-6">
+        <div className="h-full flex flex-col space-y-4 sm:space-y-6">
             {/* Header Area */}
-            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+            <div className="flex flex-col gap-3 sm:gap-4">
                 <div>
-                    <p className="text-slate-400">Curated AI-generated content for your learning journey</p>
+                    <p className="text-xs sm:text-base text-slate-400">Curated AI-generated content for your learning journey</p>
                 </div>
 
-                <div className="flex items-center gap-3 w-full md:w-auto">
-                    <div className="relative group flex-grow md:flex-grow-0">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-[#228B22] transition-colors" />
+                <div className="flex items-center gap-2 sm:gap-3 w-full">
+                    <div className="relative group flex-grow">
+                        <Search className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 group-focus-within:text-[#228B22] transition-colors" />
                         <input
                             type="text"
                             placeholder="Search resources..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-10 pr-4 py-2 bg-slate-800/50 border border-slate-700 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#228B22]/50 focus:bg-slate-800 w-full md:w-64 transition-all"
+                            className="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 bg-slate-800/50 border border-slate-700 rounded-lg text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#228B22]/50 focus:bg-slate-800 w-full transition-all"
                         />
                     </div>
-                    {/* <button className="p-2 rounded-lg bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-white transition-colors">
-                        <Filter className="w-4 h-4" />
-                    </button> */}
                 </div>
             </div>
 
             {/* Categories */}
-            <div className="flex flex-wrap gap-2 pb-2 border-b border-slate-800/50">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 pb-2 border-b border-slate-800/50 overflow-x-auto">
                 {categories.map((cat) => (
                     <button
                         key={cat.id}
@@ -112,7 +109,7 @@ export default function ResourceHub() {
                             setActiveCategory(cat.id);
                             setActiveSubcategory(null);
                         }}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeCategory === cat.id
+                        className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeCategory === cat.id
                             ? 'bg-[#228B22] text-white shadow-lg shadow-[#228B22]/20'
                             : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700'
                             }`}
@@ -170,7 +167,7 @@ export default function ResourceHub() {
                     </div>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 animate-in fade-in duration-500">
                     {resources.map((resource) => (
                         <ResourceCard
                             key={resource.id}

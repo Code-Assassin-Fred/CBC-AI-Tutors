@@ -94,45 +94,45 @@ export default function WeeklyCalendar() {
     };
 
     return (
-        <div className="bg-[#0b0f12] border border-white/5 rounded-[32px] overflow-hidden shadow-2xl">
+        <div className="bg-[#0b0f12] border border-white/5 rounded-2xl sm:rounded-[32px] overflow-hidden shadow-2xl">
             {/* Grid Header */}
-            <div className="px-6 py-6 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+            <div className="px-3 sm:px-6 py-4 sm:py-6 border-b border-white/5 bg-white/[0.02] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
                 <div>
-                    <h2 className="text-xl font-bold text-white mb-1">Weekly Plan</h2>
-                    <p className="text-white/40 text-sm font-medium mb-1">{formatWeekRange()}</p>
-                    <p className="text-sky-400 text-xs font-medium">Click any empty slot to schedule</p>
+                    <h2 className="text-base sm:text-xl font-bold text-white mb-0.5 sm:mb-1">Weekly Plan</h2>
+                    <p className="text-white/40 text-xs sm:text-sm font-medium mb-0.5 sm:mb-1">{formatWeekRange()}</p>
+                    <p className="text-sky-400 text-[10px] sm:text-xs font-medium">Click any empty slot to schedule</p>
                 </div>
-                <div className="flex items-center bg-white/5 rounded-2xl p-1 border border-white/5">
-                    <button onClick={goToPreviousWeek} className="p-2 hover:bg-white/5 rounded-xl text-white/40 hover:text-white transition-all">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="flex items-center bg-white/5 rounded-xl sm:rounded-2xl p-0.5 sm:p-1 border border-white/5 self-start sm:self-center">
+                    <button onClick={goToPreviousWeek} className="p-1.5 sm:p-2 hover:bg-white/5 rounded-lg sm:rounded-xl text-white/40 hover:text-white transition-all">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
                     <button
                         onClick={goToCurrentWeek}
-                        className={`px-4 py-2 text-sm font-bold transition-all rounded-xl ${isCurrentWeek() ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'}`}
+                        className={`px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold transition-all rounded-lg sm:rounded-xl ${isCurrentWeek() ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white'}`}
                     >
                         This Week
                     </button>
-                    <button onClick={goToNextWeek} className="p-2 hover:bg-white/5 rounded-xl text-white/40 hover:text-white transition-all">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <button onClick={goToNextWeek} className="p-1.5 sm:p-2 hover:bg-white/5 rounded-lg sm:rounded-xl text-white/40 hover:text-white transition-all">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
                 </div>
             </div>
 
-            {/* Time Grid Layout */}
-            <div ref={scrollContainerRef} className="flex flex-col h-[600px] overflow-y-auto custom-scrollbar scroll-smooth">
+            {/* Time Grid Layout - horizontal scroll on mobile */}
+            <div ref={scrollContainerRef} className="flex flex-col h-[400px] sm:h-[600px] overflow-y-auto overflow-x-auto custom-scrollbar scroll-smooth">
                 {/* Day Columns Header */}
-                <div className="flex border-b border-white/5 sticky top-0 bg-[#0b0f12] z-10">
-                    <div className="w-16 flex-shrink-0" />
+                <div className="flex border-b border-white/5 sticky top-0 bg-[#0b0f12] z-10 min-w-[600px]">
+                    <div className="w-12 sm:w-16 flex-shrink-0" />
                     {daySchedules.map((day) => (
-                        <div key={day.date} className="flex-1 py-4 text-center border-l border-white/5">
-                            <span className={`block text-[10px] font-black uppercase tracking-widest ${day.isToday ? 'text-sky-400' : 'text-white/20'}`}>
-                                {day.dayName}
+                        <div key={day.date} className="flex-1 min-w-[70px] py-2 sm:py-4 text-center border-l border-white/5">
+                            <span className={`block text-[8px] sm:text-[10px] font-black uppercase tracking-widest ${day.isToday ? 'text-sky-400' : 'text-white/20'}`}>
+                                {day.dayName.substring(0, 3)}
                             </span>
-                            <span className={`text-lg font-bold ${day.isToday ? 'text-white' : 'text-white/40'}`}>
+                            <span className={`text-sm sm:text-lg font-bold ${day.isToday ? 'text-white' : 'text-white/40'}`}>
                                 {new Date(day.date).getDate()}
                             </span>
                         </div>
@@ -140,12 +140,12 @@ export default function WeeklyCalendar() {
                 </div>
 
                 {/* Grid Body */}
-                <div className="flex relative items-start">
+                <div className="flex relative items-start min-w-[600px]">
                     {/* Time Column */}
-                    <div className="w-16 flex-shrink-0 flex flex-col">
+                    <div className="w-12 sm:w-16 flex-shrink-0 flex flex-col">
                         {hours.map(hour => (
-                            <div key={hour} className="h-20 text-[10px] font-black text-white/20 flex items-start justify-center pt-2">
-                                {hour === 0 ? '12 AM' : hour === 12 ? '12 PM' : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                            <div key={hour} className="h-16 sm:h-20 text-[8px] sm:text-[10px] font-black text-white/20 flex items-start justify-center pt-1 sm:pt-2">
+                                {hour === 0 ? '12A' : hour === 12 ? '12P' : hour > 12 ? `${hour - 12}P` : `${hour}A`}
                             </div>
                         ))}
                     </div>

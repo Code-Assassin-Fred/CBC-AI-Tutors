@@ -100,12 +100,12 @@ export default function LearningOverviewCard({ isLoading = false }: LearningOver
   return (
     <Card className="h-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-white/95">Activity</h2>
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <h2 className="text-sm sm:text-lg font-semibold text-white/95">Activity</h2>
         <select
           value={period}
           onChange={(e) => setPeriod(e.target.value)}
-          className="px-3 py-1.5 text-xs font-medium bg-[#0b1113] border border-white/8 rounded-lg text-[#9aa6b2] focus:outline-none focus:ring-2 focus:ring-sky-400/40"
+          className="px-2 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-medium bg-[#0b1113] border border-white/8 rounded-lg text-[#9aa6b2] focus:outline-none focus:ring-2 focus:ring-sky-400/40"
         >
           <option>Weekly</option>
           <option>Monthly</option>
@@ -113,15 +113,15 @@ export default function LearningOverviewCard({ isLoading = false }: LearningOver
       </div>
 
       {/* Big Stat */}
-      <div className="mb-6">
-        <p className="text-3xl font-extrabold tracking-tight text-white/95">
+      <div className="mb-4 sm:mb-6">
+        <p className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white/95">
           {hasScheduleData ? totalHours : '0'}
         </p>
-        <p className="text-sm text-[#9aa6b2] mt-1">Hours Spent</p>
+        <p className="text-xs sm:text-sm text-[#9aa6b2] mt-1">Hours Spent</p>
       </div>
 
       {/* Chart */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`} className="overflow-visible">
           {/* Grid lines */}
           {[0, 30, 60, 90, 120].map((value) => (
@@ -204,41 +204,41 @@ export default function LearningOverviewCard({ isLoading = false }: LearningOver
         </svg>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-6 mt-4">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[#0ea5e9]"></div>
-            <span className="text-xs text-[#9aa6b2]">This week</span>
+        <div className="flex items-center justify-center gap-4 sm:gap-6 mt-3 sm:mt-4">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#0ea5e9]"></div>
+            <span className="text-[10px] sm:text-xs text-[#9aa6b2]">This week</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[#f59e0b]"></div>
-            <span className="text-xs text-[#9aa6b2]">Last week</span>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#f59e0b]"></div>
+            <span className="text-[10px] sm:text-xs text-[#9aa6b2]">Last week</span>
           </div>
         </div>
       </div>
 
       {/* By Subject / Courses */}
-      <div className="mt-6 pt-6 border-t border-white/6">
-        <h3 className="text-sm font-semibold text-white/95 mb-4">
+      <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-white/6">
+        <h3 className="text-xs sm:text-sm font-semibold text-white/95 mb-3 sm:mb-4">
           {subjects.length > 0 ? 'My Courses' : 'By Subject'}
         </h3>
-        <div className="space-y-3">
+        <div className="space-y-2.5 sm:space-y-3">
           {displaySubjects.map((subject, index) => (
             <div key={index} className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 sm:gap-3">
                 <div
-                  className="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm sm:text-lg"
                   style={{ backgroundColor: `${subject.color}20` }}
                 >
                   {subject.icon}
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white/90">{subject.name}</p>
-                  <p className="text-xs text-[#9aa6b2]">
+                  <p className="text-xs sm:text-sm font-medium text-white/90">{subject.name}</p>
+                  <p className="text-[10px] sm:text-xs text-[#9aa6b2]">
                     {subject.lessonCount > 0 ? `${subject.lessonCount} lessons` : 'Get started'}
                   </p>
                 </div>
               </div>
-              <p className="text-sm font-semibold text-white/90">
+              <p className="text-xs sm:text-sm font-semibold text-white/90">
                 {subject.hours > 0 ? `${subject.hours}h` : '-'}
               </p>
             </div>
