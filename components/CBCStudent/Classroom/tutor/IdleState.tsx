@@ -5,13 +5,7 @@ import React from 'react';
 export default function IdleState() {
     return (
         <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-            <div className="mb-4">
-                <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] underline decoration-blue-500 decoration-2 underline-offset-8">
-                    AI Assistant
-                </h3>
-            </div>
-
-            <p className="text-[10px] text-white/40 uppercase tracking-widest max-w-xs leading-relaxed mt-4">
+            <p className="text-[10px] text-white/40 uppercase tracking-widest max-w-xs leading-relaxed">
                 Select a substrand on the left canvas to begin a guided session.
             </p>
 
