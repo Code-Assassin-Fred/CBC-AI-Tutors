@@ -257,12 +257,12 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
             strand={selectedStrand}
           />
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center px-8">
-            <div className="text-8xl mb-6 opacity-30">📚</div>
-            <h2 className="text-2xl font-bold text-white mb-3">
+          <div className="flex flex-col items-center justify-center h-full text-center px-4 sm:px-8">
+            <div className="text-8xl mb-6 opacity-30 hidden sm:block">📚</div>
+            <h2 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-3">
               Welcome to Your Classroom
             </h2>
-            <p className="text-white/60 text-lg max-w-md">
+            <p className="text-white/60 text-sm sm:text-lg max-w-md">
               Select a grade, subject, and strand above to load your lesson.
             </p>
           </div>
