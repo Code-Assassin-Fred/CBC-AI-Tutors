@@ -1,15 +1,18 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useCourses } from '@/lib/context/CoursesContext';
 import Link from 'next/link';
 import CoursePodcastView from './CoursePodcastView';
 import CourseImmersiveView from './CourseImmersiveView';
 import CourseQuizView from './CourseQuizView';
 import { useAuth } from '@/lib/context/AuthContext';
+import { useGamification } from '@/lib/context/GamificationContext';
+import { XP_CONFIG } from '@/types/gamification';
 
 export default function CourseViewer() {
     const { user } = useAuth();
+    const { addXP, showXPPopup } = useGamification();
     const {
         currentCourse,
         currentLesson,
@@ -25,6 +28,15 @@ export default function CourseViewer() {
 
     const [isSaving, setIsSaving] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
+
+    const handleMarkLessonComplete = useCallback(async () => {
+        if (!currentLesson || completedLessons.has(currentLesson.id)) return;
+
+        setCompletedLessons(prev => new Set(prev).add(currentLesson.id));
+        await addXP(XP_CONFIG.lesson, 'lesson', `Completed lesson: ${currentLesson.title}`);
+        showXPPopup(XP_CONFIG.lesson);
+    }, [currentLesson, completedLessons, addXP, showXPPopup]);
 
     if (!currentCourse) return null;
 
@@ -133,6 +145,29 @@ export default function CourseViewer() {
                                 )}
                             </div>
                         ))}
+
+                        {/* Lesson completion button */}
+                        <div className="mt-8 pt-6 border-t border-white/10 flex justify-center">
+                            <button
+                                onClick={handleMarkLessonComplete}
+                                disabled={completedLessons.has(currentLesson.id)}
+                                className={`px-6 py-2.5 rounded-full font-medium transition-all flex items-center gap-2 ${completedLessons.has(currentLesson.id)
+                                        ? 'bg-emerald-500/20 text-emerald-400 cursor-default'
+                                        : 'bg-sky-500 text-white hover:bg-sky-600'
+                                    }`}
+                            >
+                                {completedLessons.has(currentLesson.id) ? (
+                                    <>
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Lesson Completed (+{XP_CONFIG.lesson} XP)
+                                    </>
+                                ) : (
+                                    <>Mark as Complete (+{XP_CONFIG.lesson} XP)</>
+                                )}
+                            </button>
+                        </div>
                     </div>
                 );
 

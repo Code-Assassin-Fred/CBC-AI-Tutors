@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { ImmersiveContent, ImmersiveChunk, AssessmentResult } from '@/lib/types/agents';
 import { useCourses } from '@/lib/context/CoursesContext';
 import { useAuth } from '@/lib/context/AuthContext';
+import { useGamification } from '@/lib/context/GamificationContext';
+import { XP_CONFIG } from '@/types/gamification';
 import VoiceVisualization from '@/components/shared/VoiceVisualization';
 import { HiOutlineMicrophone, HiOutlineStop, HiOutlineSpeakerWave } from 'react-icons/hi2';
 
@@ -14,6 +16,7 @@ interface CourseImmersiveViewProps {
 export default function CourseImmersiveView({ content }: CourseImmersiveViewProps) {
     const { speak, isPlaying, stopSpeaking, currentCourse } = useCourses();
     const { user } = useAuth();
+    const { addXP, showXPPopup } = useGamification();
     const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
     const [userExplanation, setUserExplanation] = useState('');
     const [showFeedback, setShowFeedback] = useState(false);
@@ -134,7 +137,7 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
         };
     };
 
-    const handleSubmitExplanation = () => {
+    const handleSubmitExplanation = async () => {
         if (!userExplanation.trim() || !currentChunk) return;
 
         // Stop listening if active
@@ -146,6 +149,11 @@ export default function CourseImmersiveView({ content }: CourseImmersiveViewProp
         setAssessment(result);
         setAssessments(prev => new Map(prev).set(currentChunk.id, { result, response: userExplanation }));
         setShowFeedback(true);
+
+        // Award XP based on assessment level
+        const xpAmount = result.level === 'excellent' ? 8 : result.level === 'good' ? 6 : XP_CONFIG.immersiveChunk;
+        await addXP(xpAmount, 'immersive', `Practice: ${currentChunk.concept}`);
+        showXPPopup(xpAmount);
     };
 
     // Save session results to Firebase

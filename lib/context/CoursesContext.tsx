@@ -45,8 +45,7 @@ interface CoursesContextType {
     isLoadingMyCourses: boolean;
     loadMyCourses: () => Promise<void>;
 
-    // Discovery
-    discoverCourses: (query?: string) => Promise<Course[]>;
+    // Suggestions
     suggestions: TopicSuggestion[];
     loadSuggestions: () => Promise<void>;
 
@@ -280,32 +279,12 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
 
         setIsLoadingMyCourses(true);
         try {
-            // Fetch both created courses and saved courses
-            const [createdResponse, savedResponse] = await Promise.all([
-                fetch(`/api/courses/discover?creatorId=${user.uid}`),
-                fetch(`/api/courses/my-saved?userId=${user.uid}`),
-            ]);
+            const response = await fetch(`/api/courses/my-saved?userId=${user.uid}`);
 
-            let allCourses: Course[] = [];
-
-            if (createdResponse.ok) {
-                const createdData = await createdResponse.json();
-                allCourses = [...(createdData.courses || [])];
+            if (response.ok) {
+                const data = await response.json();
+                setMyCourses(data.courses || []);
             }
-
-            if (savedResponse.ok) {
-                const savedData = await savedResponse.json();
-                // Merge saved courses, avoiding duplicates
-                const savedCourses = savedData.courses || [];
-                const existingIds = new Set(allCourses.map(c => c.id));
-                for (const course of savedCourses) {
-                    if (!existingIds.has(course.id)) {
-                        allCourses.push(course);
-                    }
-                }
-            }
-
-            setMyCourses(allCourses);
         } catch (error) {
             console.error('Error loading my courses:', error);
         } finally {
@@ -314,25 +293,8 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
     }, [user]);
 
     // ========================================
-    // DISCOVERY
+    // SUGGESTIONS
     // ========================================
-
-    const discoverCourses = useCallback(async (query?: string): Promise<Course[]> => {
-        try {
-            const url = query
-                ? `/api/courses/discover?q=${encodeURIComponent(query)}`
-                : '/api/courses/discover';
-
-            const response = await fetch(url);
-            if (response.ok) {
-                const data = await response.json();
-                return data.courses || [];
-            }
-        } catch (error) {
-            console.error('Error discovering courses:', error);
-        }
-        return [];
-    }, []);
 
     const loadSuggestions = useCallback(async () => {
         try {
@@ -559,8 +521,7 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
         isLoadingMyCourses,
         loadMyCourses,
 
-        // Discovery
-        discoverCourses,
+        // Suggestions
         suggestions,
         loadSuggestions,
 

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { PodcastScript } from '@/lib/types/agents';
 import { useCourses } from '@/lib/context/CoursesContext';
+import { useGamification } from '@/lib/context/GamificationContext';
+import { XP_CONFIG } from '@/types/gamification';
 
 interface CoursePodcastViewProps {
     script: PodcastScript;
@@ -10,7 +12,9 @@ interface CoursePodcastViewProps {
 
 export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
     const { speak, stopSpeaking, isPlaying } = useCourses();
+    const { addXP, showXPPopup } = useGamification();
     const [currentSegmentIndex, setCurrentSegmentIndex] = useState(-1);
+    const hasAwardedXP = useRef(false);
 
     const handlePlay = async () => {
         if (isPlaying) {
@@ -28,6 +32,13 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
             await new Promise(resolve => setTimeout(resolve, 500));
         }
         setCurrentSegmentIndex(-1);
+
+        // Award XP for completing podcast
+        if (!hasAwardedXP.current) {
+            hasAwardedXP.current = true;
+            await addXP(XP_CONFIG.podcast, 'podcast', `Completed podcast: ${script.title}`);
+            showXPPopup(XP_CONFIG.podcast);
+        }
     };
 
     return (

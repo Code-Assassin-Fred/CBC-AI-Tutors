@@ -6,6 +6,8 @@ import { QuizQuestion } from '@/lib/types/agents';
 import { useCourses } from '@/lib/context/CoursesContext';
 import { useAuth } from '@/lib/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { useGamification } from '@/lib/context/GamificationContext';
+import { XP_CONFIG } from '@/types/gamification';
 
 interface CourseQuizViewProps {
     quiz: CourseQuiz;
@@ -29,6 +31,13 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
     const router = useRouter();
     const { selectLesson, currentCourse, saveQuizScore } = useCourses();
     const { user } = useAuth();
+    const { addXP, showXPPopup } = useGamification();
+
+    // Streak tracking for XP multipliers
+    const [correctStreak, setCorrectStreak] = useState(0);
+    const [streakMultiplier, setStreakMultiplier] = useState(1);
+    const [xpAwarded, setXpAwarded] = useState(false);
+
     const [state, setState] = useState<QuizState>({
         currentIndex: 0,
         answers: new Map(),
@@ -132,13 +141,52 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
         }));
     };
 
-    const handleSubmitAnswer = () => {
+    const handleSubmitAnswer = async () => {
+        const isAnswerCorrect = selectedAnswer === currentQuestion?.correctAnswer;
+
+        if (isAnswerCorrect) {
+            // Update streak
+            const newStreak = correctStreak + 1;
+            setCorrectStreak(newStreak);
+
+            // Calculate multiplier based on streak
+            let newMultiplier = 1;
+            if (newStreak >= 10) newMultiplier = 2;
+            else if (newStreak >= 5) newMultiplier = 1.5;
+            else if (newStreak >= 3) newMultiplier = 1.25;
+            setStreakMultiplier(newMultiplier);
+
+            // Award XP for correct answer
+            const baseXP = currentQuestion.difficulty === 'hard' ? XP_CONFIG.quizCorrectHard : XP_CONFIG.quizCorrect;
+            const xpAmount = Math.round(baseXP * newMultiplier);
+            await addXP(xpAmount, 'quiz', `Course quiz correct: ${currentQuestion.question.substring(0, 30)}...`);
+            showXPPopup(xpAmount);
+        } else {
+            // Reset streak on wrong answer
+            setCorrectStreak(0);
+            setStreakMultiplier(1);
+        }
+
         setState(prev => ({ ...prev, showResult: true }));
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (isLastQuestion) {
             setState(prev => ({ ...prev, showFinalResults: true }));
+
+            // Award quiz completion XP
+            const quizCompletionXP = Math.round(XP_CONFIG.quizComplete * streakMultiplier);
+            await addXP(quizCompletionXP, 'quiz', `Completed course quiz: ${quiz.title}`);
+            showXPPopup(quizCompletionXP);
+
+            // Award course completion bonus for passing final exam
+            if (quiz.type === 'final' && passed && !xpAwarded) {
+                setXpAwarded(true);
+                setTimeout(async () => {
+                    await addXP(XP_CONFIG.courseComplete, 'course_complete', `Completed course: ${currentCourse?.title}`);
+                    showXPPopup(XP_CONFIG.courseComplete);
+                }, 1500); // Delay to show separately
+            }
         } else {
             setState(prev => ({
                 ...prev,
@@ -157,6 +205,9 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
             isSaving: false,
             hasSaved: false,
         });
+        // Reset streak on retry
+        setCorrectStreak(0);
+        setStreakMultiplier(1);
     };
 
     const handleBackToLesson = () => {
@@ -244,9 +295,21 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
         <div className="max-w-2xl mx-auto">
             {/* Progress */}
             <div className="flex items-center justify-between mb-6">
-                <span className="text-sm text-white/50">
-                    Question {state.currentIndex + 1} of {quiz.questions.length}
-                </span>
+                <div className="flex items-center gap-3">
+                    <span className="text-sm text-white/50">
+                        Question {state.currentIndex + 1} of {quiz.questions.length}
+                    </span>
+                    {/* Streak indicator */}
+                    {streakMultiplier > 1 && (
+                        <span className="text-xs text-amber-400 font-medium">
+                            🔥 {streakMultiplier}x
+                        </span>
+                    )}
+                    {/* Potential XP */}
+                    <span className="text-xs text-white/40">
+                        +{Math.round((currentQuestion?.difficulty === 'hard' ? XP_CONFIG.quizCorrectHard : XP_CONFIG.quizCorrect) * streakMultiplier)} XP
+                    </span>
+                </div>
                 <div className="flex gap-1">
                     {quiz.questions.map((_, index) => (
                         <div
