@@ -169,17 +169,17 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
   return (
     <div className="h-full flex flex-col bg-transparent overflow-hidden">
       {/* Selector Bar */}
-      <div className="p-5 border-b border-white/10 bg-white/5">
+      <div className="p-3 sm:p-5 border-b border-white/10 bg-white/5">
         {/* <h2 className="text-lg font-semibold text-white mb-4 text-center">
           Browse Lessons
         </h2> */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="flex gap-2 sm:gap-4">
           <select
             value={selectedGrade}
             onChange={(e) => setSelectedGrade(e.target.value)}
-            className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all [&>option]:bg-[#1a1f25] [&>option]:text-white"
+            className="flex-1 min-w-0 px-2 sm:px-4 py-2 sm:py-3 bg-[#1a1f25] border border-white/20 rounded-lg sm:rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-white/40 transition-all [&>option]:bg-[#1a1f25] [&>option]:text-white"
           >
-            <option value="">Select Grade</option>
+            <option value="">Grade</option>
             {grades.map((g) => (
               <option key={g} value={g}>Grade {g}</option>
             ))}
@@ -189,9 +189,9 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
             disabled={!subjects.length}
-            className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
+            className="flex-1 min-w-0 px-2 sm:px-4 py-2 sm:py-3 bg-[#1a1f25] border border-white/20 rounded-lg sm:rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
           >
-            <option value="">Select Subject</option>
+            <option value="">Subject</option>
             {subjects.map((s) => (
               <option key={s} value={s}>{s}</option>
             ))}
@@ -201,9 +201,9 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
             value={selectedStrand}
             onChange={(e) => setSelectedStrand(e.target.value)}
             disabled={!strands.length}
-            className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
+            className="flex-1 min-w-0 px-2 sm:px-4 py-2 sm:py-3 bg-[#1a1f25] border border-white/20 rounded-lg sm:rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
           >
-            <option value="">Select Strand</option>
+            <option value="">Strand</option>
             {strands.map((s) => (
               <option key={s} value={s}>{s}</option>
             ))}

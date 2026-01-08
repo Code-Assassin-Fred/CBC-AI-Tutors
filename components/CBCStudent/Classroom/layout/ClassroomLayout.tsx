@@ -14,6 +14,7 @@ export default function ClassroomLayout() {
   // New state to hold TOC from LessonCanvas / StudentTextbookRenderer
   const [toc, setToc] = useState<TocItem[]>([]);
 
+  // Desktop: horizontal layout classes
   const leftClasses = useMemo(() => {
     const base =
       "transition-all duration-300 ease-in-out relative overflow-hidden min-w-0";
@@ -34,8 +35,8 @@ export default function ClassroomLayout() {
   return (
     <TutorProvider>
       <div className="relative flex flex-col h-[85vh] md:h-[87vh] lg:h-[90vh] w-full bg-[#0a0f14]/80 backdrop-blur-sm text-white overflow-hidden rounded-2xl shadow-xl shadow-black/40 border border-white/10">
-        {/* Top controls */}
-        <div className="flex items-center justify-center gap-2 p-3 border-b border-white/10 bg-black/20">
+        {/* Top controls - hidden on mobile since layout is fixed */}
+        <div className="hidden sm:flex items-center justify-center gap-2 p-3 border-b border-white/10 bg-black/20">
           <div className="flex items-center gap-2">
             <button
               className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "left"
@@ -69,8 +70,33 @@ export default function ClassroomLayout() {
           </div>
         </div>
 
-        {/* Main layout area */}
-        <div className="flex flex-1 overflow-hidden">
+        {/* Mobile layout: Vertical stack - Main 80%, Tutor 20% */}
+        <div className="flex flex-col flex-1 overflow-hidden sm:hidden">
+          {/* Main Panel - 80% height */}
+          <div className="h-[80%] overflow-hidden relative border-b border-white/10">
+            <div className="h-full overflow-y-auto scrollbar-hide">
+              {contentMode === "lesson" ? (
+                <LessonCanvas onTocUpdate={setToc} />
+              ) : (
+                <div className="h-full flex items-center justify-center text-white/40">
+                  <p>Saved Lessons coming soon...</p>
+                </div>
+              )}
+            </div>
+            {/* TOC Button */}
+            <TOCIcon toc={toc} />
+          </div>
+
+          {/* Tutor Panel - 20% height at bottom */}
+          <div className="h-[20%] overflow-hidden bg-[#0a0f14]">
+            <div className="h-full p-3 overflow-y-auto">
+              <TutorPanel />
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop layout: Horizontal split (existing behavior) */}
+        <div className="hidden sm:flex flex-1 overflow-hidden">
           {/* LEFT PANEL – Lesson Canvas */}
           <div className={leftClasses}>
             <div className="h-full overflow-y-auto scrollbar-hide">
