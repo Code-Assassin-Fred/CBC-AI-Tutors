@@ -95,21 +95,12 @@ export default function MyCourses({ courses, isLoading }: MyCoursesProps) {
                         </div>
                     </Link>
 
-                    {/* Delete Action - Pushed to right, outside of Link */}
-                    {course.careerPathId ? (
-                        <div
-                            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-white/10 cursor-not-allowed group/lock z-10"
-                            title="Part of a career path. Delete the career path to remove this course."
-                        >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                        </div>
-                    ) : (
+                    {/* Delete Action - Only show for non-career courses */}
+                    {!course.careerPathId && (
                         <button
                             onClick={(e) => handleDelete(e, course.id, course.creatorId)}
                             disabled={deletingId === course.id}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-white/20 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-all opacity-0 group-hover:opacity-100 z-10"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full transition-all z-10"
                             title="Remove course"
                         >
                             {deletingId === course.id ? (

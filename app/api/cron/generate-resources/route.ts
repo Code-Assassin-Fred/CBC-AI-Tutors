@@ -1,49 +1,153 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AgentOrchestrator } from '@/lib/agents/agentOrchestrator';
-import { RESOURCE_HUB_CATEGORIES } from '@/types/resource';
+import { resourceGenerationService } from '@/lib/services/resourceGenerationService';
 
-// Vercel Cron jobs must use GET
+/**
+ * Background Resource Generation Cron Job
+ * 
+ * Runs every 48 hours (staggered in batches) to ensure:
+ * 1. Every subcategory has at least 2 resources
+ * 2. Fresh content is generated regularly
+ * 
+ * Vercel Cron Schedule: 4 batches staggered 6 hours apart within each 48h cycle
+ * - Batch 1: 0 0 *\/2 * * (midnight every 2nd day)
+ * - Batch 2: 0 6 *\/2 * * (6am every 2nd day)
+ * - Batch 3: 0 12 *\/2 * * (noon every 2nd day)
+ * - Batch 4: 0 18 *\/2 * * (6pm every 2nd day)
+ */
+
+const BATCH_SIZE = 4; // Process up to 4 subcategories per batch
+
 export async function GET(req: NextRequest) {
+    const startTime = Date.now();
+
     // Basic authorization for cron jobs
     const authHeader = req.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-        // Allow if running in development without auth or check env
-        if (process.env.NODE_ENV === 'production' && !authHeader) {
-            // return new NextResponse('Unauthorized', { status: 401 });
+    if (process.env.NODE_ENV === 'production') {
+        if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+            console.warn('[Cron] Unauthorized request attempt');
+            return new NextResponse('Unauthorized', { status: 401 });
         }
     }
 
-    console.log('[Cron] Starting scheduled 48h resource generation...');
+    // Get batch number from query params (default to 1)
+    const { searchParams } = new URL(req.url);
+    const batchNumber = parseInt(searchParams.get('batch') || '1', 10);
+
+    console.log(`[Cron] ========================================`);
+    console.log(`[Cron] Resource Generation - Batch ${batchNumber}`);
+    console.log(`[Cron] Started at: ${new Date().toISOString()}`);
+    console.log(`[Cron] ========================================`);
+
     const orchestrator = new AgentOrchestrator();
-    const generatedSummary: Record<string, number> = {};
+    const results: {
+        subcategory: string;
+        reason: string;
+        success: boolean;
+        resourcesGenerated: number;
+        error?: string;
+    }[] = [];
 
     try {
-        // Iterate through all categories and subcategories
-        // To avoid timeouts, we might randomly select a few subcategories each run
-        // or rely on Vercel's max duration. For comprehensive coverage, we'd need a queue.
-        // For this implementation, we'll pick 3 random subcategories to update per 48h cycle.
+        // Get current status summary
+        const status = await resourceGenerationService.getStatusSummary();
+        console.log(`[Cron] Status: ${status.totalSubcategories} subcategories total`);
+        console.log(`[Cron]   - With gaps (<2 resources): ${status.withGaps}`);
+        console.log(`[Cron]   - Due for refresh: ${status.dueForRefresh}`);
+        console.log(`[Cron]   - Healthy: ${status.healthy}`);
 
-        const flatSubcategories = RESOURCE_HUB_CATEGORIES.flatMap(cat =>
-            cat.subcategories.map(sub => ({ catId: cat.id, subId: sub.id }))
-        );
+        // Get tasks for this batch
+        const tasks = await resourceGenerationService.getGenerationTasks(batchNumber, BATCH_SIZE);
 
-        // Shuffle and pick 3
-        const shuffled = flatSubcategories.sort(() => 0.5 - Math.random()).slice(0, 3);
-
-        for (const item of shuffled) {
-            console.log(`[Cron] Generating for ${item.catId}/${item.subId}`);
-            const ids = await orchestrator.generateResourcesForCategory(item.catId, item.subId, 2);
-            generatedSummary[`${item.catId}/${item.subId}`] = ids.length;
+        if (tasks.length === 0) {
+            console.log(`[Cron] No generation tasks required for batch ${batchNumber}.`);
+            return NextResponse.json({
+                success: true,
+                batch: batchNumber,
+                message: 'No generation tasks required',
+                status,
+                executionTimeMs: Date.now() - startTime
+            });
         }
+
+        console.log(`[Cron] Processing ${tasks.length} subcategories:`);
+        tasks.forEach(t => console.log(`[Cron]   - ${t.categoryId}/${t.subcategoryId} (${t.reason})`));
+
+        // Process each task
+        for (const task of tasks) {
+            const taskKey = `${task.categoryId}/${task.subcategoryId}`;
+            console.log(`[Cron] Generating resources for: ${taskKey}`);
+
+            try {
+                const ids = await orchestrator.generateResourcesForCategory(
+                    task.categoryId,
+                    task.subcategoryId,
+                    2 // Generate 2 resources per subcategory
+                );
+
+                // Update the last generated timestamp
+                await resourceGenerationService.updateLastGeneratedAt(
+                    task.categoryId,
+                    task.subcategoryId
+                );
+
+                results.push({
+                    subcategory: taskKey,
+                    reason: task.reason,
+                    success: true,
+                    resourcesGenerated: ids.length
+                });
+
+                console.log(`[Cron] ✓ ${taskKey}: Generated ${ids.length} resources`);
+
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+                results.push({
+                    subcategory: taskKey,
+                    reason: task.reason,
+                    success: false,
+                    resourcesGenerated: 0,
+                    error: errorMessage
+                });
+
+                console.error(`[Cron] ✗ ${taskKey}: Failed - ${errorMessage}`);
+            }
+        }
+
+        const successCount = results.filter(r => r.success).length;
+        const totalGenerated = results.reduce((sum, r) => sum + r.resourcesGenerated, 0);
+        const executionTimeMs = Date.now() - startTime;
+
+        console.log(`[Cron] ========================================`);
+        console.log(`[Cron] Batch ${batchNumber} Complete`);
+        console.log(`[Cron] Success: ${successCount}/${results.length} subcategories`);
+        console.log(`[Cron] Total resources generated: ${totalGenerated}`);
+        console.log(`[Cron] Execution time: ${executionTimeMs}ms`);
+        console.log(`[Cron] ========================================`);
 
         return NextResponse.json({
             success: true,
-            summary: generatedSummary,
-            timestamp: new Date()
+            batch: batchNumber,
+            results,
+            summary: {
+                tasksProcessed: results.length,
+                successCount,
+                failedCount: results.length - successCount,
+                totalResourcesGenerated: totalGenerated
+            },
+            executionTimeMs
         });
 
     } catch (error) {
-        console.error('[Cron] Error:', error);
-        return NextResponse.json({ error: 'Cron job failed' }, { status: 500 });
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.error(`[Cron] Batch ${batchNumber} failed:`, error);
+
+        return NextResponse.json({
+            success: false,
+            batch: batchNumber,
+            error: errorMessage,
+            results,
+            executionTimeMs: Date.now() - startTime
+        }, { status: 500 });
     }
 }

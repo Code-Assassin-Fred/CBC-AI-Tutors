@@ -62,6 +62,12 @@ interface ScheduleContextType {
     deleteBlock: (blockId: string) => Promise<void>;
     completeBlock: (blockId: string) => Promise<void>;
 
+    // Learning goals
+    goals: LearningGoal[];
+    createGoal: (goal: Omit<LearningGoal, 'id' | 'userId' | 'createdAt' | 'completedHours'>) => Promise<void>;
+    updateGoal: (goalId: string, updates: Partial<LearningGoal>) => Promise<void>;
+    deleteGoal: (goalId: string) => Promise<void>;
+
     // Streak
     streak: StudyStreak | null;
 
@@ -95,6 +101,7 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
 
     // Data state
     const [blocks, setBlocks] = useState<StudyBlock[]>([]);
+    const [goals, setGoals] = useState<LearningGoal[]>([]);
     const [streak, setStreak] = useState<StudyStreak | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -162,11 +169,11 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
             weekStart: formatDate(currentWeekStart),
             weekEnd: formatDate(weekEnd),
             blocks,
-            goals: [],
+            goals,
             totalPlannedMinutes,
             totalCompletedMinutes,
         };
-    }, [currentWeekStart, blocks]);
+    }, [currentWeekStart, blocks, goals]);
 
     // Calculate reminders
     const reminders = useMemo((): UpcomingReminder[] => {
@@ -223,6 +230,7 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
             if (response.ok) {
                 const data = await response.json();
                 setBlocks(data.blocks || []);
+                setGoals(data.goals || []);
                 setStreak(data.streak || null);
             }
         } catch (error) {
@@ -360,6 +368,72 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
         });
     }, [user]);
 
+    // Create goal
+    const createGoal = useCallback(async (
+        goalData: Omit<LearningGoal, 'id' | 'userId' | 'createdAt' | 'completedHours'>
+    ) => {
+        if (!user) return;
+
+        const newGoal: LearningGoal = {
+            ...goalData,
+            id: `goal-${Date.now()}`,
+            userId: user.uid,
+            completedHours: 0,
+            createdAt: new Date(),
+        };
+        setGoals(prev => [...prev, newGoal]);
+
+        try {
+            await fetch('/api/schedule', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'goal',
+                    data: { ...goalData, userId: user.uid }
+                }),
+            });
+        } catch (error) {
+            console.error('Failed to create goal:', error);
+        }
+    }, [user]);
+
+    // Update goal
+    const updateGoal = useCallback(async (goalId: string, updates: Partial<LearningGoal>) => {
+        if (!user) return;
+        setGoals(prev => prev.map(g =>
+            g.id === goalId ? { ...g, ...updates, updatedAt: new Date() } : g
+        ));
+
+        try {
+            await fetch('/api/schedule', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    type: 'goal',
+                    id: goalId,
+                    updates,
+                    userId: user.uid
+                }),
+            });
+        } catch (error) {
+            console.error('Failed to update goal:', error);
+        }
+    }, [user]);
+
+    // Delete goal
+    const deleteGoal = useCallback(async (goalId: string) => {
+        if (!user) return;
+        setGoals(prev => prev.filter(g => g.id !== goalId));
+
+        try {
+            await fetch(`/api/schedule?id=${goalId}&type=goal&userId=${user.uid}`, {
+                method: 'DELETE',
+            });
+        } catch (error) {
+            console.error('Failed to delete goal:', error);
+        }
+    }, [user]);
+
     const value: ScheduleContextType = {
         currentWeekStart,
         goToPreviousWeek,
@@ -373,6 +447,10 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
         updateBlock,
         deleteBlock,
         completeBlock,
+        goals,
+        createGoal,
+        updateGoal,
+        deleteGoal,
         streak,
         reminders,
         editingBlock,
