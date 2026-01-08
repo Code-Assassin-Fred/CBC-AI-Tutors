@@ -70,10 +70,10 @@ export default function ClassroomLayout() {
           </div>
         </div>
 
-        {/* Mobile layout: Vertical stack - Main 80%, Tutor 20% */}
-        <div className="flex flex-col flex-1 overflow-hidden sm:hidden">
-          {/* Main Panel - 80% height */}
-          <div className="h-[80%] overflow-hidden relative border-b border-white/10">
+        {/* Mobile layout: Vertical stack - Main 60%, Tutor 40% as separate cards */}
+        <div className="flex flex-col flex-1 overflow-hidden sm:hidden p-2 gap-2">
+          {/* Main Panel Card - 60% height */}
+          <div className="h-[60%] overflow-hidden relative rounded-xl bg-[#0b0f12] border border-white/10">
             <div className="h-full overflow-y-auto scrollbar-hide">
               {contentMode === "lesson" ? (
                 <LessonCanvas onTocUpdate={setToc} />
@@ -87,8 +87,8 @@ export default function ClassroomLayout() {
             <TOCIcon toc={toc} />
           </div>
 
-          {/* Tutor Panel - 20% height at bottom */}
-          <div className="h-[20%] overflow-hidden bg-[#0a0f14]">
+          {/* Tutor Panel Card - 40% height at bottom */}
+          <div className="h-[40%] overflow-hidden rounded-xl bg-[#0b0f12] border border-white/10">
             <div className="h-full p-3 overflow-y-auto">
               <TutorPanel />
             </div>
