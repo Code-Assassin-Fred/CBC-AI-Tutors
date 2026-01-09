@@ -48,29 +48,29 @@ export default function TeacherOnboardingPage() {
   }, [authLoading, guardLoading, user, router]);
 
   const validateStep = (currentStep: number) => {
-  setFormErrors({});
-  if (currentStep === 1) {
-    let valid = true;
+    setFormErrors({});
+    if (currentStep === 1) {
+      let valid = true;
 
-    if (!formValues.name.trim()) {
-      setFormErrors((prev) => ({ ...prev, name: 'Please enter your full name' }));
-      valid = false;
+      if (!formValues.name.trim()) {
+        setFormErrors((prev) => ({ ...prev, name: 'Please enter your full name' }));
+        valid = false;
+      }
+
+      if (!formValues.subject.trim()) {
+        setFormErrors((prev) => ({ ...prev, subject: 'Please enter your subject' }));
+        valid = false;
+      }
+
+      if (!formValues.school.trim()) {
+        setFormErrors((prev) => ({ ...prev, school: 'Please enter your school name' }));
+        valid = false;
+      }
+
+      return valid;
     }
-
-    if (!formValues.subject.trim()) {
-      setFormErrors((prev) => ({ ...prev, subject: 'Please enter your subject' }));
-      valid = false;
-    }
-
-    if (!formValues.school.trim()) {
-      setFormErrors((prev) => ({ ...prev, school: 'Please enter your school name' }));
-      valid = false;
-    }
-
-    return valid;
-  }
-  return true;
-};
+    return true;
+  };
 
   const handleNext = () => {
     if (validateStep(step)) setStep((prev) => Math.min(prev + 1, totalSteps));
@@ -85,12 +85,12 @@ export default function TeacherOnboardingPage() {
 
     try {
       const response = await setTeacherProfile({
-  userId: user.uid,
-  name: formValues.name.trim(),
-  subject: formValues.subject.trim(),
-  school: formValues.school.trim(),
-  yearsExperience: '0',
-});
+        userId: user.uid,
+        name: formValues.name.trim(),
+        subject: formValues.subject.trim(),
+        school: formValues.school.trim(),
+        yearsExperience: '0',
+      });
 
       if (!response.success) throw new Error(response.message ?? 'Failed to complete onboarding');
 
@@ -123,9 +123,8 @@ export default function TeacherOnboardingPage() {
                 value={formValues.name}
                 onChange={(e) => setFormValues({ ...formValues, name: e.target.value })}
                 placeholder="Full Name"
-                className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  formErrors.name ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
-                }`}
+                className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors.name ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
+                  }`}
               />
               {formErrors.name && <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>}
 
@@ -133,9 +132,8 @@ export default function TeacherOnboardingPage() {
                 value={formValues.subject}
                 onChange={(e) => setFormValues({ ...formValues, subject: e.target.value })}
                 placeholder="Subject you teach"
-                className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  formErrors.subject ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
-                }`}
+                className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors.subject ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
+                  }`}
               />
               {formErrors.subject && <p className="mt-1 text-sm text-red-600">{formErrors.subject}</p>}
 
@@ -143,9 +141,8 @@ export default function TeacherOnboardingPage() {
                 value={formValues.school}
                 onChange={(e) => setFormValues({ ...formValues, school: e.target.value })}
                 placeholder="School / Institution"
-                className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  formErrors.school ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
-                }`}
+                className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${formErrors.school ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
+                  }`}
               />
               {formErrors.school && <p className="mt-1 text-sm text-red-600">{formErrors.school}</p>}
             </div>
@@ -195,9 +192,8 @@ export default function TeacherOnboardingPage() {
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className={`px-8 py-3 rounded-lg font-medium text-white transition-all duration-200 flex items-center gap-2 ${
-                isSubmitting ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-900 hover:bg-indigo-800'
-              }`}
+              className={`px-8 py-3 rounded-lg font-medium text-white transition-all duration-200 flex items-center gap-2 ${isSubmitting ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-900 hover:bg-indigo-800'
+                }`}
             >
               {isSubmitting ? (
                 <>
@@ -224,7 +220,7 @@ export default function TeacherOnboardingPage() {
       </div>
 
       <div className="hidden lg:flex items-center justify-center w-full max-w-xl">
-        <img src="/educator.svg" alt="Teacher workspace illustration" className="w-full h-auto" />
+        <img src="/teacher_s628.svg" alt="Teacher workspace illustration" className="w-full h-auto" />
       </div>
     </div>
   );
