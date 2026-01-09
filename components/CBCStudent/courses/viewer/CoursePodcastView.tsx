@@ -55,14 +55,14 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
                 {/* Play button */}
                 <button
                     onClick={handlePlay}
-                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition-all ${isPlaying
+                    className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all ${isPlaying
                         ? 'bg-sky-500 text-white'
                         : 'bg-white text-black hover:bg-white/90'
                         }`}
                 >
                     {isPlaying ? (
                         <>
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <rect x="6" y="4" width="4" height="16" />
                                 <rect x="14" y="4" width="4" height="16" />
                             </svg>
@@ -70,10 +70,11 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
                         </>
                     ) : (
                         <>
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M8 5v14l11-7z" />
                             </svg>
-                            Play Episode
+                            <span className="hidden sm:inline">Play Episode</span>
+                            <span className="sm:hidden">Play</span>
                         </>
                     )}
                 </button>

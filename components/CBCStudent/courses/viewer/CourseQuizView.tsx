@@ -340,35 +340,55 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
                 </h3>
             </div>
 
-            {/* Options */}
+            {/* Options or Text Input */}
             <div className="space-y-3 mb-6">
-                {currentQuestion.options?.map((option, index) => {
-                    const optionLetter = option.charAt(0);
-                    const isSelected = selectedAnswer === optionLetter;
-                    const isCorrectOption = optionLetter === currentQuestion.correctAnswer;
+                {currentQuestion.options && currentQuestion.options.length > 0 ? (
+                    /* Multiple choice options */
+                    currentQuestion.options.map((option, index) => {
+                        const optionLetter = option.charAt(0);
+                        const isSelected = selectedAnswer === optionLetter;
+                        const isCorrectOption = optionLetter === currentQuestion.correctAnswer;
 
-                    let optionClass = 'bg-white/5 border-white/10 hover:bg-white/10';
-                    if (state.showResult) {
-                        if (isCorrectOption) {
-                            optionClass = 'bg-green-500/20 border-green-500/50';
-                        } else if (isSelected && !isCorrectOption) {
-                            optionClass = 'bg-red-500/20 border-red-500/50';
+                        let optionClass = 'bg-white/5 border-white/10 hover:bg-white/10';
+                        if (state.showResult) {
+                            if (isCorrectOption) {
+                                optionClass = 'bg-green-500/20 border-green-500/50';
+                            } else if (isSelected && !isCorrectOption) {
+                                optionClass = 'bg-red-500/20 border-red-500/50';
+                            }
+                        } else if (isSelected) {
+                            optionClass = 'bg-sky-500/20 border-sky-500/50';
                         }
-                    } else if (isSelected) {
-                        optionClass = 'bg-sky-500/20 border-sky-500/50';
-                    }
 
-                    return (
-                        <button
-                            key={index}
-                            onClick={() => handleSelectAnswer(optionLetter)}
+                        return (
+                            <button
+                                key={index}
+                                onClick={() => handleSelectAnswer(optionLetter)}
+                                disabled={state.showResult}
+                                className={`w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border transition-all text-sm sm:text-base ${optionClass}`}
+                            >
+                                <span className="text-white/80">{option}</span>
+                            </button>
+                        );
+                    })
+                ) : (
+                    /* Open-ended text input */
+                    <div className="space-y-2">
+                        <textarea
+                            value={selectedAnswer || ''}
+                            onChange={(e) => !state.showResult && handleSelectAnswer(e.target.value)}
                             disabled={state.showResult}
-                            className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${optionClass}`}
-                        >
-                            <span className="text-white/80">{option}</span>
-                        </button>
-                    );
-                })}
+                            placeholder="Type your answer here..."
+                            className="w-full min-h-[120px] p-3 sm:p-4 rounded-xl bg-white/5 border border-white/10 text-white text-sm sm:text-base placeholder-white/30 focus:outline-none focus:border-sky-500/50 resize-none"
+                        />
+                        {state.showResult && (
+                            <div className="p-3 rounded-lg bg-sky-500/10 border border-sky-500/30">
+                                <p className="text-xs text-sky-400 font-medium mb-1">Sample Answer:</p>
+                                <p className="text-sm text-white/70">{currentQuestion.correctAnswer}</p>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* Explanation (after answering) */}

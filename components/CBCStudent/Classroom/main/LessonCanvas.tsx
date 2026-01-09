@@ -208,69 +208,61 @@ export default function LessonCanvas({ onTocUpdate, onTutorActivated }: LessonCa
             {strands.map((s) => (
               <option key={s} value={s}>{s}</option>
             ))}
-          </select>
         </div>
 
-        {selectedGrade && selectedSubject && selectedStrand && (
-          <div className="mt-4 text-center text-white/70 text-sm font-medium">
-            Grade {selectedGrade} • {selectedSubject} • {selectedStrand}
-          </div>
-        )}
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
+          {loading ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-white/60 animate-pulse text-lg">Loading your lesson...</div>
+            </div>
+          ) : textbook?.exists && textbook.student_html ? (
+            <StudentTextbookRenderer
+              content={textbook.student_html}
+              images={textbook.images || []}
+              onTocUpdate={(items) => {
+                setToc(items);
+                if (onTocUpdate) onTocUpdate(items);
+              }}
+              onLearnWithAI={(substrand) => {
+                activateLearningMode({
+                  grade: selectedGrade,
+                  subject: selectedSubject,
+                  strand: selectedStrand,
+                  substrand: substrand.title,
+                  textbookContent: substrand.content,
+                });
+                if (onTutorActivated) onTutorActivated();
+              }}
+              onTakeQuiz={(substrand) => {
+                activateQuizMode({
+                  grade: selectedGrade,
+                  subject: selectedSubject,
+                  strand: selectedStrand,
+                  substrand: substrand.title,
+                  textbookContent: substrand.content,
+                });
+                if (onTutorActivated) onTutorActivated();
+              }}
+            />
+          ) : selectedGrade && selectedSubject && selectedStrand ? (
+            <EmptyLessonState
+              grade={selectedGrade}
+              subject={selectedSubject}
+              strand={selectedStrand}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-center px-4 sm:px-8">
+              <div className="text-8xl mb-6 opacity-30 hidden sm:block">📚</div>
+              <h2 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-3">
+                Welcome to Your Classroom
+              </h2>
+              <p className="text-white/60 text-sm sm:text-lg max-w-md">
+                Select a grade, subject, and strand above to load your lesson.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
-
-      {/* Content Area */}
-      <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
-        {loading ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-white/60 animate-pulse text-lg">Loading your lesson...</div>
-          </div>
-        ) : textbook?.exists && textbook.student_html ? (
-          <StudentTextbookRenderer
-            content={textbook.student_html}
-            images={textbook.images || []}
-            onTocUpdate={(items) => {
-              setToc(items);
-              if (onTocUpdate) onTocUpdate(items);
-            }}
-            onLearnWithAI={(substrand) => {
-              activateLearningMode({
-                grade: selectedGrade,
-                subject: selectedSubject,
-                strand: selectedStrand,
-                substrand: substrand.title,
-                textbookContent: substrand.content,
-              });
-              if (onTutorActivated) onTutorActivated();
-            }}
-            onTakeQuiz={(substrand) => {
-              activateQuizMode({
-                grade: selectedGrade,
-                subject: selectedSubject,
-                strand: selectedStrand,
-                substrand: substrand.title,
-                textbookContent: substrand.content,
-              });
-              if (onTutorActivated) onTutorActivated();
-            }}
-          />
-        ) : selectedGrade && selectedSubject && selectedStrand ? (
-          <EmptyLessonState
-            grade={selectedGrade}
-            subject={selectedSubject}
-            strand={selectedStrand}
-          />
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center px-4 sm:px-8">
-            <div className="text-8xl mb-6 opacity-30 hidden sm:block">📚</div>
-            <h2 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-3">
-              Welcome to Your Classroom
-            </h2>
-            <p className="text-white/60 text-sm sm:text-lg max-w-md">
-              Select a grade, subject, and strand above to load your lesson.
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+      );
 }

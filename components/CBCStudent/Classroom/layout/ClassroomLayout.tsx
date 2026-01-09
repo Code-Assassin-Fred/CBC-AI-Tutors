@@ -41,7 +41,7 @@ export default function ClassroomLayout() {
 
   return (
     <TutorProvider>
-      <div className="relative flex flex-col h-[85vh] md:h-[87vh] lg:h-[90vh] w-full bg-[#0a0f14]/80 backdrop-blur-sm text-white overflow-hidden rounded-2xl shadow-xl shadow-black/40 border border-white/10">
+      <div className="relative flex flex-col h-[calc(85vh-4rem)] md:h-[87vh] lg:h-[90vh] w-full bg-[#0a0f14]/80 backdrop-blur-sm text-white overflow-hidden rounded-2xl shadow-xl shadow-black/40 border border-white/10">
         {/* Top controls - hidden on mobile since layout is fixed */}
         <div className="hidden sm:flex items-center justify-center gap-2 p-3 border-b border-white/10 bg-black/20">
           <div className="flex items-center gap-2">
