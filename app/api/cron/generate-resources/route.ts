@@ -5,18 +5,16 @@ import { resourceGenerationService } from '@/lib/services/resourceGenerationServ
 /**
  * Background Resource Generation Cron Job
  * 
- * Runs every 48 hours (staggered in batches) to ensure:
+ * Runs daily (staggered in 2 batches) to ensure:
  * 1. Every subcategory has at least 2 resources
  * 2. Fresh content is generated regularly
  * 
- * Vercel Cron Schedule: 4 batches staggered 6 hours apart within each 48h cycle
- * - Batch 1: 0 0 *\/2 * * (midnight every 2nd day)
- * - Batch 2: 0 6 *\/2 * * (6am every 2nd day)
- * - Batch 3: 0 12 *\/2 * * (noon every 2nd day)
- * - Batch 4: 0 18 *\/2 * * (6pm every 2nd day)
+ * Vercel Cron Schedule: 2 batches staggered 12 hours apart
+ * - Batch 1: 0 0 * * * (midnight every day)
+ * - Batch 2: 0 12 * * * (noon every day)
  */
 
-const BATCH_SIZE = 4; // Process up to 4 subcategories per batch
+const BATCH_SIZE = 8; // Process up to 8 subcategories per batch (covers ~13 total subcategories in 2 runs)
 
 export async function GET(req: NextRequest) {
     const startTime = Date.now();
