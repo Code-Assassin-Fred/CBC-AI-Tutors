@@ -5,7 +5,21 @@ import LessonCanvas from "@/components/CBCStudent/Classroom/main/LessonCanvas";
 import TutorPanel from "@/components/CBCStudent/Classroom/tutor/TutorPanel";
 import TOCIcon from "@/components/CBCStudent/Classroom/main/tocicon";
 import { TocItem } from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
-import { TutorProvider } from "@/lib/context/TutorContext";
+import { TutorProvider, useTutor } from "@/lib/context/TutorContext";
+
+// Helper component to show title in mobile tutor header (needs to be inside TutorProvider)
+function MobileTutorTitle() {
+  const { context, mode } = useTutor();
+  // Don't show title when idle - let the centered text in TutorPanel show instead
+  if (mode === 'idle') {
+    return null;
+  }
+  return (
+    <span className="text-[10px] font-bold text-white uppercase tracking-widest truncate max-w-[60%]">
+      {context?.substrand || 'Learning'}
+    </span>
+  );
+}
 
 export default function ClassroomLayout() {
   const [view, setView] = useState<"both" | "left" | "right">("both");
@@ -36,8 +50,8 @@ export default function ClassroomLayout() {
   }, [view]);
 
   // Mobile panel heights
-  const mainPanelHeight = mobilePanelState === "default" ? "h-[80%]" : "h-[20%]";
-  const tutorPanelHeight = mobilePanelState === "default" ? "h-[20%]" : "h-[80%]";
+  const mainPanelHeight = mobilePanelState === "default" ? "h-[90%]" : "h-[10%]";
+  const tutorPanelHeight = mobilePanelState === "default" ? "h-[10%]" : "h-[90%]";
 
   return (
     <TutorProvider>
@@ -137,28 +151,34 @@ export default function ClassroomLayout() {
             className={`${tutorPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border-2 border-white/30 transition-all duration-300 ${mobilePanelState === "default" ? 'cursor-pointer hover:bg-white/5' : ''}`}
             onClick={() => mobilePanelState === "default" && setMobilePanelState("tutorExpanded")}
           >
-            {/* Maximize/Minimize button for Tutor - top right */}
-            <button
-              onClick={() => setMobilePanelState(mobilePanelState === "default" ? "tutorExpanded" : "default")}
-              className="absolute top-1 right-2 z-20 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full transition-colors flex items-center gap-1"
-              title={mobilePanelState === "tutorExpanded" ? "Minimize" : "Maximize"}
-            >
-              {mobilePanelState === "tutorExpanded" ? (
-                <>
-                  <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                  <span className="text-[10px] text-white/60">Min</span>
-                </>
-              ) : (
-                <>
-                  <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                  </svg>
-                  <span className="text-[10px] text-white/60">Max</span>
-                </>
-              )}
-            </button>
+            {/* Header row with title + Min/Max button */}
+            <div className="absolute top-1 left-2 right-2 z-20 flex items-center justify-between">
+              <MobileTutorTitle />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setMobilePanelState(mobilePanelState === "default" ? "tutorExpanded" : "default");
+                }}
+                className="ml-auto px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full transition-colors flex items-center gap-1"
+                title={mobilePanelState === "tutorExpanded" ? "Minimize" : "Maximize"}
+              >
+                {mobilePanelState === "tutorExpanded" ? (
+                  <>
+                    <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                    <span className="text-[10px] text-white/60">Min</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                    </svg>
+                    <span className="text-[10px] text-white/60">Max</span>
+                  </>
+                )}
+              </button>
+            </div>
 
             <div className="h-full p-3 pt-8 overflow-y-auto">
               <TutorPanel mobileExpanded={mobilePanelState === "tutorExpanded"} />

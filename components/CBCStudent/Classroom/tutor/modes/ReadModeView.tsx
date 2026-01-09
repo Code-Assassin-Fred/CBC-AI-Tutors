@@ -209,19 +209,19 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
     return (
         <div className="flex flex-col h-full">
             {/* Progress Bar and Controls - Compact */}
-            <div className="pb-3 mb-3 border-b border-white/10">
+            <div className="pb-2 sm:pb-3 mb-2 sm:mb-3 border-b border-white/10">
                 {/* Progress info */}
-                <div className="flex items-center gap-2 mb-1.5">
-                    <span className="text-xs text-white/40 truncate flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[10px] sm:text-xs text-white/40 truncate flex-1">
                         {currentSegmentIndex >= 0 ? segments[currentSegmentIndex]?.label : 'Ready to play'}
                     </span>
-                    <span className="text-xs text-white/20">
+                    <span className="text-[10px] sm:text-xs text-white/20">
                         {currentSegmentIndex >= 0 ? currentSegmentIndex + 1 : 0} / {segments.length}
                     </span>
                 </div>
 
                 {/* Progress bar + controls inline */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                     {/* Skip Back */}
                     <button
                         onClick={handleSkipBack}

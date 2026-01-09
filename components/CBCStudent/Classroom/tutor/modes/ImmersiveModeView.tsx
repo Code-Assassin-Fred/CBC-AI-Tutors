@@ -157,14 +157,14 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
     return (
         <div className="flex flex-col h-full">
             {/* Top Header with Pill Toggle */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-3 sm:mb-8">
                 <span className={`text-[10px] uppercase tracking-[0.2em] font-bold ${phase === 'learning' ? 'text-[#F5DEB3]' : 'text-white/40'
                     }`}>
-                    {phase === 'conversation' ? 'Immersive Chat' : 'Immersive Learning'}
+                    {phase === 'conversation' ? 'Chat' : 'Immersive'}
                 </span>
 
-                <div className="flex items-center gap-3">
-                    <span className="text-[10px] uppercase tracking-widest text-white font-medium">
+                <div className="flex items-center gap-2 sm:gap-3">
+                    <span className="hidden sm:inline text-[10px] uppercase tracking-widest text-white font-medium">
                         {phase === 'conversation' ? 'Switch to Immersive Learning' : 'Switch to Immersive Chat'}
                     </span>
                     <button
@@ -184,7 +184,7 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
             {/* Progress Bar - Only shown for Learning/Feedback phases */}
             {phase !== 'conversation' && !allComplete && (
                 <div className="mb-6">
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="hidden sm:flex items-center justify-between mb-2">
                         <span className="text-[10px] uppercase tracking-widest text-white/40">
                             Section {currentChunkIndex + 1} / {totalChunks}
                         </span>

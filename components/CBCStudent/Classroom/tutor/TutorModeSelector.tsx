@@ -34,7 +34,7 @@ export default function TutorModeSelector({ currentMode, onModeChange }: TutorMo
                     key={mode.id}
                     onClick={() => onModeChange(mode.id)}
                     className={`
-            px-4 py-2 rounded-lg text-sm font-medium
+            px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium
             transition-all duration-200
             ${currentMode === mode.id
                             ? 'bg-white/10 text-white shadow-sm'

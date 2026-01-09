@@ -79,11 +79,18 @@ export default function TutorPanel({ mobileExpanded = false }: TutorPanelProps) 
     return (
       <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
         {/* Learning Header */}
-        <div className="pb-3 border-b border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">
-              {context?.substrand || 'Learning'}
-            </h3>
+        <div className="pb-2 sm:pb-3 border-b border-white/10">
+          {/* Title - hidden on mobile */}
+          <h3 className="hidden sm:block text-[10px] font-bold text-white uppercase tracking-[0.2em] mb-3">
+            {context?.substrand || 'Learning'}
+          </h3>
+
+          {/* Mode tabs + Exit in same row */}
+          <div className="flex items-center justify-between">
+            <TutorModeSelector
+              currentMode={learningSubMode}
+              onModeChange={setLearningSubMode}
+            />
             <button
               onClick={exitMode}
               className="text-[10px] font-bold text-white/40 hover:text-white/60 uppercase tracking-widest transition-colors"
@@ -91,11 +98,6 @@ export default function TutorPanel({ mobileExpanded = false }: TutorPanelProps) 
               Exit
             </button>
           </div>
-
-          <TutorModeSelector
-            currentMode={learningSubMode}
-            onModeChange={setLearningSubMode}
-          />
         </div>
 
         {/* Mode Content */}
@@ -123,9 +125,9 @@ export default function TutorPanel({ mobileExpanded = false }: TutorPanelProps) 
         <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">AI Tutor</h3>
       </div>
 
-      {/* Mobile collapsed: Just show "AI Tutor" text centered, slightly up */}
+      {/* Mobile collapsed: Just show "AI Tutor" text centered */}
       {!mobileExpanded && (
-        <div className="flex sm:hidden items-center justify-center h-full pb-8">
+        <div className="absolute inset-0 flex sm:hidden items-center justify-center">
           <h3 className="text-sm font-bold text-white/60 uppercase tracking-widest">AI Tutor</h3>
         </div>
       )}
