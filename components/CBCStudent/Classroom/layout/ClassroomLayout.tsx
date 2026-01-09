@@ -93,10 +93,10 @@ export default function ClassroomLayout() {
             {/* TOC Button */}
             <TOCIcon toc={toc} />
 
-            {/* Minimize/Maximize button for Main - bottom center */}
+            {/* Minimize/Maximize button for Main - bottom right */}
             <button
               onClick={() => setMobilePanelState(mobilePanelState === "default" ? "tutorExpanded" : "default")}
-              className="absolute bottom-1 left-1/2 -translate-x-1/2 z-20 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full transition-colors flex items-center gap-1"
+              className="absolute bottom-1 right-2 z-20 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full transition-colors flex items-center gap-1"
               title={mobilePanelState === "default" ? "Minimize" : "Maximize"}
             >
               {mobilePanelState === "default" ? (
@@ -119,10 +119,10 @@ export default function ClassroomLayout() {
 
           {/* Tutor Panel Card */}
           <div className={`${tutorPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border border-white/10 transition-all duration-300`}>
-            {/* Maximize/Minimize button for Tutor - top center */}
+            {/* Maximize/Minimize button for Tutor - top right */}
             <button
               onClick={() => setMobilePanelState(mobilePanelState === "default" ? "tutorExpanded" : "default")}
-              className="absolute top-1 left-1/2 -translate-x-1/2 z-20 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full transition-colors flex items-center gap-1"
+              className="absolute top-1 right-2 z-20 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full transition-colors flex items-center gap-1"
               title={mobilePanelState === "tutorExpanded" ? "Minimize" : "Maximize"}
             >
               {mobilePanelState === "tutorExpanded" ? (
