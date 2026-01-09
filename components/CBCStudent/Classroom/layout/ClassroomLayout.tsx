@@ -11,6 +11,9 @@ export default function ClassroomLayout() {
   const [view, setView] = useState<"both" | "left" | "right">("both");
   const [contentMode, setContentMode] = useState<"lesson" | "saved">("lesson");
 
+  // Mobile panel state: 'default' = 80:20 (main large), 'tutorExpanded' = 20:80 (tutor large)
+  const [mobilePanelState, setMobilePanelState] = useState<"default" | "tutorExpanded">("default");
+
   // New state to hold TOC from LessonCanvas / StudentTextbookRenderer
   const [toc, setToc] = useState<TocItem[]>([]);
 
@@ -31,6 +34,10 @@ export default function ClassroomLayout() {
       view === "right" ? "w-full" : view === "both" ? "w-[40%]" : "w-0";
     return `${base} ${width}`;
   }, [view]);
+
+  // Mobile panel heights
+  const mainPanelHeight = mobilePanelState === "default" ? "h-[80%]" : "h-[20%]";
+  const tutorPanelHeight = mobilePanelState === "default" ? "h-[20%]" : "h-[80%]";
 
   return (
     <TutorProvider>
@@ -70,10 +77,10 @@ export default function ClassroomLayout() {
           </div>
         </div>
 
-        {/* Mobile layout: Vertical stack - Main 60%, Tutor 40% as separate cards */}
+        {/* Mobile layout: Vertical stack with toggle controls */}
         <div className="flex flex-col flex-1 overflow-hidden sm:hidden p-2 gap-2">
-          {/* Main Panel Card - 60% height */}
-          <div className="h-[60%] overflow-hidden relative rounded-xl bg-[#0b0f12] border border-white/10">
+          {/* Main Panel Card */}
+          <div className={`${mainPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border border-white/10 transition-all duration-300`}>
             <div className="h-full overflow-y-auto scrollbar-hide">
               {contentMode === "lesson" ? (
                 <LessonCanvas onTocUpdate={setToc} />
@@ -85,11 +92,57 @@ export default function ClassroomLayout() {
             </div>
             {/* TOC Button */}
             <TOCIcon toc={toc} />
+
+            {/* Minimize/Maximize button for Main - bottom center */}
+            <button
+              onClick={() => setMobilePanelState(mobilePanelState === "default" ? "tutorExpanded" : "default")}
+              className="absolute bottom-1 left-1/2 -translate-x-1/2 z-20 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full transition-colors flex items-center gap-1"
+              title={mobilePanelState === "default" ? "Minimize" : "Maximize"}
+            >
+              {mobilePanelState === "default" ? (
+                <>
+                  <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                  <span className="text-[10px] text-white/60">Min</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                  </svg>
+                  <span className="text-[10px] text-white/60">Max</span>
+                </>
+              )}
+            </button>
           </div>
 
-          {/* Tutor Panel Card - 40% height at bottom */}
-          <div className="h-[40%] overflow-hidden rounded-xl bg-[#0b0f12] border border-white/10">
-            <div className="h-full p-3 overflow-y-auto">
+          {/* Tutor Panel Card */}
+          <div className={`${tutorPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border border-white/10 transition-all duration-300`}>
+            {/* Maximize/Minimize button for Tutor - top center */}
+            <button
+              onClick={() => setMobilePanelState(mobilePanelState === "default" ? "tutorExpanded" : "default")}
+              className="absolute top-1 left-1/2 -translate-x-1/2 z-20 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full transition-colors flex items-center gap-1"
+              title={mobilePanelState === "tutorExpanded" ? "Minimize" : "Maximize"}
+            >
+              {mobilePanelState === "tutorExpanded" ? (
+                <>
+                  <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                  <span className="text-[10px] text-white/60">Min</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                  </svg>
+                  <span className="text-[10px] text-white/60">Max</span>
+                </>
+              )}
+            </button>
+
+            <div className="h-full p-3 pt-8 overflow-y-auto">
               <TutorPanel />
             </div>
           </div>
@@ -108,7 +161,7 @@ export default function ClassroomLayout() {
                 }
               >
                 {contentMode === "lesson" ? (
-                  <LessonCanvas onTocUpdate={setToc} /> // Pass TOC callback
+                  <LessonCanvas onTocUpdate={setToc} />
                 ) : (
                   <div className="h-full flex items-center justify-center text-white/40">
                     <p>Saved Lessons coming soon...</p>

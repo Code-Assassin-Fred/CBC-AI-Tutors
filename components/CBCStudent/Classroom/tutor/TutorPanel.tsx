@@ -114,10 +114,21 @@ export default function TutorPanel() {
   // Idle state (default)
   return (
     <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
-      <div className="pb-3 border-b border-white/10">
+      {/* Header - hidden on mobile */}
+      <div className="hidden sm:block pb-3 border-b border-white/10">
         <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">AI Tutor</h3>
       </div>
-      <IdleState />
+
+      {/* Mobile: Just show "AI Tutor" text centered */}
+      <div className="flex sm:hidden items-center justify-center h-full">
+        <h3 className="text-sm font-bold text-white/60 uppercase tracking-widest">AI Tutor</h3>
+      </div>
+
+      {/* Desktop: Show full IdleState content */}
+      <div className="hidden sm:block flex-1">
+        <IdleState />
+      </div>
+
       {xpPopupElement}
     </div>
   );
