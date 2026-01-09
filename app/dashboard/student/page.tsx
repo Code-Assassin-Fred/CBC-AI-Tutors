@@ -39,18 +39,18 @@ function DashboardContent() {
     return (
         <DashboardLayout active="Dashboard">
             {/* Page header chips */}
-            <div className="max-w-7xl mx-auto mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 px-0">
-                <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-2xl bg-[#0b0f12] border border-white/8 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
-                    <span className="text-[10px] sm:text-xs text-[#9aa6b2]">Welcome Back!</span>
-                    <span className="text-white/95 text-sm sm:text-base font-semibold leading-none">
+            <div className="max-w-7xl mx-auto mb-4 flex flex-row items-center justify-between gap-2 px-0">
+                <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-2xl bg-[#0b0f12] border border-white/8 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] min-w-0">
+                    <span className="text-[10px] sm:text-xs text-[#9aa6b2] hidden sm:inline">Welcome Back!</span>
+                    <span className="text-white/95 text-sm sm:text-base font-semibold leading-none truncate">
                         {displayName}
                     </span>
                 </div>
-                <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-2xl bg-[#0b0f12] border border-white/8 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
-                    <span className="text-white/90 text-sm sm:text-base font-medium leading-none">
-                        {weekday}
+                <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-2xl bg-[#0b0f12] border border-white/8 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] min-w-0">
+                    <span className="text-white/90 text-[11px] sm:text-base font-medium leading-none whitespace-nowrap">
+                        {weekday.slice(0, 3)}
                     </span>
-                    <span className="text-[#9aa6b2] text-xs sm:text-sm leading-none">
+                    <span className="text-[#9aa6b2] text-[10px] sm:text-sm leading-none whitespace-nowrap">
                         {dateText}
                     </span>
                 </div>
