@@ -81,17 +81,26 @@ export default function ClassroomLayout() {
         <div className="flex flex-col flex-1 overflow-hidden sm:hidden p-2 gap-2">
           {/* Main Panel Card */}
           <div className={`${mainPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border border-white/10 transition-all duration-300`}>
-            <div className="h-full overflow-y-auto scrollbar-hide">
-              {contentMode === "lesson" ? (
-                <LessonCanvas onTocUpdate={setToc} />
-              ) : (
-                <div className="h-full flex items-center justify-center text-white/40">
-                  <p>Saved Lessons coming soon...</p>
+            {/* When collapsed (tutorExpanded), show just "Classroom" centered */}
+            {mobilePanelState === "tutorExpanded" ? (
+              <div className="h-full flex items-center justify-center">
+                <h3 className="text-sm font-bold text-white/60 uppercase tracking-widest">Classroom</h3>
+              </div>
+            ) : (
+              <>
+                <div className="h-full overflow-y-auto scrollbar-hide">
+                  {contentMode === "lesson" ? (
+                    <LessonCanvas onTocUpdate={setToc} />
+                  ) : (
+                    <div className="h-full flex items-center justify-center text-white/40">
+                      <p>Saved Lessons coming soon...</p>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            {/* TOC Button */}
-            <TOCIcon toc={toc} />
+                {/* TOC Button - only when expanded */}
+                <TOCIcon toc={toc} />
+              </>
+            )}
 
             {/* Minimize/Maximize button for Main - bottom right */}
             <button
@@ -143,7 +152,7 @@ export default function ClassroomLayout() {
             </button>
 
             <div className="h-full p-3 pt-8 overflow-y-auto">
-              <TutorPanel />
+              <TutorPanel mobileExpanded={mobilePanelState === "tutorExpanded"} />
             </div>
           </div>
         </div>

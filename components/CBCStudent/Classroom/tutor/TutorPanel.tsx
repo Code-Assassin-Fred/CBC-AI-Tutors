@@ -12,7 +12,11 @@ import ImmersiveModeView from './modes/ImmersiveModeView';
 import QuizModeView from './modes/QuizModeView';
 import XPPopup from '@/components/gamification/XPPopup';
 
-export default function TutorPanel() {
+interface TutorPanelProps {
+  mobileExpanded?: boolean;
+}
+
+export default function TutorPanel({ mobileExpanded = false }: TutorPanelProps) {
   const {
     mode,
     learningSubMode,
@@ -114,18 +118,20 @@ export default function TutorPanel() {
   // Idle state (default)
   return (
     <div className="flex flex-col h-full pb-[env(safe-area-inset-bottom)]">
-      {/* Header - hidden on mobile */}
-      <div className="hidden sm:block pb-3 border-b border-white/10">
+      {/* Header - shown on desktop or when mobile is expanded */}
+      <div className={`${mobileExpanded ? 'block' : 'hidden sm:block'} pb-3 border-b border-white/10`}>
         <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">AI Tutor</h3>
       </div>
 
-      {/* Mobile: Just show "AI Tutor" text centered */}
-      <div className="flex sm:hidden items-center justify-center h-full">
-        <h3 className="text-sm font-bold text-white/60 uppercase tracking-widest">AI Tutor</h3>
-      </div>
+      {/* Mobile collapsed: Just show "AI Tutor" text centered */}
+      {!mobileExpanded && (
+        <div className="flex sm:hidden items-center justify-center h-full">
+          <h3 className="text-sm font-bold text-white/60 uppercase tracking-widest">AI Tutor</h3>
+        </div>
+      )}
 
-      {/* Desktop: Show full IdleState content */}
-      <div className="hidden sm:block flex-1">
+      {/* Desktop or Mobile expanded: Show full IdleState content */}
+      <div className={`${mobileExpanded ? 'block' : 'hidden sm:block'} flex-1`}>
         <IdleState />
       </div>
 
