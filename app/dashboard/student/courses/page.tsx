@@ -23,7 +23,6 @@ function CoursesPageContent() {
         myCourses,
         loadMyCourses,
         isLoadingMyCourses,
-        discoverCourses,
         enrollInCourse,
     } = useCourses();
 
@@ -57,25 +56,13 @@ function CoursesPageContent() {
                     return;
                 }
 
-                // 2. Check if it exists globally
-                const globalCourses = await discoverCourses(enrollTopic);
-                const matchingCourse = globalCourses.find(c => matchesTopic(c.title));
-
-                if (matchingCourse) {
-                    // Auto-enroll and navigate (with career path link)
-                    const enrolled = await enrollInCourse(matchingCourse.id, careerPathId);
-                    if (enrolled) {
-                        router.push(`/dashboard/student/courses/${matchingCourse.id}`);
-                    }
-                } else {
-                    // 3. Generate it (with career path link)
-                    handleGenerate(enrollTopic, careerPathId);
-                }
+                // 2. Generate it (with career path link)
+                handleGenerate(enrollTopic, careerPathId);
             };
 
             handleEnrollment();
         }
-    }, [searchParams, isGenerating, isLoadingMyCourses, myCourses, discoverCourses, enrollInCourse, router]);
+    }, [searchParams, isGenerating, isLoadingMyCourses, myCourses, enrollInCourse, router]);
 
     useEffect(() => {
         loadSuggestions();
