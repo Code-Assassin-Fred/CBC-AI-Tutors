@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/Landing/Navbar";
+import Navbar from "@/components/landing/Navbar";
 
 export default function HeroSection() {
   const router = useRouter();
