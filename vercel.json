@@ -1,12 +1,1 @@
-{
-    "crons": [
-        {
-            "path": "/api/cron/generate-resources?batch=1",
-            "schedule": "0 0 * * *"
-        },
-        {
-            "path": "/api/cron/generate-resources?batch=2",
-            "schedule": "0 12 * * *"
-        }
-    ]
-}
+{}

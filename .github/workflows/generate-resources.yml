@@ -1,0 +1,32 @@
+name: Periodic Resource Generation
+
+on:
+  schedule:
+    # Runs every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    # Allows manual triggering from the GitHub Actions tab
+
+jobs:
+  generate-resources:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Resource Generation API
+        run: |
+          # We use batch=1 always because the new logic handles task selection internally
+          # and BATCH_SIZE=1 ensures we only do one high-quality item per run.
+          
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X GET \
+            "https://cbc-ai-tutors.vercel.app/api/cron/generate-resources?batch=1" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+          
+          HTTP_STATUS=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          
+          echo "Status: $HTTP_STATUS"
+          echo "Body: $BODY"
+          
+          if [ "$HTTP_STATUS" -ne 200 ]; then
+            echo "Error: API call failed with status $HTTP_STATUS"
+            exit 1
+          fi

@@ -14,7 +14,7 @@ import { resourceGenerationService } from '@/lib/services/resourceGenerationServ
  * - Batch 2: 0 12 * * * (noon every day)
  */
 
-const BATCH_SIZE = 8; // Process up to 8 subcategories per batch (covers ~13 total subcategories in 2 runs)
+const BATCH_SIZE = 1; // Process only 1 subcategory per run to ensure maximum quality and focus
 
 export async function GET(req: NextRequest) {
     const startTime = Date.now();
@@ -80,7 +80,7 @@ export async function GET(req: NextRequest) {
                 const ids = await orchestrator.generateResourcesForCategory(
                     task.categoryId,
                     task.subcategoryId,
-                    2 // Generate 2 resources per subcategory
+                    1 // Generate 1 high-quality resource per subcategory
                 );
 
                 // Update the last generated timestamp
