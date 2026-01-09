@@ -247,34 +247,80 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
         </aside>
       </div>
 
-      {/* Mobile Bottom Navigation - visible only on mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0b0f12]/95 backdrop-blur-xl border-t border-white/10 safe-area-inset-bottom">
-        <div className="flex items-center justify-around h-16 px-2">
-          {mobileNavItems.map((item) => {
-            const isActive = item.href === '/dashboard/student'
-              ? pathname === item.href
-              : pathname.startsWith(item.href);
+      {/* Mobile Bottom Navigation - visible only on mobile with marquee scroll */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0b0f12]/95 backdrop-blur-xl border-t border-white/10 safe-area-inset-bottom overflow-hidden">
+        <div className="relative h-16">
+          {/* Marquee container with animation */}
+          <div className="flex items-center h-full animate-marquee">
+            {/* First set of nav items */}
+            {navItems.map((item) => {
+              const isActive = item.href === '/dashboard/student'
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
 
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                className={`flex flex-col items-center justify-center gap-1 py-2 px-3 min-w-[56px] rounded-xl transition-colors ${isActive
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  className={`flex flex-col items-center justify-center gap-1 py-2 px-4 min-w-[72px] rounded-xl transition-colors flex-shrink-0 ${isActive
                     ? 'text-[#0ea5e9] bg-[#0ea5e9]/10'
                     : 'text-white/60 hover:text-white/90'
-                  }`}
-                aria-label={item.label}
-              >
-                <span className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
-                  {item.icon}
-                </span>
-                <span className={`text-[10px] font-medium ${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
-                  {item.label.length > 8 ? item.label.substring(0, 6) + '..' : item.label}
-                </span>
-              </Link>
-            );
-          })}
+                    }`}
+                  aria-label={item.label}
+                >
+                  <span className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
+                    {item.icon}
+                  </span>
+                  <span className={`text-[10px] font-medium whitespace-nowrap ${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
+            {/* Duplicate set for seamless loop */}
+            {navItems.map((item) => {
+              const isActive = item.href === '/dashboard/student'
+                ? pathname === item.href
+                : pathname.startsWith(item.href);
+
+              return (
+                <Link
+                  key={`${item.id}-duplicate`}
+                  href={item.href}
+                  className={`flex flex-col items-center justify-center gap-1 py-2 px-4 min-w-[72px] rounded-xl transition-colors flex-shrink-0 ${isActive
+                    ? 'text-[#0ea5e9] bg-[#0ea5e9]/10'
+                    : 'text-white/60 hover:text-white/90'
+                    }`}
+                  aria-label={item.label}
+                >
+                  <span className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
+                    {item.icon}
+                  </span>
+                  <span className={`text-[10px] font-medium whitespace-nowrap ${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
+        {/* Inline keyframes for marquee animation */}
+        <style jsx>{`
+          @keyframes marquee {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+          .animate-marquee {
+            animation: marquee 20s linear infinite;
+          }
+          .animate-marquee:hover {
+            animation-play-state: paused;
+          }
+        `}</style>
       </nav>
     </>
   );
