@@ -32,6 +32,13 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
         }
     }, [currentSegmentIndex]);
 
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            playingRef.current = false;
+        };
+    }, []);
+
     const handlePlay = async () => {
         if (isPlayingSequence) {
             // Stop playback
@@ -212,10 +219,10 @@ export default function PodcastModeView({ script }: PodcastModeViewProps) {
                                     }
                                 }}
                                 className={`flex-1 transition-all hover:brightness-125 ${idx < currentSegmentIndex
-                                        ? 'bg-sky-500'
-                                        : idx === currentSegmentIndex
-                                            ? audio.isPlaying ? 'bg-sky-500 animate-pulse' : 'bg-sky-500'
-                                            : 'bg-white/10 hover:bg-white/20'
+                                    ? 'bg-sky-500'
+                                    : idx === currentSegmentIndex
+                                        ? audio.isPlaying ? 'bg-sky-500 animate-pulse' : 'bg-sky-500'
+                                        : 'bg-white/10 hover:bg-white/20'
                                     }`}
                                 title={`${segment.speaker}: ${segment.text.substring(0, 30)}...`}
                             />

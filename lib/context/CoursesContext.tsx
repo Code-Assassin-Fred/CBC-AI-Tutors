@@ -88,7 +88,12 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
     const [currentLesson, setCurrentLesson] = useState<CourseLesson | null>(null);
     const [currentQuiz, setCurrentQuiz] = useState<CourseQuiz | null>(null);
     const [isLoadingCourse, setIsLoadingCourse] = useState(false);
-    const [learningMode, setLearningMode] = useState<LearningMode>('explanation');
+    const [learningMode, setLearningModeState] = useState<LearningMode>('explanation');
+
+    const setLearningMode = useCallback((mode: LearningMode) => {
+        stopSpeaking();
+        setLearningModeState(mode);
+    }, []);
 
     // My courses
     const [myCourses, setMyCourses] = useState<Course[]>([]);

@@ -689,8 +689,9 @@ export function TutorProvider({ children }: TutorProviderProps) {
     // ============================================
 
     const setLearningSubMode = useCallback((subMode: LearningSubMode) => {
+        stopSpeaking(); // Stop any audio when switching sub-modes
         setLearningSubModeState(subMode);
-    }, []);
+    }, [stopSpeaking]);
 
     const exitMode = useCallback(() => {
         stopSpeaking();

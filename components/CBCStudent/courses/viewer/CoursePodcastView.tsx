@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { PodcastScript } from '@/lib/types/agents';
 import { useCourses } from '@/lib/context/CoursesContext';
 import { useGamification } from '@/lib/context/GamificationContext';
@@ -15,29 +15,53 @@ export default function CoursePodcastView({ script }: CoursePodcastViewProps) {
     const { addXP, showXPPopup } = useGamification();
     const [currentSegmentIndex, setCurrentSegmentIndex] = useState(-1);
     const hasAwardedXP = useRef(false);
+    const playingRef = useRef(false);
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            playingRef.current = false;
+        };
+    }, []);
 
     const handlePlay = async () => {
         if (isPlaying) {
+            playingRef.current = false;
             stopSpeaking();
             setCurrentSegmentIndex(-1);
             return;
         }
 
         // Play segments sequentially
+        playingRef.current = true;
         for (let i = 0; i < script.dialogue.length; i++) {
+            if (!playingRef.current) break;
+
             setCurrentSegmentIndex(i);
             const segment = script.dialogue[i];
-            await speak(segment.text);
-            // Small pause between segments
-            await new Promise(resolve => setTimeout(resolve, 500));
-        }
-        setCurrentSegmentIndex(-1);
 
-        // Award XP for completing podcast
-        if (!hasAwardedXP.current) {
-            hasAwardedXP.current = true;
-            await addXP(XP_CONFIG.podcast, 'podcast', `Completed podcast: ${script.title}`);
-            showXPPopup(XP_CONFIG.podcast);
+            try {
+                await speak(segment.text);
+                // Extra check after speaking
+                if (!playingRef.current) break;
+                // Small pause between segments
+                await new Promise(resolve => setTimeout(resolve, 500));
+            } catch (error) {
+                console.error('Error speaking segment:', error);
+                break;
+            }
+        }
+
+        if (playingRef.current) {
+            setCurrentSegmentIndex(-1);
+
+            // Award XP for completing podcast
+            if (!hasAwardedXP.current) {
+                hasAwardedXP.current = true;
+                await addXP(XP_CONFIG.podcast, 'podcast', `Completed podcast: ${script.title}`);
+                showXPPopup(XP_CONFIG.podcast);
+            }
+            playingRef.current = false;
         }
     };
 

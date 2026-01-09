@@ -108,6 +108,13 @@ export default function ReadModeView({ content }: ReadModeViewProps) {
         }
     }, [currentSegmentIndex]);
 
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            playingRef.current = false;
+        };
+    }, []);
+
     // Play from a specific index
     const playFromIndex = async (startIndex: number) => {
         setIsPlayingAll(true);
