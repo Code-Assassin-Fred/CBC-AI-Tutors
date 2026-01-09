@@ -131,7 +131,7 @@ export default function TutorPanel({ mobileExpanded = false }: TutorPanelProps) 
       )}
 
       {/* Desktop or Mobile expanded: Show full IdleState content */}
-      <div className={`${mobileExpanded ? 'block' : 'hidden sm:block'} flex-1`}>
+      <div className={`${mobileExpanded ? 'flex' : 'hidden sm:flex'} flex-1 items-center justify-center`}>
         <IdleState />
       </div>
 
