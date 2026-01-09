@@ -1,42 +1,54 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/lib/context/AuthContext';
+import { UserNotification } from '@/types/userprofile';
 
 interface NotificationsModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-interface Notification {
-    id: string;
-    title: string;
-    message: string;
-    time: string;
-    read: boolean;
-    type: 'info' | 'success' | 'warning';
-}
-
-const sampleNotifications: Notification[] = [
-    {
-        id: '1',
-        title: 'New curriculum update',
-        message: 'The Grade 7 Integrated Science curriculum has been updated.',
-        time: '2 hours ago',
-        read: false,
-        type: 'info',
-    },
-    {
-        id: '2',
-        title: 'System update',
-        message: 'New textbook generation features are now available.',
-        time: '1 day ago',
-        read: false,
-        type: 'success',
-    },
-];
-
 export default function NotificationsModal({ isOpen, onClose }: NotificationsModalProps) {
-    if (!isOpen) return null;
+    const { user } = useAuth();
+    const [notifications, setNotifications] = useState<UserNotification[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        if (isOpen && user) {
+            fetchNotifications();
+        }
+    }, [isOpen, user]);
+
+    const fetchNotifications = async () => {
+        if (!user) return;
+        setIsLoading(true);
+        try {
+            const res = await fetch(`/api/notifications?userId=${user.uid}`);
+            const data = await res.json();
+            if (data.success) {
+                setNotifications(data.notifications || []);
+            }
+        } catch (err) {
+            console.error('Error fetching notifications:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleMarkAllRead = async () => {
+        if (!user) return;
+        try {
+            await fetch('/api/notifications', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ markAllRead: true, userId: user.uid }),
+            });
+            setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+        } catch (err) {
+            console.error('Error marking notifications as read:', err);
+        }
+    };
 
     const getTypeIcon = (type: string) => {
         switch (type) {
@@ -67,13 +79,28 @@ export default function NotificationsModal({ isOpen, onClose }: NotificationsMod
         }
     };
 
+    const formatTime = (isoString: string) => {
+        const date = new Date(isoString);
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins} min ago`;
+        if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+        return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    };
+
+    if (!isOpen) return null;
+
+    const hasUnread = notifications.some(n => !n.read);
+
     return (
         <div className="fixed inset-0 z-50 flex items-start justify-end pt-16 pr-6">
             {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-black/40"
-                onClick={onClose}
-            />
+            <div className="absolute inset-0 bg-black/40" onClick={onClose} />
 
             {/* Modal */}
             <div className="relative w-80 max-h-[70vh] bg-[#0b0f12] rounded-xl border border-white/10 overflow-hidden shadow-xl">
@@ -92,13 +119,14 @@ export default function NotificationsModal({ isOpen, onClose }: NotificationsMod
 
                 {/* Notifications list */}
                 <div className="max-h-[50vh] overflow-y-auto">
-                    {sampleNotifications.length > 0 ? (
+                    {isLoading ? (
+                        <div className="py-8 text-center text-white/40 text-sm">Loading...</div>
+                    ) : notifications.length > 0 ? (
                         <div className="divide-y divide-white/5">
-                            {sampleNotifications.map((notif) => (
+                            {notifications.map((notif) => (
                                 <div
                                     key={notif.id}
-                                    className={`p-4 hover:bg-white/5 transition-colors ${!notif.read ? 'bg-white/[0.02]' : ''
-                                        }`}
+                                    className={`p-4 hover:bg-white/5 transition-colors ${!notif.read ? 'bg-white/[0.02]' : ''}`}
                                 >
                                     <div className="flex gap-3">
                                         {getTypeIcon(notif.type)}
@@ -115,7 +143,7 @@ export default function NotificationsModal({ isOpen, onClose }: NotificationsMod
                                                 {notif.message}
                                             </p>
                                             <p className="text-xs text-white/30 mt-1">
-                                                {notif.time}
+                                                {formatTime(notif.createdAt)}
                                             </p>
                                         </div>
                                     </div>
@@ -130,11 +158,16 @@ export default function NotificationsModal({ isOpen, onClose }: NotificationsMod
                 </div>
 
                 {/* Footer */}
-                <div className="px-4 py-3 border-t border-white/10">
-                    <button className="w-full text-center text-xs text-[#0ea5e9] hover:underline">
-                        Mark all as read
-                    </button>
-                </div>
+                {hasUnread && (
+                    <div className="px-4 py-3 border-t border-white/10">
+                        <button
+                            onClick={handleMarkAllRead}
+                            className="w-full text-center text-xs text-[#0ea5e9] hover:underline"
+                        >
+                            Mark all as read
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
