@@ -101,7 +101,7 @@ export default function ResourceHub() {
             </div>
 
             {/* Categories */}
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 pb-2 border-b border-slate-800/50 overflow-x-auto">
+            <div className="flex overflow-x-auto no-scrollbar gap-2 pb-2 border-b border-slate-800/50 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth">
                 {categories.map((cat) => (
                     <button
                         key={cat.id}
@@ -109,7 +109,7 @@ export default function ResourceHub() {
                             setActiveCategory(cat.id);
                             setActiveSubcategory(null);
                         }}
-                        className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${activeCategory === cat.id
+                        className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${activeCategory === cat.id
                             ? 'bg-[#228B22] text-white shadow-lg shadow-[#228B22]/20'
                             : 'bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-700'
                             }`}
@@ -121,10 +121,10 @@ export default function ResourceHub() {
 
             {/* Subcategories */}
             {activeCategory && (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex overflow-x-auto no-scrollbar gap-2 py-1 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth">
                     <button
                         onClick={() => setActiveSubcategory(null)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${!activeSubcategory
+                        className={`px-4 py-1.5 rounded-full text-xs font-medium border transition-all whitespace-nowrap flex-shrink-0 ${!activeSubcategory
                             ? 'bg-slate-100 text-slate-900 border-slate-100'
                             : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
                             }`}
@@ -135,7 +135,7 @@ export default function ResourceHub() {
                         <button
                             key={sub.id}
                             onClick={() => setActiveSubcategory(sub.id)}
-                            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${activeSubcategory === sub.id
+                            className={`px-4 py-1.5 rounded-full text-xs font-medium border transition-all whitespace-nowrap flex-shrink-0 ${activeSubcategory === sub.id
                                 ? 'bg-[#228B22]/10 text-[#228B22] border-[#228B22]/30'
                                 : 'bg-transparent text-slate-400 border-slate-700 hover:border-slate-500'
                                 }`}
