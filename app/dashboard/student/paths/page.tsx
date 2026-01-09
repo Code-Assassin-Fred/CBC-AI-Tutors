@@ -120,31 +120,33 @@ function CareerPathsContent() {
             )}
 
             {/* Tabs at top */}
-            <div className="max-w-5xl mx-auto px-4 pt-6">
-                <div className="flex items-center gap-6 border-b border-white/10 mb-6">
+            <div className="max-w-5xl mx-auto px-4 pt-4 sm:pt-10">
+                <div className="flex items-center gap-4 sm:gap-8 border-b border-white/5 mb-6 sm:mb-10 overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
                     <button
                         onClick={() => setActiveTab('my-paths')}
-                        className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'my-paths' ? 'text-[#0ea5e9]' : 'text-white/50 hover:text-white/80'
+                        className={`pb-4 text-xs sm:text-sm font-semibold transition-all relative whitespace-nowrap ${activeTab === 'my-paths' ? 'text-[#0ea5e9]' : 'text-white/40 hover:text-white/70'
                             }`}
                     >
-                        My Career Paths
-                        {savedPaths.length > 0 && (
-                            <span className="ml-2 px-1.5 py-0.5 text-xs bg-white/10 rounded-full">
-                                {savedPaths.length}
-                            </span>
-                        )}
+                        <span className="flex items-center gap-2">
+                            My Career Paths
+                            {savedPaths.length > 0 && (
+                                <span className={`px-2 py-0.5 text-[10px] rounded-full transition-colors ${activeTab === 'my-paths' ? 'bg-[#0ea5e9]/20 text-[#0ea5e9]' : 'bg-white/5 text-white/30'}`}>
+                                    {savedPaths.length}
+                                </span>
+                            )}
+                        </span>
                         {activeTab === 'my-paths' && (
-                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0ea5e9] rounded-full" />
+                            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0ea5e9] rounded-full shadow-[0_-2px_6px_rgba(14,165,233,0.4)]" />
                         )}
                     </button>
                     <button
                         onClick={() => setActiveTab('create')}
-                        className={`pb-3 text-sm font-medium transition-colors relative ${activeTab === 'create' ? 'text-[#0ea5e9]' : 'text-white/50 hover:text-white/80'
+                        className={`pb-4 text-xs sm:text-sm font-semibold transition-all relative whitespace-nowrap ${activeTab === 'create' ? 'text-[#0ea5e9]' : 'text-white/40 hover:text-white/70'
                             }`}
                     >
                         Create New
                         {activeTab === 'create' && (
-                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0ea5e9] rounded-full" />
+                            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0ea5e9] rounded-full shadow-[0_-2px_6px_rgba(14,165,233,0.4)]" />
                         )}
                     </button>
                 </div>
