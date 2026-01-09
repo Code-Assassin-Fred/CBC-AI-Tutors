@@ -123,9 +123,9 @@ export default function TutorPanel({ mobileExpanded = false }: TutorPanelProps) 
         <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">AI Tutor</h3>
       </div>
 
-      {/* Mobile collapsed: Just show "AI Tutor" text centered */}
+      {/* Mobile collapsed: Just show "AI Tutor" text centered, slightly up */}
       {!mobileExpanded && (
-        <div className="flex sm:hidden items-center justify-center h-full">
+        <div className="flex sm:hidden items-center justify-center h-full pb-8">
           <h3 className="text-sm font-bold text-white/60 uppercase tracking-widest">AI Tutor</h3>
         </div>
       )}

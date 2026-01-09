@@ -7,11 +7,11 @@ export default function IdleState() {
         <div className="flex flex-col items-center justify-center h-full p-6 text-center">
             {/* Mobile: say "above" */}
             <p className="sm:hidden text-xs text-white/70 uppercase tracking-widest max-w-xs leading-relaxed">
-                Select a substrand above to begin a guided session.
+                Select a strand above to begin a guided session.
             </p>
             {/* Desktop: say "left canvas" */}
             <p className="hidden sm:block text-xs text-white/70 uppercase tracking-widest max-w-xs leading-relaxed">
-                Select a substrand on the left canvas to begin a guided session.
+                Select a strand on the left canvas to begin a guided session.
             </p>
 
             <div className="mt-8 flex flex-col gap-3">

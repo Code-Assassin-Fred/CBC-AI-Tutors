@@ -80,26 +80,32 @@ export default function ClassroomLayout() {
         {/* Mobile layout: Vertical stack with toggle controls */}
         <div className="flex flex-col flex-1 overflow-hidden sm:hidden p-2 gap-2">
           {/* Main Panel Card */}
-          <div className={`${mainPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border border-white/10 transition-all duration-300`}>
-            {/* When collapsed (tutorExpanded), show just "Classroom" centered */}
-            {mobilePanelState === "tutorExpanded" ? (
-              <div className="h-full flex items-center justify-center">
+          <div className={`${mainPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border-2 border-white/30 transition-all duration-300`}>
+            {/* LessonCanvas always mounted to preserve state */}
+            <div className={`h-full overflow-y-auto scrollbar-hide ${mobilePanelState === "tutorExpanded" ? "invisible" : ""}`}>
+              {contentMode === "lesson" ? (
+                <LessonCanvas
+                  onTocUpdate={setToc}
+                  onTutorActivated={() => setMobilePanelState("tutorExpanded")}
+                />
+              ) : (
+                <div className="h-full flex items-center justify-center text-white/40">
+                  <p>Saved Lessons coming soon...</p>
+                </div>
+              )}
+            </div>
+
+            {/* TOC Button - only when expanded */}
+            {mobilePanelState !== "tutorExpanded" && <TOCIcon toc={toc} />}
+
+            {/* Overlay "Classroom" text when collapsed - click to maximize */}
+            {mobilePanelState === "tutorExpanded" && (
+              <div
+                className="absolute inset-0 flex items-center justify-center cursor-pointer hover:bg-white/5 transition-colors"
+                onClick={() => setMobilePanelState("default")}
+              >
                 <h3 className="text-sm font-bold text-white/60 uppercase tracking-widest">Classroom</h3>
               </div>
-            ) : (
-              <>
-                <div className="h-full overflow-y-auto scrollbar-hide">
-                  {contentMode === "lesson" ? (
-                    <LessonCanvas onTocUpdate={setToc} />
-                  ) : (
-                    <div className="h-full flex items-center justify-center text-white/40">
-                      <p>Saved Lessons coming soon...</p>
-                    </div>
-                  )}
-                </div>
-                {/* TOC Button - only when expanded */}
-                <TOCIcon toc={toc} />
-              </>
             )}
 
             {/* Minimize/Maximize button for Main - bottom right */}
@@ -126,8 +132,11 @@ export default function ClassroomLayout() {
             </button>
           </div>
 
-          {/* Tutor Panel Card */}
-          <div className={`${tutorPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border border-white/10 transition-all duration-300`}>
+          {/* Tutor Panel Card - click on collapsed panel to maximize */}
+          <div
+            className={`${tutorPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border-2 border-white/30 transition-all duration-300 ${mobilePanelState === "default" ? 'cursor-pointer hover:bg-white/5' : ''}`}
+            onClick={() => mobilePanelState === "default" && setMobilePanelState("tutorExpanded")}
+          >
             {/* Maximize/Minimize button for Tutor - top right */}
             <button
               onClick={() => setMobilePanelState(mobilePanelState === "default" ? "tutorExpanded" : "default")}

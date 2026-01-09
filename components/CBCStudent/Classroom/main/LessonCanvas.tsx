@@ -44,6 +44,7 @@ interface TextbookData {
 
 interface LessonCanvasProps {
   onTocUpdate?: (toc: TocItem[]) => void; // New prop to lift TOC
+  onTutorActivated?: () => void; // Callback when tutor is activated (for mobile expand)
 }
 
 // Get initial state from localStorage or URL params
@@ -62,7 +63,7 @@ function getInitialState(key: string, urlParam: string | null): string {
   return '';
 }
 
-export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
+export default function LessonCanvas({ onTocUpdate, onTutorActivated }: LessonCanvasProps) {
   const searchParams = useSearchParams();
   const grades = Object.keys(contentData);
   const { activateLearningMode, activateQuizMode } = useTutor();
@@ -239,6 +240,7 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
                 substrand: substrand.title,
                 textbookContent: substrand.content,
               });
+              if (onTutorActivated) onTutorActivated();
             }}
             onTakeQuiz={(substrand) => {
               activateQuizMode({
@@ -248,6 +250,7 @@ export default function LessonCanvas({ onTocUpdate }: LessonCanvasProps) {
                 substrand: substrand.title,
                 textbookContent: substrand.content,
               });
+              if (onTutorActivated) onTutorActivated();
             }}
           />
         ) : selectedGrade && selectedSubject && selectedStrand ? (
