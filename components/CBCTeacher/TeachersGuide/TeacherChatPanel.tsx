@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { HiOutlinePaperAirplane, HiOutlineSparkles } from 'react-icons/hi2';
+import { HiOutlinePaperAirplane } from 'react-icons/hi2';
+import ReactMarkdown from 'react-markdown';
 
 interface ChatMessage {
     id: string;
@@ -16,9 +17,10 @@ interface TeacherChatPanelProps {
         subject?: string;
         strand?: string;
     };
+    guideContent?: string;
 }
 
-export default function TeacherChatPanel({ context }: TeacherChatPanelProps) {
+export default function TeacherChatPanel({ context, guideContent }: TeacherChatPanelProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -54,18 +56,13 @@ export default function TeacherChatPanel({ context }: TeacherChatPanelProps) {
         setIsLoading(true);
 
         try {
-            // Build context for the AI
-            const contextString = context
-                ? `Context: Grade ${context.grade}, Subject: ${context.subject}, Strand: ${context.strand}`
-                : '';
-
-            const response = await fetch('/api/chat', {
+            const response = await fetch('/api/teacher/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: userMessage.content,
-                    context: contextString,
-                    role: 'teacher', // Indicate this is a teacher using the chat
+                    guideContent: guideContent || '',
+                    context: context || {},
                     history: messages.slice(-10).map(m => ({
                         role: m.role,
                         content: m.content,
@@ -116,46 +113,35 @@ export default function TeacherChatPanel({ context }: TeacherChatPanelProps) {
 
     return (
         <div className="flex flex-col h-full">
-            {/* Header */}
+            {/* Header - Minimalistic */}
             <div className="pb-3 border-b border-white/10">
-                <div className="flex items-center gap-2">
-                    <HiOutlineSparkles className="w-4 h-4 text-sky-400" />
-                    <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em]">
-                        Teaching Assistant
-                    </h3>
-                </div>
-                {context?.strand && (
-                    <p className="text-[10px] text-white/40 mt-1 truncate">
-                        {context.grade} • {context.subject} • {context.strand}
-                    </p>
-                )}
+                <h3 className="text-[10px] font-bold text-white/70 uppercase tracking-[0.2em]">
+                    Teaching Assistant
+                </h3>
             </div>
 
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto scrollbar-hide py-4 space-y-4 min-h-0">
                 {messages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-center px-4">
-                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-500/20 to-purple-500/20 flex items-center justify-center mb-4">
-                            <HiOutlineSparkles className="w-6 h-6 text-sky-400" />
-                        </div>
-                        <h4 className="text-sm font-semibold text-white mb-2">
-                            How can I help?
-                        </h4>
-                        <p className="text-xs text-white/50 mb-6 max-w-[200px]">
-                            Ask me anything about teaching this content, activities, assessments, or classroom strategies.
+                    <div className="flex flex-col items-center justify-center h-full text-center p-6">
+                        {/* Minimalistic idle state - matching student classroom */}
+                        <p className="text-[10px] text-white/70 uppercase tracking-widest max-w-xs leading-relaxed mb-6">
+                            Select a strand to get teaching assistance, or ask a general question below.
                         </p>
 
-                        {/* Quick Suggestions */}
-                        <div className="flex flex-wrap justify-center gap-2">
-                            {suggestions.map((suggestion, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setInput(suggestion)}
-                                    className="px-3 py-1.5 text-[10px] text-white/60 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full transition-all hover:text-white"
-                                >
-                                    {suggestion}
-                                </button>
-                            ))}
+                        <div className="flex flex-col gap-3">
+                            <div className="text-[9px] text-white/50 uppercase tracking-[0.2em] font-bold">Quick Actions</div>
+                            <div className="flex flex-wrap justify-center gap-2">
+                                {suggestions.map((suggestion, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => setInput(suggestion)}
+                                        className="px-2 py-1 border border-white/20 rounded hover:bg-white/5 transition-colors"
+                                    >
+                                        <span className="text-[9px] text-white/70 uppercase tracking-wider font-medium">{suggestion}</span>
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 ) : (
@@ -165,14 +151,22 @@ export default function TeacherChatPanel({ context }: TeacherChatPanelProps) {
                             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
                             <div
-                                className={`max-w-[85%] px-4 py-3 rounded-2xl ${message.role === 'user'
-                                        ? 'bg-sky-600 text-white rounded-br-md'
-                                        : 'bg-white/10 text-white/90 rounded-bl-md'
+                                className={`max-w-[85%] px-3 py-2 rounded-xl ${message.role === 'user'
+                                    ? 'bg-sky-600 text-white rounded-br-md'
+                                    : 'bg-white/10 text-white/90 rounded-bl-md'
                                     }`}
                             >
-                                <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                                    {message.content}
-                                </p>
+                                {message.role === 'user' ? (
+                                    <p className="text-xs leading-relaxed whitespace-pre-wrap">
+                                        {message.content}
+                                    </p>
+                                ) : (
+                                    <div className="prose prose-invert prose-xs max-w-none text-xs leading-relaxed [&>h3]:text-[11px] [&>h3]:font-bold [&>h3]:text-white [&>h3]:mt-2 [&>h3]:mb-1 [&>h4]:text-[10px] [&>h4]:font-semibold [&>h4]:text-white/90 [&>h4]:mt-1.5 [&>h4]:mb-0.5 [&>p]:my-1 [&>ul]:my-1 [&>ul]:pl-3 [&>ol]:my-1 [&>ol]:pl-3 [&>li]:my-0.5 [&>li]:text-white/80 [&>strong]:text-white">
+                                        <ReactMarkdown>
+                                            {message.content}
+                                        </ReactMarkdown>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))
@@ -181,11 +175,11 @@ export default function TeacherChatPanel({ context }: TeacherChatPanelProps) {
                 {/* Loading indicator */}
                 {isLoading && (
                     <div className="flex justify-start">
-                        <div className="px-4 py-3 rounded-2xl bg-white/10 rounded-bl-md">
+                        <div className="px-3 py-2 rounded-xl bg-white/10 rounded-bl-md">
                             <div className="flex items-center gap-1">
-                                <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                <div className="w-2 h-2 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                <div className="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                             </div>
                         </div>
                     </div>
@@ -205,16 +199,16 @@ export default function TeacherChatPanel({ context }: TeacherChatPanelProps) {
                             onKeyDown={handleKeyDown}
                             placeholder="Ask me anything..."
                             rows={1}
-                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pr-12 text-sm text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none scrollbar-hide"
+                            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 pr-10 text-xs text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-sky-500/40 resize-none scrollbar-hide"
                             disabled={isLoading}
                         />
                     </div>
                     <button
                         type="submit"
                         disabled={!input.trim() || isLoading}
-                        className="p-3 bg-sky-500 hover:bg-sky-400 disabled:bg-white/10 disabled:cursor-not-allowed rounded-xl transition-all"
+                        className="p-2 bg-sky-500 hover:bg-sky-400 disabled:bg-white/10 disabled:cursor-not-allowed rounded-lg transition-all"
                     >
-                        <HiOutlinePaperAirplane className={`w-5 h-5 ${input.trim() && !isLoading ? 'text-white' : 'text-white/30'}`} />
+                        <HiOutlinePaperAirplane className={`w-4 h-4 ${input.trim() && !isLoading ? 'text-white' : 'text-white/30'}`} />
                     </button>
                 </form>
                 <p className="text-[9px] text-white/30 text-center mt-2">

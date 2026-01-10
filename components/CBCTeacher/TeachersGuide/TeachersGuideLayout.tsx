@@ -233,8 +233,8 @@ export default function TeachersGuideLayout() {
                                 )}
                             </div>
 
-                            {/* Scrollable Content Area */}
-                            <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
+                            {/* Scrollable Content Area - Matching student classroom styling */}
+                            <div className="flex-1 overflow-y-auto px-2 pt-1 pb-2 sm:p-2 scrollbar-hide">
                                 {loading ? (
                                     <div className="flex items-center justify-center h-full">
                                         <div className="text-white/60 animate-pulse text-lg">Loading your guide...</div>
@@ -258,9 +258,7 @@ export default function TeachersGuideLayout() {
                                         </Link>
                                     </div>
                                 ) : guideContent ? (
-                                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-4xl mx-auto">
-                                        <TeacherTextbookRenderer content={guideContent} images={guideImages} />
-                                    </div>
+                                    <TeacherTextbookRenderer content={guideContent} images={guideImages} />
                                 ) : selectedGrade && selectedSubject && selectedStrand ? (
                                     <div className="h-full flex flex-col items-center justify-center text-center text-[#9aa6b2]/50">
                                         <p className="text-sm">Loading guide content...</p>
@@ -302,6 +300,7 @@ export default function TeachersGuideLayout() {
                                     subject: selectedSubject,
                                     strand: selectedStrand,
                                 }}
+                                guideContent={guideContent || ""}
                             />
                         </div>
                     </div>

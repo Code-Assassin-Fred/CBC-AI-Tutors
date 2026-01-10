@@ -265,12 +265,17 @@ CRITICAL RULES - MUST FOLLOW:
 - This is teaching guidance only, NOT student-facing content
 - Keep professional and clean style
 
-HTML STRUCTURE:
-- Use <h2> for sub-strand title
-- Use <h3> for section headings
-- Use <section class="[section-type]"> wrappers
+HTML STRUCTURE REQUIREMENTS (MUST MATCH STUDENT TEXTBOOK FORMAT):
+- Use <h2> for the sub-strand title ONLY (just one h2 at the top)
+- Use <h3> for major section headings (e.g., Learning Objectives, Prior Knowledge, Key Concepts)
+- Use <h4> for sub-section headings within each section
+- Use <section class="[section-type]"> to wrap each major section
+- Use <ul> and <ol> for lists
 - Use practical, actionable language
 - NO emoji icons anywhere
+
+CRITICAL: The numbered sections above (1-9) should ALL use <h3> tags, NOT <h2>. 
+Only the sub-strand title at the very top uses <h2>.
 
 Write the complete Teacher's Guide now:
   `.trim();
