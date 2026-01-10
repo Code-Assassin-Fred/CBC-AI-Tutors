@@ -158,20 +158,22 @@ export default function ImmersiveModeView({ content }: ImmersiveModeViewProps) {
         <div className="flex flex-col h-full">
             {/* Top Header with Pill Toggle */}
             <div className="flex items-center justify-between mb-3 sm:mb-8">
-                <span className={`text-[10px] uppercase tracking-[0.2em] font-bold ${phase === 'learning' ? 'text-[#F5DEB3]' : 'text-white/40'
-                    }`}>
-                    {phase === 'conversation' ? 'Chat' : 'Immersive'}
-                </span>
+                <div className="flex items-center gap-2">
+                    <div className={`w-1.5 h-1.5 rounded-full ${phase === 'conversation' ? 'bg-sky-500' : 'bg-[#F5DEB3]'} animate-pulse`} />
+                    <span className={`text-[10px] uppercase tracking-[0.2em] font-bold ${phase === 'conversation' ? 'text-sky-500' : 'text-[#F5DEB3]'
+                        }`}>
+                        {phase === 'conversation' ? 'Chat Mode' : 'Immersive Mode'}
+                    </span>
+                </div>
 
                 <div className="flex items-center gap-2 sm:gap-3">
-                    <span className="hidden sm:inline text-[10px] uppercase tracking-widest text-white font-medium">
-                        {phase === 'conversation' ? 'Switch to Immersive Learning' : 'Switch to Immersive Chat'}
+                    <span className="text-[10px] uppercase tracking-widest text-white/60 font-medium whitespace-nowrap">
+                        {phase === 'conversation' ? 'Switch to Immersive' : 'Switch to Chat'}
                     </span>
                     <button
                         onClick={() => setPhase(phase === 'conversation' ? 'learning' : 'conversation')}
                         className={`relative w-10 h-5 rounded-full transition-colors duration-200 focus:outline-none ${phase === 'conversation' ? 'bg-sky-500' : 'bg-white/10'
                             }`}
-                        title={phase === 'conversation' ? "Switch to Immersive Learning" : "Switch to Immersive Chat"}
                     >
                         <div
                             className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white transition-transform duration-200 transform ${phase === 'conversation' ? 'translate-x-5' : 'translate-x-0'
