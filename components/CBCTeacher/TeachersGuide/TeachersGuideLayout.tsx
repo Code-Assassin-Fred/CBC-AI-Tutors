@@ -3,8 +3,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import contentJson from '@/content.json';
 import Link from 'next/link';
-import TeacherTextbookRenderer from './TeacherTextbookRenderer';
+import TeacherTextbookRenderer, { TocItem } from './TeacherTextbookRenderer';
 import TeacherChatPanel from './TeacherChatPanel';
+import TeacherTOCIcon from './TeacherTOCIcon';
 
 // Types derived from content.json
 interface SubStrand {
@@ -38,6 +39,9 @@ export default function TeachersGuideLayout() {
 
     // View toggle state (matching student classroom)
     const [view, setView] = useState<"both" | "left" | "right">("both");
+
+    // TOC state
+    const [toc, setToc] = useState<TocItem[]>([]);
 
     // Update subjects when grade changes
     useEffect(() => {
@@ -258,7 +262,11 @@ export default function TeachersGuideLayout() {
                                         </Link>
                                     </div>
                                 ) : guideContent ? (
-                                    <TeacherTextbookRenderer content={guideContent} images={guideImages} />
+                                    <TeacherTextbookRenderer
+                                        content={guideContent}
+                                        images={guideImages}
+                                        onTocUpdate={setToc}
+                                    />
                                 ) : selectedGrade && selectedSubject && selectedStrand ? (
                                     <div className="h-full flex flex-col items-center justify-center text-center text-[#9aa6b2]/50">
                                         <p className="text-sm">Loading guide content...</p>
@@ -275,6 +283,9 @@ export default function TeachersGuideLayout() {
                                     </div>
                                 )}
                             </div>
+
+                            {/* TOC Button */}
+                            <TeacherTOCIcon toc={toc} />
                         </div>
                     </div>
                 </div>
