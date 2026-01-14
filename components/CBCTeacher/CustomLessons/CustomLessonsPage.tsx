@@ -52,7 +52,7 @@ export default function CustomLessonsPage() {
     };
 
     return (
-        <div className="h-full flex flex-col p-6">
+        <div className="flex flex-col p-6">
             {/* Header */}
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-white mb-2">Custom Lessons</h1>
@@ -112,8 +112,8 @@ export default function CustomLessonsPage() {
                         onClick={handleGenerate}
                         disabled={!topic.trim() || isGenerating}
                         className={`px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${!topic.trim() || isGenerating
-                                ? 'bg-white/10 text-white/30 cursor-not-allowed'
-                                : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/25'
+                            ? 'bg-white/10 text-white/30 cursor-not-allowed'
+                            : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/25'
                             }`}
                     >
                         {isGenerating ? (
@@ -157,7 +157,7 @@ export default function CustomLessonsPage() {
             </div>
 
             {/* Lessons Grid */}
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1">
                 <h2 className="text-lg font-semibold text-white mb-4">
                     Your Lessons {lessons.length > 0 && `(${lessons.length})`}
                 </h2>

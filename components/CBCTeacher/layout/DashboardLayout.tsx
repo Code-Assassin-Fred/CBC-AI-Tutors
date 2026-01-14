@@ -11,7 +11,7 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children, active }: DashboardLayoutProps) {
     return (
-        <div className="flex h-screen overflow-hidden bg-gradient-to-br from-[#0a0f14] via-[#0b1113] to-[#0a0f14]">
+        <div className="flex min-h-screen overflow-hidden bg-gradient-to-br from-[#0a0f14] via-[#0b1113] to-[#0a0f14]">
             {/* Sidebar */}
             <SidebarNav active={active} />
 
@@ -20,8 +20,8 @@ export default function DashboardLayout({ children, active }: DashboardLayoutPro
                 {/* TopBar */}
                 <TopBar />
 
-                {/* Main Content - scrollable */}
-                <main className="flex-1 px-4 sm:px-6 md:px-10 py-6 overflow-y-auto">
+                {/* Main Content - scrollable, with bottom padding for mobile nav if applicable */}
+                <main className="flex-1 px-4 sm:px-6 md:px-10 py-6 pb-20 md:pb-6 overflow-y-auto">
                     {children}
                 </main>
             </div>

@@ -12,10 +12,15 @@ export default function TopBar() {
     const { user } = useAuth();
 
     React.useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 0);
+        const mainElement = document.querySelector('main');
+        const handleScroll = () => {
+            if (mainElement) {
+                setScrolled(mainElement.scrollTop > 0);
+            }
+        };
         handleScroll();
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
+        mainElement?.addEventListener('scroll', handleScroll, { passive: true });
+        return () => mainElement?.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (

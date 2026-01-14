@@ -143,7 +143,7 @@ export default function TeachersGuideLayout() {
     }, [view]);
 
     return (
-        <div className="relative flex flex-col h-[85vh] md:h-[87vh] lg:h-[90vh] w-full bg-[#0a0f14]/80 backdrop-blur-sm text-white overflow-hidden rounded-2xl shadow-xl shadow-black/40 border border-white/10">
+        <div className="relative flex flex-col h-[calc(85vh-4rem)] md:h-[87vh] lg:h-[90vh] w-full bg-[#0a0f14]/80 backdrop-blur-sm text-white overflow-hidden rounded-2xl shadow-xl shadow-black/40 border border-white/10">
             {/* Top controls - View Toggle (matching student classroom) */}
             <div className="flex items-center justify-center gap-2 p-3 border-b border-white/10 bg-black/20">
                 <div className="flex items-center gap-2">
