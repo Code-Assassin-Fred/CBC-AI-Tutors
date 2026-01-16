@@ -85,7 +85,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
 
     return (
         <div
-            className={`sticky top-0 h-screen flex flex-col items-center pt-8 transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-72'
+            className={`hidden md:flex sticky top-0 h-screen flex-col items-center pt-8 transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'lg:w-72 w-20'
                 }`}
         >
             {/* Logo */}

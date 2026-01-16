@@ -11,12 +11,12 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children, active }: DashboardLayoutProps) {
     return (
-        <div className="flex min-h-screen overflow-hidden bg-gradient-to-br from-[#0a0f14] via-[#0b1113] to-[#0a0f14]">
+        <div className="flex min-h-screen bg-gradient-to-br from-[#0a0f14] via-[#0b1113] to-[#0a0f14]">
             {/* Sidebar */}
             <SidebarNav active={active} />
 
             {/* Main Content Area */}
-            <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+            <div className="flex-1 flex flex-col min-w-0 min-h-screen">
                 {/* TopBar */}
                 <TopBar />
 
