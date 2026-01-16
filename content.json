@@ -64,6 +64,354 @@
               ]
             }
           }
+        },
+        "Grammar": {
+          "SubStrands": {
+            "Determiners": {
+              "Outcomes": [
+                "Identify and use definite and indefinite articles appropriately in different contexts."
+              ]
+            },
+            "Nouns": {
+              "Outcomes": [
+                "Identify and use regular and irregular nouns in their plural forms."
+              ]
+            },
+            "Pronouns": {
+              "Outcomes": [
+                "Identify and use personal and possessive pronouns as subjects and objects."
+              ]
+            },
+            "Adjectives": {
+              "Outcomes": [
+                "Use regular and irregular adjectives to describe and compare things."
+              ]
+            },
+            "Adverbs": {
+              "Outcomes": [
+                "Distinguish and use adverbs of manner, time, and place."
+              ]
+            },
+            "Conjunctions": {
+              "Outcomes": [
+                "Identify and use conjunctions in sentences and dialogues."
+              ]
+            },
+            "Interrogatives": {
+              "Outcomes": [
+                "Identify and use interrogative sentences appropriately."
+              ]
+            },
+            "Prepositions": {
+              "Outcomes": [
+                "Identify and use prepositions of position and direction."
+              ]
+            },
+            "Tenses": {
+              "Outcomes": [
+                "Identify and use present and past perfect tenses."
+              ]
+            },
+            "Quantifiers": {
+              "Outcomes": [
+                "Select and use quantifiers appropriately."
+              ]
+            }
+          }
+        },
+        "Writing": {
+          "SubStrands": {
+            "Guided Composition": {
+              "Outcomes": [
+                "Write guided compositions such as filling forms, friendly letters, and SMS."
+              ]
+            },
+            "Creative Writing": {
+              "Outcomes": [
+                "Write narrative and descriptive compositions of 60-100 words."
+              ]
+            },
+            "Handwriting": {
+              "Outcomes": [
+                "Write legibly and neatly, applying correct spelling."
+              ]
+            },
+            "Punctuation": {
+              "Outcomes": [
+                "Identify and use commas, question marks, and other punctuation for clarity."
+              ]
+            },
+            "Spelling": {
+              "Outcomes": [
+                "Spell commonly misspelt words correctly and use double consonants."
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Kiswahili": {
+      "Strands": {
+        "Kusikiliza na Kuzungumza": {
+          "SubStrands": {
+            "Matamshi Bora": {
+              "Outcomes": [
+                "Tambua silabi na vitanzandimi",
+                "Tumia msamiati unaofaa"
+              ]
+            }
+          }
+        },
+        "Kusoma": {
+          "SubStrands": {
+            "Kusoma kwa Ufahamu": {
+              "Outcomes": [
+                "Tambua msamiati na utumie katika sentensi",
+                "Soma kwa ufasaha"
+              ]
+            }
+          }
+        },
+        "Kuandika": {
+          "SubStrands": {
+            "Kuandika Insha": {
+              "Outcomes": [
+                "Tambua muundo wa insha",
+                "Andika insha ya wasifu"
+              ]
+            }
+          }
+        },
+        "Sarufi": {
+          "SubStrands": {
+            "Aina za Maneno": {
+              "Outcomes": [
+                "Eleza nomino, vitenzi, vivumishi",
+                "Tumia katika mawasiliano"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Mathematics": {
+      "Strands": {
+        "Numbers": {
+          "SubStrands": {
+            "Whole Numbers": {
+              "Outcomes": [
+                "Use place value and total value of digits up to tens of thousands in daily life situations.",
+                "Read and write numbers up to 10,000 in symbols in real life situations.",
+                "Read and write numbers up to 1,000 in words in day to day activities.",
+                "Order numbers up to 1,000 in different situations.",
+                "Round off numbers up to 1,000 to the nearest ten in different situations.",
+                "Identify factors/divisors of numbers up to 50 in different contexts.",
+                "Identify multiples of numbers up to 100 in different situations.",
+                "Use even and odd numbers up to 100 in different situations.",
+                "Represent Hindu Arabic numerals using Roman numerals up to ‘X’ in different situations.",
+                "Make patterns involving even and odd numbers in day to day life experiences.",
+                "Use IT devices for learning and leisure.",
+                "Appreciate use of numbers in real life situations."
+              ]
+            },
+            "Addition": {
+              "Outcomes": [
+                "Add up to two 4-digit numbers with single regrouping up to a sum of 10,000 in different situations.",
+                "Add up to two 4-digit numbers with double regrouping up to a sum of 10,000 in real life situations.",
+                "Estimate sum by rounding off numbers to the nearest ten in different situations.",
+                "Create patterns involving addition up to a sum of 10,000 in real life situations.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate application of addition of numbers in real life situations."
+              ]
+            },
+            "Subtraction": {
+              "Outcomes": [
+                "Subtract up to 4-digit numbers without regrouping in real life situations.",
+                "Subtract up to 4-digit numbers with regrouping in real life situations.",
+                "Estimate difference by rounding off numbers to the nearest ten in real life situations.",
+                "Create patterns involving subtraction from up to 10,000.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate application of subtraction of numbers in real life situations."
+              ]
+            },
+            "Multiplication": {
+              "Outcomes": [
+                "Multiply up to a 2-digit number by multiples of 10 in different situations.",
+                "Multiply up to a 2-digit number by a 2-digit number without and with regrouping in real life situations.",
+                "Estimate products by rounding off numbers to the nearest ten in real life situations.",
+                "Create patterns involving multiplication with product not exceeding 100 in real life situations.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate application of multiplication of numbers in real life."
+              ]
+            },
+            "Division": {
+              "Outcomes": [
+                "Divide up to a 2-digit number by a 1-digit number without remainder in different situations.",
+                "Divide up to a 2-digit number by a 1-digit number with remainder in real life situations.",
+                "Use relationship between multiplication and division to work out problems in real life situations.",
+                "Use IT devices for learning and leisure.",
+                "Appreciate application of division of numbers in real life situations."
+              ]
+            },
+            "Fractions": {
+              "Outcomes": [
+                "Represent a fraction with denominators not exceeding 12 as part of a whole and as part of a group in real life situations.",
+                "Represent and write fractions whose denominators do not exceed 12 in real life situations.",
+                "Identify the numerator and denominator in a fraction in real life situations.",
+                "Identify different types of fractions in real life.",
+                "Convert improper fractions to mixed fractions in different situations.",
+                "Convert mixed fractions to improper fractions in different contexts.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate application of fractions in real life situations."
+              ]
+            },
+            "Decimals": {
+              "Outcomes": [
+                "Identify a tenth and a hundredth in real life situations.",
+                "Represent decimals using decimal notation in given situations.",
+                "Identify place value of decimals up to hundredths in real life.",
+                "Order decimals up to hundredths in computation.",
+                "Use IT devices for learning and leisure.",
+                "Appreciate use of decimals in real life situations."
+              ]
+            }
+          }
+        },
+        "Measurement": {
+          "SubStrands": {
+            "Length": {
+              "Outcomes": [
+                "Identify the centimetre as a unit of measuring length in real life situations.",
+                "Measure length in centimetres in real life situations.",
+                "Estimate and measure length in centimetres in real life situations.",
+                "Establish the relationship between metres and centimetres practically.",
+                "Convert metres to centimetres and centimetres to metres in real life situation.",
+                "Work out perimeter of plane figures in different contexts.",
+                "Work out addition involving length in metres and centimetres in real life situations.",
+                "Work out subtraction involving length in metres and centimetres in real life situations.",
+                "Work out multiplication involving metres and centimetres in real life situations.",
+                "Work out division involving metres and centimetres in real life situations.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate use of metres and centimetres in measuring distance in real life."
+              ]
+            },
+            "Area": {
+              "Outcomes": [
+                "Compare area of given surfaces by direct comparison.",
+                "Calculate area of squares and rectangles by counting unit squares.",
+                "Calculate area of squares and rectangles as a product of number of rows and columns.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate use of rows and columns in calculating area of squares and rectangles in real life situations."
+              ]
+            },
+            "Mass": {
+              "Outcomes": [
+                "Use a kilogram mass to measure masses of different objects practically.",
+                "Use ½ kg and ¼ kg masses to measure masses of different objects practically.",
+                "Add mass involving kilograms in real life situations.",
+                "Subtract mass involving kilograms in real life situations.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate measuring mass of different objects."
+              ]
+            },
+            "Volume": {
+              "Outcomes": [
+                "Work out volume of cubes and cuboids in real life situations.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate use of pilling method in working out volume in real life."
+              ]
+            },
+            "Capacity": {
+              "Outcomes": [
+                "Measure capacity in litres in real life situations.",
+                "Measure capacity in ½ litres and ¼ litres in real life situations.",
+                "Add and subtract capacity involving litres in real life situations.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate use of the litre as a unit of measuring capacity in real life situations."
+              ]
+            },
+            "Time": {
+              "Outcomes": [
+                "Read and tell time in a.m. and p.m. in real life situations.",
+                "Estimate time using a.m and p.m. in real life situations.",
+                "Convert units of time in real life situations.",
+                "Record time durations in hours and minutes in real life situations.",
+                "Work out time duration in real life situations.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate time in real life situations."
+              ]
+            },
+            "Money": {
+              "Outcomes": [
+                "Convert shillings into cents and cents into shillings in different contexts.",
+                "Participate in shopping activities involving money practically.",
+                "Determine needs and wants in real life situations.",
+                "Practice savings in real life.",
+                "Work out questions involving money in real life situations.",
+                "Identify money people pay to the county government for provision of services.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate the use of money in real life."
+              ]
+            }
+          }
+        },
+        "Geometry": {
+          "SubStrands": {
+            "Position and Direction": {
+              "Outcomes": [
+                "Demonstrate a clockwise and an anti-clockwise turn in the environment.",
+                "Demonstrate a quarter turn, half turn and full turn in the environment.",
+                "Identify quarter, half and full turns in the environment.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate use of position and direction in real life situations."
+              ]
+            },
+            "Angles": {
+              "Outcomes": [
+                "Identify angles in the environment.",
+                "Identify different types of angles in the environment.",
+                "Compare angles practically.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate use of angles in real life situations."
+              ]
+            },
+            "2-D Shapes": {
+              "Outcomes": [
+                "Identify different shapes in the environment.",
+                "Identify line of symmetry, practically.",
+                "Make patterns using different shapes.",
+                "Identify properties of 2-D shapes practically.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate using shapes in real life situations."
+              ]
+            }
+          }
+        },
+        "Data Handling": {
+          "SubStrands": {
+            "Data": {
+              "Outcomes": [
+                "Represent data involving real life situations using frequency tables.",
+                "Work out questions involving frequency tables representing real life situations.",
+                "Identify where frequency tables are used in real life.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate use of frequency tables in representing data in real life situations."
+              ]
+            }
+          }
+        },
+        "Algebra": {
+          "SubStrands": {
+            "Use of Letters": {
+              "Outcomes": [
+                "Represent the unknown in real life situations using letters.",
+                "Form algebraic expressions to represent real life situations.",
+                "Simplify algebraic expressions representing real life situations.",
+                "Use IT devices for learning and enjoyment.",
+                "Appreciate the use of algebraic expressions."
+              ]
+            }
+          }
         }
       }
     },
@@ -72,102 +420,381 @@
         "Living Things": {
           "SubStrands": {
             "Characteristics of living things": {
-              "Outcomes": ["Identify basic characteristics of living things."]
+              "Outcomes": [
+                "Identify basic characteristics of living things."
+              ]
             },
             "Plants: parts and functions": {
-              "Outcomes": ["Identify plant parts and state their functions."]
+              "Outcomes": [
+                "Identify plant parts and state their functions."
+              ]
             },
             "Animals: classification and use": {
-              "Outcomes": ["Classify common animals and state their uses."]
+              "Outcomes": [
+                "Classify common animals and state their uses."
+              ]
             },
             "Care for living things": {
-              "Outcomes": ["Demonstrate simple care practices for plants and animals."]
+              "Outcomes": [
+                "Demonstrate simple care practices for plants and animals."
+              ]
             }
           }
         },
         "Materials and Their Properties": {
           "SubStrands": {
             "Types of materials": {
-              "Outcomes": ["Sort materials by observable properties."]
+              "Outcomes": [
+                "Sort materials by observable properties."
+              ]
             },
             "Uses of materials": {
-              "Outcomes": ["Select materials appropriate for specific uses."]
+              "Outcomes": [
+                "Select materials appropriate for specific uses."
+              ]
             },
             "Changes in materials": {
-              "Outcomes": ["Describe simple changes such as melting, dissolving and evaporation."]
+              "Outcomes": [
+                "Describe simple changes such as melting, dissolving and evaporation."
+              ]
             }
           }
         },
         "Energy, Forces and Motion": {
           "SubStrands": {
             "Push and pull forces": {
-              "Outcomes": ["Demonstrate how pushes and pulls cause movement."]
+              "Outcomes": [
+                "Demonstrate how pushes and pulls cause movement."
+              ]
             },
             "Simple machines": {
-              "Outcomes": ["Identify simple machines and state their uses."]
+              "Outcomes": [
+                "Identify simple machines and state their uses."
+              ]
             },
             "Sources of energy": {
-              "Outcomes": ["Identify common sources of energy and their uses."]
+              "Outcomes": [
+                "Identify common sources of energy and their uses."
+              ]
             }
           }
         },
         "Weather, Water and Environment": {
           "SubStrands": {
             "Weather elements and instruments": {
-              "Outcomes": ["Observe and record daily weather using simple tools."]
+              "Outcomes": [
+                "Observe and record daily weather using simple tools."
+              ]
             },
             "Water: sources and purification": {
-              "Outcomes": ["Describe water sources and demonstrate simple purification."]
+              "Outcomes": [
+                "Describe water sources and demonstrate simple purification."
+              ]
             },
             "Environmental conservation": {
-              "Outcomes": ["Demonstrate ways of conserving water and the environment."]
+              "Outcomes": [
+                "Demonstrate ways of conserving water and the environment."
+              ]
             }
           }
         },
         "Health, Hygiene and Safety": {
           "SubStrands": {
             "Personal hygiene": {
-              "Outcomes": ["Demonstrate correct hygiene practices to prevent disease."]
+              "Outcomes": [
+                "Demonstrate correct hygiene practices to prevent disease."
+              ]
             },
             "First aid and safety": {
-              "Outcomes": ["Apply basic first aid and observe safety rules at home/school."]
+              "Outcomes": [
+                "Apply basic first aid and observe safety rules at home/school."
+              ]
+            }
+          }
+        },
+        "Environment": {
+          "SubStrands": {
+            "Air Pollution": {
+              "Outcomes": [
+                "State the meaning of the terms “pollution” and “air pollution”.",
+                "Identify air pollutants in his/her environment.",
+                "Distinguish between clean and polluted air in his/her environment.",
+                "Identify effects of air pollution on living things.",
+                "Appreciate the importance of clean air in his/her environment.",
+                "Identify ways of reducing air pollution.",
+                "Make a functional air pollution detector.",
+                "Make a functional dust mask using locally available materials."
+              ]
+            },
+            "Water Pollution": {
+              "Outcomes": [
+                "State the meaning of the term “water pollution”.",
+                "Identify water pollutants in his/her environment.",
+                "Distinguish between clean and polluted water in his/her environment.",
+                "Identify effects of water pollution on living things.",
+                "Appreciate the importance of clean water in his/her environment.",
+                "Identify ways of reducing water pollution.",
+                "Make a functional water filter using locally available materials."
+              ]
+            }
+          }
+        },
+        "Digital Technology": {
+          "SubStrands": {
+            "Digital Devices": {
+              "Outcomes": [
+                "Define the term “digital device”.",
+                "Identify the various digital devices in his/her locality.",
+                "Identify different parts of digital devices in his/her locality.",
+                "State the functions of the various parts of a digital device.",
+                "Demonstrate proper connection of parts of digital devices.",
+                "Demonstrate proper use of digital devices in their day to day life.",
+                "Model external parts of a digital device using locally available materials."
+              ]
+            },
+            "Coding": {
+              "Outcomes": [
+                "State meaning of the term “coding”.",
+                "Identify coded patterns.",
+                "Play simple puzzle games."
+              ]
+            }
+          }
+        },
+        "Matter": {
+          "SubStrands": {
+            "States of Matter": {
+              "Outcomes": [
+                "Identify the three states of matter.",
+                "Investigate different states of matter to show their characteristics.",
+                "Categorise substances in his/her environment into the three states of matter.",
+                "Observe safety when working with different materials.",
+                "Show curiosity while categorising different materials according to their states."
+              ]
+            },
+            "Properties of Matter": {
+              "Outcomes": [
+                "Demonstrate sinking and floating using different materials.",
+                "Identify objects that can float and those that can sink in water.",
+                "Identify factors that affect floating and sinking of objects in water.",
+                "Make a floater using locally available materials.",
+                "Appreciate use of floaters as life savers."
+              ]
+            }
+          }
+        },
+        "Force and Energy": {
+          "SubStrands": {
+            "Force": {
+              "Outcomes": [
+                "State the meaning of term “force”.",
+                "Demonstrate the effects of force on an object.",
+                "Appreciate effects of force in everyday life.",
+                "Observe safety precautions when dealing with force."
+              ]
+            },
+            "Energy": {
+              "Outcomes": [
+                "Demonstrate that sound travels in all directions from a source.",
+                "Demonstrate that sound can be reflected.",
+                "Make a sound producing instrument from locally available materials.",
+                "Demonstrate that light travels in a straight line.",
+                "Demonstrate the transmission of light through different materials.",
+                "Classify materials into transparent, translucent and opaque.",
+                "Demonstrate conduction of heat.",
+                "Identify poor and good conductors of heat.",
+                "Identify uses of poor and good conductors.",
+                "Make oven gloves and fireless cooker from locally available materials."
+              ]
+            },
+            "Machines": {
+              "Outcomes": [
+                "Identify the lever as a simple machine.",
+                "Identify parts of a lever.",
+                "Classify levers into first, second and third class levers.",
+                "Make a lever using locally available materials.",
+                "Use levers to lift loads."
+              ]
             }
           }
         }
       }
-    }
-  },
-  "5": {
+    },
     "Social Studies": {
       "Strands": {
-        "Our Environment": {
+        "Natural and Built Environments": {
           "SubStrands": {
-            "Meaning and Components of the Environment": {
+            "Natural Environment": {
               "Outcomes": [
-                "Define environment and identify natural and human-made components.",
-                "Identify physical and human features in the local environment.",
-                "Explain how people use and interact with the environment."
+                "Identify the four cardinal points of a compass.",
+                "Use the four cardinal points to give direction of places.",
+                "Identify the eight compass points.",
+                "Use the eight compass points to show direction on a map.",
+                "Appreciate the use of eight compass rose in everyday life.",
+                "Identify sub counties in the county.",
+                "Locate the county in relation to neighbouring counties.",
+                "Estimate the size of the county in relation to neighbouring counties.",
+                "Appreciate location and size of the county in relation to neighbouring counties.",
+                "Identify the main physical features in the County.",
+                "Examine the importance of the main physical features in the County.",
+                "Adopt responsible behaviour to conserve the physical features.",
+                "Recognize seasons experienced in the county.",
+                "Explain how seasons influence human activities in the county.",
+                "Appreciate the different seasons."
               ]
             },
-            "Types of Natural Resources": {
+            "Built Environments": {
               "Outcomes": [
-                "Distinguish between renewable and non-renewable resources.",
-                "Give examples of local renewable and non-renewable resources.",
-                "Explain how resources are used in the community."
+                "Identify the main historic built environments in the County.",
+                "State the importance of the main historic built environments in the County.",
+                "State ways of caring for historic built environments in the County.",
+                "Participate in caring for the historic built environments in the county."
+              ]
+            }
+          }
+        },
+        "People and Population": {
+          "SubStrands": {
+            "Inter-dependence of people": {
+              "Outcomes": [
+                "Identify ways in which people depend on each other in the County.",
+                "Investigate the benefits of inter-dependence of people in the County.",
+                "Appreciate interdependence of people in the County."
               ]
             },
-            "Responsible Use and Conservation of Resources": {
+            "Population distribution": {
               "Outcomes": [
-                "Demonstrate conservation methods for soil, water and forests.",
-                "Participate in a simple conservation activity.",
-                "Explain roles of individuals and communities in conservation."
+                "Describe population distribution in the County.",
+                "Recognize common patterns of population distribution in the county.",
+                "Describe patterns of population distribution in the county.",
+                "Appreciate population distribution in the county."
+              ]
+            }
+          }
+        },
+        "Culture and Social Organizations": {
+          "SubStrands": {
+            "Culture": {
+              "Outcomes": [
+                "Identify aspects of traditional culture in the County.",
+                "Describe aspects of traditional culture in the County.",
+                "Examine the importance of aspects of traditional culture in the County.",
+                "Appreciate aspects of traditional culture in the County."
               ]
             },
-            "Environmental Pollution and Protection": {
+            "The school": {
               "Outcomes": [
-                "Identify types and sources of pollution.",
-                "Describe effects of pollution on people and the environment.",
-                "Suggest and practise ways of reducing pollution."
+                "Narrate the history of the school.",
+                "Interpret the school motto and core values.",
+                "Describe the daily routine of the school.",
+                "Uphold the core values of the school."
+              ]
+            }
+          }
+        },
+        "Resources and Economic Activities": {
+          "SubStrands": {
+            "Resources in the County": {
+              "Outcomes": [
+                "Identify the main resources found in the county.",
+                "Develop desire to conserve resources in the county."
+              ]
+            },
+            "Economic activities in the County": {
+              "Outcomes": [
+                "Identify the main economic activities carried out in the county.",
+                "Explain the importance of main economic activities carried out in the county.",
+                "Develop desire to participate in economic activities in the county."
+              ]
+            },
+            "Trade in the County": {
+              "Outcomes": [
+                "Identify methods of trade in the county.",
+                "Explore the benefits of trade in the County.",
+                "Appreciate lawful trading activities in the County."
+              ]
+            },
+            "Industries in the County": {
+              "Outcomes": [
+                "Identify industries in the County.",
+                "Explain the benefits of industries in the County.",
+                "Appreciate products from industries in the county."
+              ]
+            },
+            "Enterprise Project at school": {
+              "Outcomes": [
+                "Actively participate in initiating an enterprise project at school.",
+                "Actively participate in an enterprise project at the school.",
+                "Uphold ethics in managing the enterprise project money at the school.",
+                "Appreciate collective efforts in the success of enterprise project at school."
+              ]
+            }
+          }
+        },
+        "Political Systems and Change": {
+          "SubStrands": {
+            "Community Leadership": {
+              "Outcomes": [
+                "Identify community leaders in the County.",
+                "State the duties of community leaders in the County.",
+                "State qualities of a good leader in the community.",
+                "Desire to support good community leadership in the County."
+              ]
+            }
+          }
+        },
+        "Citizenship": {
+          "SubStrands": {
+            "Good citizenship in school": {
+              "Outcomes": [
+                "Identify qualities of good citizenship in school.",
+                "Demonstrate qualities of good citizenship in school.",
+                "Appreciate qualities of good citizenship in school."
+              ]
+            },
+            "Human Rights": {
+              "Outcomes": [
+                "Identify cultural practices that are harmful to children.",
+                "State ways in which children are abused in the community.",
+                "Recognize effects of child abuse in the community.",
+                "Protect self and others from child abuse in the community.",
+                "Demonstrate knowledge of Child Rights and responsibilities in the community."
+              ]
+            },
+            "Peace": {
+              "Outcomes": [
+                "Identify factors that promote peace in school.",
+                "Uphold peace in school.",
+                "Appreciate living together in peace in the society.",
+                "Plan for a viable peace education project at school.",
+                "Actively participate in a peace education project in school.",
+                "Appreciate collective efforts in the success of peace education project at school."
+              ]
+            }
+          }
+        },
+        "Governance in Kenya": {
+          "SubStrands": {
+            "Democracy in school": {
+              "Outcomes": [
+                "Identify democratic processes in school.",
+                "Examine the benefits of democracy in school.",
+                "Practice democracy in school."
+              ]
+            },
+            "Children’s Government in school": {
+              "Outcomes": [
+                "Outline the composition of Children’s Government in school.",
+                "Describe the functions of the Children’s Government in school.",
+                "Actively participate in Children’s Government in school."
+              ]
+            },
+            "The County Government in Kenya": {
+              "Outcomes": [
+                "Outline the composition of a County Government in Kenya.",
+                "Identify sources of money for the County Government.",
+                "State the duties of a County Governor in Kenya.",
+                "Appreciate the role played by the County Government in Kenya."
               ]
             }
           }
@@ -176,34 +803,1243 @@
     },
     "Home Science": {
       "Strands": {
-        "Food and Nutrition": {
+        "Healthy Practices": {
           "SubStrands": {
-            "Types and Functions of Food": {
+            "Play": {
               "Outcomes": [
-                "Classify foods into body-building, energy-giving and protective groups.",
-                "Explain basic functions of common nutrients.",
-                "Identify local sources of nutrients."
+                "Name the various needs of a child for healthy development.",
+                "Identify different games played in the locality.",
+                "Identify play items for a child.",
+                "List qualities to look for when choosing suitable play items for a child.",
+                "Make a play item using locally available materials.",
+                "Care for the play items for the safety of the child.",
+                "Appreciate the importance of rest after play."
+              ]
+            }
+          }
+        },
+        "Healthy Living": {
+          "SubStrands": {
+            "Common Illnesses in the locality": {
+              "Outcomes": [
+                "Identify common illnesses in the locality.",
+                "Communicate when feeling unwell to others.",
+                "Identify the causes of common illnesses in the locality.",
+                "Identify healthy practices that prevent illnesses in the locality.",
+                "Practice healthy measures that prevent illnesses in the locality.",
+                "Appreciate the importance of healthy practices in promoting good health in the locality."
               ]
             },
-            "Food Hygiene and Safety": {
+            "Care of the home": {
               "Outcomes": [
-                "Demonstrate correct handwashing and kitchen hygiene.",
-                "Explain causes of food spoilage and contamination.",
-                "Apply safety measures when preparing food."
+                "Identify cleaning materials and tools used at home.",
+                "Use locally available resources to make cleaning materials and tools to be used at home.",
+                "Describe the procedures of cleaning the home.",
+                "Use various procedures to clean the home.",
+                "Observe safety when carrying out cleaning activities in the home.",
+                "Care for cleaning materials and tools for durability.",
+                "Appreciate a clean home in promoting healthy living."
               ]
             },
-            "Meal Planning and Preparation": {
+            "Care and cleaning of shoes": {
               "Outcomes": [
-                "Plan a simple balanced meal using local foods.",
-                "Prepare simple nutritious dishes safely.",
-                "Serve food neatly and appropriately."
+                "Identify different materials used for making shoes.",
+                "Identify materials used for cleaning different types of shoes.",
+                "Describe the procedure of cleaning different types of shoes.",
+                "Clean shoes made from different types of materials.",
+                "Practice safety when cleaning different types of shoes.",
+                "Clean and store materials used for cleaning different types of shoes.",
+                "Appreciate the importance of wearing clean shoes."
               ]
             },
-            "Storage and Preservation of Food": {
+            "Fuels used at home": {
               "Outcomes": [
-                "Describe methods of storing different types of food.",
-                "Demonstrate simple preservation techniques such as drying.",
-                "Explain why proper labeling and rotation are important."
+                "Identify types of fuels used at home.",
+                "State reasons for using various types of fuel at home.",
+                "Use and conserve fuels used at home.",
+                "Practice safety when using fuels.",
+                "State the challenges faced when using different types of fuel at home.",
+                "Appreciate the importance of conserving fuel at home."
+              ]
+            }
+          }
+        },
+        "Consumer Education": {
+          "SubStrands": {
+            "Consumer Awareness": {
+              "Outcomes": [
+                "Describe a shopping list used for buying items.",
+                "State the importance of a shopping list to a consumer.",
+                "Identify places where one can shop in the locality.",
+                "Outline the steps to follow when making a shopping list.",
+                "Prepare a shopping list for use at home.",
+                "Appreciate the use of a shopping list."
+              ]
+            }
+          }
+        },
+        "Foods and Nutrition": {
+          "SubStrands": {
+            "Choosing foods": {
+              "Outcomes": [
+                "List factors to consider when choosing foods from a general grocery.",
+                "Choose foods from a general grocery in the locality.",
+                "Appreciate the importance of grocery shops in the locality."
+              ]
+            },
+            "Variety in the Diet": {
+              "Outcomes": [
+                "Identify foods available in the locality.",
+                "State the functions of foods in the body.",
+                "Classify food into groups according to their functions.",
+                "Explain the importance of a variety of foods in diet for healthy living.",
+                "Select foods to make a healthy meal.",
+                "Appreciate the importance of eating a variety of foods in the diet for a healthy living."
+              ]
+            },
+            "Preservation of milk": {
+              "Outcomes": [
+                "Identify sources of milk in the locality.",
+                "State the importance of milk in the body.",
+                "State the reasons for preserving milk.",
+                "Explain the methods of preserving milk in the locality.",
+                "Use different methods to preserve milk.",
+                "Practice food hygiene when using different methods to preserve milk.",
+                "Appreciate the importance of preserving milk."
+              ]
+            },
+            "Fragile Kitchen utensils": {
+              "Outcomes": [
+                "State the uses of kitchen utensils at home.",
+                "Identify kitchen utensils that are fragile.",
+                "Identify materials used for cleaning fragile kitchen utensils.",
+                "Clean, dry and store fragile kitchen utensils used at home.",
+                "Observe precautions when cleaning fragile kitchen utensils.",
+                "Appreciate fragile kitchen utensils at home."
+              ]
+            },
+            "Cooking Food": {
+              "Outcomes": [
+                "State reasons for cooking food.",
+                "Explain food hygiene practices to observe when cooking food.",
+                "State safety precautions to observe when cooking food.",
+                "Explain methods of cooking food.",
+                "Cook food using different methods.",
+                "Appreciate cooking food using different methods."
+              ]
+            }
+          }
+        },
+        "Clothing": {
+          "SubStrands": {
+            "Needlework tools": {
+              "Outcomes": [
+                "Identify various tools used in needlework.",
+                "Use basic needlework tools in sewing.",
+                "Practice safety measures while using the needlework tools.",
+                "Store needlework tools appropriately.",
+                "Appreciate the use of needlework tools in sewing."
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Agriculture": {
+      "Strands": {
+        "Conserving our Environment": {
+          "SubStrands": {
+            "Soil": {
+              "Outcomes": [
+                "Distinguish types of soil based on particle sizes.",
+                "Investigate the ability of different types of soil to hold water.",
+                "Relate particle sizes to ability of soil to hold water.",
+                "Develop curiosity in investigating physical properties of different types of soil.",
+                "Determine the ability of different soils to hold water.",
+                "Explain the uses of sand, loam and clay in farming.",
+                "Appreciate the relationship between water holding capacity of clay, sand and loam soils to their uses.",
+                "Identify suitable materials for making compost manure.",
+                "Prepare compost manure for farming.",
+                "Explain the meaning of compost manure for farming.",
+                "Appreciate importance of compost manure in farming."
+              ]
+            },
+            "Water": {
+              "Outcomes": [
+                "Water plants and domestic animals in the immediate environment.",
+                "Identify different uses of water in farming.",
+                "Appreciate importance of water in farming.",
+                "Carry out drip irrigation to water plants.",
+                "Describe drip irrigation as a way of conserving water.",
+                "Appreciate use of drip irrigation in conserving water in farming."
+              ]
+            },
+            "Living better with wild animals": {
+              "Outcomes": [
+                "Identify small wild animals that destroy crops and domestic animals.",
+                "Explain damages caused by small wild animals in the farm.",
+                "Construct a scarecrow using locally available materials.",
+                "Use a scarecrow to keep off small wild animals from the farm.",
+                "Use digital resources to acquire information on small wild animals.",
+                "Store photos of small wild animals that destroy crops and domestic animals.",
+                "Appreciate the importance of living better with small wild animals."
+              ]
+            },
+            "Growing Fruit Trees": {
+              "Outcomes": [
+                "Identify places where fruit tree seeds could be obtained.",
+                "Collect fruit tree seeds from the local environment.",
+                "Prepare fruit seeds for planting.",
+                "Appreciate the importance of preparing seeds for planting.",
+                "Prepare a nursery bed for establishing fruit seedlings.",
+                "Sow seeds into a nursery bed.",
+                "Manage a fruit tree nursery bed up to transplanting.",
+                "Select fruit tree seedlings for sale and transplanting purposes.",
+                "Sell fruit tree seedlings to earn income.",
+                "Prepare seedlings for transplanting.",
+                "Transplant the seedlings to the seedbed.",
+                "Protect the fruit tree seedlings from damage.",
+                "Water the fruit tree seedlings to supplement moisture.",
+                "Apply mulch to the fruit tree seedlings to conserve water.",
+                "Carry out weeding for the seedlings."
+              ]
+            },
+            "Conservation Project: Edible Crop Gardening": {
+              "Outcomes": [
+                "Demonstrate care for growing fruit trees in the environment.",
+                "Identify right stage for harvesting fruits to avoid wastage.",
+                "Harvest fruits appropriately to reduce damages.",
+                "Manage growing fruit trees in school and the community.",
+                "Appreciate importance of consuming fruits for nutrition."
+              ]
+            }
+          }
+        },
+        "Domestic Animals": {
+          "SubStrands": {
+            "Domestic Animals and their Uses": {
+              "Outcomes": [
+                "Identify types of domestic animals in the community.",
+                "Distinguish between a male and a female domestic animal.",
+                "Relate various domestic animals to their uses.",
+                "Source for information on types of domestic animals.",
+                "Appreciate the importance of domestic animals to human beings."
+              ]
+            }
+          }
+        },
+        "Gardening Practices": {
+          "SubStrands": {
+            "Crops for Gardening": {
+              "Outcomes": [
+                "Give the meaning of a vegetable crop.",
+                "Identify main vegetable crops grown in Kenya.",
+                "Classify vegetable crops according to the part eaten.",
+                "Appreciate the importance of vegetable crops in the food we eat.",
+                "Give the meaning of a cereal crop.",
+                "Identify main cereal crops grown in Kenya.",
+                "Develop a display of various types of cereal grains in the classroom.",
+                "Appreciate the importance of cereal crops in the food we eat.",
+                "Give the meaning of a legume crop.",
+                "Identify main legume crops grown in Kenya.",
+                "Develop a display of various types of legume seeds in the classroom.",
+                "Appreciate the importance of legume crops in the food we eat."
+              ]
+            },
+            "Selected Gardening Practices": {
+              "Outcomes": [
+                "Prepare a fine seedbed for crops with tiny seeds.",
+                "Sow tiny seeds directly into the seedbed.",
+                "Identify the practices to care for directly sown tiny-seeded crops in a seedbed.",
+                "Carry out caring practices for the seedbed.",
+                "Appreciate the value of caring for tiny-seeded crops in the seedbed.",
+                "Identify appropriate tools and equipment used for gardening in a seedbed.",
+                "Demonstrate appropriate use of tools and equipment in gardening.",
+                "Practice safety measures when using gardening tools and equipment.",
+                "Clean the garden tools and equipment after use."
+              ]
+            },
+            "Innovative Gardening Project": {
+              "Outcomes": [
+                "Identify containers that can be used for innovative gardening.",
+                "Prepare a container garden for sowing of seeds.",
+                "Sow seeds in a container garden.",
+                "Identify the caring practices for crop in the container garden.",
+                "Care for crops in the container garden.",
+                "Carry out harvesting of crop from the container garden.",
+                "Acquire information on container gardening practices.",
+                "Compile photos on innovative container gardening.",
+                "Sell outputs of the container gardens to earn income.",
+                "Appreciate importance of container gardening to food security, income generation and aesthetics."
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Creative Arts": {
+      "Strands": {
+        "Picture Making": {
+          "SubStrands": {
+            "Drawing": {
+              "Outcomes": [
+                "Observe actual/virtual samples of value gradation strips to help them create their own.",
+                "Create value gradation strips in dry media through smudge technique to show light and dark gradation.",
+                "Talk about own and others’ gradation strips.",
+                "Observe a still life set up for motivation in creation of own composition.",
+                "Create a still life composition using smudge technique to show light and dark gradation.",
+                "Talk about own and others’ still life compositions.",
+                "Observe each other’s body features for motivation in drawing the human form.",
+                "Draw human forms from memory and create value gradation using smudge technique for self expression.",
+                "Talk about own and others’ drawings of human forms."
+              ]
+            },
+            "Crayon Etching": {
+              "Outcomes": [
+                "Observe actual or virtual pictorial compositions created using crayon etching technique.",
+                "Create a pictorial composition using crayon etching technique for self-expression.",
+                "Talk about own and others’ crayon etching composition."
+              ]
+            },
+            "Painting": {
+              "Outcomes": [
+                "Observe samples of black and white tonal variation/gradation strips, from the actual and or virtual learning environment.",
+                "Create black and white tonal variation strips to show effect of light and dark.",
+                "Talk about their own and others’ tonal variation strips.",
+                "Observe actual/virtual pictures of cylindrical forms with tonal values created in white and another colour.",
+                "Create tonal value on cylindrical forms using white and another colour to show light and dark effect.",
+                "Talk about the effect of adding white to another colour.",
+                "Observe actual/virtual pictures of simple 2-D objects in the locality.",
+                "Create tonal value on cylindrical forms using black and another colour to show light and dark effect.",
+                "Discuss the effect of adding black to another colour."
+              ]
+            },
+            "Montage": {
+              "Outcomes": [
+                "Observe virtual samples of montage in order to create their own.",
+                "Create montage composition based on theme of foods and nutrition.",
+                "Appreciate own and others’ montage pictures."
+              ]
+            }
+          }
+        },
+        "Indigenous Kenyan Crafts": {
+          "SubStrands": {
+            "Basketry": {
+              "Outcomes": [
+                "Interact with actual/virtual samples of twined items for motivation to weave their own.",
+                "Weave functional circular items with plant fibres using traditional twine technique.",
+                "Appreciate own and others’ woven items."
+              ]
+            },
+            "Leatherwork": {
+              "Outcomes": [
+                "Interact with actual/virtual samples and select leather items made by thonging.",
+                "Make a simple drum using thonging technique.",
+                "Appreciate own and others’ drums."
+              ]
+            },
+            "Pottery": {
+              "Outcomes": [
+                "Interact with actual and / or virtual samples of indigenous pottery items for motivation.",
+                "Model pinch pots using traditional pottery techniques.",
+                "Discuss about own and others’ work."
+              ]
+            }
+          }
+        },
+        "Design, Mixed Media and Technology": {
+          "SubStrands": {
+            "Graphic Design": {
+              "Outcomes": [
+                "Observe displayed short messages in lower and upper case letters.",
+                "Design short messages with lower and upper case using freehand letters for communication.",
+                "Appreciate the activity of creating short messages for communication.",
+                "Observe displayed block letters in order to make their own.",
+                "Construct simple freehand block letters to communicate short messages.",
+                "Discuss about own and others’ messages constructed by block letters."
+              ]
+            },
+            "Paper craft": {
+              "Outcomes": [
+                "Observe samples of expandable folders from the actual/virtual environment.",
+                "Design an expandable folder for storing their artwork.",
+                "Discuss about own and others’ expandable folders.",
+                "Observe folders enhanced using tie and dye technique from actual/virtual learning environment.",
+                "Tie and dye a piece of cloth to be used in enhancing an expandable folder.",
+                "Discuss about own and others’ enhanced expandable folders.",
+                "Observe block prints from actual/virtual environments.",
+                "Create a block print pattern on a piece of cloth to be used in enhancing an expandable folder.",
+                "Discuss about own and others’ enhanced expandable folders."
+              ]
+            },
+            "Puppetry": {
+              "Outcomes": [
+                "Observe a glove puppet performance in an open window theatre.",
+                "Make glove puppet characters with simple plots.",
+                "Manipulate glove puppets in an open window theatre.",
+                "Appreciate creating glove puppets and performing in an open window theatre.",
+                "Observe actual/virtual stick /rod puppet performance in a doorway theatre.",
+                "Make animal-headed puppets mounted on stick/rod for creative performance.",
+                "Perform a show on a selected theme using animal-headed puppets mounted on stick/rod in a doorway theatre.",
+                "Appreciate creating stick/rod puppets and performing in a doorway theatre."
+              ]
+            },
+            "Photography": {
+              "Outcomes": [
+                "Observe images and photographs from virtual and actual environment.",
+                "Capture images using digital devices for application of the elements of photography.",
+                "Appreciate own and others’ photographic images.",
+                "Discuss reasons for storing digital photographs in folders.",
+                "Create and name folders for storing digital photographs.",
+                "Appreciate the need for creation of folders in photography."
+              ]
+            }
+          }
+        },
+        "Presentation and Exhibition": {
+          "SubStrands": {
+            "Mounting Artwork": {
+              "Outcomes": [
+                "Identify different types of adhesives used in mounting 2D artwork.",
+                "Mat mount 2D artwork for aesthetics and presentation purposes.",
+                "Appreciate own and others’ displayed artwork."
+              ]
+            },
+            "Exhibition skills": {
+              "Outcomes": [
+                "Take a walk around the exhibition space noting the lighting and display surfaces.",
+                "Select own 2D mounted and 3D artworks.",
+                "Plan the arrangement of the selected artworks in the exhibition space.",
+                "Display selected artworks on the exhibition space.",
+                "Appreciate own and others’ exhibited artworks."
+              ]
+            }
+          }
+        },
+        "Performing": {
+          "Outcomes": [
+            "General outcomes for Music include performing songs, playing instruments, etc. Specific sub-strands not detailed in extraction."
+          ]
+        },
+        "Creating/Composing": {
+          "Outcomes": [
+            "Create and compose music."
+          ]
+        },
+        "Listening/Responding/Appreciation": {
+          "Outcomes": [
+            "Listen and respond to music, appreciate musical elements."
+          ]
+        }
+      }
+    },
+    "Physical and Health Education": {
+      "Strands": {
+        "Basic Movement Skills": {
+          "SubStrands": {
+            "Locomotor skills: An athletics track": {
+              "Outcomes": [
+                "Identify an athletic track in the community.",
+                "Identify common starting and finishing points for 100 and 200 meters races on an athletic track.",
+                "Participate in school’s athletic events to enhance learning.",
+                "Observe safety when playing games for own and others' safety.",
+                "Play games for fun and enjoyment.",
+                "Appreciate the athletic track in the community as a resource."
+              ]
+            },
+            "Locomotor skills: Standing Start in athletics": {
+              "Outcomes": [
+                "Demonstrate the Standing start to enhance learning.",
+                "Practice the standing start in athletics for skill acquisition.",
+                "Discuss the term ‘fair play’ during games and sports for value acquisition.",
+                "Observe rules when practicing the Standing start in athletics for own and others' safety.",
+                "Play games that involve Standing start in athletics for fun and enjoyment.",
+                "Appreciate the Standing start as a technique in starting races in athletics."
+              ]
+            },
+            "Locomotor skills: Standing Long jump": {
+              "Outcomes": [
+                "Demonstrate the Standing long jump for skill acquisition.",
+                "Practice the standing long jump for skill mastery.",
+                "Observe safety when practicing the Standing Long jump for own and others' safety.",
+                "Play games for fun and enjoyment.",
+                "Appreciate the Standing Long jump in athletics."
+              ]
+            },
+            "Manipulative skills: Ball game skills: Improvising balls": {
+              "Outcomes": [
+                "Identify locally available materials for improvising balls.",
+                "Improvise balls of various sizes for learning.",
+                "Gather locally available materials for improvising balls.",
+                "Dispose waste after improvisation for environmental care.",
+                "Observe safety when improvising balls to avoid injuries.",
+                "Play games using improvised balls for fun and enjoyment.",
+                "Appreciate improvising balls for self-sufficiency."
+              ]
+            },
+            "Manipulative skills: One handed Catching": {
+              "Outcomes": [
+                "Demonstrate the Two-handed catch for skill acquisition.",
+                "Practice the Two-handed catch for skill mastery.",
+                "Observe rules when playing games for own and others' safety.",
+                "Play games for fun and enjoyment.",
+                "Appreciate the Two-handed catch as a vital skill in playing a number of games."
+              ]
+            },
+            "Manipulative skills: Kneeling Overhead throw": {
+              "Outcomes": [
+                "Demonstrate the Kneeling overhead throw for skill acquisition.",
+                "Practice the Kneeling overhead throw for skill mastery.",
+                "Observe the rules when performing the Kneeling overhead throw for safety.",
+                "Play fun games for enjoyment.",
+                "Appreciate the Kneeling overhead throw for strength training."
+              ]
+            },
+            "Manipulative skills: Ball game skills: Overarm pass": {
+              "Outcomes": [
+                "Demonstrate an Overarm pass for skill acquisition.",
+                "Practice the Overarm pass for skill mastery.",
+                "Discuss the importance of respecting team mates during games and sports.",
+                "Observe rules when passing balls for own and others’ safety.",
+                "Play modified games using the Overarm pass for fun and enjoyment.",
+                "Appreciate the Overarm pass as a vital skill in a number of games."
+              ]
+            },
+            "Manipulative skills: Ball Games: Overhead pass": {
+              "Outcomes": [
+                "Demonstrate the Overhead pass for skill acquisition.",
+                "Practice the Overhead pass for skill mastery.",
+                "Discuss the importance of respecting rules during games and sports.",
+                "Observe rules when passing balls for own and others’ safety.",
+                "Play modified games using the Overhead pass for fun and enjoyment.",
+                "Appreciate the Overhead pass as a skill in playing a number of games."
+              ]
+            },
+            "Manipulative skills: Ball Games: Underarm pass": {
+              "Outcomes": [
+                "Demonstrate the Underarm pass for skill acquisition.",
+                "Practice the Underarm pass for skill mastery.",
+                "Discuss the importance of making games fun and enjoyable.",
+                "Observe rules when passing balls for own and others’ safety.",
+                "Play modified games using the Underarm pass for fun and enjoyment.",
+                "Appreciate the Underarm pass as a vital skill in playing a number of games."
+              ]
+            },
+            "Manipulative skills: Ball Games: Chest pass": {
+              "Outcomes": [
+                "Demonstrate the Chest pass for skill acquisition.",
+                "Practice the Chest pass for skill mastery.",
+                "Discuss the importance of commitment to a team during games and sports.",
+                "Observe the rules when passing the ball for own and others’ safety.",
+                "Play modified games using the Chest pass for fun and enjoyment.",
+                "Appreciate the Chest pass as a skill in playing a number of games."
+              ]
+            },
+            "Manipulative skills: Ball Games: Bounce Pass": {
+              "Outcomes": [
+                "Demonstrate the Bounce pass for skill acquisition.",
+                "Practice the Bounce pass for skill mastery.",
+                "Observe rules when playing games for own and others' safety.",
+                "Play games for fun and enjoyment.",
+                "Appreciate the Bounce Pass as a vital skill in playing a number of games."
+              ]
+            },
+            "Manipulative skills: Ball Games: Improvising Soccer balls": {
+              "Outcomes": [
+                "Describe the soccer ball to enhance learning.",
+                "Identify locally available materials for improvising soccer balls.",
+                "Gather locally available materials for improvising soccer balls.",
+                "Improvise age appropriate soccer balls for use in learning.",
+                "Clean the working area for environmental care.",
+                "Observe safety measures when improvising soccer balls to avoid injuries.",
+                "Play games using improvised soccer balls for fun and enjoyment.",
+                "Appreciate improvising the soccer balls for self-sufficiency."
+              ]
+            },
+            "Manipulative skills: Soccer- passing": {
+              "Outcomes": [
+                "Identify body parts used when passing the ball in soccer for body awareness.",
+                "Label the different parts of the foot used for passing the ball in soccer.",
+                "Practice passing the ball using the instep for skill acquisition.",
+                "Observe the rules when passing the ball in soccer for own and others’ safety.",
+                "Appreciate passing as an important skill in soccer."
+              ]
+            },
+            "Manipulative skills: Hand Juggling": {
+              "Outcomes": [
+                "Demonstrate hand juggling for skill acquisition.",
+                "Practice hand juggling of balls for skill mastery.",
+                "Observe rules when hand juggling for own and others' safety.",
+                "Play hand juggling games for fun and enjoyment.",
+                "Appreciate juggling for self-determination."
+              ]
+            },
+            "Manipulative skills: bats, posts and Rounders balls": {
+              "Outcomes": [
+                "Describe the Bats, Posts and Rounders ball to enhance learning.",
+                "Draw and label the Bats, Posts and Rounders ball in the rounders game.",
+                "Identify locally available materials for improvising the Bats, posts and Rounders balls.",
+                "Improvise age appropriate Bats, posts and Rounders ball for playing rounders game.",
+                "Observe safety measures when improvising the Bats, posts and Rounders ball.",
+                "Play games using improvised Bats, posts and Rounders ball for fun and fitness.",
+                "Appreciate improvising the Bats, posts and Rounders ball for self-sufficiency."
+              ]
+            },
+            "Manipulative skills: Pitch orientation": {
+              "Outcomes": [
+                "Identify the different sections of a Rounders pitch.",
+                "Draw a sketch of the Rounders pitch to enhance learning.",
+                "Place Rounders posts in the play area for field orientation.",
+                "Observe rules when playing Rounders for safety.",
+                "Play Rounders games for fun and enjoyment.",
+                "Appreciate the Rounders as a game for recreation."
+              ]
+            },
+            "Manipulative skills: Bowling in Rounders": {
+              "Outcomes": [
+                "Describe bowling in rounders game.",
+                "Identify the body parts that are used when bowling in Rounders.",
+                "Practice bowling for skill mastery.",
+                "Observe the rules of bowling for fair play and competition.",
+                "Play Rounders for fun and enjoyment.",
+                "Appreciate bowling in rounders."
+              ]
+            },
+            "Manipulative skills: Rounders Batting": {
+              "Outcomes": [
+                "Demonstrate the body positions in rounders when batting for skill acquisition.",
+                "Practice batting in rounders for skill mastery.",
+                "Observe rules when batting for safety.",
+                "Play conditioned Rounders games for fun and enjoyment.",
+                "Appreciate batting in Rounders for a successful game."
+              ]
+            },
+            "Manipulative skills: Running a rounder": {
+              "Outcomes": [
+                "Demonstrate running a rounder for skill acquisition.",
+                "Practice running a rounder for skill mastery.",
+                "Observe rules of running a rounder for safety.",
+                "Play Rounders games for fun and enjoyment.",
+                "Appreciate running a rounder in the game of rounders."
+              ]
+            },
+            "Manipulative skills: Basic Rope work: Improvising the jump rope": {
+              "Outcomes": [
+                "Identify locally available materials for improvising the jump rope.",
+                "Gather locally available materials for improvising durable jump rope.",
+                "List safety measures to be observed when improvising the jump rope to avoid injuries.",
+                "Clean the working area for environmental care.",
+                "Play games for fun and enjoyment.",
+                "Appreciate improvising the jump rope for self-sufficiency."
+              ]
+            },
+            "Manipulative skills: Basic rope works: Jumping techniques": {
+              "Outcomes": [
+                "Describe the jump rope to enhance learning.",
+                "Practice the correct techniques for jump rope grip, body posture, arm and wrist position, rope swing, measuring correct rope length and jumping height to avoid injuries.",
+                "Observe rules when jumping rope for safety.",
+                "Play games for fun and enjoyment.",
+                "Appreciate using the correct jumping techniques for safety."
+              ]
+            },
+            "Manipulative skills: Basic rope work: Single bounce": {
+              "Outcomes": [
+                "Demonstrate the Single bounce in jump rope for skill acquisition.",
+                "Practice the Single bounce in jump rope for skill mastery.",
+                "Observe safety when jumping rope for own and others' safety.",
+                "Play games for fun and enjoyment.",
+                "Appreciate the single bounce as a skill for jumping rope."
+              ]
+            },
+            "Manipulative skills: Basic rope work - Double bounce": {
+              "Outcomes": [
+                "Demonstrate the Double bounce in jump rope to enhance learning.",
+                "Practice the Double bounce in jumping rope for skill mastery.",
+                "Perform Double bounce in jumping rope for skill mastery.",
+                "Make relationships while jumping rope using the Double bounce for space awareness.",
+                "Observe safety when jumping rope for own and others' safety.",
+                "Play games for fun and enjoyment.",
+                "Appreciate the double bounce as a skill for jumping rope."
+              ]
+            },
+            "Manipulative skills: Basic rope work: One-foot bounce": {
+              "Outcomes": [
+                "Demonstrate the One-foot bounce to enhance learning.",
+                "Practice the One-foot bounce in jump rope for skill mastery.",
+                "Observe safety when jumping rope for own and others' safety.",
+                "Play games for fun and enjoyment.",
+                "Appreciate the One-foot bounce as a skill for jumping rope."
+              ]
+            }
+          }
+        },
+        "Gymnastics": {
+          "SubStrands": {
+            "Rolls: Forward roll": {
+              "Outcomes": [
+                "Name the body parts that are used when performing the forward roll for body awareness.",
+                "Practice the forward roll for skill mastery.",
+                "Observe rules when performing the forward rolls for own and others' safety.",
+                "Play games for fun and enjoyment.",
+                "Appreciate the forward roll for self-esteem."
+              ]
+            },
+            "Rolls: Backward roll": {
+              "Outcomes": [
+                "Name the parts of the body that are used when performing the Backward roll for body awareness.",
+                "Practice performing the Backward roll for skill mastery.",
+                "Play games for fun and enjoyment.",
+                "Observe rules when performing the Backward roll for own and others' safety.",
+                "Appreciate the Backward roll for self-esteem."
+              ]
+            },
+            "Individual balances: Headstand": {
+              "Outcomes": [
+                "Name the parts of the body that are used when performing the Headstand for body awareness.",
+                "Practice performing the Headstand for skill mastery.",
+                "Play games for fun and enjoyment.",
+                "Observe rules when performing the Headstand for own and others' safety."
+              ]
+            },
+            "Individual balances: Handstand": {
+              "Outcomes": [
+                "Name the parts of the body that are used when performing the Handstand for body awareness.",
+                "Practice performing the Handstand for skill mastery.",
+                "Perform Handstand for skill mastery.",
+                "Play games for fun and enjoyment.",
+                "Observe rules when performing the forward rolls for own and others' safety."
+              ]
+            },
+            "Sequences: Two action sequence": {
+              "Outcomes": [
+                "Describe Two action sequence for skill acquisition.",
+                "Practice Two action sequence for skill mastery.",
+                "Observe rules when performing the Backward rolls for own and others' safety.",
+                "Play games for fun and enjoyment."
+              ]
+            },
+            "Sequences: Three action sequence": {
+              "Outcomes": [
+                "Describe a Two action sequence for skill acquisition.",
+                "Practice a three action sequence for skill mastery.",
+                "Play games for fun and enjoyment.",
+                "Observe rules when performing the Two action sequence for own and others' safety."
+              ]
+            },
+            "Sequences: Four action sequence": {
+              "Outcomes": [
+                "Describe a four-action sequence for skill acquisition.",
+                "Practice a Four action sequence for skill mastery.",
+                "Play games for fun and enjoyment.",
+                "Observe rules when performing a Four action sequence for own and others' safety."
+              ]
+            }
+          }
+        },
+        "Swimming": {
+          "SubStrands": {
+            "Basic Strokes: Front Crawl": {
+              "Outcomes": [
+                "Identify floating devices from the local environment for body positioning in front crawl.",
+                "Practice the Front Crawl for skill mastery.",
+                "Observe rules when performing the front crawl for own and others' safety.",
+                "Play water games for fun and enjoyment.",
+                "Appreciate the front crawl for water survival."
+              ]
+            },
+            "Basic dives: Crouch surface dive": {
+              "Outcomes": [
+                "Describe the Crouch surface dive in swimming.",
+                "Demonstrate the Crouch surface dive for skill acquisition."
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Christian Religious Education": {
+      "Strands": {
+        "Creation": {
+          "SubStrands": {
+            "Self-awareness": {
+              "Outcomes": [
+                "Mention his/her name for identification and self-awareness.",
+                "Recognise that he/she is unique as a creation of God.",
+                "Recognize God as the Creator of our bodies.",
+                "Appreciate his/her uniqueness as God’s special creation.",
+                "Identify good thoughts and feelings in his/her day to day life.",
+                "Explain why it is important to rejoice in the Lord always according to Philippians 4:4.",
+                "Explain why we should not be angry or sin as stated in Ephesians 4:26.",
+                "Apply the lessons learnt to cope with emotions in their day to day lives.",
+                "Desire to control emotions in their interactions with others.",
+                "Identify personal choices that are acceptable to God.",
+                "Discuss results of choices they make in their daily lives.",
+                "Make right choices in their day to day lives.",
+                "Acquire responsibility by making right choices."
+              ]
+            },
+            "My family": {
+              "Outcomes": [
+                "Name family members in the nuclear family.",
+                "Identify members of the extended family.",
+                "Draw a family tree and explain the relationships within the family.",
+                "Respect members of the family for harmonious co-existence.",
+                "Explain why it is important to honour parents as stated in Ephesians 6:1-3.",
+                "Read the story of Ammon and Tamar in 2 Samuel 13:4-14.",
+                "Take care when alone with people of the opposite sex.",
+                "Identify ways of protecting oneself from sexual abuse.",
+                "Recognize whom to report to if touched inappropriately/ sexually abused.",
+                "Acquire the value of chastity and say no! to sexual sins.",
+                "Recognise that the body is the temple of the Holy Spirit as stated in 1 Corinthians 6:19.",
+                "Appreciate the body as a temple of the Holy Spirit and live a holy life."
+              ]
+            },
+            "Attributes of God": {
+              "Outcomes": [
+                "Identify the attributes of God and revere Him.",
+                "Appreciate God as a loving Father in their day to day lives."
+              ]
+            }
+          }
+        },
+        "The Holy Bible": {
+          "SubStrands": {
+            "Respect for the Holy Bible": {
+              "Outcomes": [
+                "Handle the Bible with respect as the inspired word of God.",
+                "Identify the books in the Old and New Testament.",
+                "Play a game on naming some Books in the Old and New Testament.",
+                "Recite Isaiah 49:16 and desire to read the Holy Bible always."
+              ]
+            },
+            "Bible Stories": {
+              "Outcomes": [
+                "Read the story of Zacchaeus in Luke 19:2-10.",
+                "Recount how Zacchaeus changed his behaviour positively.",
+                "Demonstrate integrity when using money.",
+                "Discuss why it is important to repent sins in order to be like Christ.",
+                "Read Numbers 22:1-6, 20-34 and retell the story of Balaam and his donkey.",
+                "Apply the story in their lives by obeying God’s instructions.",
+                "Acquire the value of love by speaking good things about others.",
+                "Acknowledge God’s greatness by revering Him in his/her day to day life.",
+                "Read Judges 14: 5- 9 and retell the story of Samson.",
+                "Acknowledge God’s power in his/her life.",
+                "Trust in God to cope with the challenges of life.",
+                "Read Genesis 41:14-24, 28-30 and retell the story of Joseph interpreting the dream.",
+                "Apply the lessons learnt and trust in God’s wisdom.",
+                "Demonstrate an awareness that the fear of God is the beginning of wisdom."
+              ]
+            },
+            "Bible Patriarchs": {
+              "Outcomes": [
+                "Read Genesis 12:1-5 and recount the call of Abraham.",
+                "Obey God’s instructions in his/her day to day life.",
+                "Mention his/ her name and it’s meaning for self- identity.",
+                "Discuss Abram’s change of name to Abraham as outlined in Genesis 17:1-5.",
+                "Recite Genesis 12:3 and appreciate God’s blessings in his or her life."
+              ]
+            }
+          }
+        },
+        "The Life of Jesus Christ": {
+          "SubStrands": {
+            "The Birth of Jesus Christ": {
+              "Outcomes": [
+                "Narrate the annunciation of the Birth of Jesus Christ as outlined in Luke 1: 26- 37.",
+                "Acknowledge the uniqueness of the birth of Jesus Christ.",
+                "Recite Luke 1:37 and trust in God’s power in his/her life.",
+                "Emulate Mary the mother of Jesus and abstain from sexual sins before marriage.",
+                "Retell the Birth of John the Baptist as written in Luke 1:5-13,57.",
+                "Discuss how John the Baptist prepared the way for the Messiah as outlined in Luke 1:76-79.",
+                "Appreciate the need to live a righteous life by turning away from sins."
+              ]
+            },
+            "The Miracles of Jesus Christ": {
+              "Outcomes": [
+                "Retell the healing of blind Bartimaeus in Mark 10:36-52.",
+                "Recognize the healing power of Jesus Christ.",
+                "Appreciate Jesus’ power over sickness and disease.",
+                "Discuss the story of the ten lepers in Luke 17:11-19.",
+                "Appreciate the miracle by having faith in God.",
+                "Outline ways of showing gratitude to God in day to day life.",
+                "Portray gratitude by thanking those who do good to him/ her.",
+                "Read the story about the widow’s son in Luke 7:11-16.",
+                "Recognize God’s power over death and believe in Resurrection.",
+                "Apply lessons learnt by showing compassion to others.",
+                "Appreciate the miracle by praying to God when faced with challenges."
+              ]
+            },
+            "Teachings of Jesus Christ": {
+              "Outcomes": [
+                "Outline the importance of forgiving others.",
+                "Appreciate forgiveness by not repaying evil for evil.",
+                "Resist vengeance as outlined in Mathew 5:39.",
+                "State the importance of helping those in need.",
+                "Demonstrate kindness by sharing with those in need.",
+                "Recite Mathew 5:42 and help those in need promptly.",
+                "Describe the parable of the lost coin and its significance in day to day lives.",
+                "Recognise God’s love for the sinner and the need to live a righteous life.",
+                "Discuss how he/she should lead a holy life that is pleasing to God.",
+                "Appreciate God’s love and lead upright lives.",
+                "Read Luke 13:18-19 about the Mustard seed.",
+                "Describe how the Kingdom of God grows from a small beginning.",
+                "Explain how we contribute to the growth of the Kingdom of God.",
+                "Appreciate the growth of God’s kingdom by evangelizing to others.",
+                "Retell the story of Nicodemus as written in John 3:1-5.",
+                "Acknowledge that repentance of sins draws us close to Christ.",
+                "Discuss the importance of baptism for Christians.",
+                "Recite John 3:16 and believe in Jesus Christ to inherit eternal life."
+              ]
+            }
+          }
+        },
+        "Christian Values": {
+          "SubStrands": {
+            "Trust": {
+              "Outcomes": [
+                "Emulate Joseph by resisting sexual temptations as young people (Genesis 39:7-12).",
+                "Exercise precaution when with people of the opposite sex.",
+                "Identify people he/she can trust for his/her own safety.",
+                "Recite Psalm 125:1 on trusting God."
+              ]
+            },
+            "Truthfulness": {
+              "Outcomes": [
+                "State the importance of telling the truth always.",
+                "Desire to always speak the truth as outlined in Ephesians 4:25.",
+                "Resist lying as cited in Proverbs 12: 19."
+              ]
+            },
+            "Obedience": {
+              "Outcomes": [
+                "Read Exodus 20:12 and state the benefit of honouring parents.",
+                "Obey parents and siblings for harmonious co-existence.",
+                "Practice responsibility by obeying teachers and other leaders in the school.",
+                "Outline the results of disobedience and desire to be always obedient."
+              ]
+            },
+            "God’s love": {
+              "Outcomes": [
+                "Recognize that God loves children as written in Matthew 19:13-15.",
+                "Demonstrate love for others by being kind to them.",
+                "Appreciate God’s love by following His teachings."
+              ]
+            },
+            "Responsibility": {
+              "Outcomes": [
+                "Identify personal items and how they take care of them.",
+                "Identify school properties and how to take care of them.",
+                "Acquire responsibility by taking care of both school and personal property."
+              ]
+            },
+            "Holiness": {
+              "Outcomes": [
+                "Recognize that we need to glorify God with our bodies as written in 1 Corinthians 6: 19-20.",
+                "Acquire the value of holiness by keeping away from situations that lead to sin.",
+                "Recite 1 Corinthians 6:19 on leading holy lives.",
+                "Appreciate the body as the temple of the Holy Spirit."
+              ]
+            }
+          }
+        },
+        "The Church": {
+          "SubStrands": {
+            "House of God": {
+              "Outcomes": [
+                "Read Matthew 21:12-14 and say the importance of respecting the Church.",
+                "Participate in Church activities as outlined in 1 Corinthians 14:26 to grow spiritually.",
+                "Appreciate the Church as a house of worship."
+              ]
+            },
+            "The Early Church": {
+              "Outcomes": [
+                "Read Matthew 10: 1-4 to identify the first disciples of Jesus Christ.",
+                "Describe how the early church was started as outlined in Acts 2:38 -41.",
+                "Desire to turn away from sins as stated in Acts 2:38."
+              ]
+            },
+            "Standing Firm in Faith": {
+              "Outcomes": [
+                "Name the city where believers were first called Christians.",
+                "Describe how Stephen was stoned for standing firm in his faith.",
+                "Explain why he/she should not join ungodly groups.",
+                "Acquire the virtue of assertiveness and stand up for his/her faith."
+              ]
+            },
+            "The Lord’s Prayer": {
+              "Outcomes": [
+                "Read Matthew 6:9-13 on the Lord’s prayer.",
+                "Recite the Lord’s prayer and pray to God always.",
+                "Say a prayer to God every day to grow spiritually."
+              ]
+            },
+            "Fruit of the Holy Spirit": {
+              "Outcomes": [
+                "List the fruit of the Holy Spirit as written in Galatians 5:22- 23.",
+                "Portray the fruit of the Holy Spirit in his/her life by living harmoniously with others.",
+                "Desire to be led by the Holy Spirit in their day to day lives.",
+                "Practice self-control in his/her day to day life.",
+                "Read Galatians 5:23-25 and exercise self-control.",
+                "Make right choices in his/her daily life.",
+                "Make right decisions that are guided by the Holy Spirit.",
+                "Demonstrate self-control by avoiding behaviour that defiles the body."
+              ]
+            }
+          }
+        },
+        "Morality and Social Media": {
+          "SubStrands": {
+            "Use of social media": {
+              "Outcomes": [
+                "List digital devices used at home and at school.",
+                "Use his/her free time well as a morally upright Christian.",
+                "Acquire the value of responsibility by using social media appropriately."
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Islamic Religious Education": {
+      "Strands": {
+        "Qur’an": {
+          "SubStrands": {
+            "Selected Surahs": {
+              "Outcomes": [
+                "Explain the basic meaning of selected Surahs: Al-Fatiha, An-Naas, Al-Falaq, Al-Ikhlas, Al-Masad, An-Nasr, Al-Kafirun."
+              ]
+            }
+          }
+        },
+        "Hadith": {
+          "SubStrands": {
+            "Hadith on brushing teeth": {
+              "Outcomes": [
+                "Read the selected hadith on brushing teeth for the promotion of oral hygiene.",
+                "Discuss the importance of brushing teeth as per the tradition of the prophet (S.AW).",
+                "Practice brushing teeth as an act of ibadah.",
+                "Appreciate the importance of brushing teeth so as to earn rewards from Allah (S.W.T.)."
+              ]
+            },
+            "Hadith on Fitness": {
+              "Outcomes": [
+                "Read the selected Hadith on physical fitness to promote healthy living.",
+                "Discuss the importance of physical fitness in the life of a Muslim.",
+                "Participate in games and sports while observing Islamic values.",
+                "Appreciate the importance of physical fitness as means of being dearer to Allah (S.W.T)."
+              ]
+            },
+            "Hadith on etiquettes of eating": {
+              "Outcomes": [
+                "Read the selected hadith on appropriate manners of eating.",
+                "Practice the etiquettes taught in the hadith when taking meals.",
+                "Appreciate the importance of eating in accordance with the teachings of the prophet to earn rewards from Allah (S.W.T.)."
+              ]
+            }
+          }
+        },
+        "Pillars of Iman": {
+          "SubStrands": {
+            "Attributes of Allah (S.W.T)": {
+              "Outcomes": [
+                "Identify the Attributes of Allah (S.W.T.) and their corresponding meaning to strengthen their belief in Allah (S.W.T.).",
+                "Explain the significance of the given Attributes of Allah (S.W.T.) in shaping his/her character.",
+                "Apply the Attributes of Allah (S.W.T.) while making dua (supplication).",
+                "Appreciate the unique Attributes of Allah (S.W.T.) as part of Islamic faith."
+              ]
+            },
+            "Angel and their duties": {
+              "Outcomes": [
+                "Identify the names of the angels and their duties as a Pillar of Iman.",
+                "Explain the significance of belief in angels in life of a Muslim.",
+                "Appreciate angels as Allah’s creation as a Pillar of Iman."
+              ]
+            },
+            "Prophets mentioned in the Qur’an": {
+              "Outcomes": [
+                "Mention the twenty five prophets of Allah (S.W.T.) named in the Qur’an as divine messengers.",
+                "Identify the Ulul Azm prophets from among the twenty five prophets of Allah to strengthen their Iman.",
+                "Explain the significance of belief in prophets in the life of a Muslim.",
+                "Apply the virtues of the prophets of Allah in their daily life.",
+                "Appreciate the belief in the prophets of Allah as a Pillar of Iman."
+              ]
+            }
+          }
+        },
+        "Devotional Acts": {
+          "SubStrands": {
+            "Twahara (Ritual Purity)": {
+              "Outcomes": [
+                "Outline the types of najasaat (impurities) a Muslim should avoid in order to perform acts of ibadah (worship).",
+                "Demonstrate appropriate ways of removing najasaat (impurities) for the purpose of purification.",
+                "Appreciate maintenance of ritual cleanliness as a condition for ibadah.",
+                "Discuss the nullifiers of wudhu (Ablution) so as to maintain a state of ritual purity.",
+                "Explain the significance of wudhu in the life of a Muslim.",
+                "Appreciate the need to be in a state of purity as a condition for ibadah."
+              ]
+            },
+            "Conditions for Swalah": {
+              "Outcomes": [
+                "State the conditions for Swalah as a requirement for its validity.",
+                "Demonstrate the observable conditions for swalah in his/her daily life.",
+                "Appreciate the need for observing the condition for swalah for its validity."
+              ]
+            },
+            "Pillars of Swalah": {
+              "Outcomes": [
+                "Explain the pillars of swalah as a requirement for its validity.",
+                "Apply the pillars of swalah correctly in daily prayers.",
+                "Appreciate the need for observing the pillars of swalah by emulating the Sunnah of the Prophet (S.A.W.)."
+              ]
+            }
+          }
+        },
+        "Akhlaq (Moral Values)": {
+          "SubStrands": {
+            "Virtues": {
+              "Outcomes": [
+                "Mention Allah’s creatures in his/her environment.",
+                "Explain the significance of showing kindness to Allah’s creatures in the environment.",
+                "Demonstrate ways through which he/she can show kindness to Allah’s creatures as an act of ibadah.",
+                "Appreciate Allah’s creatures by being kind to them.",
+                "Explain appropriate code of dress as per the teachings of Islam.",
+                "Practise Islamic manners of dress as an act of ibadah.",
+                "Discuss the significance of Islamic code of dress to enhance character formation.",
+                "Appreciate Islamic code of dress as a means of earning rewards from Allah.",
+                "Identify types of media in his/her environment to create awareness on various sources of information.",
+                "Explain the positive use of media for Islamic character building.",
+                "Observe Islamic ethics while using media in day-to-day life.",
+                "Appreciate media as a gift from Allah (S.W.T.) by using them appropriately."
+              ]
+            },
+            "Vices": {
+              "Outcomes": [
+                "Identify categories of people who deserve assistance in the society.",
+                "Explain the evils of begging as a mean of fostering a work ethic.",
+                "Appreciate work as an act of ibadah and a means of eradicating poverty.",
+                "Identify ways of earning income while observing Islamic etiquettes."
+              ]
+            },
+            "Dua (Supplication)": {
+              "Outcomes": [
+                "Recite the dua to seek Allah’s protection.",
+                "Use the dua in his/her day-to-day life when leaving and entering the house.",
+                "Appreciate the importance of using the dua to get protection from Allah (S.W.T.)."
+              ]
+            }
+          }
+        },
+        "Muamalaat": {
+          "SubStrands": {
+            "Obligations of Parents to children": {
+              "Outcomes": [
+                "Discuss the obligations of parents to their children.",
+                "Demonstrate ways in which parents can fulfil their obligations to their children.",
+                "Discuss the importance of parents fulfilling their obligations towards their children.",
+                "Appreciate love and care given to them by their parents by being obedient."
+              ]
+            },
+            "Obligations of Children to Parents": {
+              "Outcomes": [
+                "Outline obligations of children to their parents.",
+                "Explain the importance of obeying and respecting parents as a religious obligation.",
+                "Demonstrate ways on how children obey and respect their parents as an act of worship.",
+                "Appreciate their parents by respecting and obeying them."
+              ]
+            },
+            "Children’s Obligations to Other Family Members": {
+              "Outcomes": [
+                "Discuss obligations of children to other family members as an act of ibadah (worship).",
+                "Explain the significance of fulfilling obligations to other family members.",
+                "Appreciate the strengthening of the bond with other family members by visiting them during special occasions."
+              ]
+            }
+          }
+        },
+        "History of Islam": {
+          "SubStrands": {
+            "Prophet’s Marriage to Khadija (R.A)": {
+              "Outcomes": [
+                "Discuss the reasons why Khadija (R.A) proposed to marry the Prophet (S.A.W) so as to make responsible choices in life.",
+                "Explain the role played by Khadija in the life of Prophet Muhammad (S.A.W).",
+                "Appreciate the Prophet’s marriage to Khadija as a model for Muslims."
+              ]
+            },
+            "Call to Prophethood": {
+              "Outcomes": [
+                "Discuss the prophet’s experience at cave Hira with Angel Jibril for spiritual growth.",
+                "Explain the significance of the first five verses revealed to Prophet (S.A.W) in relation to education.",
+                "Appreciate the role of Prophet (S.A.W) as a messenger of Allah (S.W.T) by emulating his practices."
+              ]
+            },
+            "Al-Isra wal Miraj": {
+              "Outcomes": [
+                "Discuss the Prophet’s Night Journey to Heaven for spiritual nourishment.",
+                "Explain the significance of al-Isra wal Miraj in the life of a Muslim.",
+                "Appreciate al-Isra wal Miraj as an important event in the history of Islam."
+              ]
+            }
+          }
+        }
+      }
+    },
+    "Hindu Religious Education": {
+      "Strands": {
+        "Nature (Prakriti)": {
+          "SubStrands": {
+            "Panch-mahabhoot": {
+              "Outcomes": [
+                "State water bodies that are considered sacred as mentioned in the Scriptures to strengthen his/her faith.",
+                "Identify the role of water in our daily lives.",
+                "Appreciate the importance of jal (water) used for religious activities in different faiths for its sacredness.",
+                "Name plants that are considered sacred for familiarisation and strengthen his/her faith.",
+                "Specify the roles of plants that are considered sacred in each faith for religious activities.",
+                "Nurture plants for conservation of environment."
+              ]
+            }
+          }
+        },
+        "Divinity": {
+          "SubStrands": {
+            "Manifestation and Enlightened Souls": {
+              "Outcomes": [
+                "Identify the contributions of Manifestations and Enlightened souls for inspiration.",
+                "Implement teachings of Manifestations and Enlightened souls for righteous living.",
+                "Appreciate the teachings of Manifestations and Enlightened souls for spiritual and moral growth."
+              ]
+            }
+          }
+        },
+        "Scriptures (Holy Books)": {
+          "SubStrands": {
+            "Essence of Scriptures": {
+              "Outcomes": [
+                "Explain the essence of the Scriptures for inspiration.",
+                "Apply the essence of the Scriptures for righteous living.",
+                "Appreciate the Scriptures for spiritual growth."
+              ]
+            }
+          }
+        },
+        "Principles of Dharma": {
+          "SubStrands": {
+            "Virtues for righteousness": {
+              "Outcomes": [
+                "Identify Principles of Dharma according to Sikhism and Buddhism for familiarization.",
+                "Apply the Principles of Dharma in daily life to strengthen his/her religious beliefs for harmonious living.",
+                "Appreciate the Principles of Dharma in building up one’s character."
+              ]
+            }
+          }
+        },
+        "Ishwar Upaasnaa (Worship)": {
+          "SubStrands": {
+            "Dainik Prarthana (Daily prayers)": {
+              "Outcomes": [
+                "Identify prayers performed for different occasions for familiarisation.",
+                "Recite prayers for peace of mind.",
+                "Explain the importance of prayers in his/her daily life for spiritual development."
               ]
             }
           }
@@ -212,5 +2048,3 @@
     }
   }
 }
-
-
