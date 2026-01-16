@@ -73,34 +73,32 @@ export default function CustomTextbooksPage() {
                     <div className="flex-1 min-w-0">
                         <h1 className="text-lg font-bold text-white truncate">{selectedTextbook.title}</h1>
                         <div className="flex items-center gap-3 text-sm text-white/50">
-                            <span>{selectedTextbook.audienceAge}</span>
                             {selectedTextbook.estimatedReadingTime && (
-                                <span>• {selectedTextbook.estimatedReadingTime}</span>
+                                <span>{selectedTextbook.estimatedReadingTime}</span>
                             )}
                         </div>
                     </div>
                 </div>
 
                 {/* Content Area - Inline Viewer */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                {/* Content Area - Inline Viewer */}
+                <div className="flex-1 overflow-y-auto p-8 max-w-5xl mx-auto space-y-10">
                     {/* Introduction */}
                     {content?.introduction && (
                         <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-3">Introduction</h3>
-                            <p className="text-white/80 leading-relaxed">{content.introduction}</p>
+                            <h3 className="text-2xl font-bold text-white mb-4">Introduction</h3>
+                            <p className="text-white/85 leading-relaxed text-lg">{content.introduction}</p>
                         </section>
                     )}
 
                     {/* Learning Objectives */}
                     {content?.learningObjectives && content.learningObjectives.length > 0 && (
-                        <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-3">Learning Objectives</h3>
-                            <ul className="space-y-2">
+                        <section className="my-8">
+                            <h3 className="text-xl font-bold text-cyan-400 mb-4">Learning Objectives</h3>
+                            <ul className="space-y-3">
                                 {content.learningObjectives.map((objective, index) => (
-                                    <li key={index} className="flex items-start gap-3 text-white/70">
-                                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs font-bold">
-                                            {index + 1}
-                                        </span>
+                                    <li key={index} className="flex items-start gap-3 text-white/85 text-lg">
+                                        <span className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-400" />
                                         {objective}
                                     </li>
                                 ))}
@@ -110,65 +108,63 @@ export default function CustomTextbooksPage() {
 
                     {/* Chapters */}
                     {content?.chapters && content.chapters.length > 0 && (
-                        <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-4">Chapters</h3>
-                            <div className="space-y-6">
-                                {content.chapters.map((chapter, index) => (
-                                    <div key={index} className="bg-white/5 rounded-xl p-5">
-                                        <h4 className="text-white font-medium mb-3 flex items-center gap-2">
-                                            <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-sm font-bold">
-                                                {index + 1}
-                                            </span>
-                                            {chapter.title}
-                                        </h4>
-                                        <p className="text-white/70 mb-4 leading-relaxed">{chapter.content}</p>
-
-                                        {chapter.keyPoints && chapter.keyPoints.length > 0 && (
-                                            <div className="mt-4 pt-4 border-t border-white/10">
-                                                <p className="text-white/50 text-sm mb-2 font-medium">Key Points:</p>
-                                                <ul className="space-y-1">
-                                                    {chapter.keyPoints.map((point, i) => (
-                                                        <li key={i} className="flex items-start gap-2 text-white/60 text-sm">
-                                                            <span className="text-cyan-400 mt-0.5">•</span>
-                                                            {point}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
-
-                                        {chapter.exercises && chapter.exercises.length > 0 && (
-                                            <div className="mt-4 pt-4 border-t border-white/10">
-                                                <p className="text-white/50 text-sm mb-2 font-medium">Exercises:</p>
-                                                <ul className="space-y-2">
-                                                    {chapter.exercises.map((exercise, i) => (
-                                                        <li key={i} className="flex items-start gap-2 text-white/60 text-sm bg-white/5 p-3 rounded-lg">
-                                                            <span className="text-green-400 font-bold">{i + 1}.</span>
-                                                            {exercise.question}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
+                        <div className="space-y-12">
+                            {content.chapters.map((chapter, index) => (
+                                <section key={index} className="border-t border-white/10 pt-8 first:border-0 first:pt-0">
+                                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                                        <span className="text-cyan-400">{index + 1}.</span>
+                                        {chapter.title}
+                                    </h2>
+                                    <div className="text-white/85 leading-relaxed text-lg space-y-4 whitespace-pre-wrap">
+                                        {chapter.content}
                                     </div>
-                                ))}
-                            </div>
-                        </section>
+
+                                    {chapter.keyPoints && chapter.keyPoints.length > 0 && (
+                                        <div className="mt-6 mb-8 pl-0">
+                                            <h4 className="text-cyan-400 font-semibold mb-3">Key Points</h4>
+                                            <ul className="space-y-2">
+                                                {chapter.keyPoints.map((point, i) => (
+                                                    <li key={i} className="text-white/80">
+                                                        • {point}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {chapter.exercises && chapter.exercises.length > 0 && (
+                                        <div className="mt-8">
+                                            <h4 className="text-lg font-semibold text-white/90 mb-4">Exercises</h4>
+                                            <div className="space-y-4 pl-0">
+                                                {chapter.exercises.map((exercise, i) => (
+                                                    <div key={i} className="flex items-start gap-3 text-white/80">
+                                                        <span className="font-bold text-white/40">{i + 1}.</span>
+                                                        <p>{exercise.question}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </section>
+                            ))}
+                        </div>
                     )}
 
                     {/* Practice Questions */}
                     {content?.practiceQuestions && content.practiceQuestions.length > 0 && (
-                        <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-4">Practice Questions</h3>
-                            <div className="space-y-4">
+                        <section className="border-t border-white/10 pt-8">
+                            <h3 className="text-xl font-bold text-cyan-400 mb-6">Practice Questions</h3>
+                            <div className="space-y-6">
                                 {content.practiceQuestions.map((pq, index) => (
-                                    <div key={index} className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl p-4 border border-purple-500/20">
-                                        <p className="text-white/80 mb-2">
-                                            <span className="font-bold text-purple-400">Q{index + 1}:</span> {pq.question}
+                                    <div key={index} className="pl-0">
+                                        <p className="text-white/90 font-medium mb-2 text-lg">
+                                            <span className="text-cyan-400 mr-2">Q{index + 1}.</span>
+                                            {pq.question}
                                         </p>
                                         {pq.answer && (
-                                            <p className="text-white/60 text-sm">
-                                                <span className="font-medium text-green-400">Answer:</span> {pq.answer}
+                                            <p className="text-white/60 text-base pl-8 mt-2">
+                                                <span className="text-emerald-400 font-medium text-xs uppercase tracking-wider mr-2">Answer</span>
+                                                {pq.answer}
                                             </p>
                                         )}
                                     </div>
@@ -179,26 +175,26 @@ export default function CustomTextbooksPage() {
 
                     {/* Summary */}
                     {content?.summary && (
-                        <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-3">Summary</h3>
-                            <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-xl p-4 border border-cyan-500/20">
-                                <p className="text-white/80 leading-relaxed">{content.summary}</p>
+                        <section className="border-t border-white/10 pt-8">
+                            <h3 className="text-xl font-bold text-cyan-400 mb-4">Summary</h3>
+                            <div className="text-white/85 leading-relaxed text-lg">
+                                {content.summary}
                             </div>
                         </section>
                     )}
 
                     {/* Glossary */}
                     {content?.glossary && content.glossary.length > 0 && (
-                        <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-4">Glossary</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <section className="border-t border-white/10 pt-8 pb-12">
+                            <h3 className="text-xl font-bold text-cyan-400 mb-6">Glossary</h3>
+                            <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
                                 {content.glossary.map((item, index) => (
-                                    <div key={index} className="bg-white/5 rounded-lg p-3">
-                                        <p className="text-white font-medium text-sm">{item.term}</p>
-                                        <p className="text-white/60 text-sm">{item.definition}</p>
+                                    <div key={index}>
+                                        <dt className="text-white font-semibold mb-1">{item.term}</dt>
+                                        <dd className="text-white/60 text-sm leading-relaxed">{item.definition}</dd>
                                     </div>
                                 ))}
-                            </div>
+                            </dl>
                         </section>
                     )}
                 </div>
