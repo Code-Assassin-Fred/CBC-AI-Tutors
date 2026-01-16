@@ -27,7 +27,8 @@ interface CommunityContextType {
     searchQuery: string;
     setSearchQuery: (query: string) => void;
     isLoadingFeed: boolean;
-    loadPosts: () => Promise<void>;
+    isLoadingFeed: boolean;
+    loadPosts: (filterRole?: 'student' | 'teacher') => Promise<void>;
 
     // Active post
     activePost: CommunityPost | null;
@@ -36,7 +37,7 @@ interface CommunityContextType {
     loadPostReplies: (postId: string) => Promise<void>;
 
     // Post actions
-    createPost: (type: PostType, title: string, content: string, tags: string[], attachments?: Attachment[]) => Promise<void>;
+    createPost: (type: PostType, title: string, content: string, tags: string[], attachments?: Attachment[], authorRole?: 'student' | 'teacher') => Promise<void>;
     likePost: (postId: string) => Promise<void>;
     savePost: (postId: string) => Promise<void>;
     deletePost: (postId: string) => Promise<void>;
@@ -120,7 +121,7 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
     const [showingSaved, setShowingSaved] = useState(false);
 
     // Load posts from API
-    const loadPosts = useCallback(async () => {
+    const loadPosts = useCallback(async (filterRole?: 'student' | 'teacher') => {
         if (!user && showingSaved) {
             setPosts([]);
             return;
@@ -131,6 +132,7 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
             if (filter !== 'all') params.set('filter', filter);
             if (sort !== 'recent') params.set('sort', sort);
             if (searchQuery) params.set('q', searchQuery);
+            if (filterRole) params.set('role', filterRole);
             if (showingSaved && user) params.set('savedBy', user.uid);
 
             const response = await fetch(`/api/community?${params.toString()}`);
@@ -159,7 +161,7 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
     }, []);
 
     // Create post
-    const createPost = useCallback(async (type: PostType, title: string, content: string, tags: string[], attachments?: Attachment[]) => {
+    const createPost = useCallback(async (type: PostType, title: string, content: string, tags: string[], attachments?: Attachment[], authorRole: 'student' | 'teacher' = 'student') => {
         if (!user) return;
         setIsSubmitting(true);
         try {
@@ -171,6 +173,7 @@ export function CommunityProvider({ children }: CommunityProviderProps) {
                     data: {
                         authorId: user.uid,
                         authorName: user.displayName || 'Anonymous',
+                        authorRole,
                         type,
                         title,
                         content,

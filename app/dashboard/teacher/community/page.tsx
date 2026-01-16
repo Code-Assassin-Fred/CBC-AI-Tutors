@@ -4,7 +4,7 @@ import DashboardLayout from '@/components/CBCTeacher/layout/DashboardLayout';
 import { CommunityProvider, useCommunity } from '@/lib/context/CommunityContext';
 import TeacherCommunityFeed from '@/components/CBCTeacher/Community/TeacherCommunityFeed';
 import PostDetail from '@/components/CBCStudent/Community/PostDetail';
-import CommunitySidebar from '@/components/CBCStudent/Community/CommunitySidebar';
+import TeacherCommunitySidebar from '@/components/CBCTeacher/Community/TeacherCommunitySidebar';
 import CreatePostModal from '@/components/CBCStudent/Community/CreatePostModal';
 import { useDashboardProtection } from '@/hooks/useDashboardProtection';
 
@@ -26,12 +26,12 @@ function CommunityContent() {
 
                 {/* Sidebar - scrolls independently */}
                 <div className="w-full lg:w-80 flex-shrink-0 lg:overflow-y-auto pl-2">
-                    <CommunitySidebar />
+                    <TeacherCommunitySidebar />
                 </div>
             </div>
 
             {/* Create modal */}
-            <CreatePostModal />
+            <CreatePostModal authorRole="teacher" />
         </div>
     );
 }

@@ -27,6 +27,7 @@ export interface CommunityPost {
     authorId: string;
     authorName: string;
     authorAvatar?: string;
+    authorRole?: 'student' | 'teacher';
 
     // Content
     type: PostType;
@@ -185,6 +186,7 @@ export interface CommunityState {
 
 export interface CreatePostRequest {
     authorId: string;
+    authorRole?: 'student' | 'teacher';
     type: PostType;
     title: string;
     content: string;
@@ -201,6 +203,7 @@ export interface CreateReplyRequest {
 
 export interface FeedRequest {
     filter?: FeedFilter;
+    role?: 'student' | 'teacher';
     sort?: FeedSort;
     groupId?: string;
     searchQuery?: string;

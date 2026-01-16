@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
         const filter = searchParams.get('filter') || 'all';
         const sort = searchParams.get('sort') || 'recent';
         const search = searchParams.get('q') || '';
+        const role = searchParams.get('role'); // Filter by author role
         const postId = searchParams.get('postId'); // For fetching single post with replies
 
         // If postId is provided, fetch replies for that post
@@ -41,6 +42,11 @@ export async function GET(req: NextRequest) {
             createdAt: doc.data().createdAt?.toDate?.() || new Date(),
             updatedAt: doc.data().updatedAt?.toDate?.() || undefined,
         })) as CommunityPost[];
+
+        // Apply role filter
+        if (role) {
+            posts = posts.filter(p => p.authorRole === role);
+        }
 
         // Apply filter
         if (filter === 'questions') {
@@ -90,6 +96,7 @@ export async function POST(req: NextRequest) {
                 authorId: data.authorId,
                 authorName: data.authorName || 'Anonymous',
                 authorAvatar: data.authorAvatar || null,
+                authorRole: data.authorRole || 'student', // Default to student if not specified
                 type: data.type,
                 title: data.title,
                 content: data.content,

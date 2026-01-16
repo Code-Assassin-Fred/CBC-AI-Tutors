@@ -22,7 +22,7 @@ export default function TeacherCommunityFeed() {
     } = useCommunity();
 
     useEffect(() => {
-        loadPosts();
+        loadPosts('teacher');
     }, [loadPosts]);
 
     const filters = [

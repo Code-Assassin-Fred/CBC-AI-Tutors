@@ -5,7 +5,11 @@ import { useCommunity } from '@/lib/context/CommunityContext';
 import { PostType, Attachment } from '@/types/community';
 import { useAuth } from '@/lib/context/AuthContext';
 
-export default function CreatePostModal() {
+interface CreatePostModalProps {
+    authorRole?: 'student' | 'teacher';
+}
+
+export default function CreatePostModal({ authorRole }: CreatePostModalProps) {
     const { user } = useAuth();
     const { showCreateModal, setShowCreateModal, createPost, isSubmitting } = useCommunity();
 
@@ -35,7 +39,7 @@ export default function CreatePostModal() {
         e.preventDefault();
         if (!title.trim() || !content.trim()) return;
 
-        await createPost(type, title.trim(), content.trim(), tags, attachments);
+        await createPost(type, title.trim(), content.trim(), tags, attachments, authorRole);
         handleClose();
     };
 
