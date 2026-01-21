@@ -21,10 +21,12 @@ import { ImageMetadata } from "@/types/textbook";
 // CURRICULUM LOADER
 // ============================================
 
-const loadContentJson = () => {
-  const filePath = path.join(process.cwd(), "content.json");
+const loadGradeContent = (grade: string) => {
+  const filePath = path.join(process.cwd(), "content", `Grade ${grade}.json`);
+  if (!fs.existsSync(filePath)) return null;
   const raw = fs.readFileSync(filePath, "utf-8");
-  return JSON.parse(raw);
+  const content = JSON.parse(raw);
+  return content[grade] || content;
 };
 
 // ============================================
@@ -45,16 +47,16 @@ export async function POST(req: Request) {
     }
 
     // Load and validate curriculum data
-    const curriculum = loadContentJson();
+    const curriculum = loadGradeContent(grade);
 
-    if (!curriculum[grade] || !curriculum[grade][subject]) {
+    if (!curriculum || !curriculum[subject]) {
       return NextResponse.json(
         { error: "Invalid grade or subject" },
         { status: 400 }
       );
     }
 
-    const strands = curriculum[grade][subject].Strands;
+    const strands = curriculum[subject].Strands;
     const selectedStrand = strands[strand];
 
     if (!selectedStrand) {

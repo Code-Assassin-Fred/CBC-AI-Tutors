@@ -66,6 +66,7 @@ export interface Question {
     correctAnswer?: string;                 // For fill-blank, short-answer
     sampleAnswer?: string;                  // For open-ended
     explanation?: string;                   // Explanation of the answer
+    rubric?: string;                        // Grading rubric for this question
     points: number;
     difficulty: DifficultyLevel;
 }
@@ -80,30 +81,13 @@ export interface Assessment {
     title: string;
     description?: string;
     questions: Question[];
-    rubric?: RubricItem[];
     materials: UploadedMaterial[];
     config: AssessmentConfig;
+    rubric?: string;                        // General assessment rubric
     totalPoints: number;
     estimatedTimeMinutes: number;
     createdAt: Date;
     updatedAt?: Date;
-}
-
-// ============================================
-// RUBRIC
-// ============================================
-
-export interface RubricCriteria {
-    level: string;           // e.g., "Excellent", "Good", "Needs Improvement"
-    points: number;
-    description: string;
-}
-
-export interface RubricItem {
-    id: string;
-    criterion: string;       // What is being assessed
-    maxPoints: number;
-    criteria: RubricCriteria[];
 }
 
 // ============================================

@@ -3,33 +3,8 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import EmptyLessonState from "./EmptyLessonState";
-import contentJson from "@/content.json";
 import StudentTextbookRenderer, { TocItem } from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
 import { useTutor } from "@/lib/context/TutorContext";
-
-interface SubStrand {
-  Outcomes: string[];
-  SubStrands?: Record<string, SubStrand>;
-}
-
-interface Strand {
-  SubStrands?: Record<string, SubStrand>;
-  Outcomes?: string[];
-}
-
-interface Subject {
-  Strands: Record<string, Strand>;
-}
-
-interface GradeData {
-  [subject: string]: Subject;
-}
-
-interface ContentJson {
-  [grade: string]: GradeData;
-}
-
-const contentData = contentJson as ContentJson;
 const LESSON_STATE_KEY = 'curio_lesson_selection';
 
 interface TextbookData {
@@ -65,9 +40,9 @@ function getInitialState(key: string, urlParam: string | null): string {
 
 export default function LessonCanvas({ onTocUpdate, onTutorActivated }: LessonCanvasProps) {
   const searchParams = useSearchParams();
-  const grades = Object.keys(contentData);
   const { activateLearningMode, activateQuizMode } = useTutor();
 
+  const [grades, setGrades] = useState<string[]>([]);
   const [selectedGrade, setSelectedGrade] = useState<string>("");
   const [subjects, setSubjects] = useState<string[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
@@ -76,8 +51,17 @@ export default function LessonCanvas({ onTocUpdate, onTutorActivated }: LessonCa
 
   const [textbook, setTextbook] = useState<TextbookData | null>(null);
   const [loading, setLoading] = useState(false);
-  const [toc, setToc] = useState<TocItem[]>([]); // Local TOC
+  const [toc, setToc] = useState<TocItem[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [gradeContent, setGradeContent] = useState<any>(null);
+
+  // Fetch grades on mount
+  useEffect(() => {
+    fetch('/api/curriculum')
+      .then(res => res.json())
+      .then(data => setGrades(data.grades || []))
+      .catch(err => console.error("Failed to fetch grades:", err));
+  }, []);
 
   // Initialize from localStorage or URL params on mount
   useEffect(() => {
@@ -107,27 +91,34 @@ export default function LessonCanvas({ onTocUpdate, onTutorActivated }: LessonCa
 
   // Update subjects when grade changes
   useEffect(() => {
-    if (!selectedGrade || !contentData[selectedGrade]) {
+    if (!selectedGrade) {
+      setGradeContent(null);
       setSubjects([]);
       setSelectedSubject("");
-      setStrands([]);
-      setSelectedStrand("");
       return;
     }
-    const subjectsList = Object.keys(contentData[selectedGrade]);
-    setSubjects(subjectsList);
-    setSelectedSubject("");
+
+    fetch(`/api/curriculum?grade=${encodeURIComponent(selectedGrade)}`)
+      .then(res => res.json())
+      .then(data => {
+        setGradeContent(data);
+        const subjectsList = Object.keys(data || {});
+        setSubjects(subjectsList);
+        // Don't auto-reset if it's already set (e.g. from local storage)
+        if (!selectedSubject) setSelectedSubject("");
+      })
+      .catch(err => console.error("Failed to fetch grade content:", err));
   }, [selectedGrade]);
 
   // Update strands when subject changes
   useEffect(() => {
-    if (!selectedGrade || !selectedSubject) {
+    if (!gradeContent || !selectedSubject) {
       setStrands([]);
       setSelectedStrand("");
       return;
     }
 
-    const subjectData = contentData[selectedGrade]?.[selectedSubject];
+    const subjectData = gradeContent[selectedSubject];
     if (!subjectData?.Strands) {
       setStrands([]);
       setSelectedStrand("");
@@ -136,8 +127,9 @@ export default function LessonCanvas({ onTocUpdate, onTutorActivated }: LessonCa
 
     const strandsList = Object.keys(subjectData.Strands);
     setStrands(strandsList);
-    setSelectedStrand("");
-  }, [selectedGrade, selectedSubject]);
+    // Don't auto-reset if it's already set
+    if (!selectedStrand) setSelectedStrand("");
+  }, [gradeContent, selectedSubject]);
 
   // Fetch textbook only when full selection is made
   useEffect(() => {

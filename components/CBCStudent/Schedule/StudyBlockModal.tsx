@@ -5,7 +5,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { useSchedule } from '@/lib/context/ScheduleContext';
 import { useCourses } from '@/lib/context/CoursesContext';
 import { StudyBlock, StudyBlockColor } from '@/types/schedule';
-import contentJson from '@/content.json';
+
 
 interface GradeMap {
     [grade: string]: {
@@ -58,13 +58,55 @@ export default function StudyBlockModal() {
     const [strand, setStrand] = useState('');
     const [substrand, setSubstrand] = useState('');
 
-    // Load available grades
-    const grades = Object.keys(contentJson);
-    const subjects = grade ? Object.keys((contentJson as GradeMap)[grade] || {}) : [];
-    const strands = (grade && subject) ? Object.keys((contentJson as GradeMap)[grade][subject]?.Strands || {}) : [];
-    const substrands = (grade && subject && strand)
-        ? Object.keys((contentJson as GradeMap)[grade][subject].Strands[strand]?.SubStrands || {})
-        : [];
+    // Dynamic Data
+    const [grades, setGrades] = useState<string[]>([]);
+    const [subjects, setSubjects] = useState<string[]>([]);
+    const [strands, setStrands] = useState<string[]>([]);
+    const [substrands, setSubstrands] = useState<string[]>([]);
+
+    // Fetch grades on mount
+    useEffect(() => {
+        fetch('/api/curriculum')
+            .then(res => res.json())
+            .then(data => setGrades(data.grades || []))
+            .catch(err => console.error("Failed to fetch grades:", err));
+    }, []);
+
+    // Fetch grade content when grade changes
+    const [gradeContent, setGradeContent] = useState<any>(null);
+
+    useEffect(() => {
+        if (!grade) {
+            setGradeContent(null);
+            setSubjects([]);
+            return;
+        }
+        fetch(`/api/curriculum?grade=${encodeURIComponent(grade)}`)
+            .then(res => res.json())
+            .then(data => {
+                setGradeContent(data);
+                setSubjects(Object.keys(data || {}));
+            })
+            .catch(err => console.error("Failed to fetch grade content:", err));
+    }, [grade]);
+
+    // Update strands when subject changes
+    useEffect(() => {
+        if (!gradeContent || !subject) {
+            setStrands([]);
+            return;
+        }
+        setStrands(Object.keys(gradeContent[subject]?.Strands || {}));
+    }, [gradeContent, subject]);
+
+    // Update substrands when strand changes
+    useEffect(() => {
+        if (!gradeContent || !subject || !strand) {
+            setSubstrands([]);
+            return;
+        }
+        setSubstrands(Object.keys(gradeContent[subject].Strands[strand]?.SubStrands || {}));
+    }, [gradeContent, subject, strand]);
 
     useEffect(() => {
         if (editingBlock) {

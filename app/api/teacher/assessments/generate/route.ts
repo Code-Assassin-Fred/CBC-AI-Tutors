@@ -4,6 +4,7 @@
  * POST /api/teacher/assessments/generate
  * Generates an AI-powered assessment based on uploaded materials.
  * Uses streaming to provide real-time progress updates.
+ * Now includes grading rubrics as requested.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -74,21 +75,18 @@ export async function POST(request: NextRequest) {
                         percentage: 25,
                     });
 
-                    // Step 3: Generating questions
+                    // Step 3: Generating questions & rubrics
                     sendEvent({
                         type: 'progress',
                         step: 'generating-questions',
-                        message: `Generating ${totalQuestions} questions...`,
+                        message: `Generating ${totalQuestions} questions with grading rubrics...`,
                         percentage: 40,
                     });
 
-                    const assessmentPrompt = `You are an expert educational assessment creator. Create a comprehensive assessment with grading rubric based on the following specifications.
+                    const assessmentPrompt = `You are an expert educational assessment creator. Create a comprehensive assessment based on the following specifications.
 
 MATERIALS TO BASE THE ASSESSMENT ON:
-The teacher has uploaded the following materials: ${materialNames.join(', ')}
-Material URLs: ${materialUrls.join(', ')}
-
-Note: Generate questions that would logically come from educational materials with these names. Create appropriate content-based questions.
+Materials uploaded: ${materialNames.join(', ')}
 
 ASSESSMENT REQUIREMENTS:
 - Title: ${config.title}
@@ -97,33 +95,23 @@ ASSESSMENT REQUIREMENTS:
 ${config.specifications ? `- Additional Specifications: ${config.specifications}` : ''}
 ${config.topicFocus ? `- Focus Topic: ${config.topicFocus}` : ''}
 
+GRADING RUBRIC REQUIREMENT:
+For each question, especially open-ended and short-answer ones, you MUST provide a grading rubric.
+Also provide a general assessment rubric explaining the overall evaluation criteria.
+
 QUESTION TYPE GUIDELINES:
-- multiple-choice: 4 options, one correct answer, clear distractors
+- multiple-choice: 4 options, one correct answer
 - true-false: Statement that is clearly true or false
 - short-answer: Requires 1-3 sentence response
 - open-ended: Requires detailed explanation or analysis
 - fill-blank: Sentence with a key term blanked out
 
-For EACH question, provide:
-1. Clear, unambiguous question text
-2. Correct answer or sample answer
-3. Brief explanation of why the answer is correct
-4. Appropriate point value (1-5 based on complexity)
-
-RUBRIC REQUIREMENTS:
-Create a grading rubric with 3-5 criteria covering:
-- Content accuracy and understanding
-- Clarity of explanation (for written responses)
-- Use of relevant examples/evidence
-- Critical thinking and analysis
-
-Each criterion should have 3-4 levels (e.g., Excellent, Good, Developing, Needs Improvement) with point allocations and descriptions.
-
 Format your response as JSON with this structure:
 {
     "title": "Assessment title",
-    "description": "Brief description of what this assessment covers",
+    "description": "Brief description",
     "estimatedTimeMinutes": 30,
+    "rubric": "General assessment rubric summarizing evaluation criteria",
     "questions": [
         {
             "type": "multiple-choice",
@@ -135,52 +123,18 @@ Format your response as JSON with this structure:
                 {"id": "d", "text": "Option D", "isCorrect": false}
             ],
             "explanation": "Why B is correct",
+            "rubric": "1pt for correct choice",
             "points": 2,
             "difficulty": "medium"
         },
         {
-            "type": "true-false",
-            "question": "Statement to evaluate",
-            "correctAnswer": "true",
-            "explanation": "Why this is true/false",
-            "points": 1,
-            "difficulty": "easy"
-        },
-        {
             "type": "short-answer",
-            "question": "Short answer question",
+            "question": "Question text",
             "sampleAnswer": "Expected answer",
-            "explanation": "What a good answer should include",
+            "explanation": "What to look for",
+            "rubric": "Detailed grading criteria for this question (e.g., 3pts: full concept; 1pt: partial; 0pts: none)",
             "points": 3,
             "difficulty": "medium"
-        },
-        {
-            "type": "open-ended",
-            "question": "Open-ended question requiring analysis",
-            "sampleAnswer": "Key points that should be covered",
-            "explanation": "Grading criteria",
-            "points": 5,
-            "difficulty": "hard"
-        },
-        {
-            "type": "fill-blank",
-            "question": "The _____ is responsible for...",
-            "correctAnswer": "missing term",
-            "explanation": "Why this term fits",
-            "points": 1,
-            "difficulty": "easy"
-        }
-    ],
-    "rubric": [
-        {
-            "criterion": "Content Accuracy",
-            "maxPoints": 10,
-            "criteria": [
-                {"level": "Excellent", "points": 10, "description": "All answers demonstrate complete understanding"},
-                {"level": "Good", "points": 7, "description": "Most answers are accurate with minor errors"},
-                {"level": "Developing", "points": 4, "description": "Some understanding shown but significant gaps"},
-                {"level": "Needs Improvement", "points": 1, "description": "Limited understanding demonstrated"}
-            ]
         }
     ]
 }`;
@@ -190,7 +144,7 @@ Format your response as JSON with this structure:
                         messages: [
                             {
                                 role: 'system',
-                                content: 'You are an expert educational assessment creator. Always respond with valid JSON only. Create pedagogically sound questions that test understanding, not just memorization.',
+                                content: 'You are an expert educational assessment creator. Always respond with valid JSON only.',
                             },
                             { role: 'user', content: assessmentPrompt },
                         ],
@@ -202,7 +156,7 @@ Format your response as JSON with this structure:
                     sendEvent({
                         type: 'progress',
                         step: 'validating',
-                        message: 'Validating generated questions...',
+                        message: 'Validating generated content...',
                         percentage: 75,
                     });
 
@@ -217,45 +171,44 @@ Format your response as JSON with this structure:
                         percentage: 90,
                     });
 
-                    // Process questions and add IDs
-                    const questions: Question[] = (assessmentData.questions || []).map((q: Record<string, unknown>, index: number) => ({
+                    const questions: Question[] = (assessmentData.questions || []).map((q: any) => ({
                         id: uuidv4(),
                         type: q.type as QuestionType,
-                        question: q.question as string,
+                        question: q.question,
                         options: q.options,
-                        correctAnswer: q.correctAnswer as string | undefined,
-                        sampleAnswer: q.sampleAnswer as string | undefined,
-                        explanation: q.explanation as string | undefined,
-                        points: (q.points as number) || 1,
-                        difficulty: (q.difficulty as DifficultyLevel) || 'medium',
+                        correctAnswer: q.correctAnswer,
+                        sampleAnswer: q.sampleAnswer,
+                        explanation: q.explanation,
+                        rubric: q.rubric,
+                        points: q.points || 1,
+                        difficulty: q.difficulty || 'medium',
                     }));
 
                     const totalPoints = questions.reduce((sum, q) => sum + q.points, 0);
 
-                    // Build the assessment object
                     const assessmentId = uuidv4();
                     const assessment: Assessment = {
                         id: assessmentId,
                         teacherId,
                         title: assessmentData.title || config.title,
-                        description: assessmentData.description || `Assessment with ${questions.length} questions`,
+                        description: assessmentData.description,
                         questions,
-                        materials: materialUrls.map((url: string, i: number) => ({
+                        materials: materialUrls.map((url, i) => ({
                             id: uuidv4(),
-                            name: materialNames[i] || `Material ${i + 1}`,
+                            name: materialNames[i],
                             url,
-                            type: 'other' as const,
+                            type: 'other',
                             mimeType: 'application/octet-stream',
                             size: 0,
                             uploadedAt: new Date(),
                         })),
                         config,
+                        rubric: assessmentData.rubric,
                         totalPoints,
                         estimatedTimeMinutes: assessmentData.estimatedTimeMinutes || 30,
                         createdAt: new Date(),
                     };
 
-                    // Save to Firestore
                     const assessmentRef = adminDb
                         .collection('teachers')
                         .doc(teacherId)
@@ -267,22 +220,17 @@ Format your response as JSON with this structure:
                         createdAt: new Date(),
                     });
 
-                    // Send success event
                     sendEvent({
                         type: 'done',
                         step: 'complete',
-                        message: 'Assessment created successfully!',
+                        message: 'Assessment with rubric created!',
                         percentage: 100,
                         data: assessment,
                     });
 
                 } catch (error) {
                     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-                    console.error('Assessment generation error:', errorMessage);
-                    sendEvent({
-                        type: 'error',
-                        error: errorMessage,
-                    });
+                    sendEvent({ type: 'error', error: errorMessage });
                 } finally {
                     controller.close();
                 }
@@ -299,9 +247,6 @@ Format your response as JSON with this structure:
 
     } catch (error) {
         console.error('Assessment generation error:', error);
-        return NextResponse.json(
-            { error: 'Failed to start assessment generation' },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: 'Failed to generate assessment' }, { status: 500 });
     }
 }

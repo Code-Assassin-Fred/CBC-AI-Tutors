@@ -86,128 +86,192 @@ export default function AssessmentsPage() {
     // Assessment Viewer
     if (selectedAssessment) {
         return (
-            <div className="flex flex-col h-full overflow-hidden">
-                {/* Header */}
-                <div className="p-4 border-b border-white/10 bg-white/5 flex items-center gap-4">
-                    <button
-                        onClick={() => setSelectedAssessment(null)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all"
-                    >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                        Back
-                    </button>
-                    <div className="flex-1 min-w-0">
-                        <h1 className="text-lg font-bold text-white truncate">{selectedAssessment.title}</h1>
-                        <div className="flex items-center gap-3 text-sm text-white/50">
-                            <span>{selectedAssessment.questions?.length || 0} Questions</span>
-                            <span>•</span>
-                            <span>{selectedAssessment.totalPoints} Points</span>
-                            <span>•</span>
-                            <span>{selectedAssessment.estimatedTimeMinutes} min</span>
+            <div className="flex flex-col h-full overflow-hidden bg-[#0a0f14]">
+                {/* Header - Hidden on print */}
+                <div className="p-4 border-b border-white/10 bg-white/5 flex items-center justify-between gap-4 print:hidden">
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => setSelectedAssessment(null)}
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all font-medium"
+                        >
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Back
+                        </button>
+                        <div className="min-w-0">
+                            <h1 className="text-lg font-bold text-white truncate">{selectedAssessment.title}</h1>
+                            <div className="flex items-center gap-3 text-sm text-white/50">
+                                <span>{selectedAssessment.questions?.length || 0} Questions</span>
+                                <span>•</span>
+                                <span>{selectedAssessment.totalPoints} Points</span>
+                            </div>
                         </div>
                     </div>
+
+                    <button
+                        onClick={() => window.print()}
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500 text-white hover:bg-cyan-400 transition-all shadow-lg shadow-cyan-500/20 font-semibold"
+                    >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        </svg>
+                        Print Assessment
+                    </button>
                 </div>
 
-                {/* Questions */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-6 max-w-4xl mx-auto w-full">
-                    {selectedAssessment.description && (
-                        <p className="text-white/70 text-lg">{selectedAssessment.description}</p>
-                    )}
+                {/* Canvas Area */}
+                <div className="flex-1 overflow-y-auto p-4 sm:p-8 md:p-12 print:p-0 print:overflow-visible">
+                    <div className="max-w-[800px] mx-auto bg-white rounded-xl shadow-2xl overflow-hidden print:shadow-none print:rounded-none min-h-[1000px] flex flex-col text-gray-900">
 
-                    {selectedAssessment.questions?.map((question: Question, index: number) => (
-                        <div key={question.id} className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                            {/* Question Header */}
-                            <div className="flex items-start gap-4 mb-4">
-                                <span className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm font-bold">
-                                    {index + 1}
-                                </span>
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <span className={`text-xs px-2 py-0.5 rounded-full ${question.type === 'multiple-choice' ? 'bg-blue-500/20 text-blue-400' :
-                                            question.type === 'true-false' ? 'bg-purple-500/20 text-purple-400' :
-                                                question.type === 'short-answer' ? 'bg-green-500/20 text-green-400' :
-                                                    question.type === 'open-ended' ? 'bg-orange-500/20 text-orange-400' :
-                                                        'bg-pink-500/20 text-pink-400'
-                                            }`}>
-                                            {QUESTION_TYPE_LABELS[question.type]}
-                                        </span>
-                                        <span className="text-xs text-white/40">{question.points} pts</span>
-                                    </div>
-                                    <p className="text-white text-lg">{question.question}</p>
+                        {/* Print Styles */}
+                        <style jsx global>{`
+                            @media print {
+                                body { background: white !important; color: black !important; }
+                                .DashboardLayout_main { padding: 0 !important; }
+                                header, aside, .print-hidden, .print\\:hidden { display: none !important; }
+                                .print-only { display: block !important; }
+                                @page { margin: 2cm; }
+                            }
+                        `}</style>
+
+                        {/* Assessment Header */}
+                        <div className="p-10 border-b border-gray-100 bg-gray-50/80">
+                            <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">{selectedAssessment.title}</h2>
+                            <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 font-medium">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-gray-400 uppercase tracking-widest text-[10px] font-bold">Points</span>
+                                    <span className="text-gray-900 font-bold underline decoration-cyan-500/30 underline-offset-4">{selectedAssessment.totalPoints}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-gray-400 uppercase tracking-widest text-[10px] font-bold">Duration</span>
+                                    <span className="text-gray-900 font-bold underline decoration-cyan-500/30 underline-offset-4">{selectedAssessment.estimatedTimeMinutes} min</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-gray-400 uppercase tracking-widest text-[10px] font-bold">Student Name</span>
+                                    <div className="w-48 h-6 border-b-2 border-gray-200"></div>
                                 </div>
                             </div>
-
-                            {/* Options for Multiple Choice */}
-                            {question.type === 'multiple-choice' && question.options && (
-                                <div className="ml-12 space-y-2 mb-4">
-                                    {question.options.map((option) => (
-                                        <div
-                                            key={option.id}
-                                            className={`flex items-center gap-3 p-3 rounded-xl border ${option.isCorrect
-                                                ? 'border-emerald-500/50 bg-emerald-500/10'
-                                                : 'border-white/10 bg-white/5'
-                                                }`}
-                                        >
-                                            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium ${option.isCorrect
-                                                ? 'bg-emerald-500 text-white'
-                                                : 'bg-white/10 text-white/60'
-                                                }`}>
-                                                {option.id.toUpperCase()}
-                                            </span>
-                                            <span className={option.isCorrect ? 'text-emerald-400' : 'text-white/80'}>
-                                                {option.text}
-                                            </span>
-                                            {option.isCorrect && (
-                                                <svg className="w-5 h-5 text-emerald-400 ml-auto" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                                </svg>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            {/* Answer for other types */}
-                            {question.type !== 'multiple-choice' && (question.correctAnswer || question.sampleAnswer) && (
-                                <div className="ml-12 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 mb-4">
-                                    <div className="text-xs text-emerald-400 font-medium mb-1">
-                                        {question.type === 'open-ended' ? 'Sample Answer' : 'Correct Answer'}
-                                    </div>
-                                    <p className="text-white/90">{question.correctAnswer || question.sampleAnswer}</p>
-                                </div>
-                            )}
-
-                            {/* Explanation */}
-                            {question.explanation && (
-                                <div className="ml-12 p-4 rounded-xl bg-white/5 border border-white/10">
-                                    <div className="text-xs text-cyan-400 font-medium mb-1">Explanation</div>
-                                    <p className="text-white/70 text-sm">{question.explanation}</p>
-                                </div>
-                            )}
                         </div>
-                    ))}
+
+                        {/* Content */}
+                        <div className="p-10 space-y-12 flex-1">
+                            {/* General Rubric (Teacher Only View) */}
+                            {selectedAssessment.rubric && (
+                                <section className="print:hidden rounded-2xl bg-cyan-50 border border-cyan-100 p-6 shadow-sm">
+                                    <h3 className="text-cyan-800 font-bold mb-2 flex items-center gap-2 text-sm uppercase tracking-wider">
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Assessment Rubric
+                                    </h3>
+                                    <p className="text-cyan-700 text-sm leading-relaxed whitespace-pre-wrap">{selectedAssessment.rubric}</p>
+                                </section>
+                            )}
+
+                            {selectedAssessment.description && (
+                                <p className="text-gray-500 text-lg italic leading-relaxed font-serif border-l-4 border-cyan-500/10 pl-6">{selectedAssessment.description}</p>
+                            )}
+
+                            {/* Questions */}
+                            <div className="space-y-16">
+                                {selectedAssessment.questions?.map((question: Question, index: number) => (
+                                    <div key={question.id} className="relative group">
+                                        <div className="flex items-start gap-6">
+                                            <span className="flex-shrink-0 w-10 h-10 rounded-xl bg-gray-900 text-white flex items-center justify-center font-bold text-lg shadow-lg">
+                                                {index + 1}
+                                            </span>
+                                            <div className="flex-1 space-y-4">
+                                                <div className="flex items-center justify-between">
+                                                    <span className="text-[10px] uppercase tracking-[0.2em] font-black text-gray-400">{QUESTION_TYPE_LABELS[question.type]}</span>
+                                                    <span className="text-sm font-bold text-gray-400">Score: _____ / {question.points}</span>
+                                                </div>
+                                                <p className="text-2xl text-gray-900 font-serif leading-snug font-medium">{question.question}</p>
+
+                                                {/* Multiple Choice Options */}
+                                                {question.type === 'multiple-choice' && question.options && (
+                                                    <div className="grid grid-cols-1 gap-3 mt-6">
+                                                        {question.options.map((option) => (
+                                                            <div key={option.id} className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${option.isCorrect ? 'border-emerald-100 bg-emerald-50/30' : 'border-gray-50 bg-gray-50/20'
+                                                                }`}>
+                                                                <div className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center text-sm font-black ${option.isCorrect ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-gray-200 text-gray-400'
+                                                                    }`}>
+                                                                    {option.id.toUpperCase()}
+                                                                </div>
+                                                                <span className={`text-lg ${option.isCorrect ? 'text-emerald-900 font-semibold' : 'text-gray-800'}`}>{option.text}</span>
+                                                                {option.isCorrect && (
+                                                                    <span className="ml-auto text-[10px] uppercase tracking-widest font-bold text-emerald-600 print:hidden">Correct</span>
+                                                                )}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+
+                                                {/* Open Response Lines */}
+                                                {(question.type === 'short-answer' || question.type === 'open-ended' || question.type === 'fill-blank') && (
+                                                    <div className="mt-6 space-y-4">
+                                                        {Array.from({ length: question.type === 'open-ended' ? 10 : question.type === 'short-answer' ? 4 : 1 }).map((_, i) => (
+                                                            <div key={i} className="h-10 border-b-2 border-gray-100 w-full mb-1"></div>
+                                                        ))}
+                                                    </div>
+                                                )}
+
+                                                {/* True/False Options */}
+                                                {question.type === 'true-false' && (
+                                                    <div className="flex gap-12 mt-6">
+                                                        <div className="flex items-center gap-3 group/opt cursor-pointer">
+                                                            <div className="w-8 h-8 rounded-xl border-2 border-gray-200 flex items-center justify-center font-black text-gray-200 group-hover/opt:border-cyan-500 group-hover/opt:text-cyan-500 transition-all">T</div>
+                                                            <span className="text-gray-700 font-bold text-lg">TRUE</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 group/opt cursor-pointer">
+                                                            <div className="w-8 h-8 rounded-xl border-2 border-gray-200 flex items-center justify-center font-black text-gray-200 group-hover/opt:border-cyan-500 group-hover/opt:text-cyan-500 transition-all">F</div>
+                                                            <span className="text-gray-700 font-bold text-lg">FALSE</span>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Rubric/Explanation - Teacher Only */}
+                                                <div className="print:hidden space-y-3 pt-6 mt-6 border-t border-gray-100">
+                                                    {(question.correctAnswer || question.sampleAnswer) && (
+                                                        <div className="rounded-xl bg-emerald-50/80 p-4 border border-emerald-100">
+                                                            <span className="text-[10px] font-black text-emerald-800 uppercase tracking-widest block mb-1">Expected Answer:</span>
+                                                            <p className="text-emerald-900 text-sm font-medium">{question.correctAnswer || question.sampleAnswer}</p>
+                                                        </div>
+                                                    )}
+                                                    {question.rubric && (
+                                                        <div className="rounded-xl bg-amber-50/80 p-4 border border-amber-100">
+                                                            <span className="text-[10px] font-black text-amber-800 uppercase tracking-widest block mb-1">Grading Rubric:</span>
+                                                            <p className="text-amber-900 text-sm italic">{question.rubric}</p>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Pagination Footer */}
+                        <div className="p-10 text-center border-t border-gray-50 bg-gray-50/30 text-[9px] text-gray-400 font-bold uppercase tracking-[0.3em] mt-auto">
+                            Curio Academic Performance Assessment &copy; {new Date().getFullYear()} &bull; Professional Edition
+                        </div>
+                    </div>
                 </div>
             </div>
         );
     }
 
-    // Main View: Form + Assessments List
+    // Default view: Form + List
     return (
         <div className="flex flex-col h-full overflow-hidden">
-            {/* Collapsible Form Section */}
+            {/* Form Section */}
             <div className={`border-b border-white/10 transition-all ${showForm ? 'p-6' : 'p-3'}`}>
                 <button
                     onClick={() => setShowForm(!showForm)}
                     className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-2"
                 >
-                    <svg
-                        className={`w-4 h-4 transition-transform ${showForm ? 'rotate-90' : ''}`}
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
+                    <svg className={`w-4 h-4 transition-transform ${showForm ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                     <span className="text-sm font-medium">Create New Assessment</span>
@@ -215,11 +279,11 @@ export default function AssessmentsPage() {
 
                 {showForm && (
                     <div className="bg-[#0d1117] border border-white/10 rounded-2xl p-6 space-y-6">
-                        {/* Step 1: Upload Materials */}
+                        {/* Step 1: Upload */}
                         <div>
                             <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
                                 <span className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm">1</span>
-                                Upload Learning Materials
+                                Upload Materials
                             </h3>
                             <MaterialUploader
                                 materials={uploadedMaterials}
@@ -231,193 +295,96 @@ export default function AssessmentsPage() {
                             />
                         </div>
 
-                        {/* Step 2: Configure Assessment */}
+                        {/* Step 2: Config */}
                         <div>
                             <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
                                 <span className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm">2</span>
-                                Configure Assessment
+                                Configure & Generate
                             </h3>
-
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {/* Title */}
                                 <div className="md:col-span-2">
                                     <label className="block text-white/70 text-sm mb-2">Assessment Title *</label>
                                     <input
                                         type="text"
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
-                                        placeholder="e.g., Chapter 5 Quiz - Photosynthesis"
-                                        className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
+                                        placeholder="Enter a title for the assessment..."
+                                        className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all"
                                         disabled={isGenerating}
                                     />
                                 </div>
-
-                                {/* Question Types */}
                                 <div className="md:col-span-2">
-                                    <label className="block text-white/70 text-sm mb-3">Question Types</label>
+                                    <label className="block text-white/70 text-sm mb-3">Question Mix</label>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                                         {questionTypes.map((qt) => (
-                                            <div
-                                                key={qt.type}
-                                                className={`flex items-center justify-between p-3 rounded-xl border transition-all ${qt.enabled
-                                                    ? 'border-cyan-500/50 bg-cyan-500/10'
-                                                    : 'border-white/10 bg-white/5'
-                                                    }`}
-                                            >
-                                                <label className="flex items-center gap-2 cursor-pointer flex-1">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={qt.enabled}
-                                                        onChange={() => handleQuestionTypeToggle(qt.type)}
-                                                        className="w-4 h-4 rounded border-white/30 bg-transparent text-cyan-500 focus:ring-cyan-500/50"
-                                                        disabled={isGenerating}
-                                                    />
-                                                    <span className={`text-sm ${qt.enabled ? 'text-white' : 'text-white/50'}`}>
-                                                        {QUESTION_TYPE_LABELS[qt.type]}
-                                                    </span>
+                                            <div key={qt.type} className={`flex items-center justify-between p-3 rounded-xl border ${qt.enabled ? 'border-cyan-500/30 bg-cyan-500/5' : 'border-white/5 bg-white/[0.02]'}`}>
+                                                <label className="flex items-center gap-2 cursor-pointer">
+                                                    <input type="checkbox" checked={qt.enabled} onChange={() => handleQuestionTypeToggle(qt.type)} className="w-4 h-4 rounded text-cyan-500 bg-transparent border-white/20" disabled={isGenerating} />
+                                                    <span className="text-sm text-white/80">{QUESTION_TYPE_LABELS[qt.type]}</span>
                                                 </label>
                                                 {qt.enabled && (
-                                                    <input
-                                                        type="number"
-                                                        min="1"
-                                                        max="20"
-                                                        value={qt.count}
-                                                        onChange={(e) => handleQuestionCountChange(qt.type, parseInt(e.target.value) || 0)}
-                                                        className="w-14 px-2 py-1 rounded-lg bg-[#0b0f12] border border-white/20 text-white text-center text-sm focus:outline-none focus:border-cyan-500/50"
-                                                        disabled={isGenerating}
-                                                    />
+                                                    <input type="number" min="1" max="20" value={qt.count} onChange={(e) => handleQuestionCountChange(qt.type, parseInt(e.target.value) || 0)} className="w-12 h-8 rounded bg-black/40 border border-white/10 text-center text-sm text-white" disabled={isGenerating} />
                                                 )}
                                             </div>
                                         ))}
                                     </div>
-                                    <p className="text-white/40 text-xs mt-2">
-                                        Total: {totalQuestions} questions
-                                    </p>
                                 </div>
-
-                                {/* Difficulty */}
                                 <div>
-                                    <label className="block text-white/70 text-sm mb-2">Difficulty Level</label>
-                                    <select
-                                        value={difficulty}
-                                        onChange={(e) => setDifficulty(e.target.value as DifficultyLevel)}
-                                        className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-                                        disabled={isGenerating}
-                                    >
-                                        {Object.entries(DIFFICULTY_LABELS).map(([value, label]) => (
-                                            <option key={value} value={value}>{label}</option>
-                                        ))}
+                                    <label className="block text-white/70 text-sm mb-2">Difficulty</label>
+                                    <select value={difficulty} onChange={(e) => setDifficulty(e.target.value as DifficultyLevel)} className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white outline-none" disabled={isGenerating}>
+                                        {Object.entries(DIFFICULTY_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                                     </select>
                                 </div>
-
-                                {/* Additional Specifications */}
                                 <div>
-                                    <label className="block text-white/70 text-sm mb-2">Additional Specifications (optional)</label>
-                                    <input
-                                        type="text"
-                                        value={specifications}
-                                        onChange={(e) => setSpecifications(e.target.value)}
-                                        placeholder="e.g., Focus on vocabulary, include diagrams"
-                                        className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all"
-                                        disabled={isGenerating}
-                                    />
+                                    <label className="block text-white/70 text-sm mb-2">Extra Instructions</label>
+                                    <input type="text" value={specifications} onChange={(e) => setSpecifications(e.target.value)} placeholder="e.g. Focus on vocabulary" className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white outline-none" disabled={isGenerating} />
                                 </div>
                             </div>
                         </div>
 
-                        {/* Generate Button */}
+                        {/* Action */}
                         <div className="flex items-center gap-4">
                             <button
                                 onClick={handleGenerate}
                                 disabled={!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0 || isGenerating}
-                                className={`px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0 || isGenerating
-                                    ? 'bg-white/10 text-white/30 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/25'
+                                className={`px-8 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0 || isGenerating
+                                        ? 'bg-white/10 text-white/20'
+                                        : 'bg-cyan-500 text-white hover:bg-cyan-400 shadow-xl shadow-cyan-500/10'
                                     }`}
                             >
-                                {isGenerating ? (
-                                    <>
-                                        <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                                        </svg>
-                                        Generating...
-                                    </>
-                                ) : (
-                                    <>
-                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                                        </svg>
-                                        Generate Assessment
-                                    </>
-                                )}
+                                {isGenerating ? 'Generating...' : 'Start Intelligence Engine'}
                             </button>
-
-                            {/* Progress */}
                             {isGenerating && generationProgress && (
                                 <div className="flex-1">
-                                    <div className="text-white/60 text-sm mb-1">{generationProgress.message}</div>
-                                    <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                                        <div
-                                            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300"
-                                            style={{ width: `${generationProgress.percentage}%` }}
-                                        />
-                                    </div>
+                                    <div className="text-[10px] uppercase tracking-widest text-white/40 mb-1">{generationProgress.message}</div>
+                                    <div className="h-1 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-cyan-500 transition-all duration-500" style={{ width: `${generationProgress.percentage}%` }} /></div>
                                 </div>
                             )}
                         </div>
-
-                        {/* Error */}
-                        {generationError && (
-                            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
-                                {generationError}
-                            </div>
-                        )}
-
-                        {/* Validation hints */}
-                        {(!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0) && !isGenerating && (
-                            <div className="text-white/40 text-sm space-y-1">
-                                {uploadedMaterials.length === 0 && <p>• Upload at least one material</p>}
-                                {!title.trim() && <p>• Enter an assessment title</p>}
-                                {totalQuestions === 0 && <p>• Select at least one question type</p>}
-                            </div>
-                        )}
                     </div>
                 )}
             </div>
 
-            {/* Assessments List */}
+            {/* List Section */}
             <div className="flex-1 overflow-y-auto p-6">
-                <h2 className="text-lg font-semibold text-cyan-400 mb-4">
-                    Your Assessments {assessments.length > 0 && `(${assessments.length})`}
-                </h2>
+                <div className="max-w-7xl mx-auto">
+                    <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                        Assessment Library
+                        <span className="px-2 py-0.5 rounded-md bg-white/5 text-[10px] text-white/40">{assessments.length} Available</span>
+                    </h2>
 
-                {isLoadingAssessments ? (
-                    <div className="flex items-center justify-center py-12">
-                        <svg className="w-8 h-8 animate-spin text-white/40" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                        </svg>
-                    </div>
-                ) : assessments.length === 0 ? (
-                    <div className="text-center py-12 text-white/40">
-                        <svg className="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                        </svg>
-                        <p>No assessments yet. Upload materials and generate your first assessment above!</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {assessments.map((assessment) => (
-                            <AssessmentCard
-                                key={assessment.id}
-                                assessment={assessment}
-                                onClick={() => setSelectedAssessment(assessment)}
-                                onDelete={() => handleDelete(assessment.id)}
-                            />
-                        ))}
-                    </div>
-                )}
+                    {isLoadingAssessments ? (
+                        <div className="flex items-center justify-center py-20"><div className="w-10 h-10 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" /></div>
+                    ) : assessments.length === 0 ? (
+                        <div className="text-center py-20 bg-white/[0.02] border border-dashed border-white/10 rounded-3xl">
+                            <p className="text-white/30 font-medium">No assessments ready yet. Feed the AI some materials above!</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {assessments.map(a => <AssessmentCard key={a.id} assessment={a} onClick={() => setSelectedAssessment(a)} onDelete={() => handleDelete(a.id)} />)}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

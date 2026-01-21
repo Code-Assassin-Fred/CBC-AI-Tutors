@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import TextbookRenderer from "@/components/admin/TextbookRenderer";
 import StudentTextbookRenderer from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
 import GenerationProgress from "@/components/admin/GenerationProgress";
-import contentJson from "@/content.json";
+
 import { useAuth } from "@/lib/context/AuthContext";
 
 // ---- Types ----
@@ -60,9 +60,9 @@ const RobotIcon = () => (
 // ---- Component ----
 export default function GeneratePage() {
   const { user } = useAuth();
-  const grades = Object.keys(contentJson);
 
-  const [selectedGrade, setSelectedGrade] = useState<string>(grades[0] || "");
+  const [grades, setGrades] = useState<string[]>([]);
+  const [selectedGrade, setSelectedGrade] = useState<string>("");
   const [subjects, setSubjects] = useState<string[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<string>("");
   const [strands, setStrands] = useState<string[]>([]);
@@ -73,22 +73,45 @@ export default function GeneratePage() {
   const [images, setImages] = useState<any[]>([]);
   const [mode, setMode] = useState<"Learner" | "Teacher">("Learner");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [useStreaming, setUseStreaming] = useState(true); // Toggle for streaming mode
+  const [useStreaming, setUseStreaming] = useState(true);
+
+  const [gradeContent, setGradeContent] = useState<any>(null);
+
+  // ---- Fetch grades on mount ----
+  useEffect(() => {
+    fetch('/api/curriculum')
+      .then(res => res.json())
+      .then(data => {
+        const gradeList = data.grades || [];
+        setGrades(gradeList);
+        if (gradeList.length > 0) setSelectedGrade(gradeList[0]);
+      })
+      .catch(err => console.error("Failed to fetch grades:", err));
+  }, []);
 
   // ---- Update subjects when grade changes ----
   useEffect(() => {
     if (!selectedGrade) return;
-    const subjectsList = Object.keys(
-      (contentJson as GradeMap)[selectedGrade] || {}
-    );
-    setSubjects(subjectsList);
-    setSelectedSubject(subjectsList[0] || "");
+
+    fetch(`/api/curriculum?grade=${encodeURIComponent(selectedGrade)}`)
+      .then(res => res.json())
+      .then(data => {
+        setGradeContent(data);
+        const subjectsList = Object.keys(data || {});
+        setSubjects(subjectsList);
+        setSelectedSubject(subjectsList[0] || "");
+      })
+      .catch(err => console.error("Failed to fetch grade content:", err));
   }, [selectedGrade]);
 
   // ---- Update strands when subject changes ----
   useEffect(() => {
-    if (!selectedGrade || !selectedSubject) return;
-    const subjectData = (contentJson as GradeMap)[selectedGrade]?.[selectedSubject];
+    if (!gradeContent || !selectedSubject) {
+      setStrands([]);
+      setSelectedStrand("");
+      return;
+    }
+    const subjectData = gradeContent[selectedSubject];
     if (!subjectData) {
       setStrands([]);
       setSelectedStrand("");
@@ -98,7 +121,7 @@ export default function GeneratePage() {
     const strandsList = Object.keys(strandsObj || {});
     setStrands(strandsList);
     setSelectedStrand(strandsList[0] || "");
-  }, [selectedGrade, selectedSubject]);
+  }, [gradeContent, selectedSubject]);
 
   // ---- Start generation ----
   const startGeneration = () => {
