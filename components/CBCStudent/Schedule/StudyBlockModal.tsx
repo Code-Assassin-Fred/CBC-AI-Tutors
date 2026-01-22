@@ -5,6 +5,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { useSchedule } from '@/lib/context/ScheduleContext';
 import { useCourses } from '@/lib/context/CoursesContext';
 import { StudyBlock, StudyBlockColor } from '@/types/schedule';
+import { getGroupedGrades } from '@/lib/utils/grade-hierarchy';
 
 
 interface GradeMap {
@@ -286,7 +287,13 @@ export default function StudyBlockModal() {
                                                     className="w-full bg-black/20 text-white border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-500"
                                                 >
                                                     <option value="">Select Grade</option>
-                                                    {grades.map(g => <option key={g} value={g}>{g}</option>)}
+                                                    {getGroupedGrades(grades).map((section) => (
+                                                        <optgroup key={section.label} label={section.label}>
+                                                            {section.grades.map((g) => (
+                                                                <option key={g} value={g}>{g}</option>
+                                                            ))}
+                                                        </optgroup>
+                                                    ))}
                                                 </select>
                                             </div>
                                             <div>

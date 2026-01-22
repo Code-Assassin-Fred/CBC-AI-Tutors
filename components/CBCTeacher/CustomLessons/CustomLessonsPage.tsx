@@ -4,11 +4,9 @@ import { useEffect, useState } from 'react';
 import { useCustomLessons } from '@/lib/context/CustomLessonsContext';
 import CustomLessonCard from './CustomLessonCard';
 import CustomLessonViewer from './CustomLessonViewer';
+import { GRADE_SECTIONS } from '@/lib/utils/grade-hierarchy';
 
-const GRADE_OPTIONS = [
-    'Grade 4', 'Grade 5', 'Grade 6', 'Grade 7', 'Grade 8',
-    'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'
-];
+const GRADE_OPTIONS = GRADE_SECTIONS.flatMap(s => s.grades.map(g => `Grade ${g}`));
 
 export default function CustomLessonsPage() {
     const {
@@ -96,8 +94,12 @@ export default function CustomLessonsPage() {
                                     className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all"
                                     disabled={isGenerating}
                                 >
-                                    {GRADE_OPTIONS.map((grade) => (
-                                        <option key={grade} value={grade}>{grade}</option>
+                                    {GRADE_SECTIONS.map((section) => (
+                                        <optgroup key={section.label} label={section.label}>
+                                            {section.grades.map((g) => (
+                                                <option key={g} value={`Grade ${g}`}>Grade {g}</option>
+                                            ))}
+                                        </optgroup>
                                     ))}
                                 </select>
                             </div>

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import TeacherTextbookRenderer, { TocItem } from './TeacherTextbookRenderer';
 import TeacherChatPanel from './TeacherChatPanel';
 import TeacherTOCIcon from './TeacherTOCIcon';
+import { getGroupedGrades } from '@/lib/utils/grade-hierarchy';
 
 // Types derived from content.json
 interface SubStrand {
@@ -200,8 +201,12 @@ export default function TeachersGuideLayout() {
                                         className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all [&>option]:bg-[#1a1f25] [&>option]:text-white"
                                     >
                                         <option value="">Select Grade</option>
-                                        {grades.map((g) => (
-                                            <option key={g} value={g}>Grade {g}</option>
+                                        {getGroupedGrades(grades).map((section) => (
+                                            <optgroup key={section.label} label={section.label}>
+                                                {section.grades.map((g) => (
+                                                    <option key={g} value={g}>Grade {g}</option>
+                                                ))}
+                                            </optgroup>
                                         ))}
                                     </select>
 

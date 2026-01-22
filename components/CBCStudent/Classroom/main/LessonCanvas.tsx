@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import EmptyLessonState from "./EmptyLessonState";
 import StudentTextbookRenderer, { TocItem } from "@/components/CBCStudent/Classroom/main/StudentTextbookRenderer";
 import { useTutor } from "@/lib/context/TutorContext";
+import { getGroupedGrades } from "@/lib/utils/grade-hierarchy";
 const LESSON_STATE_KEY = 'curio_lesson_selection';
 
 interface TextbookData {
@@ -173,8 +174,12 @@ export default function LessonCanvas({ onTocUpdate, onTutorActivated }: LessonCa
             className="flex-1 min-w-0 px-2 sm:px-4 py-2 sm:py-3 bg-[#1a1f25] border border-white/20 rounded-lg sm:rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-white/40 transition-all [&>option]:bg-[#1a1f25] [&>option]:text-white"
           >
             <option value="">Grade</option>
-            {grades.map((g) => (
-              <option key={g} value={g}>Grade {g}</option>
+            {getGroupedGrades(grades).map((section) => (
+              <optgroup key={section.label} label={section.label}>
+                {section.grades.map((g) => (
+                  <option key={g} value={g}>Grade {g}</option>
+                ))}
+              </optgroup>
             ))}
           </select>
 

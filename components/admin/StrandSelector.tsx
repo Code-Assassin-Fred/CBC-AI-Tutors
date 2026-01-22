@@ -1,5 +1,5 @@
-"use client";
 import React, { useState, useEffect } from "react";
+import { getGroupedGrades } from "@/lib/utils/grade-hierarchy";
 
 interface StrandSelectorProps {
   gradesData: Record<string, any>;
@@ -49,10 +49,14 @@ export default function StrandSelector({ gradesData, onSelect }: StrandSelectorP
           onChange={(e) => setGrade(e.target.value)}
         >
           <option value="">Select Grade</option>
-          {Object.keys(gradesData).map((g) => (
-            <option key={g} value={g}>
-              {g}
-            </option>
+          {getGroupedGrades(Object.keys(gradesData)).map((section) => (
+            <optgroup key={section.label} label={section.label}>
+              {section.grades.map((g) => (
+                <option key={g} value={g}>
+                  {g}
+                </option>
+              ))}
+            </optgroup>
           ))}
         </select>
       </div>

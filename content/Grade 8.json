@@ -1,10 +1,402 @@
 {
     "8": {
+        "English": {
+            "Strands": {
+                "Listening and Speaking": {
+                    "SubStrands": {
+                        "Polite Language (telephone etiquette)": {
+                            "Outcomes": [
+                                "Demonstrate knowledge of appropriate language use in different social situations",
+                                "Use polite language in telephone conversations"
+                            ]
+                        },
+                        "Oral presentations – songs": {
+                            "Outcomes": [
+                                "Perform songs with appropriate expression",
+                                "Analyse the structure of songs"
+                            ]
+                        },
+                        "Listening comprehension": {
+                            "Outcomes": [
+                                "Listen to and understand oral texts on various topics"
+                            ]
+                        },
+                        "Selective listening": {
+                            "Outcomes": [
+                                "Listen for specific information in oral texts"
+                            ]
+                        },
+                        "Pronunciation": {
+                            "Outcomes": [
+                                "Pronounce words correctly with attention to sounds and stress"
+                            ]
+                        },
+                        "Conversational skills – disagreeing politely": {
+                            "Outcomes": [
+                                "Express disagreement politely in conversations"
+                            ]
+                        },
+                        "Listening for details-responding appropriately": {
+                            "Outcomes": [
+                                "Listen for details and respond appropriately"
+                            ]
+                        },
+                        "Oral Narratives – myths": {
+                            "Outcomes": [
+                                "Retell myths using own words"
+                            ]
+                        },
+                        "Pronunciation – sounds and stress": {
+                            "Outcomes": [
+                                "Identify and pronounce stressed syllables in words"
+                            ]
+                        },
+                        "Oral Presentations": {
+                            "Outcomes": [
+                                "Make oral presentations on given topics"
+                            ]
+                        },
+                        "Interviews": {
+                            "Outcomes": [
+                                "Conduct and participate in interviews"
+                            ]
+                        },
+                        "Oral Narratives – legends": {
+                            "Outcomes": [
+                                "Retell legends using own words"
+                            ]
+                        },
+                        "Pronunciation": {
+                            "Outcomes": [
+                                "Pronounce words with correct intonation"
+                            ]
+                        },
+                        "Oral Presentations – Verse": {
+                            "Outcomes": [
+                                "Recite verse with appropriate expression"
+                            ]
+                        },
+                        "Oral Narratives – trickster stories": {
+                            "Outcomes": [
+                                "Retell trickster stories using own words"
+                            ]
+                        }
+                    }
+                },
+                "Reading": {
+                    "SubStrands": {
+                        "Intensive Reading – Prose": {
+                            "Outcomes": [
+                                "Read prose texts for comprehension"
+                            ]
+                        },
+                        "Intensive Reading – Poetry": {
+                            "Outcomes": [
+                                "Read poetry for comprehension and appreciation"
+                            ]
+                        },
+                        "Extensive Reading": {
+                            "Outcomes": [
+                                "Read extensively for pleasure and information"
+                            ]
+                        },
+                        "Intensive Reading – Prose": {
+                            "Outcomes": [
+                                "Analyse themes in prose texts"
+                            ]
+                        },
+                        "Intensive Reading – Poetry": {
+                            "Outcomes": [
+                                "Analyse poetic devices in poetry"
+                            ]
+                        },
+                        "Extensive Reading": {
+                            "Outcomes": [
+                                "Summarise read materials"
+                            ]
+                        },
+                        "Intensive Reading – Prose": {
+                            "Outcomes": [
+                                "Identify literary devices in prose"
+                            ]
+                        },
+                        "Intensive Reading – Poetry": {
+                            "Outcomes": [
+                                "Interpret messages in poetry"
+                            ]
+                        },
+                        "Extensive Reading": {
+                            "Outcomes": [
+                                "Read and discuss class readers"
+                            ]
+                        },
+                        "Intensive Reading – Prose": {
+                            "Outcomes": [
+                                "Make inferences from prose texts"
+                            ]
+                        },
+                        "Intensive Reading – Poetry": {
+                            "Outcomes": [
+                                "Appreciate rhythm and rhyme in poetry"
+                            ]
+                        },
+                        "Extensive Reading": {
+                            "Outcomes": [
+                                "Develop reading habits"
+                            ]
+                        },
+                        "Intensive Reading – Prose": {
+                            "Outcomes": [
+                                "Analyse characters in prose texts"
+                            ]
+                        },
+                        "Intensive Reading – Poetry": {
+                            "Outcomes": [
+                                "Analyse themes in poetry"
+                            ]
+                        },
+                        "Extensive Reading": {
+                            "Outcomes": [
+                                "Use library resources"
+                            ]
+                        }
+                    }
+                },
+                "Grammar in Use": {
+                    "SubStrands": {
+                        "Word classes – compound Nouns": {
+                            "Outcomes": [
+                                "Identify and use compound nouns correctly"
+                            ]
+                        },
+                        "Word classes – collective Nouns": {
+                            "Outcomes": [
+                                "Identify and use collective nouns correctly"
+                            ]
+                        },
+                        "Primary auxiliaries": {
+                            "Outcomes": [
+                                "Use primary auxiliaries in sentences"
+                            ]
+                        },
+                        "Verbs and tenses": {
+                            "Outcomes": [
+                                "Use various tenses correctly"
+                            ]
+                        },
+                        "Adjectives": {
+                            "Outcomes": [
+                                "Use adjectives to describe and compare"
+                            ]
+                        },
+                        "Adverbs": {
+                            "Outcomes": [
+                                "Use adverbs of manner, time, place"
+                            ]
+                        },
+                        "Pronouns": {
+                            "Outcomes": [
+                                "Use pronouns as subjects and objects"
+                            ]
+                        },
+                        "Simple prepositions": {
+                            "Outcomes": [
+                                "Use prepositions of position and direction"
+                            ]
+                        },
+                        "Conjunctions": {
+                            "Outcomes": [
+                                "Use conjunctions in sentences"
+                            ]
+                        },
+                        "Determiners and Quantifiers": {
+                            "Outcomes": [
+                                "Use determiners and quantifiers appropriately"
+                            ]
+                        },
+                        "Adverbs": {
+                            "Outcomes": [
+                                "Distinguish adverbs from adjectives"
+                            ]
+                        },
+                        "Adverbs": {
+                            "Outcomes": [
+                                "Use adverbs in sentences"
+                            ]
+                        },
+                        "Compound Sentences": {
+                            "Outcomes": [
+                                "Form and use compound sentences"
+                            ]
+                        },
+                        "Active and Passive voice": {
+                            "Outcomes": [
+                                "Change sentences from active to passive voice"
+                            ]
+                        },
+                        "Interrogative Sentences": {
+                            "Outcomes": [
+                                "Form interrogative sentences"
+                            ]
+                        }
+                    }
+                },
+                "Writing": {
+                    "SubStrands": {
+                        "Handwriting – Legibility": {
+                            "Outcomes": [
+                                "Write legibly and neatly"
+                            ]
+                        },
+                        "Punctuation marks": {
+                            "Outcomes": [
+                                "Use punctuation marks for clarity"
+                            ]
+                        },
+                        "Guided Writing – Filling forms": {
+                            "Outcomes": [
+                                "Fill in forms accurately"
+                            ]
+                        },
+                        "Creative Writing – Imaginative compositions": {
+                            "Outcomes": [
+                                "Write imaginative compositions"
+                            ]
+                        },
+                        "Handwriting": {
+                            "Outcomes": [
+                                "Improve handwriting"
+                            ]
+                        },
+                        "Punctuation": {
+                            "Outcomes": [
+                                "Use advanced punctuation marks"
+                            ]
+                        },
+                        "Guided Writing – Letters": {
+                            "Outcomes": [
+                                "Write friendly letters"
+                            ]
+                        },
+                        "Creative Writing – Narrative compositions": {
+                            "Outcomes": [
+                                "Write narrative compositions"
+                            ]
+                        },
+                        "Handwriting": {
+                            "Outcomes": [
+                                "Write fluently"
+                            ]
+                        },
+                        "Punctuation": {
+                            "Outcomes": [
+                                "Use punctuation in writing"
+                            ]
+                        },
+                        "Guided Writing – Dialogues": {
+                            "Outcomes": [
+                                "Write dialogues"
+                            ]
+                        },
+                        "Creative Writing – Descriptive compositions": {
+                            "Outcomes": [
+                                "Write descriptive compositions"
+                            ]
+                        },
+                        "Handwriting": {
+                            "Outcomes": [
+                                "Develop good handwriting"
+                            ]
+                        },
+                        "Punctuation": {
+                            "Outcomes": [
+                                "Edit writing for punctuation"
+                            ]
+                        },
+                        "Guided Writing – Notices": {
+                            "Outcomes": [
+                                "Write notices"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Kiswahili": {
+            "Strands": {
+                "Kusikiliza na Kuzungumza": {
+                    "SubStrands": {
+                        "Matamshi Bora": {
+                            "Outcomes": [
+                                "Tambua silabi na vitanzandimi",
+                                "Tumia msamiati unaofaa"
+                            ]
+                        },
+                        "Kusikiliza kwa Ufahamu": {
+                            "Outcomes": [
+                                "Sikiliza hadithi na maelezo mbalimbali",
+                                "Jibu maswali kuhusu maelezo yaliyosikilizwa"
+                            ]
+                        },
+                        "Kuzungumza kwa Ufasaha": {
+                            "Outcomes": [
+                                "Zungumza kwa ufasaha kuhusu mada mbalimbali"
+                            ]
+                        }
+                    }
+                },
+                "Kusoma": {
+                    "SubStrands": {
+                        "Kusoma kwa Ufahamu": {
+                            "Outcomes": [
+                                "Soma kwa ufasaha na kueleza maana ya maneno",
+                                "Jibu maswali kuhusu maelezo yaliyosomwa"
+                            ]
+                        },
+                        "Kusoma kwa Ufasaha": {
+                            "Outcomes": [
+                                "Soma maelezo mbalimbali kwa ufasaha"
+                            ]
+                        }
+                    }
+                },
+                "Kuandika": {
+                    "SubStrands": {
+                        "Kuandika Insha": {
+                            "Outcomes": [
+                                "Tambua muundo wa insha",
+                                "Andika insha ya hadithi au maelezo"
+                            ]
+                        },
+                        "Kuandika kwa Ufasaha": {
+                            "Outcomes": [
+                                "Andika kwa ufasaha na usahihi"
+                            ]
+                        }
+                    }
+                },
+                "Sarufi": {
+                    "SubStrands": {
+                        "Aina za Maneno": {
+                            "Outcomes": [
+                                "Eleza nomino, vitenzi, vivumishi, viongez i",
+                                "Tumia katika mawasiliano"
+                            ]
+                        },
+                        "Matumizi ya Lugha": {
+                            "Outcomes": [
+                                "Tumia lugha kwa usahihi katika mawasiliano"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "Mathematics": {
             "Strands": {
-                "1.0: NUMBERS": {
+                "Numbers": {
                     "SubStrands": {
-                        "1.1 Integers": {
+                        "Integers": {
                             "Outcomes": [
                                 "identify integers in different situations",
                                 "represent integers on a number line in different situations",
@@ -13,15 +405,15 @@
                                 "reflect on use of integers in real life situations"
                             ]
                         },
-                        "1.2 Fractions": {
+                        "Fractions": {
                             "Outcomes": [
                                 "carry out combined operations on fractions in different situations",
-                                "Work out operations on fractions in real life Situations",
+                                "work out operations on fractions in real life situations",
                                 "use IT devices for learning more on fractions and for enjoyment",
                                 "promote use of fractions in real life situations"
                             ]
                         },
-                        "1.3 Decimals": {
+                        "Decimals": {
                             "Outcomes": [
                                 "convert fractions to decimals in different situations",
                                 "identify recurring decimals in different situations",
@@ -35,7 +427,7 @@
                                 "promote use of decimals in real life situations"
                             ]
                         },
-                        "1.4 Squares and Square roots": {
+                        "Squares and square roots": {
                             "Outcomes": [
                                 "work out the squares of numbers from tables in different situations",
                                 "work out the square roots of numbers from tables in different situations",
@@ -44,7 +436,7 @@
                                 "enjoy using squares and square roots in real life situations"
                             ]
                         },
-                        "1.5 Rates, Ratio, Proportions and Percentages": {
+                        "Rates, Ratio, Proportions and Percentages": {
                             "Outcomes": [
                                 "identify rates in different situations",
                                 "work out rates in real life situations",
@@ -62,9 +454,9 @@
                         }
                     }
                 },
-                "2.0: ALGEBRA": {
+                "Algebra": {
                     "SubStrands": {
-                        "2.1 Algebraic Expressions": {
+                        "Algebraic Expressions": {
                             "Outcomes": [
                                 "factorize algebraic expressions in different situations",
                                 "simplify algebraic fractions in different situations",
@@ -73,10 +465,10 @@
                                 "enjoy using algebraic expressions in real life situations"
                             ]
                         },
-                        "2.2 Linear Equations": {
+                        "Linear Equations": {
                             "Outcomes": [
                                 "form linear equations in two unknowns in real life situations",
-                                "solve linear equations in two unknowns by Substitution method in real life situations",
+                                "solve linear equations in two unknowns by substitution method in real life situations",
                                 "solve linear equations in two unknowns by elimination method in real life situations",
                                 "apply linear equations in two unknowns in real life situations",
                                 "use IT devices to work out linear learning and for enjoyment",
@@ -85,30 +477,30 @@
                         }
                     }
                 },
-                "3.0: MEASUREMENTS": {
+                "Measurements": {
                     "SubStrands": {
-                        "3.1 Circles": {
+                        "Circles": {
                             "Outcomes": [
                                 "work out the circumference of a circle in real life situations",
-                                "work out the length of an Arc of a circle in different situations",
-                                "calculate the Perimeter of a sector of a circle in different situations",
+                                "work out the length of an arc of a circle in different situations",
+                                "calculate the perimeter of a sector of a circle in different situations",
                                 "use IT or other resources for more learning on circles",
                                 "promote use of circles in real life situations"
                             ]
                         },
-                        "3.2 Area": {
+                        "Area": {
                             "Outcomes": [
-                                "calculate the Area of circle in different situations",
-                                "work out the Area of a sector of a circle in different situations",
-                                "work out the Surface Area of Cubes and Cuboids in real life situations",
-                                "work out the Surface area of a cylinders in real life situations",
-                                "determine the surface Area of a triangular Prism in different situations",
+                                "calculate the area of circle in different situations",
+                                "work out the area of a sector of a circle in different situations",
+                                "work out the surface area of cubes and cuboids in real life situations",
+                                "work out the surface area of a cylinders in real life situations",
+                                "determine the surface area of a triangular prism in different situations",
                                 "work out the area of irregular shapes using square grids in real life situations",
                                 "use IT and other materials for learning more on area and for enjoyment",
                                 "recognise use of length in real life situations"
                             ]
                         },
-                        "3.3 Money": {
+                        "Money": {
                             "Outcomes": [
                                 "identify interest and principal in real life situations",
                                 "calculate simple interest in real life situations",
@@ -121,9 +513,9 @@
                         }
                     }
                 },
-                "4.0: GEOMETRY": {
+                "Geometry": {
                     "SubStrands": {
-                        "4.1 Geometrical Constructions": {
+                        "Geometrical Constructions": {
                             "Outcomes": [
                                 "construct parallel and perpendicular lines in different situations",
                                 "divide a line proportionally in different situations",
@@ -136,7 +528,7 @@
                                 "admire geometric patterns in objects and substances in real life"
                             ]
                         },
-                        "4.2 Coordinates and graphs": {
+                        "Coordinates and graphs": {
                             "Outcomes": [
                                 "draw a labelled Cartesian plane on different learning materials",
                                 "identify points on the Cartesian plane in different situations",
@@ -150,7 +542,7 @@
                                 "reflect on the use of graphs in real life"
                             ]
                         },
-                        "4.3 Scale Drawing": {
+                        "Scale Drawing": {
                             "Outcomes": [
                                 "represent length to a given scale in different situations",
                                 "convert actual length to scale length in real life situations",
@@ -166,7 +558,7 @@
                                 "recognise the use of scale drawing in maps"
                             ]
                         },
-                        "4.4 Common Solids": {
+                        "Common Solids": {
                             "Outcomes": [
                                 "identify common solids from the environment",
                                 "sketch nets of cubes, cuboids, cylinders, pyramids and cones in different situations",
@@ -179,9 +571,9 @@
                         }
                     }
                 },
-                "5.0: DATA HANDLING AND PROBABILITY": {
+                "Data Handling and Probability": {
                     "SubStrands": {
-                        "5.1 Data Presentation and Interpretation": {
+                        "Data Presentation and Interpretation": {
                             "Outcomes": [
                                 "draw bar graphs of data from real life situations",
                                 "interpret bar graphs of data from real life situations",
@@ -194,7 +586,7 @@
                                 "promote use of data representation and interpretation in real life situations"
                             ]
                         },
-                        "5.2 Probability": {
+                        "Probability": {
                             "Outcomes": [
                                 "identify events involving chance in real life situations",
                                 "perform chance experiments in different situations",
@@ -211,115 +603,189 @@
         },
         "Integrated Science": {
             "Strands": {
-                "1.0: MIXTURES, ELEMENTS AND COMPOUNDS": {
+                "Mixtures, Elements and Compounds": {
                     "SubStrands": {
-                        "1.1 Elements and Compounds": {
+                        "Properties of matter in the different states": {
                             "Outcomes": [
-                                "explain the relationship between an atom, an element, a molecule and a compound",
-                                "assign symbols to selected elements",
-                                "write word equations to represent reactions of selected elements to form compounds",
-                                "outline the applications of common elements and compounds in the society",
+                                "describe properties of the different states of matter",
+                                "demonstrate diffusion in liquids",
+                                "distinguish between temporary and permanent changes in substances",
+                                "appreciate the applications of change of state of matter in day-to- day life"
+                            ]
+                        },
+                        "Elements and Compounds": {
+                            "Outcomes": [
+                                "distinguish between an element and a compound",
+                                "relate common elements to their symbols",
+                                "explain the applications of common elements in day- to-day life",
                                 "appreciate the information on packaging labels of commonly consumed substances"
                             ]
                         },
-                        "1.2 Physical and chemical changes": {
+                        "Structure of the atom": {
                             "Outcomes": [
-                                "describe the characteristics of particles in the three states of matter",
-                                "explain the effects of impurities on boiling point and melting point of a substance",
-                                "distinguish between physical and chemical changes in substances",
-                                "outline applications of change of state of matter in day-to-day life",
-                                "appreciate the applications of change of state of matter in day-to-day life"
-                            ]
-                        },
-                        "1.3 Classes of fire": {
-                            "Outcomes": [
-                                "identify causes of fire in nature",
-                                "explain the role of the components of fire triangle in the spread of fire",
-                                "describe ways of controlling different classes of fires",
-                                "acknowledge the dangers of fires in nature"
+                                "describe the structure of an atom and electron arrangement of elements",
+                                "determine atomic number and mass number of elements",
+                                "classify elements into metals and non-metals",
+                                "Describe the physical and chemical properties of oxygen in day-to-day life",
+                                "explain the role of oxygen in combustion and spread of fire",
+                                "identify classes of fire and their control measures",
+                                "appreciate the application of fire control measures in day-to-day life",
+                                "develop curiosity about rights to safety and access to information"
                             ]
                         }
                     }
                 },
-                "2.0: LIVING THINGS AND THEIR ENVIRONMENT": {
+                "Living Things and Their Environment": {
                     "SubStrands": {
-                        "2.1 The Cell": {
+                        "The Cell": {
                             "Outcomes": [
-                                "describe the structure of plant and animal cells as observed under a light microscope",
-                                "describe the functions of components of cells seen under the light microscope",
+                                "identify the components of a cell as seen under the light microscope and state their functions",
                                 "compare plant and animal cells as observed under a light microscope",
-                                "determine the magnification of cells under the light microscope",
-                                "appreciate the role of cells in living things"
+                                "calculate the magnification of cells seen under the light microscope",
+                                "appreciate the use of a light microscope in magnification"
                             ]
                         },
-                        "2.2 Movement of materials in and out of the cell": {
+                        "Movement of materials in and out of the cell": {
                             "Outcomes": [
-                                "outline the process of diffusion and osmosis in cells",
-                                "demonstrate diffusion and osmosis in living things",
-                                "explain the role of diffusion and osmosis in living things",
-                                "appreciate the importance of diffusion and osmosis in living things"
-                            ]
-                        },
-                        "2.3 Reproduction in human beings": {
-                            "Outcomes": [
-                                "outline the menstrual cycle and its related challenges in human beings",
-                                "develop a plan to manage challenges related to menstrual cycle in human beings",
-                                "describe fertilisation and implantation in human beings",
-                                "outline symptoms of common STIs in human beings",
-                                "explain prevention measures for common STIs in human beings",
-                                "appreciate the need for a healthy reproductive system"
+                                "describe the properties of the cell membrane",
+                                "explain the role of diffusion in living organisms",
+                                "demonstrate the process of osmosis in living things",
+                                "describe factors affecting osmosis",
+                                "explain the role of osmosis in living organisms",
+                                "appreciate the importance of diffusion and osmosis in living organisms"
                             ]
                         }
                     }
                 },
-                "3.0: FORCE AND ENERGY": {
+                "Force and Energy": {
                     "SubStrands": {
-                        "3.1 Transformation of Energy": {
+                        "Static charges": {
+                            "Outcomes": [
+                                "explain the origin of charges on a material",
+                                "Describe detection of static charges on bodies",
+                                "Describe the distribution of charges on metallic conductors",
+                                "explain the application of static charges in day to day life",
+                                "outline the necessary safety measures against lightning",
+                                "appreciate applications of static charges in day to day life"
+                            ]
+                        },
+                        "Electrical energy": {
+                            "Outcomes": [
+                                "Explain the meaning of terms used in electrical energy",
+                                "Describe the working of primary cells and secondary cells as a source of electrical energy",
+                                "Outline necessary care and maintenance of secondary cells",
+                                "Apply mathematical relationship between charge and time to determine the rate of flow of electricity",
+                                "Appreciate use of cells as an alternative source of electrical energy to fossil fuels"
+                            ]
+                        },
+                        "Transformation of energy": {
                             "Outcomes": [
                                 "identify forms of energy in nature",
-                                "classify energy sources into renewable or non-renewable",
-                                "demonstrate simple energy transformations in nature",
-                                "describe safety measures associated with energy transformation",
-                                "appreciate the applications of energy transformation in day-to-day life"
-                            ]
-                        },
-                        "3.2 Pressure": {
-                            "Outcomes": [
-                                "demonstrate pressure in solids and liquids",
-                                "identify applications of pressure in solids and liquids",
-                                "appreciate the applications of pressure in solids and liquids"
+                                "explain energy transformations in nature",
+                                "identify appliances whose working relies on energy transformation",
+                                "identify strategies to mitigate dangers associated with energy transformation",
+                                "appreciate the applications of energy transformation in day to day life"
                             ]
                         }
                     }
                 }
             }
         },
-        "Pre-technical Studies": {
+        "Social Studies": {
             "Strands": {
-                "1.0: FOUNDATIONS OF PRE - TECHNICAL STUDIES": {
+                "Social Studies and Personal Management": {
                     "SubStrands": {
-                        "1.1 Fire Safety": {
+                        "Self-awareness": {
+                            "Outcomes": [
+                                "describe their personal life goals for self-motivation",
+                                "explain different ways of self-improvement for the attainment of life goals",
+                                "display values for the achievement of their life goals"
+                            ]
+                        },
+                        "Self-esteem": {
+                            "Outcomes": [
+                                "explain factors that influence self-esteem in their day-to-day lives",
+                                "describe ways of building a healthy self-esteem",
+                                "exhibit a healthy self-esteem in their interactions",
+                                "display values that enhance healthy self-esteem in their day-to-day lives"
+                            ]
+                        },
+                        "Managing Emotions": {
+                            "Outcomes": [
+                                "describe the possible triggers of emotions in life",
+                                "explain the effect of their emotions on self and others",
+                                "express their emotions positively in different situations",
+                                "appreciate the role of values in expressing emotions in life"
+                            ]
+                        },
+                        "Managing Stress": {
+                            "Outcomes": [
+                                "describe challenges associated with stress management in their life",
+                                "explain effects of unmanaged stress in their life",
+                                "exhibit positive ways of managing stress in different situations",
+                                "apply values necessary for managing stress positively in their life"
+                            ]
+                        },
+                        "Resilience": {
+                            "Outcomes": [
+                                "describe situations that require resilience in their day-to-day lives",
+                                "manifest characteristics of a resilient person in day-to-day life",
+                                "exhibit values that enhance effectiveness in resiliency in day-to-day lives",
+                                "appreciate resilience in day-to-day lives"
+                            ]
+                        },
+                        "Risky Behaviours": {
+                            "Outcomes": [
+                                "describe risky behaviours in day-to-day lives",
+                                "choose ‘good’ over ‘risky’ behaviours in their day-to-day lives",
+                                "portray values associated with avoidance of risky behaviours in day-to-day life",
+                                "appreciate avoidance of risky behaviours in day-to-day lives"
+                            ]
+                        }
+                    }
+                },
+                "Community Service Learning": {
+                    "SubStrands": {
+                        "Community Service Learning Project": {
+                            "Outcomes": [
+                                "identify a problem/gap in the community",
+                                "design a solution(s) to the identified problem",
+                                "plan to implement the solution to the identified problem",
+                                "implement the plan for solving the identified problem",
+                                "report/account on the concluded project",
+                                "appreciate the need to be part of the solution to the gaps/challenges in the community"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Pre-Technical Studies": {
+            "Strands": {
+                "Foundations of Pre-Technical Studies": {
+                    "SubStrands": {
+                        "Fire Safety": {
                             "Outcomes": [
                                 "identify possible causes of fire outbreaks in the environment",
                                 "explain ways of preventing fire outbreaks in the environment",
                                 "extinguish fires in the environment using appropriate methods",
-                                "acknowledge the need for fire safety in day - to - day life"
+                                "acknowledge the need for fire safety in day-to-day life"
                             ]
                         },
-                        "1.2 Data Safety": {
+                        "Data Safety": {
                             "Outcomes": [
                                 "outline the importance of data in an electronic device",
                                 "identify threats to data in an electronic device",
                                 "describe ways of protecting data in an electronic device",
                                 "secure data in an electronic device",
-                                "acknowledge the need for data safety in day - to - day life"
+                                "acknowledge the need for data safety in day-to-day life"
                             ]
                         }
                     }
                 },
-                "2.0: COMMUNICATION IN PRE - TECHNICAL STUDIES": {
+                "Communication in Pre-Technical Studies": {
                     "SubStrands": {
-                        "2.1 Plane Geometry": {
+                        "Plane Geometry": {
                             "Outcomes": [
                                 "identify instruments used in drawing",
                                 "explain the layout of a drawing environment",
@@ -327,7 +793,7 @@
                                 "embrace the use of plane geometry in drawing"
                             ]
                         },
-                        "2.2 Dimensioning": {
+                        "Dimensioning": {
                             "Outcomes": [
                                 "identify the types of dimensioning in drawing",
                                 "draw lines used for dimensioning in drawing",
@@ -335,7 +801,7 @@
                                 "embrace the importance of dimensioning in drawing"
                             ]
                         },
-                        "2.3 Plain Scale Drawing": {
+                        "Plain Scale Drawing": {
                             "Outcomes": [
                                 "describe the features of a plain scale used in drawing",
                                 "interpret a plain scale used in drawing",
@@ -343,19 +809,19 @@
                                 "appreciate the use of plain scale drawing in the work environment"
                             ]
                         },
-                        "2.4 Visual Programming": {
+                        "Visual Programming": {
                             "Outcomes": [
-                                "identify types of visual programming applications used in day - to - day life",
+                                "identify types of visual programming applications used in day-to-day life",
                                 "explore the features of visual programming applications in a user environment",
                                 "create instructions to solve problems using visual programming application",
-                                "value the importance of visual programming in day - to - day life"
+                                "value the importance of visual programming in day-to-day life"
                             ]
                         }
                     }
                 },
-                "3.0: MATERIALS FOR PRODUCTION": {
+                "Materials for Production": {
                     "SubStrands": {
-                        "3.1 Composite Materials": {
+                        "Composite Materials": {
                             "Outcomes": [
                                 "identify composite materials in the locality",
                                 "describe the composition of composite materials in the locality",
@@ -363,7 +829,7 @@
                                 "acknowledge the importance of composite materials used in the locality"
                             ]
                         },
-                        "3.2 Ceramics": {
+                        "Ceramics": {
                             "Outcomes": [
                                 "identify common ceramic materials in the locality",
                                 "describe the physical properties of ceramic materials in the locality",
@@ -373,9 +839,9 @@
                         }
                     }
                 },
-                "4.0: TOOLS AND PRODUCTION": {
+                "Tools and Production": {
                     "SubStrands": {
-                        "4.1 Cutting Tools": {
+                        "Cutting Tools": {
                             "Outcomes": [
                                 "identify cutting tools used in the work environment",
                                 "select cutting tools for given tasks in a workplace",
@@ -384,36 +850,36 @@
                                 "recognise the importance of cutting tools in the work environment"
                             ]
                         },
-                        "4.2 Computer Software": {
+                        "Computer Software": {
                             "Outcomes": [
                                 "identify the categories of computer software used in a workplace",
                                 "explain the functions of different application software in the workplace",
-                                "use computer software to perform tasks in day - to - day life",
+                                "use computer software to perform tasks in day-to-day life",
                                 "acknowledge the importance of application software in the workplace"
                             ]
                         }
                     }
                 },
-                "5.0: ENTREPRENEURSHIP": {
+                "Entrepreneurship": {
                     "SubStrands": {
-                        "5.1 Bookkeeping": {
+                        "Bookkeeping": {
                             "Outcomes": [
                                 "explain the importance of bookkeeping in entrepreneurship",
                                 "classify business transactions in bookkeeping",
                                 "prepare simple financial statements for a business",
-                                "appreciate the importance of financial records in day - to - day life"
+                                "appreciate the importance of financial records in day-to-day life"
                             ]
                         },
-                        "5.2 Income and Budgeting": {
+                        "Income and Budgeting": {
                             "Outcomes": [
                                 "identify sources of income for an individual",
-                                "explain the importance of budgeting in day - to - day life",
+                                "explain the importance of budgeting in day-to-day life",
                                 "prepare a simple budget for personal financial management",
                                 "explore ethical and unethical practices in budgeting",
                                 "appreciate the importance of financial planning in income management"
                             ]
                         },
-                        "5.3 Marketing goods and Services": {
+                        "Marketing Goods and Services": {
                             "Outcomes": [
                                 "explain the importance of marketing to a business",
                                 "analyse the sources of information about the market for its potential customers",
@@ -422,7 +888,7 @@
                                 "recognise suitable markets for goods and services"
                             ]
                         },
-                        "5.4 Distribution of Goods and Services": {
+                        "Distribution of Goods and Services": {
                             "Outcomes": [
                                 "explain the role of intermediaries in the distribution of goods and services",
                                 "illustrate the channels for distributing different goods and services in business",
@@ -434,272 +900,532 @@
                 }
             }
         },
-        "Agriculture": {
-            "Strands": {
-                "1.0 Conservation of Resources": {
-                    "SubStrands": {
-                        "1.1 Soil Conservation Measures": {
-                            "Outcomes": [
-                                "describe methods of soil conservation in agricultural environment",
-                                "carry out soil conservation activities in the environment",
-                                "demonstrate caring attitude towards soil in the environment"
-                            ]
-                        },
-                        "1.2 Water Harvesting and Storage": {
-                            "Outcomes": [
-                                "discuss ways of storing harvested water for domestic use",
-                                "take part in harvesting and storing water in the school for domestic use",
-                                "show responsibility in harvesting and storing water for domestic use"
-                            ]
-                        }
-                    }
-                },
-                "2.0 Food Production Processes": {
-                    "SubStrands": {
-                        "2.1 Kitchen and Backyard Gardening": {
-                            "Outcomes": [
-                                "explain the role of kitchen and backyard garden in food production",
-                                "establish a kitchen and backyard garden for food production",
-                                "adopt the use of kitchen and backyard garden for food production"
-                            ]
-                        },
-                        "2.2 Poultry Rearing in a Fold": {
-                            "Outcomes": [
-                                "describe a fold in poultry rearing",
-                                "construct a fold for rearing poultry",
-                                "rear poultry in a fold",
-                                "show responsibility in rearing of poultry"
-                            ]
-                        },
-                        "2.3 Crop Pest and Disease Control": {
-                            "Outcomes": [
-                                "identify vegetable crops attacked by pests and diseases",
-                                "control pests and diseases on vegetable crops",
-                                "acknowledge importance of controlling pests and diseases in vegetable production"
-                            ]
-                        },
-                        "2.4 Preparation of Animal Products": {
-                            "Outcomes": [
-                                "explain the importance of processing fish and dressing poultry carcass",
-                                "process fresh fish for various purposes",
-                                "dress poultry carcass for various purposes",
-                                "uphold ethical and safety practices in preparation of animal products"
-                            ]
-                        },
-                        "2.5 Preserving Animal Products": {
-                            "Outcomes": [
-                                "explain the importance of preserving milk and meat at household level",
-                                "preserve meat to prolong shelf life at household level",
-                                "preserve milk to prolong shelf life at household level",
-                                "Embrace the use of various methods to preserve animal products at household level"
-                            ]
-                        },
-                        "2.6 Cooking: Preparing a Balanced Meal": {
-                            "Outcomes": [
-                                "explain factors to consider in preparing a balanced meal",
-                                "prepare a balanced meal for healthy living",
-                                "use various styles to present the meal",
-                                "adopt the use of a balanced meal in day to day life"
-                            ]
-                        }
-                    }
-                },
-                "3.0 Hygiene Practices": {
-                    "SubStrands": {
-                        "3.1 Cleaning the Kitchen": {
-                            "Outcomes": [
-                                "explain the routine cleaning practices of a kitchen",
-                                "carry out cleaning of a kitchen to maintain hygiene",
-                                "appreciate the importance of a clean kitchen for healthy living"
-                            ]
-                        }
-                    }
-                },
-                "4.0 Production Techniques": {
-                    "SubStrands": {
-                        "4.1 Sewing Skills: Constructing Household Items": {
-                            "Outcomes": [
-                                "identify types of seams used in making household items",
-                                "make samples of seams on a piece of cloth",
-                                "construct a household item using seams",
-                                "appreciate the use of seam in making household items"
-                            ]
-                        },
-                        "4.2 Constructing Innovative Animal Waterer": {
-                            "Outcomes": [
-                                "explain challenges with animal waterers used in the community",
-                                "design and construct an innovative waterer for water conservation",
-                                "appreciate use of innovative waterers in animal rearing"
-                            ]
-                        },
-                        "4.3 ICT Support Services": {
-                            "Outcomes": [
-                                "describe support services that can be accessed through use of ICT",
-                                "access support services using ICT",
-                                "show responsibility in use of ICT in accessing support services"
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "Business Studies": {
-            "Strands": {
-                "1.0 Business and Money Management": {
-                    "SubStrands": {
-                        "1.1 Financial goals": {
-                            "Outcomes": [
-                                "Analyse the meaning and importance of goal setting as used in financial management",
-                                "examine the factors to consider when setting financial goals",
-                                "apply available learning resources to search for information for setting financial goals",
-                                "formulate financial goals for individual development",
-                                "appreciate the importance of setting goals in financial management"
-                            ]
-                        },
-                        "1.2 Income": {
-                            "Outcomes": [
-                                "analyse the sources of income to an individual",
-                                "demonstrate the use of talents and abilities for income generation",
-                                "apply available resources to develop talents for income generation",
-                                "identify the ethical and legal issues in generating income",
-                                "conform to ethical and legal issues in generating income"
-                            ]
-                        },
-                        "1.3 Budgeting and spending": {
-                            "Outcomes": [
-                                "explore the meaning and importance of budgeting in day- to- day life",
-                                "analyse ways of spending money wisely in day- to- day life",
-                                "prepare a simple budget for personal finance management",
-                                "identify ethical issues in budgeting and spending money in the community",
-                                "appreciate the importance of budgeting and spending money wisely for personal development"
-                            ]
-                        }
-                    }
-                },
-                "2.0 Business and its environment": {
-                    "SubStrands": {
-                        "2.1 Types of business enterprises": {
-                            "Outcomes": [
-                                "explore the meaning, formation, management, sources of finance, advantages, and disadvantages of a sole proprietorship business enterprise",
-                                "examine the meaning, formation, management, sources of finance, advantages, and disadvantages of a partnership business enterprise",
-                                "analyse the meaning, formation, types, management, sources of finance, advantages, and disadvantages of a cooperative society",
-                                "recognise the role of sole proprietorships, partnerships and cooperative societies"
-                            ]
-                        },
-                        "2.2 Entrepreneurship": {
-                            "Outcomes": [
-                                "investigate the importance of entrepreneurship to an individual and community",
-                                "identify the qualities of an entrepreneur in business",
-                                "determine sources and ways of generating business ideas for a business venture",
-                                "evaluate a business opportunity to determine its viability",
-                                "analyse factors that enhance business success in the community",
-                                "appreciate the role of entrepreneurship for self and community development"
-                            ]
-                        },
-                        "2.3 Networking in business": {
-                            "Outcomes": [
-                                "identify the stakeholders in business",
-                                "explain the benefits of networking in business",
-                                "apply available resources to identify ways of networking in business",
-                                "appreciate the role of networking in business"
-                            ]
-                        },
-                        "2.4 Business communication": {
-                            "Outcomes": [
-                                "identify the types, advantages and disadvantages of communication channels used in business",
-                                "examine the factors considered when selecting communication channels",
-                                "acknowledge the role of communication channels in business"
-                            ]
-                        },
-                        "2.5 Location and size of a production unit": {
-                            "Outcomes": [
-                                "analyse the factors determining the size of a production unit",
-                                "examine the factors considered when locating a production unit",
-                                "assess the suitability of locating a production unit in their community",
-                                "recognise the importance of suitably locating a production unit"
-                            ]
-                        },
-                        "2.6 Marketing of goods and services": {
-                            "Outcomes": [
-                                "explore the sources of information about the market for its potential customers",
-                                "identify methods of gathering information about the market for its potential customers",
-                                "gather information about the market of a particular product in the community",
-                                "collect information about the market of a particular product for the consumer to make effective buying decision",
-                                "appreciate the importance of gathering information about the market and customers in business"
-                            ]
-                        },
-                        "2.7 Demand and Supply": {
-                            "Outcomes": [
-                                "investigate the concept of demand and supply in business",
-                                "analyse the factors that influence demand and supply of a product in the market",
-                                "recognise the significance of demand and supply in business"
-                            ]
-                        }
-                    }
-                },
-                "3.0 Government and global influence in business": {
-                    "SubStrands": {
-                        "3.1 Government economic policies affecting businesses": {
-                            "Outcomes": [
-                                "examine the Government economic policies affecting businesses in Kenya",
-                                "explain the significance of e-Government in business",
-                                "use e-Government platforms to access business services",
-                                "appreciate the role of government economic policy in business"
-                            ]
-                        },
-                        "3.2 Taxation in Kenya": {
-                            "Outcomes": [
-                                "examine the meaning and importance of Value Added Tax (VAT) and Excise duty in Kenya",
-                                "calculate VAT and Excise duty levied on products in business",
-                                "analyse the effect of VAT and Excise duty on business activities",
-                                "sensitize the school community on the importance of VAT and Excise duty to the Government of Kenya",
-                                "recognise the importance of VAT and Excise duty to the Government of Kenya"
-                            ]
-                        }
-                    }
-                },
-                "4.0 Financial Records in Business": {
-                    "SubStrands": {
-                        "4.1 Pricing and costing of goods and services": {
-                            "Outcomes": [
-                                "differentiate between cost and price in business",
-                                "identify types of costs for a small scale business",
-                                "analyse the factors considered in pricing and buying of goods and services",
-                                "determine the cost and price of goods and services for a small scale business",
-                                "calculate profit or loss for goods and services for a small scale business",
-                                "appreciate the pricing and costing of goods and services in business"
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "Christian Religious Education": {
-            "Strands": {}
+            "Strands": {
+                "Creation": {
+                    "SubStrands": {
+                        "Origin and Consequences of Sin": {
+                            "Outcomes": [
+                                "identify the origin of sin according to the creation accounts",
+                                "examine the consequences of sin after the fall of man",
+                                "analyse the causes of sin today",
+                                "discuss moral values and life skills needed to overcome temptations",
+                                "appreciate the creation accounts in the Bible"
+                            ]
+                        },
+                        "God’s Plan for Redemption": {
+                            "Outcomes": [
+                                "explain God’s plan for redemption in the Bible",
+                                "discuss the significance of redemption in the life of a Christian",
+                                "apply the teachings on redemption in their daily lives",
+                                "appreciate God's plan for redemption"
+                            ]
+                        }
+                    }
+                },
+                "The Bible": {
+                    "SubStrands": {
+                        "Faith and God’s Promises": {
+                            "Outcomes": [
+                                "explain faith and God’s promises in the Bible",
+                                "discuss the significance of faith and God’s promises in the life of a Christian",
+                                "apply the teachings on faith and God’s promises in their daily lives",
+                                "appreciate the importance of faith and God’s promises"
+                            ]
+                        },
+                        "Abrahamic Covenant": {
+                            "Outcomes": [
+                                "explain the Abrahamic covenant in the Bible",
+                                "discuss the significance of the Abrahamic covenant in the life of a Christian",
+                                "apply the teachings on the Abrahamic covenant in their daily lives",
+                                "appreciate the Abrahamic covenant"
+                            ]
+                        },
+                        "Leadership in Israel (Saul)": {
+                            "Outcomes": [
+                                "explain leadership in Israel during Saul's time",
+                                "discuss the significance of leadership in the life of a Christian",
+                                "apply the teachings on leadership in their daily lives",
+                                "appreciate good leadership"
+                            ]
+                        }
+                    }
+                },
+                "The Life and Ministry of Jesus Christ": {
+                    "SubStrands": {
+                        "Healing of Blind Bartimaeus": {
+                            "Outcomes": [
+                                "explain the healing of Blind Bartimaeus",
+                                "discuss the significance of the miracle in the life of a Christian",
+                                "apply the teachings from the miracle in their daily lives",
+                                "appreciate the miracle of Jesus Christ"
+                            ]
+                        },
+                        "Calming the Storm": {
+                            "Outcomes": [
+                                "explain the miracle of calming the storm",
+                                "discuss the significance of the miracle in the life of a Christian",
+                                "apply the teachings from the miracle in their daily lives",
+                                "appreciate the power of Jesus Christ"
+                            ]
+                        },
+                        "Healing of the Paralytic": {
+                            "Outcomes": [
+                                "explain the healing of the paralytic",
+                                "discuss the significance of the miracle in the life of a Christian",
+                                "apply the teachings from the miracle in their daily lives",
+                                "appreciate the forgiveness of sins by Jesus Christ"
+                            ]
+                        }
+                    }
+                },
+                "Teachings of Jesus Christ": {
+                    "SubStrands": {
+                        "Teaching on Prayer": {
+                            "Outcomes": [
+                                "explain Jesus' teaching on prayer",
+                                "discuss the significance of prayer in the life of a Christian",
+                                "apply the teachings on prayer in their daily lives",
+                                "appreciate the importance of prayer"
+                            ]
+                        },
+                        "The Lost Sheep": {
+                            "Outcomes": [
+                                "explain the parable of the lost sheep",
+                                "discuss the significance of the parable in the life of a Christian",
+                                "apply the teachings from the parable in their daily lives",
+                                "appreciate God's love for lost sinners"
+                            ]
+                        }
+                    }
+                },
+                "The Church": {
+                    "SubStrands": {
+                        "The Holy Spirit": {
+                            "Outcomes": [
+                                "explain the role of the Holy Spirit in the Church",
+                                "discuss the significance of the Holy Spirit in the life of a Christian",
+                                "apply the teachings on the Holy Spirit in their daily lives",
+                                "appreciate the guidance of the Holy Spirit"
+                            ]
+                        },
+                        "Acts of Compassion": {
+                            "Outcomes": [
+                                "explain acts of compassion in the Church",
+                                "discuss the significance of compassion in the life of a Christian",
+                                "apply acts of compassion in their daily lives",
+                                "appreciate acts of compassion"
+                            ]
+                        }
+                    }
+                },
+                "Christian Living Today": {
+                    "SubStrands": {
+                        "Human Sexuality": {
+                            "Outcomes": [
+                                "explain human sexuality for holistic development",
+                                "discuss healthy and unhealthy relationships for responsible living",
+                                "discuss the circumstances that lead to unhealthy relationships",
+                                "outline the consequences of engaging in sex before marriage",
+                                "compile values and life skills needed to avoid irresponsible sexual behaviour",
+                                "utilize values and life skills acquired to form healthy relationships"
+                            ]
+                        },
+                        "Christian Marriage and Family": {
+                            "Outcomes": [
+                                "discuss the biblical teachings on marriage and family",
+                                "explain ways the church promotes values among young people before marriage",
+                                "identify values needed to maintain stability in families",
+                                "appreciate the family as a sacred institution ordained by God"
+                            ]
+                        },
+                        "Alcohol, Drugs and Substance use": {
+                            "Outcomes": [
+                                "identify drugs commonly abused by youths in Kenya today",
+                                "discuss reasons why young people abuse drugs today",
+                                "explore the effects of alcohol, drugs and substance abuse on an individual and the family",
+                                "read the scriptures provided on the effects of alcohol, drug and substance abuse",
+                                "recommend values and life skills needed to stay free from alcohol, drug and substance abuse",
+                                "utilise values and life-skills acquired to live an alcohol, drug and substance-free life"
+                            ]
+                        },
+                        "Gambling": {
+                            "Outcomes": [
+                                "identify types of gambling in Kenya today",
+                                "discuss five causes of gambling",
+                                "outline teachings on money and wealth from the scriptures provided",
+                                "examine the effects of gambling on individuals and families",
+                                "outline teachings on true riches from the scriptures provided",
+                                "utilize acquired skills and moral values to live a gambling free life"
+                            ]
+                        },
+                        "Social Media": {
+                            "Outcomes": [
+                                "identify different social media platforms used by young people today",
+                                "describe ways of using social media responsibly",
+                                "examine ways in which social media is misused today",
+                                "discuss ways they should respond to cyberbullying",
+                                "recommend values and life skills needed for responsible use of social media",
+                                "apply Christian values as they use different social media platforms",
+                                "desire to use social media responsibly"
+                            ]
+                        }
+                    }
+                }
+            }
         },
         "Islamic Religious Education": {
-            "Strands": {}
+            "Strands": {
+                "Qur'an": {
+                    "SubStrands": {
+                        "Modes of Revelation": {
+                            "Outcomes": [
+                                "describe the modes of revelation of the Qur'an for spiritual growth",
+                                "explain the significance of the modes of revelation of the Qur'an in the life of a Muslim",
+                                "appreciate the modes of revelation of the Qur'an as a source of guidance"
+                            ]
+                        },
+                        "Selected Surahs": {
+                            "Outcomes": [
+                                "recite the selected surahs correctly for spiritual nourishment",
+                                "explain the meanings of the selected surahs for application in day-to-day life",
+                                "apply the teachings of the selected surahs in day-to-day life",
+                                "appreciate the teachings of the selected surahs as a source of guidance"
+                            ]
+                        }
+                    }
+                },
+                "Hadith": {
+                    "SubStrands": {
+                        "Ulumal-Hadith": {
+                            "Outcomes": [
+                                "describe the factors that led to the development of Hadith during the time of the Prophet (S.A.W.) and the Rightly Guided Caliphs for better application of Islamic teachings",
+                                "explain the methods used by the Prophet (S.A.W.) to teach Hadith",
+                                "apply the methods used by the Prophet (S.A.W.) to teach Hadith",
+                                "value Hadith as a primary source of guidance"
+                            ]
+                        },
+                        "Selected Hadith": {
+                            "Outcomes": [
+                                "explain the lessons learnt from the Hadith on accountability and respect for authority for character building",
+                                "explain the relevance of the Hadith on accountability and respect for authority in the life of a Muslim",
+                                "practice the teachings of the Hadith on accountability and respect for authority in daily life",
+                                "appreciate Hadith as the second source of law"
+                            ]
+                        }
+                    }
+                },
+                "Pillars of Iman": {
+                    "SubStrands": {
+                        "Belief in revealed scriptures": {
+                            "Outcomes": [
+                                "identify the revealed books of Allah (S.W.T.) as a pillar of Iman",
+                                "explain the significance of belief in revealed books in the life of a Muslim",
+                                "appreciate the revealed books of Allah (S.W.T.) as a pillar of Iman"
+                            ]
+                        },
+                        "Ulul-Azm Prophets": {
+                            "Outcomes": [
+                                "describe the qualities of Ulul Azm Prophets for emulation",
+                                "narrate the stories of Nabii Musa and Issa (A.S.)for spiritual nourishment",
+                                "apply the teachings from the stories of Nabii Musa and Issa (A.S.) for character building",
+                                "appreciate the Ulul-Azm Prophets as role models"
+                            ]
+                        }
+                    }
+                },
+                "Devotional Acts": {
+                    "SubStrands": {
+                        "Swalah": {
+                            "Outcomes": [
+                                "explain the importance of Swalah in the life of a Muslim",
+                                "perform Swalah correctly as an act of ibadah",
+                                "appreciate Swalah as a pillar of Islam"
+                            ]
+                        },
+                        "Zakat": {
+                            "Outcomes": [
+                                "explain the importance of Zakat in the life of a Muslim",
+                                "perform Zakat correctly as an act of ibadah",
+                                "appreciate Zakat as a pillar of Islam"
+                            ]
+                        }
+                    }
+                },
+                "Akhlaq (Moral Values)": {
+                    "SubStrands": {
+                        "Virtues": {
+                            "Outcomes": [
+                                "identify virtues in Islam for character building",
+                                "explain the significance of virtues in the life of a Muslim",
+                                "practice virtues in day-to-day life",
+                                "appreciate virtues as a means of earning rewards from Allah (S.W.T.)"
+                            ]
+                        },
+                        "Vices": {
+                            "Outcomes": [
+                                "identify vices in Islam to avoid them",
+                                "explain the evils of vices in the life of a Muslim",
+                                "practice avoidance of vices in day-to-day life",
+                                "appreciate avoidance of vices as a means of earning rewards from Allah (S.W.T.)"
+                            ]
+                        },
+                        "Dua (Supplication)": {
+                            "Outcomes": [
+                                "recite the dua for protection from evil",
+                                "use the dua in day-to-day life",
+                                "appreciate the importance of dua for protection from evil"
+                            ]
+                        }
+                    }
+                },
+                "Muamalaat": {
+                    "SubStrands": {
+                        "Obligations of Parents to children": {
+                            "Outcomes": [
+                                "discuss the obligations of parents to their children",
+                                "demonstrate ways in which parents can fulfil their obligations to their children",
+                                "discuss the importance of parents fulfilling their obligations towards their children",
+                                "appreciate love and care given to them by their parents by being obedient"
+                            ]
+                        },
+                        "Obligations of Children to Parents": {
+                            "Outcomes": [
+                                "outline obligations of children to their parents",
+                                "explain the importance of obeying and respecting parents as a religious obligation",
+                                "demonstrate ways on how children obey and respect their parents as an act of worship",
+                                "appreciate their parents by respecting and obeying them"
+                            ]
+                        },
+                        "Children’s Obligations to Other Family Members": {
+                            "Outcomes": [
+                                "discuss obligations of children to other family members as an act of ibadah (worship)",
+                                "explain the significance of fulfilling obligations to other family members",
+                                "appreciate the strengthening of the bond with other family members by visiting them during special occasions"
+                            ]
+                        }
+                    }
+                },
+                "History of Islam": {
+                    "SubStrands": {
+                        "Prophet’s Marriage to Khadija (R.A)": {
+                            "Outcomes": [
+                                "discuss the reasons why Khadija (R.A) proposed to marry the Prophet (S.A.W) so as to make responsible choices in life",
+                                "explain the role played by Khadija in the life of Prophet Muhammad (S.A.W)",
+                                "appreciate the Prophet’s marriage to Khadija as a model for Muslims"
+                            ]
+                        },
+                        "Call to Prophethood": {
+                            "Outcomes": [
+                                "discuss the prophet’s experience at cave Hira with Angel Jibril for spiritual growth",
+                                "explain the significance of the first five verses revealed to Prophet (S.A.W) in relation to education",
+                                "appreciate the role of Prophet (S.A.W) as a messenger of Allah (S.W.T) by emulating his practices"
+                            ]
+                        },
+                        "Al-Isra wal Miraj": {
+                            "Outcomes": [
+                                "discuss the Prophet’s Night Journey to Heaven for spiritual nourishment",
+                                "explain the significance of al-Isra wal Miraj in the life of a Muslim",
+                                "appreciate al-Isra wal Miraj as an important event in the history of Islam"
+                            ]
+                        }
+                    }
+                }
+            }
         },
-        "Home Science": {
-            "Strands": {}
+        "Life Skills Education": {
+            "Strands": {
+                "Personal Management Skills": {
+                    "SubStrands": {
+                        "Self-awareness": {
+                            "Outcomes": [
+                                "describe their personal life goals for self-motivation",
+                                "explain different ways of self-improvement for the attainment of life goals",
+                                "display values for the achievement of their life goals"
+                            ]
+                        },
+                        "Self-esteem": {
+                            "Outcomes": [
+                                "explain factors that influence self-esteem in their day-to-day lives",
+                                "describe ways of building a healthy self-esteem",
+                                "exhibit a healthy self-esteem in their interactions",
+                                "display values that enhance healthy self-esteem in their day-to-day lives"
+                            ]
+                        },
+                        "Managing Emotions": {
+                            "Outcomes": [
+                                "describe the possible triggers of emotions in life",
+                                "explain the effect of their emotions on self and others",
+                                "express their emotions positively in different situations",
+                                "appreciate the role of values in expressing emotions in life"
+                            ]
+                        },
+                        "Managing Stress": {
+                            "Outcomes": [
+                                "describe challenges associated with stress management in their life",
+                                "explain effects of unmanaged stress in their life",
+                                "exhibit positive ways of managing stress in different situations",
+                                "apply values necessary for managing stress positively in their life"
+                            ]
+                        },
+                        "Resilience": {
+                            "Outcomes": [
+                                "describe situations that require resilience in their day-to-day lives",
+                                "manifest characteristics of a resilient person in day-to-day life",
+                                "exhibit values that enhance effectiveness in resiliency in day-to-day lives",
+                                "appreciate resilience in day-to-day lives"
+                            ]
+                        },
+                        "Risky Behaviours": {
+                            "Outcomes": [
+                                "describe risky behaviours in day-to-day lives",
+                                "choose ‘good’ over ‘risky’ behaviours in their day-to-day lives",
+                                "portray values associated with avoidance of risky behaviours in day-to-day life",
+                                "appreciate avoidance of risky behaviours in day-to-day lives"
+                            ]
+                        }
+                    }
+                },
+                "Interpersonal Relationship Skills": {
+                    "SubStrands": {
+                        "Healthy relationships": {
+                            "Outcomes": [
+                                "explain the effects of their relationships on self and others",
+                                "engage in healthy relationships in their day-to-day life",
+                                "discern unhealthy relationships in their daily interactions",
+                                "exhibit values that enhance healthy relationships in their lives"
+                            ]
+                        },
+                        "Effective communication": {
+                            "Outcomes": [
+                                "describe the process of effective communication in their interactions",
+                                "exhibit effective communication in day-to-day life",
+                                "demonstrate values that enhance effective communication in their day-to-day life"
+                            ]
+                        },
+                        "Negotiation": {
+                            "Outcomes": [
+                                "describe the process of enhancing negotiation in different situations",
+                                "display effective negotiation skills in their day-to-day life",
+                                "exhibit values that enhance negotiations in their day-to-day life",
+                                "appreciate the need for negotiation skills in life"
+                            ]
+                        },
+                        "Non-violent conflict resolution": {
+                            "Outcomes": [
+                                "explain consequences of unresolved conflicts in their daily interactions",
+                                "resolve conflicts peacefully in their day-to-day life",
+                                "exhibit values that enhance conflict resolution in real life situations"
+                            ]
+                        },
+                        "Assertiveness": {
+                            "Outcomes": [
+                                "explain factors that influence assertiveness in their day-to-day lives",
+                                "discern obstacles to assertiveness in their day-to-day lives",
+                                "exhibit values useful in enhancing assertiveness in their daily interactions"
+                            ]
+                        },
+                        "Empathy": {
+                            "Outcomes": [
+                                "describe hindrances to empathy in their day-to-day lives",
+                                "display empathy in different situations as required",
+                                "exhibit values that enhance empathy in their daily interactions"
+                            ]
+                        },
+                        "Managing Peer Influence": {
+                            "Outcomes": [
+                                "describe ways of resisting negative peer influence in their lives",
+                                "discern and resist negative peer influence in their interactions",
+                                "exhibit values that enhance resistance to negative peer influence"
+                            ]
+                        }
+                    }
+                },
+                "Decision Making Skills": {
+                    "SubStrands": {
+                        "Effective Decision-Making": {
+                            "Outcomes": [
+                                "differentiate between impulsive and rational decision making in real life situations",
+                                "make appropriate decisions in managing influences",
+                                "exhibit values in decision making in real life situations"
+                            ]
+                        },
+                        "Critical thinking skills": {
+                            "Outcomes": [
+                                "explain essential skills for critical thinking in different situations",
+                                "discern hindrances to critical thinking in different circumstances",
+                                "appreciate the value of critical thinking in different circumstances"
+                            ]
+                        },
+                        "Creative Thinking": {
+                            "Outcomes": [
+                                "describe ways of developing creative thinking in different contexts",
+                                "discern and overcome challenges to creative thinking in their everyday life",
+                                "appreciate the importance of values in creative thinking within their environment"
+                            ]
+                        },
+                        "Problem-Solving skills": {
+                            "Outcomes": [
+                                "explain the rational problem-solving model in different contexts",
+                                "identify obstacles to problem solving in their environment",
+                                "apply effective problem-solving skills in their day-to-day interactions",
+                                "appreciate the role of values in enhancing problem solving in their lives"
+                            ]
+                        },
+                        "Psychometric Tests": {
+                            "Outcomes": [
+                                "describe types of psychometric tests used in day-to-day life",
+                                "discuss qualities of good psychometric tests in their day-to-day life",
+                                "use appropriate psychometric tests for own evaluation in their day-to-day lives",
+                                "portray values associated with psychometric tests in their day-to-day life",
+                                "appreciate psychometric tests in their day-to-day life"
+                            ]
+                        }
+                    }
+                },
+                "Community Service-Learning Project": {
+                    "SubStrands": {
+                        "Community Service-Learning Project": {
+                            "Outcomes": [
+                                "identify a problem/gap in the community",
+                                "design a solution(s) to the identified problem",
+                                "plan to implement the solution to the identified problem",
+                                "implement the plan for solving the identified problem",
+                                "report/account on the concluded project",
+                                "appreciate the need to be part of the solution to the gaps/challenges in the community"
+                            ]
+                        }
+                    }
+                }
+            }
         },
         "Creative Arts": {
             "Strands": {
-                "1.0: THE ARTS AND ENTREPRENEURSHIP": {
+                "Foundations of Creative Arts and Sports": {
                     "SubStrands": {
-                        "1.1 Costing of artworks": {
+                        "Roles of Creative Arts and Sports": {
                             "Outcomes": [
-                                "analyse priced 2 Dimension and 3 Dimension artworks to conceptualize factors considered in costing of artwork",
-                                "calculate the unit cost artworks for proper value placement",
-                                "explore factors that influence a consumer’s purchasing decisions, and designs a 3-colour chart",
-                                "appreciate the importance of consumer’s purchasing decisions in artwork"
+                                "describe the roles of Creative Arts and Sports in society",
+                                "make a storyboard highlighting the roles of Creative Arts and Sports in society",
+                                "appreciate the role played by Creative Arts and Sports in society"
+                            ]
+                        },
+                        "Components of Creative Arts and Sports": {
+                            "Outcomes": [
+                                "describe elements of Verse",
+                                "perform activities that enhance endurance and agility in physical fitness",
+                                "write note values on the bass staff",
+                                "name pitches on the bass staff",
+                                "group music notes in 3 4 time",
+                                "construct the scale of G major on a staff",
+                                "appreciate the basic elements of Creative Arts and Sports"
                             ]
                         }
                     }
                 },
-                "2.0: PICTURE MAKING": {
+                "Creating and Performing in Creative Arts and Sports": {
                     "SubStrands": {
-                        "2.1: Drawing": {
+                        "Drawing and Painting": {
                             "Outcomes": [
                                 "analyse components of perspective in sample cuboids drawn in two - point perspective",
                                 "draw cuboids in two point perspective from different views",
@@ -707,175 +1433,195 @@
                                 "appreciate own and other is two-point perspective drawings"
                             ]
                         },
-                        "2.2: Painting": {
+                        "Rhythm": {
                             "Outcomes": [
-                                "analyse warm and cool colours on the colour wheel and sample paintings in regard to colour temperature",
-                                "create an imaginative seascape composition based on colour temperature",
-                                "investigate the psychological, cultural and conventional symbolic meaning of colours",
-                                "appreciate the use of colour temperature and symbolic meanings in creation of artworks"
+                                "describe 3 4 time in music",
+                                "compose a four - bar rhythm in 3 4 time",
+                                "write rhythms in 3 4 time, incorporating dotted notes and their corresponding rests from dictation",
+                                "sight read rhythms in 3 4 time",
+                                "appreciate rhythms created by self and others"
                             ]
                         },
-                        "2.3: Mosaic": {
+                        "Cultural Creative Dance": {
                             "Outcomes": [
-                                "analyse characteristics of mosaic from sample artworks",
-                                "identify functions of mosaic art in contemporary society",
-                                "create a paper mosaic landscape pictorial composition for self- expression",
-                                "create an egg shell mosaic landscape pictorial composition of a flower for self- expression",
-                                "appreciate own and others’ pictorial composition"
-                            ]
-                        }
-                    }
-                },
-                "3.0: MULTIMEDIA ARTS": {
-                    "SubStrands": {
-                        "3.1: Traditional 2 Dimension Animation": {
-                            "Outcomes": [
-                                "study features of flip books with two moving objects against a painted background",
-                                "make flip book of two moving objects against a painted background",
-                                "manipulate the flip book to animate the moving objects",
-                                "appreciate own and others’ flip book animations"
+                                "describe elements of a cultural creative dance",
+                                "develop a plot for a cultural creative dance addressing a societal issue",
+                                "discuss the role of songs and instruments in a cultural creative dance",
+                                "make simple dance movements to varied cultural idioms",
+                                "recognize the functions of cultural creative dance in society"
                             ]
                         },
-                        "3.2: Graphic Design": {
+                        "Melody": {
                             "Outcomes": [
-                                "analyse logo design samples for conceptualisation",
-                                "design a logo in two colours for an institution",
-                                "appreciate own and others’ logo designs",
-                                "analyse samples of trademark designs for conceptualisation",
-                                "design a trademark in two colours for a company",
-                                "appreciate own and others’ trademark designs"
+                                "describe qualities of a good melody",
+                                "construct and name the pitches on the bass staff",
+                                "group music notes in 3 4 time",
+                                "construct the scale of G major on a staff",
+                                "compose a four - bar melody in G major",
+                                "perform created pieces of music in G major",
+                                "enjoy creating melodies in G major"
                             ]
                         },
-                        "3.3: Ornamentation of Objects": {
-                            "Outcomes": [
-                                "analyse sample objects ornamented using yarn",
-                                "decorate found objects using yarn for self-expression",
-                                "appreciate own and others’ decorated objects decorated using yarn",
-                                "analyse sample objects ornamented made using paper craft techniques",
-                                "create decorations on found objects using paper craft techniques for self-expression",
-                                "appreciate own and others’ paper decorated objects"
-                            ]
-                        }
-                    }
-                },
-                "4.0: INDIGENOUS CRAFTS": {
-                    "SubStrands": {
-                        "4.1: Sculpture": {
-                            "Outcomes": [
-                                "analyse samples of sculptural forms made by assemblage and construction",
-                                "assemble and construct a sculpture by reusing materials for self- expression",
-                                "appreciate own and others’ assemblage and construction sculptural forms",
-                                "analyse the elements and principles of 3 Dimensional modelled sculptures",
-                                "create clay modelled sculptural forms for self-expression",
-                                "appreciate own and others’ modelled sculptures",
-                                "analyse samples of one-piece mould casting to familiarise with the concept",
-                                "cast sculptural forms using one piece mould for skill development",
-                                "appreciate own and others’ cast sculptures"
-                            ]
-                        },
-                        "4.2: Pottery": {
-                            "Outcomes": [
-                                "analyse characteristics of sample functional slab vessels",
-                                "model a functional vessel using slab technique",
-                                "decorate the vessel using a combination of techniques",
-                                "fire the modelled vessels in the down draught kiln",
-                                "critique own and others’ fired slab vessels",
-                                "analyse a demonstration on pellet technique to acquaint with the process",
-                                "model a functional vessel using pellet technique",
-                                "decorate the modelled vessel using different techniques",
-                                "build a down draught kiln in readiness for firing",
-                                "fire the modelled vessels in the down draught kiln",
-                                "appraise own and others’ fired vessels"
-                            ]
-                        },
-                        "4.3: Weaving": {
-                            "Outcomes": [
-                                "analyse samples of pile weave structure to understand the concept",
-                                "make a frame loom using mitre joints to be used in pile weaving",
-                                "create a two colour wall hanging using pile weave for self-expression",
-                                "apply finishing techniques on the wall hanging",
-                                "appreciate own and others’ woven artwork"
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "Physical Education": {
-            "Strands": {
-                "1.0: GAMES": {
-                    "SubStrands": {
-                        "1.1 Equipment and facilities in Basketball": {
+                        "Basketball": {
                             "Outcomes": [
                                 "describe the playing zones in a Basketball court",
                                 "identify the playing equipment in Basketball game",
                                 "appreciate the safe use of a Basketball court and equipment during play"
                             ]
                         },
-                        "1.2 Passes and reception in Basketball": {
+                        "Descant Recorder or any other Western Solo Instrument": {
                             "Outcomes": [
-                                "distinguish between the bounce and baseball passes in Basketball",
-                                "execute the bounce and baseball passes in Basketball",
-                                "appreciate the bounce and baseball passes for fun and enjoyment"
+                                "read and play the scale of G major written in staff notation",
+                                "apply appropriate playing techniques when playing the descant recorder or any other Western solo instrument",
+                                "interpret performance directions when playing the descant recorder or any other Western solo instrument",
+                                "read melodies in simple time, in G Major on a descant recorder or any other Western solo instrument",
+                                "play two part music on the descant recorder or any other western solo instrument",
+                                "appreciate playing the descant recorder or any other Western solo instrument in an ensemble"
                             ]
                         },
-                        "1.3 Dodging and marking in Basketball": {
+                        "Storytelling and Animation": {
                             "Outcomes": [
-                                "establish the basic stance and movement in dodging and marking",
-                                "perform dodging and marking in Basketball",
-                                "value the safe application of dodging and marking while playing Basketball for enjoyment"
+                                "describe techniques used in storytelling",
+                                "explain qualities of a good flipbook",
+                                "compose a 3 to 5-minute story addressing an issue in society",
+                                "create a flipbook animation for storytelling",
+                                "perform a 3 to 5-minute story before an audience",
+                                "realise storytelling as a means of communication"
                             ]
                         },
-                        "1.4 Dribbling in Basketball": {
-                            "Outcomes": [
-                                "distinguish between the high and low dribble in Basketball",
-                                "perform low and high dribble in Basketball",
-                                "recognize the use of low and high dribble in Basketball"
-                            ]
-                        },
-                        "1.5. Footwork in Basketball": {
-                            "Outcomes": [
-                                "analyse the landing and pivoting options in Basketball",
-                                "perform the landing and pivoting skills in Basketball",
-                                "appreciate each other’s effort while practising footwork skills in Basketball game"
-                            ]
-                        },
-                        "1.6 Shooting in Basketball": {
-                            "Outcomes": [
-                                "distinguish amongst the set, jump and lay-up shots in Basketball",
-                                "execute the set, jump and lay-up shots in Basketball",
-                                "appraise each other’s performance during shooting in basketball for self-efficacy"
-                            ]
-                        },
-                        "1.7 Volley and punt Kicks in Soccer": {
+                        "Soccer": {
                             "Outcomes": [
                                 "differentiate between the volley and punt kicks in Soccer",
                                 "perform the volley and punt kicks in Soccer",
                                 "appreciate the execution of the volley and punt kicks while observing rules in a Soccer game"
                             ]
                         },
-                        "1.8 Dribbling in Soccer": {
+                        "Kenyan Folk song": {
+                            "Outcomes": [
+                                "classify folk songs in Kenyan communities",
+                                "use appropriate care and maintenance procedures for a Kenyan aerophone",
+                                "apply techniques of tuning and playing a Kenyan aerophones",
+                                "play a Kenyan aerophone alone and with others in an ensemble",
+                                "make a Kenyan aerophone using locally available materials",
+                                "appreciate the role of Kenyan aerophones in music performance"
+                            ]
+                        },
+                        "Indigenous Kenyan Craft - Pottery": {
+                            "Outcomes": [
+                                "discuss function of pottery in Kenyan communities",
+                                "identify materials for pottery in the local environment",
+                                "make pottery inspired by patriotism for Kenya",
+                                "sing a patriotic song adorned in pottery inspired by patriotism",
+                                "recognise pottery as an indigenous Kenyan craft"
+                            ]
+                        },
+                        "Swimming (Optional)": {
+                            "Outcomes": [
+                                "explain the prone body position and glide in breast stroke",
+                                "perform the leg and arm action in Breast stroke",
+                                "appreciate own and others efforts while performing breast stroke"
+                            ]
+                        },
+                        "Kenyan Indigenous Games (Optional)": {
+                            "Outcomes": [
+                                "identify types of indigenous rope games played in Kenya",
+                                "perform different indigenous rope games for skill acquisition",
+                                "perform indigenous rope skipping to a musical rhythm for enjoyment",
+                                "appreciate the role played by indigenous rope skipping games for fitness and health"
+                            ]
+                        }
+                    }
+                },
+                "Appreciation in Creative Arts and Sports": {
+                    "SubStrands": {
+                        "Analysis of Creative Arts and Sports": {
+                            "Outcomes": [
+                                "examine the spirit of sports values for clean sports",
+                                "analyse a folk song from a Kenyan community",
+                                "analyse a storytelling performance",
+                                "make portfolio for showcase",
+                                "appreciate the role of analysis in Creative Arts and Sports"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Physical and Health Education": {
+            "Strands": {
+                "Games": {
+                    "SubStrands": {
+                        "Equipment and facilities in Basketball": {
+                            "Outcomes": [
+                                "describe the playing zones in a Basketball court",
+                                "identify the playing equipment in Basketball game",
+                                "appreciate the safe use of a Basketball court and equipment during play"
+                            ]
+                        },
+                        "Passes and reception in Basketball": {
+                            "Outcomes": [
+                                "distinguish between the bounce and baseball passes in Basketball",
+                                "execute the bounce and baseball passes in Basketball",
+                                "appreciate the bounce and baseball passes for fun and enjoyment"
+                            ]
+                        },
+                        "Dodging and marking in Basketball": {
+                            "Outcomes": [
+                                "establish the basic stance and movement in dodging and marking",
+                                "perform dodging and marking in Basketball",
+                                "value the safe application of dodging and marking while playing Basketball for enjoyment"
+                            ]
+                        },
+                        "Dribbling in Basketball": {
+                            "Outcomes": [
+                                "distinguish between the high and low dribble in Basketball",
+                                "perform low and high dribble in Basketball",
+                                "recognize the use of low and high dribble in Basketball"
+                            ]
+                        },
+                        "Footwork in Basketball": {
+                            "Outcomes": [
+                                "analyse the landing and pivoting options in Basketball",
+                                "perform the landing and pivoting skills in Basketball",
+                                "appreciate each other’s effort while practising footwork skills in Basketball game"
+                            ]
+                        },
+                        "Shooting in Basketball": {
+                            "Outcomes": [
+                                "distinguish amongst the set, jump and lay-up shots in Basketball",
+                                "execute the set, jump and lay-up shots in Basketball",
+                                "appraise each other’s performance during shooting in basketball for self-efficacy"
+                            ]
+                        },
+                        "Volley and punt Kicks in Soccer": {
+                            "Outcomes": [
+                                "differentiate between the volley and punt kicks in Soccer",
+                                "perform the volley and punt kicks in Soccer",
+                                "appreciate the execution of the volley and punt kicks while observing rules in a Soccer game"
+                            ]
+                        },
+                        "Dribbling in Soccer": {
                             "Outcomes": [
                                 "distinguish between the single and double dribble in Soccer",
                                 "perform the single and double dribble techniques in Soccer",
                                 "appreciate each other while practicing the single and double dribble techniques in Soccer"
                             ]
                         },
-                        "1.9 Dodging and Marking in Soccer": {
+                        "Dodging and Marking in Soccer": {
                             "Outcomes": [
                                 "establish the basic stance and movement for dodging and marking in Soccer",
                                 "perform the basic stance and movement in dodging and marking in Soccer",
                                 "appraise each other's efforts while practising the dodging and marking skills"
                             ]
                         },
-                        "1.10 Tackling in soccer": {
+                        "Tackling in soccer": {
                             "Outcomes": [
                                 "compare the block and slide tackling techniques in Soccer",
                                 "perform the block and slide tackling techniques in Soccer",
                                 "value each other's efforts while practising the tackling techniques in Soccer"
                             ]
                         },
-                        "1.11 Goalkeeping in soccer": {
+                        "Goalkeeping in soccer": {
                             "Outcomes": [
                                 "describe the basic stance positions and movements of a goalkeeper in Soccer",
                                 "perform the basic stance and movements of a goalkeeper in Soccer",
@@ -884,30 +1630,30 @@
                         }
                     }
                 },
-                "2.0: ATHLETICS": {
+                "Athletics": {
                     "SubStrands": {
-                        "2.1 Triple Jump in Field Events": {
+                        "Triple Jump in Field Events": {
                             "Outcomes": [
                                 "explain the approach, take off, flight and landing in Triple jump",
                                 "perform the approach, take off, flight (hop, step and jump) and landing phases in Triple jump",
                                 "appreciate own and others’ participation in the preparation of the sand pit while observing safety"
                             ]
                         },
-                        "2.2 Glide style in Shot put": {
+                        "Glide style in Shot put": {
                             "Outcomes": [
                                 "analyse the glide style in shot put",
                                 "perform the glide style in putting the shot for skill development",
                                 "appreciate own and others effort of putting the shot for enhanced self-esteem"
                             ]
                         },
-                        "2.3 Middle distance races in Track Events": {
+                        "Middle distance races in Track Events": {
                             "Outcomes": [
                                 "describe the middle distance races in track events",
                                 "perform the takeoff position, pacing, stride length and recovery in middle distance races",
                                 "respect own and others’ space and pace while running the middle distance races for enjoyment"
                             ]
                         },
-                        "2.4 Rhythm in Hurdling races": {
+                        "Rhythm in Hurdling races": {
                             "Outcomes": [
                                 "explain how rhythm is established in hurdling races",
                                 "apply rhythm for effective hurdle clearance",
@@ -916,9 +1662,9 @@
                         }
                     }
                 },
-                "3.0: PHYSICAL FITNESS AND HEALTH": {
+                "Physical Fitness and Health": {
                     "SubStrands": {
-                        "3.1 pre assessment for fitness": {
+                        "pre assessment for fitness": {
                             "Outcomes": [
                                 "recognize the basic tools that evaluate cardio respiratory endurance, speed and reaction time",
                                 "conduct pre exercise assessment on cardio respiratory endurance, speed and reaction time using the fitness evaluation tools",
@@ -926,7 +1672,7 @@
                                 "show sensitivity to others regardless of gender and ability while participating in fitness assessment"
                             ]
                         },
-                        "3.2 Fitness activities for fitness components": {
+                        "Fitness activities for fitness components": {
                             "Outcomes": [
                                 "analyse exercises that promote cardiorespiratory endurance, speed and reaction time",
                                 "evaluate the relationship between nutritional demands and exercises for health promotion",
@@ -935,19 +1681,19 @@
                                 "show sensitivity to others while participating in fitness activities for performance and wellness"
                             ]
                         },
-                        "3.3 post assessment for fitness components": {
+                        "post assessment for fitness components": {
                             "Outcomes": [
                                 "refer to tools used in pretest for cardiorespiratory endurance, speed and reaction time for post assessment",
                                 "conduct post exercise assessment on cardiorespiratory endurance, speed and reaction time using the fitness evaluation tools",
-                                "complete the journal on post- test records for cardiorespiratory endurance, speed and reaction time in fitness assessment",
+                                "complete the journal on post-test records for cardiorespiratory endurance, speed and reaction time in fitness assessment",
                                 "show sensitivity for others regardless of gender and ability when interpreting the results of fitness assessment"
                             ]
                         }
                     }
                 },
-                "4.0: CAREER OPPORTUNITIES IN FITNESS AND SPORTS": {
+                "Career Opportunities in Fitness and Sports": {
                     "SubStrands": {
-                        "4.1 Fitness and Sports Related Careers": {
+                        "Fitness and Sports Related Careers": {
                             "Outcomes": [
                                 "identify careers related to fitness in the community for poverty eradication",
                                 "identify ways of managing income generated from talent in sports and fitness careers through saving and ethical spending",
@@ -957,16 +1703,16 @@
                         }
                     }
                 },
-                "5.0: SWIMMING": {
+                "Swimming": {
                     "SubStrands": {
-                        "5.1 Breast stroke in swimming": {
+                        "Breast stroke in swimming": {
                             "Outcomes": [
                                 "explain the prone body position and glide in breast stroke",
                                 "perform the leg and arm action in Breast stroke",
                                 "appreciate own and others efforts while performing breast stroke"
                             ]
                         },
-                        "5.2 Inverted breast stroke in swimming": {
+                        "Inverted breast stroke in swimming": {
                             "Outcomes": [
                                 "explain the supine body position and glide in Inverted breast stroke",
                                 "perform the leg and arm action techniques in Inverted breast stroke for skill acquisition",
@@ -975,16 +1721,16 @@
                         }
                     }
                 },
-                "6.0: HOCKEY": {
+                "Hockey": {
                     "SubStrands": {
-                        "6.1 Dribbling in Hockey": {
+                        "Dribbling in Hockey": {
                             "Outcomes": [
                                 "explain the different dribbles performed in Hockey",
                                 "perform the straight and reverse one-handed and side dribble in Hockey for skill development",
                                 "embrace the application of different dribbling techniques in Hockey for fun and enjoyment"
                             ]
                         },
-                        "6.2 Tackling in Hockey": {
+                        "Tackling in Hockey": {
                             "Outcomes": [
                                 "differentiate between the lunge and jab tackles in Hockey",
                                 "safely apply the tackling skills for mastery in Hockey",
@@ -993,16 +1739,16 @@
                         }
                     }
                 },
-                "7.0: KABADDI": {
+                "Kabaddi": {
                     "SubStrands": {
-                        "7.1 Defensive Skills in Kabaddi": {
+                        "Defensive Skills in Kabaddi": {
                             "Outcomes": [
                                 "distinguish amongst the defensive skills in Kabaddi",
                                 "perform the defensive skills of waist hold, wrist hold, knee hold and ankle hold in Kabaddi for skill development",
                                 "appraise others and team efforts when applying defensive skills in Kabaddi"
                             ]
                         },
-                        "7.2 Attacking Skills in Kabaddi": {
+                        "Attacking Skills in Kabaddi": {
                             "Outcomes": [
                                 "differentiate amongst the attacking skills in Kabaddi",
                                 "perform toe touch and dubik techniques for skill development",
@@ -1013,166 +1759,131 @@
                 }
             }
         },
-        "Life Skills Education": {
+        "Business Studies": {
             "Strands": {
-                "1.0 Personal Management Skills": {
+                "Business and Money Management": {
                     "SubStrands": {
-                        "1.1 Self-awareness": {
+                        "Financial goals": {
                             "Outcomes": [
-                                "describe their personal life goals for self-motivation.",
-                                "explain different ways of self-improvement for the attainment of life goals.",
-                                "display values for the achievement of their life goals."
+                                "analyse the meaning and importance of goal setting as used in financial management",
+                                "examine the factors to consider when setting financial goals",
+                                "apply available learning resources to search for information for setting financial goals",
+                                "formulate financial goals for individual development",
+                                "appreciate the importance of setting goals in financial management"
                             ]
                         },
-                        "1.2 Self-esteem": {
+                        "Income": {
                             "Outcomes": [
-                                "explain factors that influence self-esteem in their day-to-day lives",
-                                "describe ways of building a healthy self esteem",
-                                "exhibit a healthy self-esteem in their interactions",
-                                "display values that enhance healthy self-esteem in their day-to-day lives."
+                                "analyse the sources of income to an individual",
+                                "demonstrate the use of talents and abilities for income generation",
+                                "apply available resources to develop talents for income generation",
+                                "identify the ethical and legal issues in generating income",
+                                "conform to ethical and legal issues in generating income"
                             ]
                         },
-                        "1.3 Managing Emotions": {
+                        "Budgeting and spending": {
                             "Outcomes": [
-                                "describe the possible triggers of emotions in life",
-                                "explain the effect of their emotions on self and others",
-                                "express their emotions positively in different situations.",
-                                "appreciate the role of values in expressing emotions in life."
-                            ]
-                        },
-                        "1.4 Managing Stress": {
-                            "Outcomes": [
-                                "describe challenges associated with stress management in their life",
-                                "explain effects of unmanaged stress in their life",
-                                "exhibit positive ways of managing stress in different situations",
-                                "apply values necessary for managing stress positively in their life."
-                            ]
-                        },
-                        "1.5 Resilience": {
-                            "Outcomes": [
-                                "describe situations that require resilience in their day-to-day lives",
-                                "manifest characteristics of a resilient person in day-to-day life",
-                                "exhibit values that enhance effectiveness in resiliency in day-to-day lives",
-                                "appreciate resilience in day-to-day lives."
-                            ]
-                        },
-                        "1.6 Risky Behaviours": {
-                            "Outcomes": [
-                                "describe risky behaviours in day-to-day lives",
-                                "choose ‘good’ over ‘risky’ behaviours in their day-to-lives",
-                                "portray values associated with avoidance of risky behaviours in day-to-day life",
-                                "appreciate avoidance of risky behaviours in day-to-day lives."
+                                "explore the meaning and importance of budgeting in day-to-day life",
+                                "analyse ways of spending money wisely in day-to-day life",
+                                "prepare a simple budget for personal finance management",
+                                "identify ethical issues in budgeting and spending money in the community",
+                                "appreciate the importance of budgeting and spending money wisely for personal development"
                             ]
                         }
                     }
                 },
-                "2.0 Interpersonal Relationship Skills": {
+                "Business and its Environment": {
                     "SubStrands": {
-                        "2.1 Healthy relationships": {
+                        "Types of business enterprises": {
                             "Outcomes": [
-                                "explain the effects of their relationships on self and others",
-                                "engage in healthy relationships in their day-to-day life",
-                                "discern unhealthy relationships in their daily interactions",
-                                "exhibit values that enhance healthy relationships in their lives."
+                                "explore the meaning, formation, management, sources of finance, advantages, and disadvantages of a sole proprietorship business enterprise",
+                                "examine the meaning, formation, management, sources of finance, advantages, and disadvantages of a partnership business enterprise",
+                                "analyse the meaning, formation, types, management, sources of finance, advantages, and disadvantages of a cooperative society",
+                                "recognise the role of sole proprietorships, partnerships and cooperative societies"
                             ]
                         },
-                        "2.2 Effective communication": {
+                        "Entrepreneurship": {
                             "Outcomes": [
-                                "describe the process of effective communication in their interactions",
-                                "exhibit effective communication in day-to-day life",
-                                "demonstrate values that enhance effective communication in their day-to-day life."
+                                "investigate the importance of entrepreneurship to an individual and community",
+                                "identify the qualities of an entrepreneur in business",
+                                "determine sources and ways of generating business ideas for a business venture",
+                                "evaluate a business opportunity to determine its viability",
+                                "analyse factors that enhance business success in the community",
+                                "appreciate the role of entrepreneurship for self and community development"
                             ]
                         },
-                        "2.3 Negotiation": {
+                        "Networking in business": {
                             "Outcomes": [
-                                "describe the process of enhancing negotiation in different situations",
-                                "display effective negotiation skills in their day-to-day life",
-                                "exhibit values that enhance negotiations in their day-to-day life",
-                                "appreciate the need for negotiation skills in life."
+                                "identify the stakeholders in business",
+                                "explain the benefits of networking in business",
+                                "apply available resources to identify ways of networking in business",
+                                "appreciate the role of networking in business"
                             ]
                         },
-                        "2.4 Non-Violent conflict resolution": {
+                        "Business communication": {
                             "Outcomes": [
-                                "explain consequences of unresolved conflicts in their daily interactions",
-                                "resolve conflicts peacefully in their day-to-day life",
-                                "exhibit values that enhance conflict resolution in real life situations."
+                                "identify the types, advantages and disadvantages of communication channels used in business",
+                                "examine the factors considered when selecting communication channels",
+                                "acknowledge the role of communication channels in business"
                             ]
                         },
-                        "2.5 Assertiveness": {
+                        "Location and size of a production unit": {
                             "Outcomes": [
-                                "explain factors that influence assertiveness in their day-to-day lives",
-                                "discern obstacles to assertiveness in their day-to-day lives",
-                                "exhibit values useful in enhancing assertiveness in their daily interactions."
+                                "analyse the factors determining the size of a production unit",
+                                "examine the factors considered when locating a production unit",
+                                "assess the suitability of locating a production unit in their community",
+                                "recognise the importance of suitably locating a production unit"
                             ]
                         },
-                        "2.6 Empathy": {
+                        "Marketing of goods and services": {
                             "Outcomes": [
-                                "describe hindrances to empathy in their day-to-day lives",
-                                "display empathy in different situations as required",
-                                "exhibit values that enhance empathy in their daily interactions."
+                                "explore the sources of information about the market for its potential customers",
+                                "identify methods of gathering information about the market for its potential customers",
+                                "gather information about the market of a particular product in the community",
+                                "collect information about the market of a particular product for the consumer to make effective buying decision",
+                                "appreciate the importance of gathering information about the market and customers in business"
                             ]
                         },
-                        "2.7 Managing Peer Influence": {
+                        "Demand and Supply": {
                             "Outcomes": [
-                                "describe ways of resisting negative peer influence in their lives",
-                                "discern and resist negative peer influence in their interactions",
-                                "exhibit values that enhance resistance to negative peer influence."
+                                "investigate the concept of demand and supply in business",
+                                "analyse the factors that influence demand and supply of a product in the market",
+                                "recognise the significance of demand and supply in business"
                             ]
                         }
                     }
                 },
-                "3.0 Decision Making Skills": {
+                "Government and Global Influence in Business": {
                     "SubStrands": {
-                        "3.1 Effective Decision-Making": {
+                        "Government economic policies affecting businesses": {
                             "Outcomes": [
-                                "differentiate between impulsive and rational decision making in real life situations",
-                                "make appropriate decisions in managing influences",
-                                "exhibit values in decision making in real life situations."
+                                "examine the Government economic policies affecting businesses in Kenya",
+                                "explain the significance of e-Government in business",
+                                "use e-Government platforms to access business services",
+                                "appreciate the role of government economic policy in business"
                             ]
                         },
-                        "3.2 Critical thinking skills": {
+                        "Taxation in Kenya": {
                             "Outcomes": [
-                                "explain essential skills for critical thinking in different situations",
-                                "discern hindrances to critical thinking in different circumstances",
-                                "appreciate the value of critical thinking in different circumstances."
-                            ]
-                        },
-                        "3.3 Creative Thinking": {
-                            "Outcomes": [
-                                "describe ways of developing creative thinking in different contexts",
-                                "discern and overcome challenges to creative thinking in their everyday life",
-                                "appreciate the importance of values in creative thinking within their environment."
-                            ]
-                        },
-                        "3.4 Problem-Solving skills": {
-                            "Outcomes": [
-                                "explain the rational problem-solving model in different contexts",
-                                "identify obstacles to problem solving in their environment",
-                                "apply effective problem-solving skills in their day-to-day interactions",
-                                "appreciate the role of values in enhancing problem solving in their lives."
-                            ]
-                        },
-                        "3.5 Psychometric Tests": {
-                            "Outcomes": [
-                                "describe types of psychometric tests used in day-to-day life",
-                                "discuss qualities of good psychometric tests in their day-to-day life",
-                                "use appropriate psychometric tests for own evaluation in their day-to-day lives",
-                                "portray values associated with psychometric tests in their day-to-day life",
-                                "appreciate psychometric tests in their day-to-day life."
+                                "examine the meaning and importance of Value Added Tax (VAT) and Excise duty in Kenya",
+                                "calculate VAT and Excise duty levied on products in business",
+                                "analyse the effect of VAT and Excise duty on business activities",
+                                "sensitize the school community on the importance of VAT and Excise duty to the Government of Kenya",
+                                "recognise the importance of VAT and Excise duty to the Government of Kenya"
                             ]
                         }
                     }
                 },
-                "4.0 Community Service-Learning Project": {
+                "Financial Records in Business": {
                     "SubStrands": {
-                        "Community Service-Learning Project": {
+                        "Pricing and costing of goods and services": {
                             "Outcomes": [
-                                "identify a problem/gap in the community",
-                                "design a solution(s) to the identified problem",
-                                "plan to implement the solution to the identified problem",
-                                "implement the plan for solving the identified problem",
-                                "report/account on the concluded project",
-                                "appreciate the need to be part of the solution to the gaps/challenges in the community."
+                                "differentiate between cost and price in business",
+                                "identify types of costs for a small scale business",
+                                "analyse the factors considered in pricing and buying of goods and services",
+                                "determine the cost and price of goods and services for a small scale business",
+                                "calculate profit or loss for goods and services for a small scale business",
+                                "appreciate the pricing and costing of goods and services in business"
                             ]
                         }
                     }
