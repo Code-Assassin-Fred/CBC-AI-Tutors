@@ -1,0 +1,1164 @@
+{
+    "12": {
+        "English": {
+            "Strands": {
+                "Listening and Speaking": {
+                    "SubStrands": {
+                        "Extensive listening": {
+                            "LearningOutcomes": [
+                                "Listen to obtain meaning from oral texts and provide appropriate feedback",
+                                "Speak fluently in a variety of contexts"
+                            ]
+                        },
+                        "Etiquette": {
+                            "LearningOutcomes": [
+                                "Demonstrate appropriate etiquette in social interactions",
+                                "Apply communication skills in diverse situations"
+                            ]
+                        },
+                        "Critical listening": {
+                            "LearningOutcomes": [
+                                "Analyze oral texts critically",
+                                "Evaluate arguments in discussions"
+                            ]
+                        },
+                        "Pronunciation and conversational skills": {
+                            "LearningOutcomes": [
+                                "Pronounce words accurately in conversations",
+                                "Engage in meaningful dialogues"
+                            ]
+                        }
+                    }
+                },
+                "Reading": {
+                    "SubStrands": {
+                        "Reading fluency": {
+                            "LearningOutcomes": [
+                                "Read texts fluently with comprehension",
+                                "Apply reading strategies for understanding"
+                            ]
+                        },
+                        "Extensive reading": {
+                            "LearningOutcomes": [
+                                "Read widely for pleasure and knowledge",
+                                "Summarize key ideas from texts"
+                            ]
+                        },
+                        "Intensive reading": {
+                            "LearningOutcomes": [
+                                "Analyze literary devices in texts",
+                                "Interpret themes and messages"
+                            ]
+                        },
+                        "Critical reading": {
+                            "LearningOutcomes": [
+                                "Evaluate bias and credibility in texts",
+                                "Form reasoned opinions based on reading"
+                            ]
+                        }
+                    }
+                },
+                "Grammar in Use": {
+                    "SubStrands": {
+                        "Word classes": {
+                            "LearningOutcomes": [
+                                "Identify and use advanced word classes correctly",
+                                "Construct complex sentences"
+                            ]
+                        },
+                        "Phrases": {
+                            "LearningOutcomes": [
+                                "Use phrases to enhance sentence structure",
+                                "Analyze phrase functions in texts"
+                            ]
+                        },
+                        "Clauses": {
+                            "LearningOutcomes": [
+                                "Construct and identify clause types",
+                                "Combine clauses for effective writing"
+                            ]
+                        },
+                        "Sentence structure": {
+                            "LearningOutcomes": [
+                                "Vary sentence structures for emphasis",
+                                "Edit sentences for clarity and conciseness"
+                            ]
+                        }
+                    }
+                },
+                "Writing": {
+                    "SubStrands": {
+                        "Sentence fluency": {
+                            "LearningOutcomes": [
+                                "Write fluent and coherent sentences",
+                                "Use varied sentence lengths for rhythm"
+                            ]
+                        },
+                        "Mechanics of writing: Spelling": {
+                            "LearningOutcomes": [
+                                "Apply advanced spelling rules",
+                                "Proofread for spelling errors"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Kiswahili": {
+            "Strands": {
+                "Kusikiliza na Kuzungumza": {
+                    "SubStrands": {
+                        "Kusikiliza kwa kina": {
+                            "LearningOutcomes": [
+                                "Kusikiliza na kutoa maoni yanayofaa",
+                                "Kuchanganua mazungumzo"
+                            ]
+                        }
+                    }
+                },
+                "Kusoma": {
+                    "SubStrands": {
+                        "Kusoma kwa ufasaha": {
+                            "LearningOutcomes": [
+                                "Kusoma maandishi kwa ufasaha",
+                                "Kuelewa maana ya maandishi"
+                            ]
+                        }
+                    }
+                },
+                "Sarufi": {
+                    "SubStrands": {
+                        "Aina za maneno": {
+                            "LearningOutcomes": [
+                                "Kutumia aina za maneno vizuri",
+                                "Kutengeneza sentensi tata"
+                            ]
+                        }
+                    }
+                },
+                "Kuandika": {
+                    "SubStrands": {
+                        "Ufasaha wa sentensi": {
+                            "LearningOutcomes": [
+                                "Kuandika sentensi zilizofaa",
+                                "Kurekebisha makosa ya tahajia"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Kenyan Sign Language": {
+            "Strands": {
+                "Communication": {
+                    "SubStrands": {
+                        "Signing fluency": {
+                            "LearningOutcomes": [
+                                "Communicate fluently in KSL",
+                                "Express ideas using visual signs"
+                            ]
+                        }
+                    }
+                },
+                "Receptive skills": {
+                    "SubStrands": {
+                        "Visual listening": {
+                            "LearningOutcomes": [
+                                "Interpret signed messages accurately",
+                                "Respond appropriately to signed communication"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Physical Education": {
+            "Strands": {
+                "Health and Fitness": {
+                    "SubStrands": {
+                        "Flexibility": {
+                            "LearningOutcomes": [
+                                "Perform flexibility exercises",
+                                "Improve range of motion"
+                            ]
+                        },
+                        "Muscular strength": {
+                            "LearningOutcomes": [
+                                "Build muscular strength through training",
+                                "Apply strength in sports"
+                            ]
+                        }
+                    }
+                },
+                "Sports Skills": {
+                    "SubStrands": {
+                        "Basketball": {
+                            "LearningOutcomes": [
+                                "Demonstrate basketball skills",
+                                "Participate in team games"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Community Service Learning": {
+            "Strands": {
+                "Citizenship": {
+                    "SubStrands": {
+                        "Community Needs": {
+                            "LearningOutcomes": [
+                                "Identify community needs",
+                                "Participate in service projects"
+                            ]
+                        }
+                    }
+                },
+                "Life Skills": {
+                    "SubStrands": {
+                        "Self-Awareness": {
+                            "LearningOutcomes": [
+                                "Develop self-awareness in community",
+                                "Resolve conflicts"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Mathematics": {
+            "Strands": {
+                "Algebra": {
+                    "SubStrands": {
+                        "Equations": {
+                            "LearningOutcomes": [
+                                "Solve linear equations",
+                                "Apply algebra in real-life problems"
+                            ]
+                        }
+                    }
+                },
+                "Geometry": {
+                    "SubStrands": {
+                        "Coordinate geometry": {
+                            "LearningOutcomes": [
+                                "Use coordinate geometry to solve problems",
+                                "Graph functions"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Advanced Mathematics": {
+            "Strands": {
+                "Calculus": {
+                    "SubStrands": {
+                        "Differentiation": {
+                            "LearningOutcomes": [
+                                "Compute derivatives",
+                                "Apply calculus in optimization"
+                            ]
+                        }
+                    }
+                },
+                "Linear Algebra": {
+                    "SubStrands": {
+                        "Matrices": {
+                            "LearningOutcomes": [
+                                "Perform matrix operations",
+                                "Solve systems using matrices"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Biology": {
+            "Strands": {
+                "Genetics": {
+                    "SubStrands": {
+                        "Inheritance": {
+                            "LearningOutcomes": [
+                                "Understand Mendelian inheritance",
+                                "Solve genetic problems"
+                            ]
+                        }
+                    }
+                },
+                "Ecology": {
+                    "SubStrands": {
+                        "Ecosystems": {
+                            "LearningOutcomes": [
+                                "Analyze ecosystem dynamics",
+                                "Discuss conservation"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Chemistry": {
+            "Strands": {
+                "Inorganic Chemistry": {
+                    "SubStrands": {
+                        "Periodic Table": {
+                            "LearningOutcomes": [
+                                "Analyze periodicity trends",
+                                "Predict chemical properties"
+                            ]
+                        }
+                    }
+                },
+                "Organic Chemistry": {
+                    "SubStrands": {
+                        "Hydrocarbons": {
+                            "LearningOutcomes": [
+                                "Classify hydrocarbons",
+                                "Discuss reactions"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Physics": {
+            "Strands": {
+                "Mechanics": {
+                    "SubStrands": {
+                        "Kinematics": {
+                            "LearningOutcomes": [
+                                "Solve motion problems",
+                                "Apply Newton's laws"
+                            ]
+                        }
+                    }
+                },
+                "Electromagnetism": {
+                    "SubStrands": {
+                        "Circuits": {
+                            "LearningOutcomes": [
+                                "Analyze electrical circuits",
+                                "Calculate power"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "General Science": {
+            "Strands": {
+                "Integrated Science": {
+                    "SubStrands": {
+                        "Basic Concepts": {
+                            "LearningOutcomes": [
+                                "Apply scientific method",
+                                "Understand fundamental principles"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Agriculture": {
+            "Strands": {
+                "Crop Production": {
+                    "SubStrands": {
+                        "Soil Management": {
+                            "LearningOutcomes": [
+                                "Manage soil fertility",
+                                "Practice sustainable farming"
+                            ]
+                        }
+                    }
+                },
+                "Animal Husbandry": {
+                    "SubStrands": {
+                        "Livestock Management": {
+                            "LearningOutcomes": [
+                                "Care for livestock",
+                                "Apply breeding techniques"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Computer Studies": {
+            "Strands": {
+                "Programming": {
+                    "SubStrands": {
+                        "Algorithms": {
+                            "LearningOutcomes": [
+                                "Design algorithms",
+                                "Write code in high-level languages"
+                            ]
+                        }
+                    }
+                },
+                "Networking": {
+                    "SubStrands": {
+                        "Data Communication": {
+                            "LearningOutcomes": [
+                                "Understand network topologies",
+                                "Configure basic networks"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Home Science": {
+            "Strands": {
+                "Nutrition": {
+                    "SubStrands": {
+                        "Balanced Diet": {
+                            "LearningOutcomes": [
+                                "Plan balanced meals",
+                                "Apply food preservation methods"
+                            ]
+                        }
+                    }
+                },
+                "Home Management": {
+                    "SubStrands": {
+                        "Cleaning": {
+                            "LearningOutcomes": [
+                                "Maintain home hygiene",
+                                "Manage household resources"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Drawing and Design": {
+            "Strands": {
+                "Technical Drawing": {
+                    "SubStrands": {
+                        "Orthographic Projections": {
+                            "LearningOutcomes": [
+                                "Create technical drawings",
+                                "Use CAD software"
+                            ]
+                        }
+                    }
+                },
+                "Design Principles": {
+                    "SubStrands": {
+                        "Aesthetics": {
+                            "LearningOutcomes": [
+                                "Apply design elements",
+                                "Create functional designs"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Aviation Technology": {
+            "Strands": {
+                "Aeronautics": {
+                    "SubStrands": {
+                        "Aerodynamics": {
+                            "LearningOutcomes": [
+                                "Understand flight principles",
+                                "Analyze aircraft structures"
+                            ]
+                        }
+                    }
+                },
+                "Aviation Safety": {
+                    "SubStrands": {
+                        "Regulations": {
+                            "LearningOutcomes": [
+                                "Apply aviation regulations",
+                                "Practice safety procedures"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Building and Construction": {
+            "Strands": {
+                "Construction Techniques": {
+                    "SubStrands": {
+                        "Materials": {
+                            "LearningOutcomes": [
+                                "Select construction materials",
+                                "Apply building codes"
+                            ]
+                        }
+                    }
+                },
+                "Project Management": {
+                    "SubStrands": {
+                        "Planning": {
+                            "LearningOutcomes": [
+                                "Plan construction projects",
+                                "Manage resources"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Electrical Technology": {
+            "Strands": {
+                "Circuits": {
+                    "SubStrands": {
+                        "AC/DC": {
+                            "LearningOutcomes": [
+                                "Design electrical circuits",
+                                "Install wiring systems"
+                            ]
+                        }
+                    }
+                },
+                "Electronics": {
+                    "SubStrands": {
+                        "Components": {
+                            "LearningOutcomes": [
+                                "Use electronic components",
+                                "Troubleshoot devices"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Metal Technology": {
+            "Strands": {
+                "Metallurgy": {
+                    "SubStrands": {
+                        "Properties": {
+                            "LearningOutcomes": [
+                                "Analyze metal properties",
+                                "Apply heat treatment"
+                            ]
+                        }
+                    }
+                },
+                "Fabrication": {
+                    "SubStrands": {
+                        "Welding": {
+                            "LearningOutcomes": [
+                                "Perform welding techniques",
+                                "Fabricate metal structures"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Power Mechanics": {
+            "Strands": {
+                "Engines": {
+                    "SubStrands": {
+                        "Internal Combustion": {
+                            "LearningOutcomes": [
+                                "Understand engine operations",
+                                "Maintain mechanical systems"
+                            ]
+                        }
+                    }
+                },
+                "Systems": {
+                    "SubStrands": {
+                        "Hydraulics": {
+                            "LearningOutcomes": [
+                                "Design hydraulic systems",
+                                "Troubleshoot power systems"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Wood Technology": {
+            "Strands": {
+                "Woodworking": {
+                    "SubStrands": {
+                        "Joinery": {
+                            "LearningOutcomes": [
+                                "Apply joinery techniques",
+                                "Construct wooden structures"
+                            ]
+                        }
+                    }
+                },
+                "Finishing": {
+                    "SubStrands": {
+                        "Surface Treatment": {
+                            "LearningOutcomes": [
+                                "Apply finishes to wood",
+                                "Restore wooden items"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Media Technology": {
+            "Strands": {
+                "Media Production": {
+                    "SubStrands": {
+                        "Digital Media": {
+                            "LearningOutcomes": [
+                                "Produce digital content",
+                                "Edit media files"
+                            ]
+                        }
+                    }
+                },
+                "Communication": {
+                    "SubStrands": {
+                        "Journalism": {
+                            "LearningOutcomes": [
+                                "Write media articles",
+                                "Conduct interviews"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Marine and Fisheries Technology": {
+            "Strands": {
+                "Marine Biology": {
+                    "SubStrands": {
+                        "Aquatic Ecosystems": {
+                            "LearningOutcomes": [
+                                "Study marine life",
+                                "Manage fisheries"
+                            ]
+                        }
+                    }
+                },
+                "Navigation": {
+                    "SubStrands": {
+                        "Maritime Safety": {
+                            "LearningOutcomes": [
+                                "Apply navigation techniques",
+                                "Ensure maritime safety"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Advanced English": {
+            "Strands": {
+                "Advanced Communication": {
+                    "SubStrands": {
+                        "Public Speaking": {
+                            "LearningOutcomes": [
+                                "Deliver persuasive speeches",
+                                "Debate complex topics"
+                            ]
+                        }
+                    }
+                },
+                "Literary Analysis": {
+                    "SubStrands": {
+                        "Critical Reading": {
+                            "LearningOutcomes": [
+                                "Analyze literary works",
+                                "Write critical essays"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Literature in English": {
+            "Strands": {
+                "Oral Literature": {
+                    "SubStrands": {
+                        "Narratives": {
+                            "LearningOutcomes": [
+                                "Analyze oral narratives",
+                                "Perform oral literature"
+                            ]
+                        }
+                    }
+                },
+                "Poetry": {
+                    "SubStrands": {
+                        "Appreciation": {
+                            "LearningOutcomes": [
+                                "Interpret poetry",
+                                "Write poems"
+                            ]
+                        }
+                    }
+                },
+                "Fiction and Non-Fiction": {
+                    "SubStrands": {
+                        "Analysis": {
+                            "LearningOutcomes": [
+                                "Critique novels",
+                                "Analyze non-fiction"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Indigenous Languages": {
+            "Strands": {
+                "Communication": {
+                    "SubStrands": {
+                        "Oral Skills": {
+                            "LearningOutcomes": [
+                                "Speak indigenous language fluently",
+                                "Preserve cultural heritage"
+                            ]
+                        }
+                    }
+                },
+                "Literature": {
+                    "SubStrands": {
+                        "Folk Tales": {
+                            "LearningOutcomes": [
+                                "Analyze indigenous literature",
+                                "Tell stories in indigenous language"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Kiswahili Kipevu": {
+            "Strands": {
+                "Ufasihi": {
+                    "SubStrands": {
+                        "Fasihi Simulizi": {
+                            "LearningOutcomes": [
+                                "Changanua fasihi simulizi",
+                                "Tunga mashairi"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Fasihi ya Kiswahili": {
+            "Strands": {
+                "Fasihi Andishi": {
+                    "SubStrands": {
+                        "Riwaya": {
+                            "LearningOutcomes": [
+                                "Changanua riwaya",
+                                "Andika insha za kufaa"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Sign Language": {
+            "Strands": {
+                "Advanced Signing": {
+                    "SubStrands": {
+                        "Conversational Signing": {
+                            "LearningOutcomes": [
+                                "Sign complex conversations",
+                                "Interpret signed language"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Arabic": {
+            "Strands": {
+                "Listening and Speaking": {
+                    "SubStrands": {
+                        "Conversation": {
+                            "LearningOutcomes": [
+                                "Engage in Arabic conversations",
+                                "Pronounce words correctly"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "French": {
+            "Strands": {
+                "Communication": {
+                    "SubStrands": {
+                        "Oral Expression": {
+                            "LearningOutcomes": [
+                                "Speak French fluently",
+                                "Understand spoken French"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "German": {
+            "Strands": {
+                "Sprache": {
+                    "SubStrands": {
+                        "Gespräch": {
+                            "LearningOutcomes": [
+                                "Führen Gespräche auf Deutsch",
+                                "Verstehen gesprochene Deutsch"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Mandarin Chinese": {
+            "Strands": {
+                "Communication": {
+                    "SubStrands": {
+                        "Speaking": {
+                            "LearningOutcomes": [
+                                "Speak Mandarin fluently",
+                                "Understand spoken Mandarin"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "History and Citizenship": {
+            "Strands": {
+                "Themes in Kenyan History and Citizenship": {
+                    "SubStrands": {
+                        "Linguistic groups in Kenya": {
+                            "LearningOutcomes": [
+                                "Explore linguistic groups in Kenya",
+                                "Discuss migration and settlement"
+                            ]
+                        },
+                        "Establishment of colonial rule": {
+                            "LearningOutcomes": [
+                                "Analyze colonial establishment",
+                                "Evaluate impacts"
+                            ]
+                        },
+                        "The Constitution of Kenya (2010)": {
+                            "LearningOutcomes": [
+                                "Understand constitutional principles",
+                                "Apply rights and responsibilities"
+                            ]
+                        },
+                        "Political developments and challenges since independence": {
+                            "LearningOutcomes": [
+                                "Discuss post-independence politics",
+                                "Analyze challenges"
+                            ]
+                        },
+                        "Elections in Kenya": {
+                            "LearningOutcomes": [
+                                "Understand electoral processes",
+                                "Promote democratic participation"
+                            ]
+                        },
+                        "National integration": {
+                            "LearningOutcomes": [
+                                "Promote national unity",
+                                "Address integration challenges"
+                            ]
+                        }
+                    }
+                },
+                "Themes in African History and Citizenship": {
+                    "SubStrands": {
+                        "Human Developments in Africa": {
+                            "LearningOutcomes": [
+                                "Trace human origins in Africa",
+                                "Discuss early civilizations"
+                            ]
+                        },
+                        "African Civilizations up to 19th Century": {
+                            "LearningOutcomes": [
+                                "Analyze African empires",
+                                "Evaluate cultural contributions"
+                            ]
+                        },
+                        "Colonization of Africa": {
+                            "LearningOutcomes": [
+                                "Examine colonial processes",
+                                "Assess impacts on Africa"
+                            ]
+                        },
+                        "Modern Nationalism in Africa": {
+                            "LearningOutcomes": [
+                                "Study independence movements",
+                                "Analyze nationalist leaders"
+                            ]
+                        },
+                        "Effects of global wars on Africa": {
+                            "LearningOutcomes": [
+                                "Evaluate war impacts",
+                                "Discuss post-war changes"
+                            ]
+                        }
+                    }
+                },
+                "Themes in International History and Citizenship": {
+                    "SubStrands": {
+                        "Great revolutions": {
+                            "LearningOutcomes": [
+                                "Analyze major revolutions",
+                                "Understand global changes"
+                            ]
+                        },
+                        "International organisations": {
+                            "LearningOutcomes": [
+                                "Discuss UN and AU roles",
+                                "Promote international cooperation"
+                            ]
+                        }
+                    }
+                },
+                "Contemporary Themes in History and Citizenship": {
+                    "SubStrands": {
+                        "Human Rights": {
+                            "LearningOutcomes": [
+                                "Understand human rights principles",
+                                "Advocate for rights"
+                            ]
+                        },
+                        "The 4th industrial revolution": {
+                            "LearningOutcomes": [
+                                "Explore technological advancements",
+                                "Discuss societal impacts"
+                            ]
+                        },
+                        "Equality and Non-Discrimination": {
+                            "LearningOutcomes": [
+                                "Promote equality",
+                                "Address discrimination"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Geography": {
+            "Strands": {
+                "Physical Geography": {
+                    "SubStrands": {
+                        "Climatology": {
+                            "LearningOutcomes": [
+                                "Analyze climate patterns",
+                                "Discuss environmental impacts"
+                            ]
+                        }
+                    }
+                },
+                "Human Geography": {
+                    "SubStrands": {
+                        "Population": {
+                            "LearningOutcomes": [
+                                "Study population dynamics",
+                                "Analyze migration"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Christian Religious Education": {
+            "Strands": {
+                "Bible Studies": {
+                    "SubStrands": {
+                        "Old Testament": {
+                            "LearningOutcomes": [
+                                "Interpret Old Testament teachings",
+                                "Apply moral lessons"
+                            ]
+                        }
+                    }
+                },
+                "Christian Values": {
+                    "SubStrands": {
+                        "Ethics": {
+                            "LearningOutcomes": [
+                                "Promote Christian ethics",
+                                "Address contemporary issues"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Islamic Religious Education": {
+            "Strands": {
+                "Qur'an": {
+                    "SubStrands": {
+                        "Selected Surah": {
+                            "LearningOutcomes": [
+                                "Recite and interpret Surah",
+                                "Apply teachings"
+                            ]
+                        }
+                    }
+                },
+                "Hadith": {
+                    "SubStrands": {
+                        "Selected Hadith": {
+                            "LearningOutcomes": [
+                                "Understand Hadith",
+                                "Apply moral teachings"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Hindu Religious Education": {
+            "Strands": {
+                "Scriptures": {
+                    "SubStrands": {
+                        "Vedas": {
+                            "LearningOutcomes": [
+                                "Study Vedas",
+                                "Apply philosophical teachings"
+                            ]
+                        }
+                    }
+                },
+                "Yoga": {
+                    "SubStrands": {
+                        "Practices": {
+                            "LearningOutcomes": [
+                                "Practice yoga",
+                                "Achieve spiritual balance"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Business Studies": {
+            "Strands": {
+                "Business and Money Management": {
+                    "SubStrands": {
+                        "Money": {
+                            "LearningOutcomes": [
+                                "Understand monetary systems",
+                                "Manage personal finances"
+                            ]
+                        }
+                    }
+                },
+                "Business Environment": {
+                    "SubStrands": {
+                        "Business Activities": {
+                            "LearningOutcomes": [
+                                "Identify business types",
+                                "Analyze environments"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Sports and Recreation": {
+            "Strands": {
+                "Health and Fitness": {
+                    "SubStrands": {
+                        "Flexibility": {
+                            "LearningOutcomes": [
+                                "Improve flexibility",
+                                "Prevent injuries"
+                            ]
+                        }
+                    }
+                },
+                "Coaching": {
+                    "SubStrands": {
+                        "Introduction to coaching": {
+                            "LearningOutcomes": [
+                                "Learn coaching principles",
+                                "Coach basic skills"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Music and Dance": {
+            "Strands": {
+                "Performing": {
+                    "SubStrands": {
+                        "Songs": {
+                            "LearningOutcomes": [
+                                "Perform songs",
+                                "Compose music"
+                            ]
+                        }
+                    }
+                },
+                "Listening": {
+                    "SubStrands": {
+                        "Appreciation": {
+                            "LearningOutcomes": [
+                                "Appreciate music genres",
+                                "Analyze performances"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Theatre and Film": {
+            "Strands": {
+                "Performing": {
+                    "SubStrands": {
+                        "Acting": {
+                            "LearningOutcomes": [
+                                "Perform in theatre",
+                                "Direct plays"
+                            ]
+                        }
+                    }
+                },
+                "Film Production": {
+                    "SubStrands": {
+                        "Editing": {
+                            "LearningOutcomes": [
+                                "Produce films",
+                                "Edit videos"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Fine Arts": {
+            "Strands": {
+                "Visual Arts": {
+                    "SubStrands": {
+                        "Drawing": {
+                            "LearningOutcomes": [
+                                "Create artworks",
+                                "Use various media"
+                            ]
+                        }
+                    }
+                },
+                "Appreciation": {
+                    "SubStrands": {
+                        "Art History": {
+                            "LearningOutcomes": [
+                                "Analyze art works",
+                                "Appreciate cultural art"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

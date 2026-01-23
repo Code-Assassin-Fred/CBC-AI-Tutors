@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import contentJson from '@/content.json';
 import Link from 'next/link';
 import TeacherTextbookRenderer, { TocItem } from './TeacherTextbookRenderer';
 import TeacherChatPanel from './TeacherChatPanel';
 import TeacherTOCIcon from './TeacherTOCIcon';
 import { getGroupedGrades } from '@/lib/utils/grade-hierarchy';
 
-// Types derived from content.json
+// Types for curriculum data
 interface SubStrand {
     Outcomes: string[];
 }
@@ -18,14 +17,13 @@ interface Strand {
 interface Subject {
     Strands: Record<string, Strand>;
 }
-interface GradeMap {
-    [grade: string]: {
-        [subject: string]: Subject;
-    };
+interface GradeContent {
+    [subject: string]: Subject;
 }
 
 export default function TeachersGuideLayout() {
-    const grades = Object.keys(contentJson);
+    const [grades, setGrades] = useState<string[]>([]);
+    const [gradeContent, setGradeContent] = useState<GradeContent | null>(null);
 
     const [selectedGrade, setSelectedGrade] = useState<string>("");
     const [subjects, setSubjects] = useState<string[]>([]);
@@ -44,28 +42,59 @@ export default function TeachersGuideLayout() {
     // TOC state
     const [toc, setToc] = useState<TocItem[]>([]);
 
-    // Update subjects when grade changes
+    // Fetch available grades on mount
+    useEffect(() => {
+        const fetchGrades = async () => {
+            try {
+                const res = await fetch('/api/curriculum');
+                const data = await res.json();
+                if (data.grades) {
+                    setGrades(data.grades);
+                }
+            } catch (err) {
+                console.error('Failed to fetch grades:', err);
+            }
+        };
+        fetchGrades();
+    }, []);
+
+    // Fetch grade content when grade changes
     useEffect(() => {
         if (!selectedGrade) {
+            setGradeContent(null);
             setSubjects([]);
             setSelectedSubject("");
             setStrands([]);
             setSelectedStrand("");
             return;
         }
-        const subjectsList = Object.keys((contentJson as GradeMap)[selectedGrade] || {});
-        setSubjects(subjectsList);
-        setSelectedSubject("");
+
+        const fetchGradeContent = async () => {
+            try {
+                const res = await fetch(`/api/curriculum?grade=${encodeURIComponent(selectedGrade)}`);
+                const data = await res.json();
+                if (!res.ok) {
+                    console.error('Failed to fetch grade content:', data.error);
+                    return;
+                }
+                setGradeContent(data);
+                setSubjects(Object.keys(data));
+                setSelectedSubject("");
+            } catch (err) {
+                console.error('Failed to fetch grade content:', err);
+            }
+        };
+        fetchGradeContent();
     }, [selectedGrade]);
 
     // Update strands when subject changes
     useEffect(() => {
-        if (!selectedGrade || !selectedSubject) {
+        if (!gradeContent || !selectedSubject) {
             setStrands([]);
             setSelectedStrand("");
             return;
         }
-        const subjectData = (contentJson as GradeMap)[selectedGrade]?.[selectedSubject];
+        const subjectData = gradeContent[selectedSubject];
         if (!subjectData) {
             setStrands([]);
             setSelectedStrand("");
@@ -75,7 +104,7 @@ export default function TeachersGuideLayout() {
         const strandsList = Object.keys(strandsObj || {});
         setStrands(strandsList);
         setSelectedStrand("");
-    }, [selectedGrade, selectedSubject]);
+    }, [gradeContent, selectedSubject]);
 
     // Fetch guide function
     const fetchGuide = useCallback(async (grade: string, subject: string, strand: string) => {

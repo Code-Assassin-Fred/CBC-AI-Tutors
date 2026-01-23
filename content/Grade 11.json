@@ -1,328 +1,608 @@
 {
     "11": {
-        "Chemistry": {
-            "Strands": {
-                "Inorganic Chemistry": {
-                    "SubStrands": {
-                        "The mole": {
-                            "Outcomes": [
-                                "Carry out titrations and solve problems involving molar solutions, titrations.",
-                                "Work out amount of substances, number of particles and molar quantities using chemical mole ratios and molar gas equations (mole ratios and molar volume gas volume).",
-                                "Observe safety precautions while carrying out titrations and dispose waste responsibly."
-                            ]
-                        },
-                        "Salts": {
-                            "Outcomes": [
-                                "Investigate the effect of heat on salts (carbonates, nitrates, and sulphates).",
-                                "Explain the solubility of salts in water (chlorides, nitrates, sulphates, carbonates).",
-                                "Use solubility curves to determine the mass of salt that crystallises from a saturated solution.",
-                                "Explain preparation of insoluble salts using precipitation reactions.",
-                                "Analyse cations and anions present in substances (Pb²⁺, Mg²⁺, Zn²⁺, Al³⁺, Cu²⁺, etc.)."
-                            ]
-                        }
-                    }
-                },
-                "Physical Chemistry": {
-                    "SubStrands": {
-                        "Gas Laws": {
-                            "Outcomes": [
-                                "Explain the behaviour of gases under different conditions of temperature and pressure.",
-                                "Apply gas laws to calculate volume, temperature, and pressure of gases.",
-                                "Compare the rates of diffusion of gases.",
-                                "Relate mole ratios to reacting volumes of gases.",
-                                "Outline applications of gas laws.",
-                                "Appreciate the role of diffusion in day-to-day life."
-                            ]
-                        },
-                        "Reaction Rates": {
-                            "Outcomes": [
-                                "Investigate factors affecting reaction rates.",
-                                "Explain the concept of reaction rates in chemical processes.",
-                                "Apply mathematical models to describe reaction rates."
-                            ]
-                        }
-                    }
-                },
-                "Organic Chemistry": {
-                    "SubStrands": {
-                        "Introduction to Organic Chemistry": {
-                            "Outcomes": [
-                                "Identify sources of selected organic compounds.",
-                                "Prepare selected organic compounds in the laboratory.",
-                                "Investigate physical and chemical properties of selected organic compounds.",
-                                "Outline uses of selected organic compounds.",
-                                "Appreciate the importance of organic compounds in day-to-day life."
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "Community Service Learning": {
-            "Strands": {
-                "Citizenship": {
-                    "SubStrands": {
-                        "Civic Dialogue": {
-                            "Outcomes": [
-                                "Explain the meaning of civic dialogue for informed decision making",
-                                "Illustrate the importance of civic dialogue in national development",
-                                "Apply knowledge of civic dialogue in promoting national unity",
-                                "Appreciate the importance of civic dialogue in national development"
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "English": {
             "Strands": {
                 "Listening and Speaking": {
                     "SubStrands": {
-                        "Extensive Listening": {
+                        "Extensive listening": {
                             "Outcomes": [
-                                "Describe characters, places and memorable events from a recording",
-                                "Listen to a recording and pick key details for general information",
-                                "Recount a story or dialogue in an oral context for enjoyment",
-                                "Acknowledge the role of identifying key information for lifelong learning"
+                                "describe characters, places and memorable events from a recording",
+                                "listen to a recording and pick key details for general information",
+                                "recount a story or dialogue in an oral context for enjoyment",
+                                "acknowledge the role of identifying key information for lifelong learning"
                             ]
                         },
                         "Etiquette": {
                             "Outcomes": [
-                                "Pick out the target sounds and aspects of etiquette in oral or written texts",
-                                "Use appropriate etiquette in different contexts",
-                                "Articulate the sounds /ɒ/ and /ɔ:/ for effective communication",
-                                "Justify the need for accurate pronunciation in communication"
+                                "pick out the target sounds and aspects of etiquette in oral or written texts",
+                                "use appropriate etiquette in different contexts",
+                                "articulate the sounds /ɒ/ and /ɔ: / for effective communication",
+                                "justify the need for accurate pronunciation in communication"
                             ]
                         },
-                        "Critical Listening": {
+                        "Critical listening": {
                             "Outcomes": [
-                                "Describe various forms of distractions to effective listening in different contexts",
-                                "Determine the speaker, context and intention in varied oral texts",
-                                "Select key points from an audio text for information",
-                                "Appreciate the importance of critical listening in communication"
+                                "describe various forms of distractions to effective listening in different contexts",
+                                "determine the speaker, context and intention in varied oral texts",
+                                "select key points from an audio text for information",
+                                "appreciate the importance of critical listening in communication"
                             ]
                         },
-                        "Conversational Skills": {
+                        "Pronunciation and conversational skills": {
                             "Outcomes": [
-                                "Classify discourse markers used in a variety of texts",
-                                "Articulate the sounds /ə/, /ɑ:/ and /ɜ:/ for oral fluency",
-                                "Use discourse markers to organise ideas during conversations",
-                                "Apply onomatopoeic words and idiophones in oral communication",
-                                "Advocate the need to organise ideas appropriately in oral communication"
+                                "classify discourse markers used in a variety of texts",
+                                "articulate the sounds / ə /, /ɑ: / and / ɜ: / for oral fluency",
+                                "use discourse markers to organise ideas during conversations",
+                                "apply onomatopoeic words and idiophones in oral communication",
+                                "advocate the need to organise ideas appropriately in oral communication"
                             ]
                         },
-                        "Selective Listening": {
+                        "Intensive listening": {
                             "Outcomes": [
-                                "Describe ways of selecting specific information from a listening text",
-                                "Listen to an oral text and filter instructions and directions from the text",
-                                "Take notes from a variety of listening texts",
-                                "Argue for the need to listen attentively to extract specific details"
+                                "select specific details from a listening text",
+                                "use words and phrases picked from an oral text in a variety of contexts",
+                                "advocate the need to discriminate among sounds for effective communication"
                             ]
                         },
-                        "Interactive Listening": {
+                        "Non - verbal cues": {
                             "Outcomes": [
-                                "Establish instances of turn-taking and negotiating meaning in a dialogue",
-                                "Clarify the speaker’s meaning in a conversation",
-                                "Show empathy towards the speaker for effective social relations",
-                                "Advocate the importance of listening to understand for peaceful co-existence"
+                                "identify the sounds / ᴧ / / æ / and / aʊ / / əʊ / in oral texts",
+                                "articulate the sounds / ᴧ / / æ / and / aʊ / / əʊ / for oral fluency",
+                                "use nonverbal cues appropriately in oral communication",
+                                "acknowledge the importance of articulating sounds accurately"
                             ]
                         },
-                        "Pronunciation and Conducting Meetings": {
+                        "Selective listening": {
                             "Outcomes": [
-                                "Explain how to take turns, interrupt and disagree politely in an oral context",
-                                "Interrupt and disagree politely for peaceful co-existence",
-                                "Practise turn taking in a variety of contexts",
-                                "Articulate the sounds /ʧ/, /ʤ/, /ʒ/ for effective communication",
-                                "Promote the need to observe etiquette in oral communication"
+                                "describe ways of selecting specific information from a listening text",
+                                "listen to an oral text and filter instructions and directions from the text",
+                                "take notes from a variety of listening texts",
+                                "argue for the need to listen attentively to extract specific details"
                             ]
                         },
-                        "Responsive Listening": {
+                        "Speaking fluency": {
                             "Outcomes": [
-                                "Outline techniques for listening to respond for problem solving",
-                                "Listen to a text to find solutions to problems",
-                                "Relate oral texts to personal experiences for critical thinking",
-                                "Contribute to solving social problems in a variety of contexts"
+                                "contrast well - written sentences with comma splices, run on sentences and run on lines in a text",
+                                "rewrite comma splices, run on sentences and run on lines as complete sentences for clear communication",
+                                "value the importance of well - written sentences in communication"
+                            ]
+                        },
+                        "Interactive listening": {
+                            "Outcomes": [
+                                "establish instances of turn - taking and negotiating meaning in a dialogue",
+                                "clarify the speaker’s meaning in a conversation",
+                                "show empathy towards the speaker for effective social relations",
+                                "advocate the importance of listening to understand for peaceful co - existence"
+                            ]
+                        },
+                        "Pronunciation and conducting meetings": {
+                            "Outcomes": [
+                                "explain how to take turns, interrupt and disagree politely in an oral context",
+                                "interrupt and disagree politely for peaceful co - existence",
+                                "practise turn taking in a variety of contexts",
+                                "articulate the sounds/ʧ/ /ʤ//ʒ/ for effective communication",
+                                "promote the need to observe etiquette in oral communication"
+                            ]
+                        },
+                        "Responsive listening": {
+                            "Outcomes": [
+                                "outline techniques for listening to respond for problem solving",
+                                "listen to a text to find solutions to problems",
+                                "relate oral texts to personal experiences for critical thinking",
+                                "contribute to solving social problems in a variety of contexts"
                             ]
                         },
                         "Pronunciation and Syllabic Stress": {
                             "Outcomes": [
-                                "Distinguish word classes on the basis of stress",
-                                "Place stress in disyllabic words correctly in oral communication",
-                                "Pronounce words with the sounds /ʊ/ and /u:/ accurately",
-                                "Champion the need to stress words correctly for clear communication"
+                                "distinguish word classes on the basis of stress",
+                                "place stress in disyllabic words correctly in oral communication",
+                                "pronounce words with the sounds /ʊ/ and /u:/ accurately",
+                                "champion the need to stress words correctly for clear communication"
+                            ]
+                        },
+                        "Critical listening": {
+                            "Outcomes": [
+                                "recognise opinions from an audio recording",
+                                "explain facts in a given oral text",
+                                "distinguish facts from opinions in an oral context",
+                                "advocate the relevance of distinguishing facts and opinions in an oral context"
                             ]
                         },
                         "Pronunciation and Emphatic Stress": {
                             "Outcomes": [
-                                "Recognise the different realisations of the sounds /f/ in writing",
-                                "Articulate the sounds /ŋ/ and the blends /ŋɡ/ in varied texts",
-                                "Use emphatic stress in sentences for enhanced meaning",
-                                "Promote the need for correct pronunciation and stress placement in speech"
+                                "recognise the different realisations of the sounds /f/ in writing",
+                                "articulate the sounds /ŋ/ / and the blends / /ŋɡ/ in varied texts",
+                                "use emphatic stress in sentences for enhanced meaning",
+                                "promote the need for correct pronunciation and stress placement in speech"
                             ]
                         },
                         "Intensive Listening/Viewing": {
                             "Outcomes": [
-                                "Recognise non-verbal cues and visuals from an audiovisual presentation",
-                                "Interpret non-verbal cues in an oral text for meaning",
-                                "Infer meaning from visuals in audiovisual texts",
-                                "Acknowledge the role of non-verbal cues in decoding meaning in a text"
+                                "recognise non - verbal cues and visuals from an audiovisual presentation",
+                                "interpret non - verbal cues in an oral text for meaning",
+                                "infer meaning from visuals in audiovisual texts",
+                                "acknowledge the role of non - verbal cues in decoding meaning in a text"
                             ]
                         },
                         "Speaking Fluency": {
                             "Outcomes": [
-                                "Differentiate the consonant sounds /ð/ and /θ/ in oral communication",
-                                "Apply appropriate intonation in different types of sentences in oral presentations",
-                                "Analyse aspects of fluency in an informative skit",
-                                "Acknowledge the importance of speaking fluently in various contexts"
+                                "distinguish among synonyms, antonym and homophones in communication",
+                                "recognise the various realisations of sound /i:/ in an oral context",
+                                "describe a speaker’s accuracy, expressiveness and speed in an oral presentation",
+                                "perform an oral narrative with accuracy, expression and at the right speed for fluency",
+                                "influence others to use synonyms, antonyms and homophones accurately"
+                            ]
+                        },
+                        "Selective Listening": {
+                            "Outcomes": [
+                                "identify strategies for listening to specific details from an oral text",
+                                "extract specific information from an oral narrative",
+                                "embrace the importance of listening for particular information in an oral context"
+                            ]
+                        },
+                        "Speaking Fluency": {
+                            "Outcomes": [
+                                "differentiate the consonant sounds / ð / and/ θ / in oral communication",
+                                "apply appropriate intonation in different types of sentences in oral presentations",
+                                "analyse aspects of fluency in an informative skit",
+                                "acknowledge the importance of speaking fluently in various contexts"
                             ]
                         }
                     }
                 },
                 "Reading": {
                     "SubStrands": {
-                        "Reading Fluency": {
+                        "Reading fluency": {
                             "Outcomes": [
-                                "Preview a text and make predictions about characters, people and places for reading fluency",
-                                "Skim varied texts while glossing over unknown words to obtain the gist",
-                                "Scan a text to obtain specific details",
-                                "Predict how words collocate for effective communication",
-                                "Acknowledge the importance of reading fluency in lifelong learning"
+                                "preview a text and make predictions about characters, people and places for reading fluency",
+                                "skim varied texts while glossing over unknown words to obtain the gist",
+                                "scan a text to obtain specific details",
+                                "predict how words collocate for effective communication",
+                                "acknowledge the importance of reading fluency in lifelong learning"
                             ]
                         },
-                        "Extensive Reading": {
+                        "Extensive reading": {
                             "Outcomes": [
-                                "Select a text in preparation for reading",
-                                "Read varied texts for enjoyment and general understanding",
-                                "Recognise the role of extensive reading in building vocabulary"
+                                "select a text in preparation for reading",
+                                "read varied texts for enjoyment and general understanding",
+                                "recognise the role of extensive reading in building vocabulary"
                             ]
                         },
-                        "Study Skills": {
+                        "Extensive reading": {
                             "Outcomes": [
-                                "Outline steps in summary and note making for improving comprehension",
-                                "Use the SQ4R technique and summary and note making skills for study purposes",
-                                "Analyse visual information in a reading context",
-                                "Acknowledge the importance of using effective study skills in extensive and intensive reading"
+                                "explain the uses of the thesaurus and dictionaries for enhancement of reading skills",
+                                "pick out information from atlases, manuals, newspapers and encyclopedias for general knowledge",
+                                "appreciate the importance of reference materials as a source of information"
                             ]
                         },
-                        "Critical Reading": {
+                        "Study skills": {
                             "Outcomes": [
-                                "Recognise opinions from an audio recording",
-                                "Explain facts in a given oral text",
-                                "Distinguish facts from opinions in an oral context",
-                                "Advocate the relevance of distinguishing facts and opinions in an oral context"
+                                "outline steps in summary and note making for improving comprehension",
+                                "use the SQ4R technique and summary and note making skills for study purposes",
+                                "analyse visual information in a reading context",
+                                "acknowledge the importance of using effective study skills in extensive and intensive reading"
+                            ]
+                        },
+                        "Intensive reading": {
+                            "Outcomes": [
+                                "evaluate their understanding of a text for comprehension",
+                                "make predictions about events, people and places in a text",
+                                "answer direct and inferential questions from a text",
+                                "infer the meaning of words and phrases in a written text",
+                                "promote the role of reading comprehension in learning"
+                            ]
+                        },
+                        "Reading fluency": {
+                            "Outcomes": [
+                                "discuss the features of expressive reading from a selected text",
+                                "read a text with expression to bring out pitch, pace, volume and intonation patterns",
+                                "promote the value of expressive reading for lifelong learning"
+                            ]
+                        },
+                        "Intensive reading": {
+                            "Outcomes": [
+                                "create mental images about people, places or happenings in a text for lifelong learning",
+                                "infer the meaning of words and phrases for comprehension",
+                                "relate information in a text to real life situations",
+                                "summarise information from a text for comprehension",
+                                "appreciate the importance of reading comprehension in lifelong long learning"
+                            ]
+                        },
+                        "Extensive listening": {
+                            "Outcomes": [
+                                "explain how to identify the audience, purpose and attitude in a text",
+                                "determine the audience, purpose and attitude in a reading text for clarity",
+                                "use transparent phrasal verbs and binomial expressions in sentences",
+                                "recognise the importance of critical and close reading in understanding a text"
+                            ]
+                        },
+                        "Critical reading": {
+                            "Outcomes": [
+                                "explain how to identify the audience, purpose and attitude in a text",
+                                "determine the audience, purpose and attitude in a reading text for clarity",
+                                "use transparent phrasal verbs and binomial expressions in sentences",
+                                "recognise the importance of critical and close reading in understanding a text"
                             ]
                         }
                     }
                 },
                 "Grammar in Use": {
                     "SubStrands": {
+                        "Word classes": {
+                            "Outcomes": [
+                                "classify nouns in sentences",
+                                "recognise the various types of pronouns in varied contexts",
+                                "differentiate the use of words as pronouns and determiners in sentences",
+                                "use nouns and pronouns in sentences",
+                                "acknowledge the importance of the correct usage of nouns, pronouns and determiners for effective communication"
+                            ]
+                        },
+                        "Word classes": {
+                            "Outcomes": [
+                                "identify main verbs and primary auxiliary verbs from printed or digital texts",
+                                "inflect verbs appropriately to show tense and aspect for effective communication",
+                                "use main verbs and primary auxiliary verbs in sentences",
+                                "use adverbs of time, place and manner in sentence construction",
+                                "acknowledge the role of verbs, tense, aspect and time and adverbs in communicating precisely"
+                            ]
+                        },
                         "Word Classes": {
                             "Outcomes": [
-                                "Classify nouns in sentences",
-                                "Recognise the various types of pronouns in varied contexts",
-                                "Differentiate the use of words as pronouns and determiners in sentences",
-                                "Use nouns and pronouns in sentences",
-                                "Acknowledge the importance of the correct usage of nouns, pronouns and determiners for effective communication",
-                                "Identify main verbs and primary auxiliary verbs from printed or digital texts",
-                                "Inflect verbs appropriately to show tense and aspect for effective communication",
-                                "Use main verbs and primary auxiliary verbs in sentences",
-                                "Use adverbs of time, place and manner in sentence construction",
-                                "Acknowledge the role of verbs, tense, aspect and time and adverbs in communicating precisely",
-                                "Identify adjectives, simple prepositions and coordinating conjunctions from written texts",
-                                "Use simple prepositions and coordinating conjunctions in sentences",
-                                "Order adjectives correctly in sentences",
-                                "Recognise the importance of using adjectives, simple prepositions and conjunctions in communication"
+                                "identify adjectives, simple prepositions and coordinating conjunctions from written texts",
+                                "use simple prepositions and coordinating conjunctions in sentences",
+                                "order adjectives correctly in sentences",
+                                "recognise the importance of using adjectives, simple prepositions and conjunctions in communication"
                             ]
                         },
                         "Phrases": {
                             "Outcomes": [
-                                "Identify the constituents of the noun phrase and verb phrase for information",
-                                "Use the noun phrase and verb phrase for fluency in oral and written texts",
-                                "Advocate the correct usage of noun phrases and verb phrases in communication",
-                                "Analyse the constituents of adverb, adjective and prepositional phrases for information",
-                                "Describe the functions of the adverb, adjective and prepositional phrases in sentences",
-                                "Use adverb, adjective and prepositional phrases in varied contexts",
-                                "Appreciate the use of the adverb, adjective and prepositional phrases in sentences"
+                                "identify the constituents of the noun phrase and verb phrase for information",
+                                "use the noun phrase and verb phrase for fluency in oral and written texts",
+                                "advocate the correct usage of noun phrases and verb phrases in communication"
+                            ]
+                        },
+                        "Phrases": {
+                            "Outcomes": [
+                                "analyse the constituents of adverb, adjective and prepositional phrases for information",
+                                "describe the functions of the adverb, adjective and prepositional phrases in sentences",
+                                "use adverb, adjective and prepositional phrases in varied contexts",
+                                "appreciate the use of the adverb, adjective and prepositional phrases in sentences"
                             ]
                         },
                         "Clauses": {
                             "Outcomes": [
-                                "Pick out relative and adverbial clauses in sentences",
-                                "Distinguish between defining and non-defining relative clauses in a text",
-                                "Use relative clauses and adverbial clauses in varied contexts",
-                                "Advocate the correct use of relative clauses and adverbial clauses in sentences"
+                                "pick out relative and adverbial clauses in sentences",
+                                "distinguish between defining and non - defining relative clauses in a text",
+                                "use relative clauses and adverbial clauses in varied contexts",
+                                "advocate the correct use of relative clauses and adverbial clauses in sentences"
+                            ]
+                        },
+                        "Clauses": {
+                            "Outcomes": [
+                                "recognise the noun clause that begin with that and what from a given context",
+                                "use noun clauses in varied contexts",
+                                "acknowledge the importance of the noun clause in communication"
+                            ]
+                        },
+                        "Sentence structure": {
+                            "Outcomes": [
+                                "analyse the SV, SVO, SVC, SVOO, SVOA patterns in simple sentences",
+                                "use simple sentences in oral and written texts",
+                                "use compound sentences in oral and written texts",
+                                "recognise the importance of using a variety of sentences in communication"
                             ]
                         },
                         "Sentences": {
                             "Outcomes": [
-                                "Analyse the SV, SVO, SVC, SVOO, SVOA patterns in simple sentences",
-                                "Use simple sentences in oral and written texts",
-                                "Use compound sentences in oral and written texts",
-                                "Recognise the importance of using a variety of sentences in communication",
-                                "Explain the basic rules of subject-verb agreement in sentences",
-                                "Examine the agreement of subject-verb in sentences",
-                                "Distinguish between active and passive sentences in a text",
-                                "Construct active and passive sentences for variety in communication",
-                                "Advocate for the use of a variety of sentences for effective communication"
+                                "explain the basic rules of subject - verb agreement in sentences",
+                                "examine the agreement of subject - verb in sentences",
+                                "distinguish between active and passive sentences in a text",
+                                "construct active and passive sentences for variety in communication",
+                                "advocate for the use of a variety of sentences for effective communication"
                             ]
                         }
                     }
                 },
                 "Writing": {
                     "SubStrands": {
-                        "Sentence Fluency": {
+                        "Sentence fluency": {
                             "Outcomes": [
-                                "Contrast well-written sentences with comma splices, run on sentences and run on lines in a text",
-                                "Rewrite comma splices, run on sentences and run on lines as complete sentences for clear communication",
-                                "Value the importance of well-written sentences in communication"
+                                "contrast well - written sentences with comma splices, run on sentences and run on lines in a text",
+                                "rewrite comma splices, run on sentences and run on lines as complete sentences for clear communication",
+                                "value the importance of well - written sentences in communication"
                             ]
                         },
-                        "Mechanics of Writing: Spelling": {
+                        "Mechanics of writing: Spelling": {
                             "Outcomes": [
-                                "Identify frequently misspelt and easily confused words in written texts",
-                                "Use acronyms, commonly misspelt and easily confused words in sentences",
-                                "Apply spelling rules to write words with affixes for effective communication",
-                                "Appreciate the role of abbreviations and acronyms in written texts"
+                                "identify frequently misspelt and easily confused words in written texts",
+                                "use acronyms, commonly misspelt and easily confused words in sentences",
+                                "apply spelling rules to write words with affixes for effective communication",
+                                "appreciate the role of abbreviations and acronyms in written texts"
                             ]
                         },
-                        "Elements of Effective Writing": {
+                        "Elements of effective writing": {
                             "Outcomes": [
-                                "Explain the use of connectors of addition, similarity and contrast in a text",
-                                "Order ideas in a paragraph for coherence",
-                                "Write a coherent paragraph on a given topic",
-                                "Acknowledge the value of logically ordering ideas in writing"
+                                "explain the use of connectors of addition, similarity and contrast in a text",
+                                "order ideas in a paragraph for coherence",
+                                "write a coherent paragraph on a given topic",
+                                "acknowledge the value of logically ordering ideas in writing"
                             ]
                         },
                         "The Writing Process": {
                             "Outcomes": [
-                                "Explain the steps of the writing process in institutional writing",
-                                "Write an appreciation letter adhering to the steps of the writing process for clear communication",
-                                "Appreciate the importance of following the writing process for lifelong learning"
+                                "explain the steps of the writing process in institutional writing",
+                                "write an appreciation letter adhering to the steps of the writing process for clear communication",
+                                "appreciate the importance of following the writing process for lifelong learning"
                             ]
                         },
-                        "Creative Writing": {
+                        "Creative writing": {
                             "Outcomes": [
-                                "Describe a person in a variety of ways for literary effect",
-                                "Write a descriptive narrative essay on given topics",
-                                "Advocate the use of sensory details in descriptive writing"
+                                "describe a person in a variety of ways for literary effect",
+                                "write a descriptive narrative essay on given topics",
+                                "advocate the use of sensory details in descriptive writing"
                             ]
                         },
-                        "Mechanics of Writing": {
+                        "Functional writing": {
                             "Outcomes": [
-                                "Explain the punctuation principles of capitalisation, quotation marks, dashes, hyphens and slashes in writing",
-                                "Use the target punctuation marks to write sentences for effective communication",
-                                "Apply the rules of capitalisation in a variety of sentences",
-                                "Advocate the correct use of punctuation marks in sentences"
+                                "identify the appropriate format and content of complaint, request and inquiry letters for effective communication",
+                                "write letters of complaint, request and inquiry in varied situations",
+                                "acknowledge the role of letter writing in effective communication"
                             ]
                         },
                         "Functional Writing": {
                             "Outcomes": [
-                                "Identify the appropriate format and content of complaint, request and inquiry letters for effective communication",
-                                "Write letters of complaint, request and inquiry in varied situations",
-                                "Acknowledge the role of letter writing in effective communication",
-                                "Identify the elements of simple reports, memos and emails in written contexts",
-                                "Write simple reports, memos and emails for writing fluency",
-                                "Advocate the need to produce well-written simple reports, memos and emails for effective communication"
+                                "identify the elements of simple reports, memos and emails in written contexts",
+                                "write simple reports, memos and emails for writing fluency",
+                                "advocate the need to produce well - written simple reports, memos and emails for effective communication"
+                            ]
+                        },
+                        "Functional Writing": {
+                            "Outcomes": [
+                                "describe the features of notice of a meeting, agenda and minutes for information",
+                                "write a notice of a meeting and the agenda for communication",
+                                "prepare the attendant minutes for information",
+                                "recognise the value of documents related to meetings for lifelong learning"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Literature in English": {
+            "Strands": {
+                "Oral Literature": {
+                    "SubStrands": {
+                        "Introduction to oral literature": {
+                            "Outcomes": [
+                                "identify genres of oral literature for information",
+                                "analyse the features of oral literature from a variety of oral literature genres",
+                                "discuss the functions of oral literature for comprehension",
+                                "appreciate the importance of oral literature in daily life"
+                            ]
+                        },
+                        "Oral Narratives": {
+                            "Outcomes": [
+                                "identify features of oral narratives from given narratives",
+                                "analyse features of different oral narratives for literary analysis",
+                                "discuss the functions of oral narratives for critical analysis",
+                                "appreciate the importance of oral narratives in the society"
+                            ]
+                        },
+                        "Songs/Oral Poetry": {
+                            "Outcomes": [
+                                "identify the features of songs for literary analysis",
+                                "analyse the performance of a lullaby for literary appreciation",
+                                "appreciate the value of songs in the society"
+                            ]
+                        },
+                        "Short Forms of Oral Literature": {
+                            "Outcomes": [
+                                "Identify the features of short forms of oral literature for literary appreciation",
+                                "analyse types and functions of short forms of oral literature for literary analysis",
+                                "create short forms of oral literature for effective performance",
+                                "appreciate the roles of short forms of oral literature in the society"
+                            ]
+                        },
+                        "Modern Forms of Oral Literature": {
+                            "Outcomes": [
+                                "Identify the features of modern forms of oral literature for literary analysis",
+                                "discuss qualities of a good story teller for literary appreciation",
+                                "analyse elements of modern forms of oral literature literary appreciation",
+                                "evaluate performance techniques in modern forms of oral literature for critical analysis",
+                                "acknowledge the evolving nature of oral literature for literary appreciation"
+                            ]
+                        },
+                        "Oral Literature Fieldwork(Project)": {
+                            "Outcomes": [
+                                "explain the preparation process for fieldwork",
+                                "discuss the objectives of fieldwork",
+                                "evaluate methods of data collection in fieldwork",
+                                "explain ethical considerations in fieldwork",
+                                "conduct fieldwork research on short forms for literary appreciation",
+                                "appreciate the value of fieldwork in research"
+                            ]
+                        }
+                    }
+                },
+                "Poetry": {
+                    "SubStrands": {
+                        "Introduction to poetry": {
+                            "Outcomes": [
+                                "identify the elements of a poem from Kenya for comprehension",
+                                "analyse the elements of a poem, from Kenya for comprehension",
+                                "acknowledge the importance of elements of poetry when analysing poems"
+                            ]
+                        },
+                        "Appreciation of Poetry": {
+                            "Outcomes": [
+                                "identify the characteristics of free verse, blank verse, sonnet, narrative poems and sonnet from given poems",
+                                "analyse the structure and subject matter of a free verse, blank verse, sonnet, narrative poems and sonnets for literary appreciation",
+                                "perform different types of poems for enjoyment",
+                                "acknowledge the place of poems in the society"
+                            ]
+                        },
+                        "Appreciation of Poetry": {
+                            "Outcomes": [
+                                "explain the process involved in writing of a poem",
+                                "create a poem on a given topic",
+                                "appreciate writing of poetry for effective communication"
+                            ]
+                        },
+                        "Appreciation of Poetry": {
+                            "Outcomes": [
+                                "recognise sound patterns in a given poem",
+                                "relate the sound patterns in a poem to the subject matter",
+                                "appreciate the importance of poetry for life long learning"
+                            ]
+                        },
+                        "Appreciation of Poetry": {
+                            "Outcomes": [
+                                "describe sound patterns in a poem for critical appreciation",
+                                "analyse sound patterns in a poem for literary analysis",
+                                "relate the sound patterns in a poem to the subject matter for literary criticism",
+                                "acknowledge the importance of poetry lifelong learning"
+                            ]
+                        },
+                        "Appreciation of Poetry": {
+                            "Outcomes": [
+                                "discuss repetition, refrain and chorus in a poem for critical analysis",
+                                "analyse repetition, refrain and chorus in a poem for literary appreciation",
+                                "acknowledge the importance of poetry for lifelong learning"
+                            ]
+                        },
+                        "Appreciation of Poetry": {
+                            "Outcomes": [
+                                "examine subject matter in poems from Kenya for literary analysis",
+                                "analyse subject matter in poems from Kenya for literary appreciation",
+                                "acknowledge the importance of subject matter in poems from Kenya for literary appreciation"
+                            ]
+                        },
+                        "Appreciation of Poetry": {
+                            "Outcomes": [
+                                "examine subject matter in poems from Kenya for literary analysis",
+                                "analyse themes in a variety of poems from Kenya for literary appreciation",
+                                "acknowledge the significance of subject matter in poems from Kenya for literary appreciation"
+                            ]
+                        },
+                        "Appreciation of Poetry": {
+                            "Outcomes": [
+                                "examine imagery in a given poem for literary analysis",
+                                "analyse imagery in a given poem for literary appreciation",
+                                "acknowledge the importance of imagery for literary appreciation"
+                            ]
+                        }
+                    }
+                },
+                "Fiction and Non - Fiction": {
+                    "SubStrands": {
+                        "Fiction": {
+                            "Outcomes": [
+                                "explain the features of prose fiction for knowledge",
+                                "examine the elements of history in prose fiction in Kenya",
+                                "critically analyse a novel from Kenya",
+                                "appreciate how history has shaped the features of prose fiction in Kenya"
+                            ]
+                        },
+                        "Non - Fiction": {
+                            "Outcomes": [
+                                "explain the features of non-fiction for literary appreciation",
+                                "categorise non-fiction prose for critical analysis",
+                                "appreciate the significance of non-fiction for lifelong learning"
+                            ]
+                        },
+                        "Fiction": {
+                            "Outcomes": [
+                                "identify characters and their traits from the set novel",
+                                "analyse themes, characters, and characterisation in the novel",
+                                "relate the novel to the culture of Kenya",
+                                "appreciate the value of the novel for life-long learning"
+                            ]
+                        },
+                        "Non - Fiction: Personal Journal": {
+                            "Outcomes": [
+                                "identify the structure of a personal journal for critical analysis",
+                                "analyse the content and style of a personal journal for literary appreciation",
+                                "write an entry of a personal journal from personal experiences",
+                                "appreciate the value of life writing for effective communication"
+                            ]
+                        },
+                        "Fiction": {
+                            "Outcomes": [
+                                "identify the language and style in the novel for literary appreciation",
+                                "analyse the language and style in the novel for critical analysis",
+                                "relate language use in the novel to values for life-long learning",
+                                "appreciate the value of the novel for life-long learning"
+                            ]
+                        },
+                        "Non - Fiction: (Autobiography from Kenya)": {
+                            "Outcomes": [
+                                "explain the structure of an autobiography for comprehension",
+                                "analyse the main ideas addressed in an autobiography for lifelong learning",
+                                "write their own life story for self-reflection",
+                                "acknowledge the value of writing for personal growth"
+                            ]
+                        },
+                        "Fiction (Play from Kenya)": {
+                            "Outcomes": [
+                                "Identify the setting, plot, characters and their traits in the set play",
+                                "analyse the themes, language and style in the set play",
+                                "relate the characters, and thematic concerns to real life",
+                                "acknowledge the value of the play in highlighting societal concerns"
+                            ]
+                        },
+                        "Non-fiction (Autobiography from Kenya)": {
+                            "Outcomes": [
+                                "Explain the use of language and style for literary appreciation",
+                                "analyse language and style in the autobiography for literary analysis",
+                                "relate the autobiography to the culture of Kenya for lifelong learning",
+                                "acknowledge the value of autobiography for lifelong learning"
+                            ]
+                        },
+                        "Fiction (Anthology of short stories from Kenya and East Africa)": {
+                            "Outcomes": [
+                                "explain the features of a short story for literary appreciation",
+                                "interpret the elements of history and culture in the short story in Kenya for lifelong learning",
+                                "appreciate how history and culture have shaped the short story in Kenya"
+                            ]
+                        },
+                        "Non-fiction (Memoir Kenya)": {
+                            "Outcomes": [
+                                "explain features of a memoir for literary appreciation",
+                                "study the structure of a memoir for literary analysis",
+                                "analyse the content of a memoir for literary appreciation",
+                                "acknowledge the values in a memoir for lifelong learning"
+                            ]
+                        },
+                        "Fiction (Anthology of short story from Kenya)": {
+                            "Outcomes": [
+                                "identify the setting and plot of the short story for literary appreciation",
+                                "analyse the themes, characters, and characterisation, language and style for critical analysis",
+                                "appreciate the value of the short story for life-long learning"
+                            ]
+                        },
+                        "Non-fiction (Memoirs from Kenya)": {
+                            "Outcomes": [
+                                "explain the use of language and style in a memoir for literary analysis",
+                                "discuss themes in a memoir for literary analysis",
+                                "analyse language and style in a memoir for literary appreciation",
+                                "relate the memoir to the culture of Kenya for lifelong learning",
+                                "acknowledge the values in a memoir for lifelong learning"
+                            ]
+                        },
+                        "Fiction (Anthology of short story from Kenya)": {
+                            "Outcomes": [
+                                "identify the themes in short stories for literary appreciation",
+                                "analyse language and style in short stories for critical analysis",
+                                "relate thematic concerns in short stories to values for life-long learning",
+                                "appreciate the values in short stories for life-long learning"
+                            ]
+                        },
+                        "Non-fiction prose (Literary/narrative Journalism)": {
+                            "Outcomes": [
+                                "explain the form and features of literary journalism for literary appreciation",
+                                "discuss form, features and language in literary journalism for literary analysis",
+                                "analyse the subject matter of literary journalism for literary appreciation",
+                                "appreciate the importance of literary journalism for lifelong learning"
                             ]
                         }
                     }
@@ -333,166 +613,124 @@
             "Strands": {
                 "Numbers and Algebra": {
                     "SubStrands": {
-                        "Real Numbers": {
+                        "Matrices": {
                             "Outcomes": [
-                                "Classify whole numbers as odd, even, prime, and composite in different situations",
-                                "Classify real numbers as rational and irrational in different situations",
-                                "Determine the reciprocal of real numbers by division",
-                                "Determine the reciprocal of real numbers by use of mathematical tables and calculators",
-                                "Apply reciprocal of real numbers in mathematical computations",
-                                "Promote the use of real numbers in day-to-day activities"
+                                "define a matrix in different situations",
+                                "determine the order of a matrix in different situations",
+                                "perform operations on matrices in different situations",
+                                "determine the determinant and inverse of a 2x2 matrix in different situations",
+                                "apply matrices to real life situations",
+                                "appreciate use of matrices in real life situations"
                             ]
                         },
-                        "Indices and Logarithms": {
+                        "Binary Operations": {
                             "Outcomes": [
-                                "Express numbers in index form",
-                                "Derive the laws of indices using factors",
-                                "Apply the laws of indices in different situations",
-                                "Relate index notation to logarithm notation to base 10",
-                                "Determine common logarithms of numbers from mathematical tables and calculators",
-                                "Apply common logarithms in multiplication, division, powers, and roots of numbers",
-                                "Appreciate the use of indices and common logarithms in mathematical computations"
+                                "define binary operation in different situations",
+                                "determine the identity element of a binary operation in different situations",
+                                "determine the inverse element of a binary operation in different situations",
+                                "apply binary operations in real life situations",
+                                "appreciate use of binary operations in real life situations"
                             ]
                         },
-                        "Quadratic Expressions and Equations": {
+                        "Linear Inequalities": {
                             "Outcomes": [
-                                "Form quadratic expressions from different situations",
-                                "Derive the quadratic identities from the concept of area",
-                                "Apply quadratic identities in numerical cases",
-                                "Factorise quadratic expressions in different situations",
-                                "Form quadratic equations in different situations",
-                                "Solve quadratic equations by factorisation",
-                                "Apply quadratic equations to real-life situations",
-                                "Explore the use of quadratic equations in real-life situations"
+                                "solve linear inequalities in one unknown in different situations",
+                                "represent linear inequalities on a number line in different situations",
+                                "represent linear inequalities in two unknowns graphically in different situations",
+                                "apply linear inequalities in real life situations",
+                                "appreciate use of linear inequalities in real life situations"
+                            ]
+                        },
+                        "Quadratic Equations": {
+                            "Outcomes": [
+                                "complete the square of quadratic expressions in different situations",
+                                "solve quadratic equations using completing the square method in different situations",
+                                "solve quadratic equations using the quadratic formula in different situations",
+                                "apply quadratic equations in real life situations",
+                                "appreciate use of quadratic equations in real life situations"
+                            ]
+                        },
+                        "Approximation and Errors": {
+                            "Outcomes": [
+                                "determine absolute and relative errors in different situations",
+                                "determine truncation and rounding off errors in different situations",
+                                "apply approximation and errors in real life situations",
+                                "appreciate use of approximation and errors in real life situations"
                             ]
                         }
                     }
                 },
                 "Measurements and Geometry": {
                     "SubStrands": {
-                        "Similarity and Enlargement": {
+                        "Trigonometry II": {
                             "Outcomes": [
-                                "Determine the centre of enlargement and the linear scale factor for similar figures",
-                                "Construct the image of an object under an enlargement given the centre and the linear scale factor",
-                                "Determine the area and volume scale factor of different figures and solids",
-                                "Relate linear scale factor, area scale factor, and volume scale factor in enlargements",
-                                "Apply similarity and enlargement to real-life situations",
-                                "Appreciate the use of similarity and enlargement in real-life situations"
+                                "apply sine and cosine rules to solve problems in real life situations",
+                                "determine trigonometric ratios of obtuse angles in different situations",
+                                "apply trigonometric ratios to solve problems in real life situations",
+                                "appreciate use of trigonometry in real life situations"
                             ]
                         },
-                        "Reflection and Congruence": {
+                        "Three Dimensional Geometry": {
                             "Outcomes": [
-                                "Identify lines of symmetry in plane figures",
-                                "Determine the properties of reflection in different situations",
-                                "Draw an image given an object and a mirror line on plane surface and Cartesian plane",
-                                "Determine the equation of the mirror line given an object and its image",
-                                "Carry out congruence tests for triangles",
-                                "Appreciate use of reflection and congruence in real-life situations"
+                                "determine the coordinates of a point in three dimensional space in different situations",
+                                "determine the distance between two points in three dimensional space in different situations",
+                                "determine the angle between two lines in three dimensional space in different situations",
+                                "determine the angle between a line and a plane in three dimensional space in different situations",
+                                "determine the angle between two planes in three dimensional space in different situations",
+                                "appreciate use of three dimensional geometry in real life situations"
                             ]
                         },
-                        "Rotation": {
+                        "Graphical Methods": {
                             "Outcomes": [
-                                "Determine the properties of rotation in different situations",
-                                "Rotate an object, given the centre and angle of rotation on a plane surface and the Cartesian plane",
-                                "Determine the centre and angle of rotation given an object and its image",
-                                "Determine the order of rotational symmetry of plane figures",
-                                "Determine the axis and order of rotational symmetry in solids",
-                                "Deduce congruence from rotation",
-                                "Appreciate the application of rotation in real-life situations"
+                                "draw graphs of cubic functions in different situations",
+                                "solve cubic equations graphically in different situations",
+                                "draw graphs of trigonometric functions in different situations",
+                                "solve trigonometric equations graphically in different situations",
+                                "appreciate use of graphical methods in real life situations"
                             ]
                         },
-                        "Trigonometry 1": {
+                        "Loci": {
                             "Outcomes": [
-                                "Determine the trigonometric ratios of acute angles from mathematical tables and calculators",
-                                "Relate sines and cosines of complementary angles",
-                                "Relate the sine, cosine, and tangent of acute angles",
-                                "Determine trigonometric ratios of special angles: 30°, 45°, 60°, and 90° using triangles",
-                                "Apply trigonometric ratios to angles of elevation and depression",
-                                "Reflect on the use of trigonometry in real-life situations"
-                            ]
-                        },
-                        "Area of Polygons": {
-                            "Outcomes": [
-                                "Derive the formula for the area of a triangle given two sides and an included angle",
-                                "Work out the area of a triangle given two sides and an included angle",
-                                "Determine the area of a triangle using Heron’s formula",
-                                "Determine the area of quadrilaterals in different situations",
-                                "Work out the area of regular polygons of heptagon and octagon",
-                                "Determine the area of irregular polygons in different situations",
-                                "Explore the area of polygons as used in real-life situations"
-                            ]
-                        },
-                        "Area of a Part of a Circle": {
-                            "Outcomes": [
-                                "Determine the area of an annulus in different situations",
-                                "Work out the area of a sector of a circle in real-life situations",
-                                "Determine the area of an annular sector in different situations",
-                                "Work out the area of a segment of a circle",
-                                "Determine the area of common region between two intersecting circles",
-                                "Apply the area of a part of a circle in real-life situations",
-                                "Explore the use of the area of a part of a circle in real-life situations"
-                            ]
-                        },
-                        "Surface Area and Volume of Solids": {
-                            "Outcomes": [
-                                "Determine the surface area of prisms, pyramids, cones, frustums, and spheres",
-                                "Calculate the surface area of composite solids",
-                                "Calculate the volume of prisms, pyramids, cones, frustums, and spheres",
-                                "Determine the volume of composite solids",
-                                "Explore the use of the surface area and volume of solids in real-life situations"
-                            ]
-                        },
-                        "Vectors I": {
-                            "Outcomes": [
-                                "Explain vector and scalar quantities with illustrations",
-                                "Use vector notations in different ways",
-                                "Represent vectors geometrically in different situations",
-                                "Identify equivalent vectors in different situations",
-                                "Add vectors in different situations",
-                                "Multiply vectors by scalars",
-                                "Determine column vectors in different situations",
-                                "Determine position vectors in different situations",
-                                "Work out magnitude of a vector in different situations",
-                                "Determine the midpoint of a vector in different situations",
-                                "Determine translation vector as a transformation",
-                                "Appreciate the use of vectors in real-life situations"
-                            ]
-                        },
-                        "Linear Motion": {
-                            "Outcomes": [
-                                "Explain the terms distance, displacement, speed, velocity, and acceleration in real-life situations",
-                                "Determine velocity and acceleration in different situations",
-                                "Draw a displacement-time graph of different situations",
-                                "Interpret displacement-time graph in different situations",
-                                "Draw a velocity-time graph from given tables in different situations",
-                                "Interpret velocity-time graph in different situations",
-                                "Determine relative speed of two moving bodies in different situations",
-                                "Appreciate use of linear motion in real-life situations"
+                                "determine the locus of points at a given distance from fixed points in different situations",
+                                "determine the locus of points at a given distance from straight lines in different situations",
+                                "determine the locus of points in terms of intersection of loci in different situations",
+                                "appreciate use of loci in real life situations"
                             ]
                         }
                     }
                 },
                 "Statistics and Probability": {
                     "SubStrands": {
-                        "Statistics I": {
+                        "Statistics II": {
                             "Outcomes": [
-                                "Collect data from real-life sources",
-                                "Draw a frequency distribution table for grouped and ungrouped data",
-                                "Determine mean, mode, and median of grouped and ungrouped data",
-                                "Represent data using histograms and frequency polygons",
-                                "Interpret data from histograms and frequency polygons",
-                                "Promote data collection, organisation, and representation for informed decision making"
+                                "determine the mean, mode and median of grouped data in different situations",
+                                "draw ogives for grouped data in different situations",
+                                "determine quartiles, deciles and percentiles from ogives in different situations",
+                                "determine measures of dispersion of grouped data in different situations",
+                                "apply statistics in real life situations",
+                                "appreciate use of statistics in real life situations"
                             ]
                         },
-                        "Probability 1": {
+                        "Probability II": {
                             "Outcomes": [
-                                "Perform experiments involving probabilities in different situations",
-                                "Identify the range of probability in different situations",
-                                "Generate probability space of different events",
-                                "Determine the probability of mutually exclusive and independent events",
-                                "Apply the laws of probability in different situations",
-                                "Determine the probability of independent events using tree diagrams",
-                                "Appreciate the application of probability in real-life situations"
+                                "determine the probability of dependent events in different situations",
+                                "determine the probability of independent events in different situations",
+                                "apply probability in real life situations",
+                                "appreciate use of probability in real life situations"
+                            ]
+                        }
+                    }
+                },
+                "Calculus": {
+                    "SubStrands": {
+                        "Differentiation": {
+                            "Outcomes": [
+                                "determine the gradient of a curve at a point in different situations",
+                                "determine the derivative of a function from first principles in different situations",
+                                "determine the derivatives of functions using rules of differentiation in different situations",
+                                "determine the second derivative of functions in different situations",
+                                "apply differentiation in real life situations",
+                                "appreciate use of differentiation in real life situations"
                             ]
                         }
                     }
@@ -501,103 +739,609 @@
         },
         "Biology": {
             "Strands": {
-                "Cell Biology and Biodiversity": {
+                "Ecology": {
                     "SubStrands": {
-                        "Introduction to Biology": {
+                        "Ecology": {
                             "Outcomes": [
-                                "Explain the application of Biology in everyday life",
-                                "Relate fields of study in Biology to career opportunities",
-                                "Illustrate the careers related to fields of study in Biology",
-                                "Appreciate the importance of Biology in everyday life"
+                                "define ecology and its importance",
+                                "identify components of an ecosystem",
+                                "describe food chains and food webs",
+                                "appreciate the importance of ecology in conservation"
                             ]
                         },
-                        "Scientific investigations in Biology": {
+                        "Population Ecology": {
                             "Outcomes": [
-                                "Identify apparatus and materials used for collecting, processing and preserving specimens",
-                                "Collect, process and preserve specimens for biological studies using improvised and conventional apparatus",
-                                "Appreciate the importance of collecting, processing and preserving specimens in Biology"
+                                "define population and community",
+                                "describe population dynamics",
+                                "discuss factors affecting population growth",
+                                "appreciate the need for population control"
                             ]
                         },
-                        "Cell Structure and Specialization": {
+                        "Human Ecology": {
                             "Outcomes": [
-                                "Differentiate between light and electron microscope as used in the study of cell structure",
-                                "Describe the structure and functions of plant and animal cells as observed in an electron microscope",
-                                "Prepare temporary slides for observation and estimation of cell size using a light microscope",
-                                "Relate the structures of specialized cells in plants and animals to their functions",
-                                "Appreciate the cell as the basic unit of life"
-                            ]
-                        },
-                        "Chemicals of Life": {
-                            "Outcomes": [
-                                "Describe the composition, properties and functions of the chemicals of life in organisms",
-                                "Investigate the presence of carbohydrates, lipids, proteins and vitamin C in food substances",
-                                "Investigate the presence of enzymes in living tissues",
-                                "Determine factors affecting enzymatic reactions in cells",
-                                "Appreciate the importance of chemical components in cells"
+                                "discuss the impact of human activities on the environment",
+                                "describe pollution and its effects",
+                                "explain conservation measures",
+                                "appreciate the role of humans in environmental conservation"
                             ]
                         }
                     }
                 },
-                "Anatomy and Physiology of Plants": {
+                "Genetics": {
                     "SubStrands": {
-                        "Nutrition": {
+                        "Introduction to Genetics": {
                             "Outcomes": [
-                                "Describe types of nutrition in plants",
-                                "Relate the structure of the chloroplast to its function in plant cells",
-                                "Illustrate the light and dark stages of photosynthesis in plants",
-                                "Appreciate the significance of photosynthesis in nature"
+                                "define genetics and heredity",
+                                "describe the structure of DNA",
+                                "explain the role of DNA in heredity",
+                                "appreciate the importance of genetics in breeding"
                             ]
                         },
-                        "Transport": {
+                        "Monohybrid Inheritance": {
                             "Outcomes": [
-                                "Relate structures of the plant transport system to their functions in plants",
-                                "Illustrate the arrangement of vascular tissues in monocotyledonous and dicotyledonous plants",
-                                "Demonstrate the uptake of water and mineral salts from the roots to the leaves",
-                                "Demonstrate factors that affect the rate of transpiration in plants",
-                                "Describe the translocation of manufactured food in plants",
-                                "Appreciate the significance of transport in plants"
+                                "define monohybrid inheritance",
+                                "use Punnett squares to predict offspring",
+                                "discuss complete and incomplete dominance",
+                                "appreciate genetic diversity"
                             ]
                         },
-                        "Gaseous Exchange and Respiration": {
+                        "Dihybrid Inheritance": {
                             "Outcomes": [
-                                "Relate the structure of gaseous exchange sites in plants to their function",
-                                "Describe the mechanism of opening and closing of stomata in plants",
-                                "Investigate aerobic and anaerobic respiration in living organisms",
-                                "Explain the economic importance of anaerobic respiration in nature",
-                                "Appreciate the significance of gaseous exchange and respiration to plants and the environment"
+                                "define dihybrid inheritance",
+                                "use Punnett squares for dihybrid crosses",
+                                "discuss linkage and crossing over",
+                                "appreciate genetic variation"
+                            ]
+                        },
+                        "Mutation": {
+                            "Outcomes": [
+                                "define mutation and mutagens",
+                                "describe types of mutations",
+                                "discuss the effects of mutations",
+                                "appreciate the role of mutations in evolution"
                             ]
                         }
                     }
                 },
-                "Anatomy and Physiology of Animals": {
+                "Evolution": {
+                    "SubStrands": {
+                        "Introduction to Evolution": {
+                            "Outcomes": [
+                                "define evolution",
+                                "discuss theories of origin of life",
+                                "describe Lamarck's theory of evolution",
+                                "appreciate the concept of evolution"
+                            ]
+                        },
+                        "Darwin's Theory": {
+                            "Outcomes": [
+                                "describe Darwin's theory of natural selection",
+                                "discuss evidence for organic evolution",
+                                "explain mechanisms of evolution",
+                                "appreciate natural selection in adaptation"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Chemistry": {
+            "Strands": {
+                "Inorganic Chemistry": {
+                    "SubStrands": {
+                        "The Mole": {
+                            "Outcomes": [
+                                "define the mole and molar quantities",
+                                "calculate molar mass",
+                                "use Avogadro's number in calculations",
+                                "appreciate the mole concept in stoichiometry"
+                            ]
+                        }
+                    }
+                },
+                "Physical Chemistry": {
+                    "SubStrands": {
+                        "Salts": {
+                            "Outcomes": [
+                                "define salts and their types",
+                                "prepare salts by various methods",
+                                "discuss the solubility of salts",
+                                "appreciate the use of salts in industry"
+                            ]
+                        },
+                        "Gas Laws": {
+                            "Outcomes": [
+                                "state the gas laws",
+                                "apply gas laws in calculations",
+                                "discuss the ideal gas equation",
+                                "appreciate the behavior of gases"
+                            ]
+                        }
+                    }
+                },
+                "Organic Chemistry": {
+                    "SubStrands": {
+                        "Introduction to Organic Chemistry": {
+                            "Outcomes": [
+                                "define organic chemistry",
+                                "describe the unique properties of carbon",
+                                "classify organic compounds",
+                                "appreciate the diversity of organic compounds"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Physics": {
+            "Strands": {
+                "Mechanics": {
+                    "SubStrands": {
+                        "Linear Motion": {
+                            "Outcomes": [
+                                "define distance, displacement, speed, velocity, acceleration",
+                                "use equations of motion",
+                                "draw velocity-time graphs",
+                                "appreciate applications in transport"
+                            ]
+                        },
+                        "Newton's Laws": {
+                            "Outcomes": [
+                                "state Newton's laws of motion",
+                                "apply Newton's laws in problems",
+                                "discuss conservation of momentum",
+                                "appreciate applications in safety"
+                            ]
+                        }
+                    }
+                },
+                "Waves": {
+                    "SubStrands": {
+                        "Waves I": {
+                            "Outcomes": [
+                                "define waves and their types",
+                                "describe wave properties",
+                                "explain reflection and refraction",
+                                "appreciate waves in communication"
+                            ]
+                        }
+                    }
+                },
+                "Thermal Physics": {
+                    "SubStrands": {
+                        "Thermal Expansion": {
+                            "Outcomes": [
+                                "explain thermal expansion",
+                                "calculate expansion in solids, liquids, gases",
+                                "discuss applications and problems",
+                                "appreciate in engineering"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "General Science": {
+            "Strands": {
+                "Scientific Methods": {
+                    "SubStrands": {
+                        "Scientific Methods": {
+                            "Outcomes": [
+                                "describe the scientific method",
+                                "conduct experiments",
+                                "analyze data",
+                                "appreciate scientific inquiry"
+                            ]
+                        }
+                    }
+                },
+                "Earth and Space": {
+                    "SubStrands": {
+                        "Earth and Space": {
+                            "Outcomes": [
+                                "describe the solar system",
+                                "explain seasons and tides",
+                                "discuss space exploration",
+                                "appreciate astronomy"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Agriculture": {
+            "Strands": {
+                "Crop Production": {
+                    "SubStrands": {
+                        "Crop Production II": {
+                            "Outcomes": [
+                                "explain crop rotation",
+                                "describe pest and disease control",
+                                "discuss harvest and post-harvest handling",
+                                "appreciate sustainable farming"
+                            ]
+                        }
+                    }
+                },
+                "Animal Production": {
+                    "SubStrands": {
+                        "Livestock Production": {
+                            "Outcomes": [
+                                "describe livestock breeds",
+                                "explain feeding and housing",
+                                "discuss disease control",
+                                "appreciate animal husbandry"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Computer Studies": {
+            "Strands": {
+                "Programming": {
+                    "SubStrands": {
+                        "Programming": {
+                            "Outcomes": [
+                                "write programs in high-level languages",
+                                "use control structures",
+                                "debug programs",
+                                "appreciate software development"
+                            ]
+                        }
+                    }
+                },
+                "Networking": {
+                    "SubStrands": {
+                        "Networking": {
+                            "Outcomes": [
+                                "describe network types",
+                                "explain network topologies",
+                                "discuss network security",
+                                "appreciate connectivity"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Home Science": {
+            "Strands": {
+                "Nutrition": {
                     "SubStrands": {
                         "Nutrition": {
                             "Outcomes": [
-                                "Relate the structure of mouthparts of insects to their functions",
-                                "Illustrate mouthparts in different insects",
-                                "Relate the structure of beaks of birds to their functions",
-                                "Appreciate diversity in feeding modes of insects and birds"
+                                "describe balanced diets",
+                                "explain nutrition for special groups",
+                                "discuss food preservation",
+                                "appreciate healthy eating"
                             ]
-                        },
-                        "Transport": {
+                        }
+                    }
+                },
+                "Clothing": {
+                    "SubStrands": {
+                        "Clothing": {
                             "Outcomes": [
-                                "Explain the importance of transport in animals",
-                                "Illustrate structure of the transport systems in insects, fish, amphibians, reptiles and mammals",
-                                "Describe the pumping mechanism of the mammalian heart",
-                                "Describe the human lymphatic and immune systems, and blood clotting mechanism",
-                                "Explain the ABO and rhesus factor blood grouping systems in humans",
-                                "Appreciate the diversity of transport systems in animals"
+                                "describe garment construction",
+                                "explain fabric selection",
+                                "discuss laundry processes",
+                                "appreciate textile science"
                             ]
-                        },
-                        "Gaseous Exchange and Respiration": {
+                        }
+                    }
+                }
+            }
+        },
+        "Drawing and Design": {
+            "Strands": {
+                "Drawing": {
+                    "SubStrands": {
+                        "Drawing": {
                             "Outcomes": [
-                                "Explain the general characteristics of respiratory surfaces in animals",
-                                "Describe the structure and adaptations of respiratory structures in animals",
-                                "Describe the mechanism of gaseous exchange in humans",
-                                "Describe the process of aerobic and anaerobic respiration",
-                                "Calculate the respiratory quotient for different foods",
-                                "Investigate factors affecting the rate of respiration",
-                                "Appreciate the importance of gaseous exchange and respiration in animals"
+                                "use drawing tools",
+                                "draw technical drawings",
+                                "apply design principles",
+                                "appreciate technical drawing"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Aviation Technology": {
+            "Strands": {
+                "Aviation": {
+                    "SubStrands": {
+                        "Aviation": {
+                            "Outcomes": [
+                                "describe aircraft components",
+                                "explain aviation principles",
+                                "discuss safety procedures",
+                                "appreciate aviation industry"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Building and Construction": {
+            "Strands": {
+                "Construction": {
+                    "SubStrands": {
+                        "Construction": {
+                            "Outcomes": [
+                                "describe building materials",
+                                "explain construction techniques",
+                                "discuss safety in construction",
+                                "appreciate building trades"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Electrical Technology": {
+            "Strands": {
+                "Electrical": {
+                    "SubStrands": {
+                        "Electrical": {
+                            "Outcomes": [
+                                "describe electrical circuits",
+                                "explain electrical installation",
+                                "discuss safety in electricity",
+                                "appreciate electrical engineering"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Metal Technology": {
+            "Strands": {
+                "Metalwork": {
+                    "SubStrands": {
+                        "Metalwork": {
+                            "Outcomes": [
+                                "describe metal properties",
+                                "explain metal working techniques",
+                                "discuss safety in metalwork",
+                                "appreciate metal technology"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Power Mechanics": {
+            "Strands": {
+                "Power Mechanics": {
+                    "SubStrands": {
+                        "Power Mechanics": {
+                            "Outcomes": [
+                                "describe engines",
+                                "explain vehicle systems",
+                                "discuss maintenance",
+                                "appreciate automotive technology"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Wood Technology": {
+            "Strands": {
+                "Woodwork": {
+                    "SubStrands": {
+                        "Woodwork": {
+                            "Outcomes": [
+                                "describe wood properties",
+                                "explain wood working techniques",
+                                "discuss safety in woodwork",
+                                "appreciate wood technology"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Media Technology": {
+            "Strands": {
+                "Media": {
+                    "SubStrands": {
+                        "Media": {
+                            "Outcomes": [
+                                "describe media production",
+                                "explain media ethics",
+                                "discuss digital media",
+                                "appreciate media industry"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Marine and Fisheries Technology": {
+            "Strands": {
+                "Marine": {
+                    "SubStrands": {
+                        "Marine": {
+                            "Outcomes": [
+                                "describe marine ecosystems",
+                                "explain fisheries management",
+                                "discuss sustainable fishing",
+                                "appreciate marine resources"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Advanced English": {
+            "Strands": {
+                "Advanced Language Skills": {
+                    "SubStrands": {
+                        "Advanced Language Skills": {
+                            "Outcomes": [
+                                "use advanced vocabulary",
+                                "write advanced compositions",
+                                "analyse literature",
+                                "appreciate advanced English"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Indigenous Languages": {
+            "Strands": {
+                "Language Skills": {
+                    "SubStrands": {
+                        "Language Skills": {
+                            "Outcomes": [
+                                "use indigenous language vocabulary",
+                                "write in indigenous language",
+                                "analyse indigenous literature",
+                                "appreciate cultural heritage"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Kiswahili Kipevu": {
+            "Strands": {
+                "Kusikiliza na Kuzungumza": {
+                    "SubStrands": {
+                        "Matamshi Bora": {
+                            "Outcomes": [
+                                "Tambua silabi na vitanzandimi",
+                                "Tumia msamiati unaofaa"
+                            ]
+                        }
+                    }
+                },
+                "Kusoma": {
+                    "SubStrands": {
+                        "Kusoma kwa Ufahamu": {
+                            "Outcomes": [
+                                "Tambua msamiati na utumie katika sentensi",
+                                "Soma kwa ufasaha"
+                            ]
+                        }
+                    }
+                },
+                "Kuandika": {
+                    "SubStrands": {
+                        "Kuandika Insha": {
+                            "Outcomes": [
+                                "Tambua muundo wa insha",
+                                "Andika insha ya wasifu"
+                            ]
+                        }
+                    }
+                },
+                "Sarufi": {
+                    "SubStrands": {
+                        "Aina za Maneno": {
+                            "Outcomes": [
+                                "Eleza nomino, vitenzi, vivumishi",
+                                "Tumia katika mawasiliano"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Fasihi ya Kiswahili": {
+            "Strands": {
+                "Fasihi": {
+                    "SubStrands": {
+                        "Fasihi": {
+                            "Outcomes": [
+                                "Eleza fasihi ya Kiswahili",
+                                "Tathmini tamthilia",
+                                "Changanua shairi",
+                                "Thamini fasihi"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Sign Language": {
+            "Strands": {
+                "Sign Language Skills": {
+                    "SubStrands": {
+                        "Sign Language Skills": {
+                            "Outcomes": [
+                                "use sign language vocabulary",
+                                "communicate in sign language",
+                                "appreciate deaf culture"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Arabic": {
+            "Strands": {
+                "Arabic Language": {
+                    "SubStrands": {
+                        "Arabic Language": {
+                            "Outcomes": [
+                                "use Arabic vocabulary",
+                                "write in Arabic",
+                                "speak Arabic",
+                                "appreciate Arabic culture"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "French": {
+            "Strands": {
+                "French Language": {
+                    "SubStrands": {
+                        "French Language": {
+                            "Outcomes": [
+                                "use French vocabulary",
+                                "write in French",
+                                "speak French",
+                                "appreciate French culture"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "German": {
+            "Strands": {
+                "German Language": {
+                    "SubStrands": {
+                        "German Language": {
+                            "Outcomes": [
+                                "use German vocabulary",
+                                "write in German",
+                                "speak German",
+                                "appreciate German culture"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Mandarin Chinese": {
+            "Strands": {
+                "Chinese Language": {
+                    "SubStrands": {
+                        "Chinese Language": {
+                            "Outcomes": [
+                                "use Chinese vocabulary",
+                                "write in Chinese",
+                                "speak Chinese",
+                                "appreciate Chinese culture"
                             ]
                         }
                     }
@@ -610,56 +1354,56 @@
                     "SubStrands": {
                         "Linguistic groups in Kenya": {
                             "Outcomes": [
-                                "Explore the linguistic groups in Kenya",
-                                "Discuss the causes and effects of migration, settlement and expansion of the linguistic groups",
-                                "Trace the migration routes and settlement areas of the linguistic groups in Kenya",
-                                "Apply the knowledge of diverse communities of Kenya to promote social cohesion",
-                                "Appreciate the diversity of communities in Kenya"
+                                "explore the linguistic groups in Kenya",
+                                "discuss the causes and effects of migration, settlement and expansion of the linguistic groups",
+                                "trace the migration routes and settlement areas of the linguistic groups in Kenya",
+                                "apply the knowledge of diverse communities of Kenya to promote social cohesion",
+                                "appreciate the diversity of communities in Kenya"
                             ]
                         },
                         "Establishment of colonial rule": {
                             "Outcomes": [
-                                "Examine the reasons for the establishment of colonial rule",
-                                "Evaluate the methods applied by the British in the establishment of colonial rule in Kenya",
-                                "Discuss the process of establishment of colonial rule in Kenya",
-                                "Apply lesson learnt from the process of establishment of colonial rule in Kenya",
-                                "Desire to maintain independence and unity in Kenya"
+                                "examine the reasons for the establishment of colonial rule",
+                                "evaluate the methods applied by the British in the establishment of colonial rule in Kenya",
+                                "discuss the process of establishment of colonial rule in Kenya",
+                                "apply lesson learnt from the process of establishment of colonial rule in Kenya",
+                                "desire to maintain independence and unity in Kenya"
                             ]
                         },
                         "The Constitution of Kenya (2010)": {
                             "Outcomes": [
-                                "Categorise the type of public resources in Kenya",
-                                "Analyse the importance of public resources for posterity",
-                                "Develop strategies for sustainable utilisation of public resources",
-                                "Advocate for efficient use of public resources for an ethical society",
-                                "Desire to support efficient use of public resources to promote ethical practices"
+                                "categorise the type of public resources in Kenya",
+                                "analyse the importance of public resources for posterity",
+                                "develop strategies for sustainable utilisation of public resources",
+                                "advocate for efficient use of public resources for an ethical society",
+                                "desire to support efficient use of public resources to promote ethical practices"
                             ]
                         },
                         "Political developments and challenges since independence": {
                             "Outcomes": [
-                                "Analyse major political developments in Kenya since Independence",
-                                "Discuss the major political challenges since independence",
-                                "Propose possible solutions to the major political challenges",
-                                "Develop activities that promote peaceful political environments in Kenya",
-                                "Embrace peaceful coexistence for harmonious living"
+                                "analyse major political developments in Kenya since Independence",
+                                "discuss the major political challenges since independence",
+                                "propose possible solutions to the major political challenges",
+                                "develop activities that promote peaceful political environments in Kenya",
+                                "embrace peaceful coexistence for harmonious living"
                             ]
                         },
                         "Elections in Kenya": {
                             "Outcomes": [
-                                "Identify the guidelines governing elections in Kenya",
-                                "Describe the roles and functions of IEBC in Kenya",
-                                "Elaborate the electoral processes in Kenya",
-                                "Enumerate measures taken by IEBC in curbing election malpractices in management of elections",
-                                "Appreciate the roles and functions of IEBC in Kenya"
+                                "identify the guidelines governing elections in Kenya",
+                                "describe the roles and functions of IEBC in Kenya",
+                                "elaborate the electoral processes in Kenya",
+                                "enumerate measures taken by IEBC in curbing election malpractices in management of elections",
+                                "appreciate the roles and functions of IEBC in Kenya"
                             ]
                         },
                         "National integration": {
                             "Outcomes": [
-                                "Discuss the importance of national integration",
-                                "Explain the components of national integration",
+                                "discuss the importance of national integration",
+                                "explain the components of national integration",
                                 "Examine factors that limit national integration",
                                 "Demonstrate ways of enhancing national integration",
-                                "Acknowledge the importance of national unity"
+                                "acknowledge the importance of national unity"
                             ]
                         }
                     }
@@ -668,37 +1412,37 @@
                     "SubStrands": {
                         "Human Developments in Africa": {
                             "Outcomes": [
-                                "Explain the factors that led to transition from migratory to sedentary lifestyle by early humans",
-                                "Analyse advancements that took place during the Neolithic revolution",
-                                "Examine the contributions of Neolithic revolution to the modern society",
-                                "Classify the characteristics of pastoralism in reference to selected communities in Africa",
-                                "Propose solutions to challenges facing contemporary pastoralism in Africa",
-                                "Recognise the advancements that took place during the Neolithic revolution"
+                                "explain the factors that led to transition from migratory to sedentary lifestyle by early humans",
+                                "analyse advancements that took place during the Neolithic revolution",
+                                "examine the contributions of Neolithic revolution to the modern society",
+                                "classify the characteristics of pastoralism in reference to selected communities in Africa",
+                                "propose solutions to challenges facing contemporary pastoralism in Africa",
+                                "recognise the advancements that took place during the Neolithic revolution"
                             ]
                         },
-                        "African Civilizations up to 19th Century (Wanga, Buganda And Nyamwezi)": {
+                        "African Civilizations up to 19th century (Wanga, Buganda And Nyamwezi)": {
                             "Outcomes": [
-                                "Examine the development of selected early civilizations in Africa",
-                                "Analyse the importance of ancient African civilizations to modern society",
-                                "Apply the best practices from the early civilizations",
-                                "Appreciate contributions of early civilizations"
+                                "examine the development of selected early civilizations in Africa",
+                                "analyse the importance of ancient African civilizations to modern society",
+                                "apply the best practices from the early civilizations",
+                                "appreciate contributions of early civilizations"
                             ]
                         },
                         "Colonization of Africa": {
                             "Outcomes": [
-                                "Discuss the significance of the Berlin conference in relation to scramble for and partition of Africa",
-                                "Evaluate how key players determined the colonization of Africa",
-                                "Discern the extent to which different reasons influenced colonisation of Africa",
-                                "Justify why it was inevitable to end colonialization of Africa to promote a sense of nationalism",
-                                "Appreciate the justification of the end of colonization of Africa to promote a sense of nationalism"
+                                "discuss the significance of the Berlin conference in relation to scramble for and partition of Africa",
+                                "evaluate how key players determined the colonization of Africa",
+                                "discern the extent to which different reasons influenced colonisation of Africa",
+                                "justify why it was inevitable to end colonialization of Africa to promote a sense of nationalism",
+                                "appreciate the justification of the end of colonization of Africa to promote a sense of nationalism"
                             ]
                         },
                         "Modern Nationalism in Africa": {
                             "Outcomes": [
-                                "Explore factors that have influenced nationalism in Africa",
-                                "Draw lessons from key leaders who contributed to nationalism in African countries",
-                                "Illustrate best practices that have been adopted by African nations strengthen nationalism",
-                                "Acknowledge modern African Nationalism in development of modern African states"
+                                "explore factors that have influenced nationalism in Africa",
+                                "draw lessons from key leaders who contributed to nationalism in African countries",
+                                "illustrate best practices that have been adopted by African nations strengthen nationalism",
+                                "acknowledge modern African Nationalism in development of modern African states"
                             ]
                         },
                         "Effects of global wars on Africa": {
@@ -714,73 +1458,741 @@
                     "SubStrands": {
                         "Great revolutions - French": {
                             "Outcomes": [
-                                "Classify the causes of the French revolutions",
-                                "Explain the significance of the French revolution to world economies",
-                                "Design the best practices from the French revolution in daily interactions",
-                                "Appreciate the significance of the French revolution to the world economies today"
+                                "classify the causes of the French revolutions",
+                                "explain the significance of the French revolution to world economies",
+                                "design the best practices from the French revolution in daily interactions",
+                                "appreciate the significance of the French revolution to the world economies today"
                             ]
                         },
                         "International organisations": {
                             "Outcomes": [
-                                "Enumerate the significance of different types of international organisations",
-                                "Examine factors that strengthen ties among commonwealth countries",
-                                "Illustrate opportunities and challenges facing commonwealth nations",
-                                "Appreciate the significance of different types of international organisations"
+                                "enumerate the significance of different types of international organisations",
+                                "examine factors that strengthen ties among commonwealth countries",
+                                "illustrate opportunities and challenges facing commonwealth nations",
+                                "appreciate the significance of different types of international organisations"
                             ]
                         },
                         "Modern Slavery and Servitude": {
                             "Outcomes": [
-                                "Discuss various forms of slavery and servitude in the modern world",
-                                "Assess the factors that cause slavery and servitude in the modern world",
-                                "Illustrate ways in which governments and civil society collaborate to end slavery and servitude in the society today",
-                                "Elaborate the roles of abolitionists movements in the modern society",
-                                "Appreciate the need to free the world from slavery and servitude"
+                                "discuss various forms of slavery and servitude in the modern world",
+                                "assess the factors that cause slavery and servitude in the modern world",
+                                "illustrate ways in which governments and civil society collaborate to end slavery and servitude in the society today",
+                                "elaborate the roles of abolitionists movements in the modern society",
+                                "appreciate the need to free the world from slavery and servitude"
                             ]
                         },
                         "Global Governance": {
                             "Outcomes": [
-                                "Identify the guiding principles for global governance for a sustainable society",
-                                "Illustrate key areas in global governance that guarantee a stable global trends",
-                                "Examine the importance of global governance",
-                                "Explore emerging issues and possible opportunities in global governance",
-                                "Recognise the importance of good global governance"
+                                "identify the guiding principles for global governance for a sustainable society",
+                                "illustrate key areas in global governance that guarantee a stable global trends",
+                                "examine the importance of global governance",
+                                "explore emerging issues and possible opportunities in global governance",
+                                "recognise the importance of good global governance"
                             ]
                         },
-                        "The 1st Industrial Revolution": {
+                        "The 1st Industrial revolution": {
                             "Outcomes": [
-                                "Compare the factors that led to industrial revolution in Britain and USA",
-                                "Discuss impacts of the 1st industrial revolution on Africa",
-                                "Appraise measures taken to address the impact of 1st industrial revolution on Africa",
-                                "Recognise the measures taken by the Africans to address the impact of 1st industrial revolution on Africa"
+                                "compare the factors that led to industrial revolution in Britain and USA",
+                                "discuss impacts of the 1st industrial revolution on Africa",
+                                "appraise measures taken to address the impact of 1st industrial revolution on Africa",
+                                "recognize the measures taken by the Africans to address the impact of 1st industrial revolution on Africa"
                             ]
                         }
                     }
                 },
                 "Contemporary Themes in History and Citizenship": {
                     "SubStrands": {
-                        "Peace and Conflict Transformations in Kenya": {
+                        "Peace and Conflict transformations in Kenya": {
                             "Outcomes": [
-                                "Identify national activities that contribute peace in Kenya for harmonious living",
-                                "Examine ways in which the Constitution (2010) strives to prevent conflicts in Kenya",
-                                "Deduce incidences where the constitution has been applied to foster peace and curb conflicts in a community",
-                                "Desire to uphold peace and curb conflicts in Kenya"
+                                "identify national activities that contribute peace in Kenya for harmonious living",
+                                "examine ways in which the Constitution (2010) strives to prevent conflicts in Kenya",
+                                "deduce incidences where the constitution has been applied to foster peace and curb conflicts in a community",
+                                "desire to uphold peace and curb conflicts in Kenya"
                             ]
                         },
-                        "The 4th Industrial and Technologies Revolution": {
+                        "The 4th industrial and technologies revolution": {
                             "Outcomes": [
-                                "Trace the technological advancements in the 4th generation",
-                                "Analyse the role of information and communication technology in the 4th generation",
-                                "Discuss the impact of technology in the 4th generation",
-                                "Exploit the opportunities provided by the 4th Industrial revolution for promotion of growth and sustainability in the society",
-                                "Appreciate the importance of technology in life"
+                                "trace the technological advancements in the 4th generation",
+                                "analyse the role of information and communication technology in the 4th generation",
+                                "discuss the impact of technology in the 4th generation",
+                                "exploit the opportunities provided by the 4Th Industrial revolution for promotion of growth and sustainability in the society",
+                                "appreciate the importance of technology in life"
                             ]
                         },
-                        "Equity and Non-Discrimination": {
+                        "Equity and non-discrimination": {
                             "Outcomes": [
-                                "Analyse factors that promote equity and non-discrimination in the society",
-                                "Identify historical injustice in the society that promote inequality and discrimination",
-                                "Develop measures that promote equity and non-discrimination in the society",
-                                "Desire to promote equity and non-discrimination in the society"
+                                "analyse factors that promote equity and non-discrimination in the society",
+                                "identify historical injustice in the society that promote inequality and discrimination",
+                                "develop measures that promote equity and non-discrimination in the society",
+                                "desire to promote equity and non-discrimination in the society"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Geography": {
+            "Strands": {
+                "Physical Geography": {
+                    "SubStrands": {
+                        "Weather and Climate": {
+                            "Outcomes": [
+                                "describe weather and climate patterns in different regions",
+                                "analyze the impact of climate change on the environment",
+                                "discuss measures to mitigate climate change"
+                            ]
+                        }
+                    }
+                },
+                "Human and Economic Activities": {
+                    "SubStrands": {
+                        "Industry": {
+                            "Outcomes": [
+                                "explain the types of industries in Kenya",
+                                "analyse the factors influencing industrial development",
+                                "discuss the impact of industries on the environment"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Christian Religious Education": {
+            "Strands": {
+                "The Old Testament": {
+                    "SubStrands": {
+                        "The Creation and Early History": {
+                            "Outcomes": [
+                                "Explain the significance of the creation story in Genesis",
+                                "Describe the process of creation in Genesis 1",
+                                "Discuss the role of human beings in the creation narrative",
+                                "Identify the events leading to the fall of humanity in Genesis 3"
+                            ]
+                        },
+                        "The Patriarchs": {
+                            "Outcomes": [
+                                "Describe the call of Abraham and its significance",
+                                "Explain the covenant between God and Abraham",
+                                "Discuss the lives and roles of Isaac and Jacob",
+                                "Analyze the story of Joseph and its themes of forgiveness and providence"
+                            ]
+                        },
+                        "The Exodus and Law": {
+                            "Outcomes": [
+                                "Explain the significance of the Exodus event",
+                                "Describe the Ten Commandments and their importance",
+                                "Discuss the Mosaic Covenant",
+                                "Identify the key laws given to Moses"
+                            ]
+                        },
+                        "Conquest and Settlement": {
+                            "Outcomes": [
+                                "Describe the conquest of Canaan under Joshua",
+                                "Explain the role of the judges in Israel",
+                                "Discuss the establishment of the monarchy",
+                                "Analyze the division of the kingdom"
+                            ]
+                        },
+                        "United Monarchy": {
+                            "Outcomes": [
+                                "Describe the reign of Saul as the first king",
+                                "Explain the contributions of King David",
+                                "Discuss the reign of King Solomon",
+                                "Analyze the building of the Temple in Jerusalem"
+                            ]
+                        },
+                        "Divided Kingdom": {
+                            "Outcomes": [
+                                "Explain the division of the kingdom after Solomon",
+                                "Discuss the roles of key prophets like Elijah and Elisha",
+                                "Describe the Assyrian and Babylonian exiles",
+                                "Analyze the significance of the exile"
+                            ]
+                        },
+                        "Restoration and Return": {
+                            "Outcomes": [
+                                "Describe the return from exile under Cyrus",
+                                "Explain the rebuilding of the Temple",
+                                "Discuss the role of Ezra and Nehemiah",
+                                "Analyze the post-exilic community and its challenges"
+                            ]
+                        }
+                    }
+                },
+                "The New Testament": {
+                    "SubStrands": {
+                        "The Life and Ministry of Jesus Christ": {
+                            "Outcomes": [
+                                "Describe the birth and early life of Jesus",
+                                "Explain the significance of Jesus' baptism and temptation",
+                                "Discuss the miracles and teachings of Jesus",
+                                "Analyze the parables and their moral lessons"
+                            ]
+                        },
+                        "The Death and Resurrection of Jesus": {
+                            "Outcomes": [
+                                "Explain the events leading to the crucifixion",
+                                "Describe the significance of the resurrection",
+                                "Discuss the appearances of the risen Christ",
+                                "Analyze the impact of the resurrection on the disciples"
+                            ]
+                        },
+                        "The Early Church": {
+                            "Outcomes": [
+                                "Describe the coming of the Holy Spirit at Pentecost",
+                                "Explain the growth and organization of the early church",
+                                "Discuss the role of key apostles like Peter and Paul",
+                                "Analyze the challenges faced by the early church"
+                            ]
+                        },
+                        "The Letters of Paul": {
+                            "Outcomes": [
+                                "Explain the purpose and themes of Paul's letters",
+                                "Describe the letter to the Romans and its theological content",
+                                "Discuss the letter to the Corinthians and church conduct",
+                                "Analyze the letter to the Galatians and justification by faith"
+                            ]
+                        },
+                        "General Epistles and Revelation": {
+                            "Outcomes": [
+                                "Describe the letters of Peter and their encouragement to believers",
+                                "Explain the letter of James and its emphasis on faith and works",
+                                "Discuss the letter to the Hebrews and its Christological focus",
+                                "Analyze the Book of Revelation and its apocalyptic messages"
+                            ]
+                        }
+                    }
+                },
+                "Church in Action": {
+                    "SubStrands": {
+                        "The Church in the Early Centuries": {
+                            "Outcomes": [
+                                "Describe the spread of Christianity in the Roman Empire",
+                                "Explain the role of early church fathers like Augustine",
+                                "Discuss the Council of Nicaea and its outcomes",
+                                "Analyze the persecution and growth of the church"
+                            ]
+                        },
+                        "The Medieval Church": {
+                            "Outcomes": [
+                                "Explain the organization and hierarchy of the medieval church",
+                                "Describe the role of monasticism",
+                                "Discuss the Crusades and their impact",
+                                "Analyze the Great Schism and its effects"
+                            ]
+                        },
+                        "The Reformation": {
+                            "Outcomes": [
+                                "Describe the key figures of the Reformation like Luther and Calvin",
+                                "Explain the Ninety-Five Theses and indulgences",
+                                "Discuss the impact of the printing press on reform",
+                                "Analyze the outcomes of the Council of Trent"
+                            ]
+                        },
+                        "The Modern Church": {
+                            "Outcomes": [
+                                "Describe the missionary movement and global spread",
+                                "Explain the role of ecumenism in church unity",
+                                "Discuss the impact of technology on worship",
+                                "Analyze contemporary challenges like secularism"
+                            ]
+                        }
+                    }
+                },
+                "Christian Living Today": {
+                    "SubStrands": {
+                        "Ethics and Morality": {
+                            "Outcomes": [
+                                "Explain Christian ethics based on the Ten Commandments",
+                                "Describe the role of conscience in decision-making",
+                                "Discuss bioethical issues like abortion and euthanasia",
+                                "Analyze social justice and poverty alleviation"
+                            ]
+                        },
+                        "Relationships and Family": {
+                            "Outcomes": [
+                                "Describe Christian teachings on marriage and family",
+                                "Explain the role of forgiveness in relationships",
+                                "Discuss parenting and child upbringing from a Christian perspective",
+                                "Analyze the impact of divorce on families"
+                            ]
+                        },
+                        "Vocation and Work": {
+                            "Outcomes": [
+                                "Explain the Christian view of work as a calling",
+                                "Describe the dignity of labor and work ethics",
+                                "Discuss the balance between work and rest",
+                                "Analyze the role of work in personal and societal development"
+                            ]
+                        },
+                        "Stewardship and Environment": {
+                            "Outcomes": [
+                                "Describe Christian stewardship of creation",
+                                "Explain the responsibility towards the environment",
+                                "Discuss sustainable living and resource management",
+                                "Analyze the impact of climate change from a Christian perspective"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Islamic Religious Education": {
+            "Strands": {
+                "Qur’an": {
+                    "SubStrands": {
+                        "Selected Surahs": {
+                            "Outcomes": [
+                                "Explain the basic meaning of selected Surahs: Al-Fatiha, An-Naas, Al-Falaq, Al-Ikhlas, Al-Masad, An-Nasr, Al-Kafirun."
+                            ]
+                        }
+                    }
+                },
+                "Hadith": {
+                    "SubStrands": {
+                        "Hadith on brushing teeth": {
+                            "Outcomes": [
+                                "Read the selected hadith on brushing teeth for the promotion of oral hygiene.",
+                                "Discuss the importance of brushing teeth as per the tradition of the prophet (S.AW).",
+                                "Practice brushing teeth as an act of ibadah.",
+                                "Appreciate the importance of brushing teeth so as to earn rewards from Allah (S.W.T.)."
+                            ]
+                        },
+                        "Hadith on Fitness": {
+                            "Outcomes": [
+                                "Read the selected Hadith on physical fitness to promote healthy living.",
+                                "Discuss the importance of physical fitness in the life of a Muslim.",
+                                "Participate in games and sports while observing Islamic values.",
+                                "Appreciate the importance of physical fitness as means of being dearer to Allah (S.W.T)."
+                            ]
+                        },
+                        "Hadith on etiquettes of eating": {
+                            "Outcomes": [
+                                "Read the selected hadith on appropriate manners of eating.",
+                                "Practice the etiquettes taught in the hadith when taking meals.",
+                                "Appreciate the importance of eating in accordance with the teachings of the prophet to earn rewards from Allah (S.W.T.)."
+                            ]
+                        }
+                    }
+                },
+                "Pillars of Iman": {
+                    "SubStrands": {
+                        "Attributes of Allah (S.W.T)": {
+                            "Outcomes": [
+                                "Identify the Attributes of Allah (S.W.T.) and their corresponding meaning to strengthen their belief in Allah (S.W.T.).",
+                                "Explain the significance of the given Attributes of Allah (S.W.T.) in shaping his/her character.",
+                                "Apply the Attributes of Allah (S.W.T.) while making dua (supplication).",
+                                "Appreciate the unique Attributes of Allah (S.W.T.) as part of Islamic faith."
+                            ]
+                        },
+                        "Angel and their duties": {
+                            "Outcomes": [
+                                "Identify the names of the angels and their duties as a Pillar of Iman.",
+                                "Explain the significance of belief in angels in life of a Muslim.",
+                                "Appreciate angels as Allah’s creation as a Pillar of Iman."
+                            ]
+                        },
+                        "Prophets mentioned in the Qur’an": {
+                            "Outcomes": [
+                                "Mention the twenty five prophets of Allah (S.W.T.) named in the Qur’an as divine messengers.",
+                                "Identify the Ulul Azm prophets from among the twenty five prophets of Allah to strengthen their Iman.",
+                                "Explain the significance of belief in prophets in the life of a Muslim.",
+                                "Apply the virtues of the prophets of Allah in their daily life.",
+                                "Appreciate the belief in the prophets of Allah as a Pillar of Iman."
+                            ]
+                        }
+                    }
+                },
+                "Devotional Acts": {
+                    "SubStrands": {
+                        "Twahara (Ritual Purity)": {
+                            "Outcomes": [
+                                "Outline the types of najasaat (impurities) a Muslim should avoid in order to perform acts of ibadah (worship).",
+                                "Demonstrate appropriate ways of removing najasaat (impurities) for the purpose of purification.",
+                                "Appreciate maintenance of ritual cleanliness as a condition for ibadah.",
+                                "Discuss the nullifiers of wudhu (Ablution) so as to maintain a state of ritual purity.",
+                                "Explain the significance of wudhu in the life of a Muslim.",
+                                "Appreciate the need to be in a state of purity as a condition for ibadah."
+                            ]
+                        },
+                        "Conditions for Swalah": {
+                            "Outcomes": [
+                                "State the conditions for Swalah as a requirement for its validity.",
+                                "Demonstrate the observable conditions for swalah in his/her daily life.",
+                                "Appreciate the need for observing the condition for swalah for its validity."
+                            ]
+                        },
+                        "Pillars of Swalah": {
+                            "Outcomes": [
+                                "Explain the pillars of swalah as a requirement for its validity.",
+                                "Apply the pillars of swalah correctly in daily prayers.",
+                                "Appreciate the need for observing the pillars of swalah by emulating the Sunnah of the Prophet (S.A.W.)."
+                            ]
+                        }
+                    }
+                },
+                "Akhlaq (Moral Values)": {
+                    "SubStrands": {
+                        "Virtues": {
+                            "Outcomes": [
+                                "Mention Allah’s creatures in his/her environment.",
+                                "Explain the significance of showing kindness to Allah’s creatures in the environment.",
+                                "Demonstrate ways through which he/she can show kindness to Allah’s creatures as an act of ibadah.",
+                                "Appreciate Allah’s creatures by being kind to them.",
+                                "Explain appropriate code of dress as per the teachings of Islam.",
+                                "Practise Islamic manners of dress as an act of ibadah.",
+                                "Discuss the significance of Islamic code of dress to enhance character formation.",
+                                "Appreciate Islamic code of dress as a means of earning rewards from Allah.",
+                                "Identify types of media in his/her environment to create awareness on various sources of information.",
+                                "Explain the positive use of media for Islamic character building.",
+                                "Observe Islamic ethics while using media in day-to-day life.",
+                                "Appreciate media as a gift from Allah (S.W.T.) by using them appropriately."
+                            ]
+                        },
+                        "Vices": {
+                            "Outcomes": [
+                                "Identify categories of people who deserve assistance in the society.",
+                                "Explain the evils of begging as a mean of fostering a work ethic.",
+                                "Appreciate work as an act of ibadah and a means of eradicating poverty.",
+                                "Identify ways of earning income while observing Islamic etiquettes."
+                            ]
+                        },
+                        "Dua (Supplication)": {
+                            "Outcomes": [
+                                "Recite the dua to seek Allah’s protection.",
+                                "Use the dua in his/her day-to-day life when leaving and entering the house.",
+                                "Appreciate the importance of using the dua to get protection from Allah (S.W.T.)."
+                            ]
+                        }
+                    }
+                },
+                "Muamalaat": {
+                    "SubStrands": {
+                        "Obligations of Parents to children": {
+                            "Outcomes": [
+                                "Discuss the obligations of parents to their children.",
+                                "Demonstrate ways in which parents can fulfil their obligations to their children.",
+                                "Discuss the importance of parents fulfilling their obligations towards their children.",
+                                "Appreciate love and care given to them by their parents by being obedient."
+                            ]
+                        },
+                        "Obligations of Children to Parents": {
+                            "Outcomes": [
+                                "Outline obligations of children to their parents.",
+                                "Explain the importance of obeying and respecting parents as a religious obligation.",
+                                "Demonstrate ways on how children obey and respect their parents as an act of worship.",
+                                "Appreciate their parents by respecting and obeying them."
+                            ]
+                        },
+                        "Children’s Obligations to Other Family Members": {
+                            "Outcomes": [
+                                "Discuss obligations of children to other family members as an act of ibadah (worship).",
+                                "Explain the significance of fulfilling obligations to other family members.",
+                                "Appreciate the strengthening of the bond with other family members by visiting them during special occasions."
+                            ]
+                        }
+                    }
+                },
+                "History of Islam": {
+                    "SubStrands": {
+                        "Prophet’s Marriage to Khadija (R.A)": {
+                            "Outcomes": [
+                                "Discuss the reasons why Khadija (R.A) proposed to marry the Prophet (S.A.W) so as to make responsible choices in life.",
+                                "Explain the role played by Khadija in the life of Prophet Muhammad (S.A.W).",
+                                "Appreciate the Prophet’s marriage to Khadija as a model for Muslims."
+                            ]
+                        },
+                        "Call to Prophethood": {
+                            "Outcomes": [
+                                "Discuss the prophet’s experience at cave Hira with Angel Jibril for spiritual growth.",
+                                "Explain the significance of the first five verses revealed to Prophet (S.A.W) in relation to education.",
+                                "Appreciate the role of Prophet (S.A.W) as a messenger of Allah (S.W.T) by emulating his practices."
+                            ]
+                        },
+                        "Al-Isra wal Miraj": {
+                            "Outcomes": [
+                                "Discuss the Prophet’s Night Journey to Heaven for spiritual nourishment.",
+                                "Explain the significance of al-Isra wal Miraj in the life of a Muslim.",
+                                "Appreciate al-Isra wal Miraj as an important event in the history of Islam."
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Hindu Religious Education": {
+            "Strands": {
+                "Principles of Hinduism": {
+                    "SubStrands": {
+                        "Principles of Hinduism": {
+                            "Outcomes": [
+                                "explain Hindu principles",
+                                "discuss dharma and karma",
+                                "appreciate Hindu ethics"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Business Studies": {
+            "Strands": {
+                "Business and Money Management": {
+                    "SubStrands": {
+                        "Money": {
+                            "Outcomes": [
+                                "illustrate the uses of money in day-to-day life",
+                                "identify the key security features of the Kenyan currency",
+                                "describe themes and symbols on the Kenyan currency",
+                                "appreciate the importance of money in the economy"
+                            ]
+                        },
+                        "Business Goals": {
+                            "Outcomes": [
+                                "explore the meaning and importance of setting personal goals for self-development",
+                                "analyse the factors to consider when setting personal goals for self-development",
+                                "set personal goals for self-development",
+                                "use ICT devices or exercise books for setting personal goals for self-development",
+                                "recognize the need for setting personal goals for self-development"
+                            ]
+                        },
+                        "Budgeting in Business": {
+                            "Outcomes": [
+                                "distinguish between talents and abilities of learners in school",
+                                "identify ways of nurturing talents and abilities for business purpose",
+                                "demonstrate personal talents and abilities in school",
+                                "relate talents and abilities to career opportunities in the world",
+                                "identify ethical issues related to the use of talents and abilities in business",
+                                "appreciate the importance of nurturing talent and abilities in generating income"
+                            ]
+                        },
+                        "Banking": {
+                            "Outcomes": [
+                                "distinguish between needs and wants as used in Business Studies",
+                                "explore the meaning of the term scarcity, choice, scale of preference and opportunity cost in relation to satisfaction of consumer needs and wants",
+                                "prepare a scale of preference to satisfy personal needs and wants",
+                                "justify the need for business activities for self and the community",
+                                "analyse trading activities in the community",
+                                "recognize the need for business activities in the satisfaction of human wants and needs for self and the community"
+                            ]
+                        }
+                    }
+                },
+                "Business and Its Environment": {
+                    "SubStrands": {
+                        "Business Activities": {
+                            "Outcomes": [
+                                "analyse types and importance of goods and services found in the local market",
+                                "distinguish between goods and services found in the market",
+                                "identify sources and places where consumers may buy goods and services",
+                                "embrace the value of goods and services for the satisfaction of human wants"
+                            ]
+                        },
+                        "Types of Business Ownership": {
+                            "Outcomes": [
+                                "examine the characteristics of economic resources used for production of goods and services",
+                                "analyse types of economic resources in Kenya",
+                                "explore sustainable ways of using economic resources in Kenya",
+                                "conduct resource mapping in the local community and classify economic resources",
+                                "appreciate the importance of economic resources in Kenya for the production of goods and services"
+                            ]
+                        },
+                        "Social Responsibility of Business": {
+                            "Outcomes": [
+                                "assess the meaning and importance of communication in business",
+                                "use ICT tools in business communication",
+                                "recognise the role of effective communication in business"
+                            ]
+                        },
+                        "Entrepreneurship": {
+                            "Outcomes": [
+                                "explore the meaning and importance of production in the community",
+                                "analyse the importance, characteristics and rewards for the factors of production in the community",
+                                "examine consumer concerns to addressed in the production of goods and services",
+                                "embrace the value of factors of production in producing goods and services to satisfy human wants"
+                            ]
+                        },
+                        "Production": {
+                            "Outcomes": [
+                                "relate the terms market, marketing and consumer to the consumption and business environment",
+                                "explain factors considered when selecting a suitable market for goods and services",
+                                "identify ICT platforms used for marketing goods and services",
+                                "appreciate the role of marketing in the satisfaction of human needs and wants in the society"
+                            ]
+                        },
+                        "Consumer Satisfaction": {
+                            "Outcomes": [
+                                "justify the need for government involvement in business in Kenya",
+                                "identify the legal requirements for starting and operating a simple business in Kenya",
+                                "recognise the role of Government in business in Kenya"
+                            ]
+                        }
+                    }
+                },
+                "Government and Global Influence in Business": {
+                    "SubStrands": {
+                        "Public Finance": {
+                            "Outcomes": [
+                                "explain the meaning of tax and taxation in Kenya",
+                                "examine the importance of paying taxes in Kenya",
+                                "investigate the need for paying taxes in Kenya",
+                                "desire to pay taxes as a Kenyan citizen"
+                            ]
+                        }
+                    }
+                },
+                "Financial Records in Business": {
+                    "SubStrands": {
+                        "Business Transactions": {
+                            "Outcomes": [
+                                "explain the meaning of a business transaction as used in business",
+                                "distinguish between cash and credit transactions in business",
+                                "identify financial documents used in buying and selling in business",
+                                "analyse methods used in making payments for goods and services",
+                                "appreciate the role of financial documents in record keeping in business"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Sports and Recreation": {
+            "Strands": {
+                "Sports": {
+                    "SubStrands": {
+                        "Sports": {
+                            "Outcomes": [
+                                "participate in sports activities",
+                                "apply sports rules",
+                                "discuss sports ethics",
+                                "appreciate physical fitness"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Music and Dance": {
+            "Strands": {
+                "Music": {
+                    "SubStrands": {
+                        "Music": {
+                            "Outcomes": [
+                                "perform music pieces",
+                                "compose songs",
+                                "appreciate music genres"
+                            ]
+                        }
+                    }
+                },
+                "Dance": {
+                    "SubStrands": {
+                        "Dance": {
+                            "Outcomes": [
+                                "perform dance routines",
+                                "create dance choreography",
+                                "appreciate cultural dances"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Theatre and Film": {
+            "Strands": {
+                "Theatre": {
+                    "SubStrands": {
+                        "Theatre": {
+                            "Outcomes": [
+                                "perform theatre plays",
+                                "write scripts",
+                                "appreciate theatre arts"
+                            ]
+                        }
+                    }
+                },
+                "Film": {
+                    "SubStrands": {
+                        "Film": {
+                            "Outcomes": [
+                                "produce short films",
+                                "edit videos",
+                                "appreciate film industry"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Fine Arts": {
+            "Strands": {
+                "Fine Arts": {
+                    "SubStrands": {
+                        "Fine Arts": {
+                            "Outcomes": [
+                                "create art works",
+                                "use art materials",
+                                "appreciate art forms"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Kenyan Sign Language": {
+            "Strands": {
+                "Sign Language": {
+                    "SubStrands": {
+                        "Sign Language": {
+                            "Outcomes": [
+                                "use KSL vocabulary",
+                                "communicate in KSL",
+                                "appreciate deaf culture"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Physical Education": {
+            "Strands": {
+                "Physical Education": {
+                    "SubStrands": {
+                        "Physical Education": {
+                            "Outcomes": [
+                                "participate in PE activities",
+                                "apply PE skills",
+                                "appreciate physical health"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Community Service Learning": {
+            "Strands": {
+                "Community Service": {
+                    "SubStrands": {
+                        "Community Service": {
+                            "Outcomes": [
+                                "participate in community service",
+                                "develop CSL projects",
+                                "appreciate community engagement"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "Advanced Mathematics": {
+            "Strands": {
+                "Advanced Math": {
+                    "SubStrands": {
+                        "Advanced Math": {
+                            "Outcomes": [
+                                "solve advanced math problems",
+                                "apply advanced concepts",
+                                "appreciate advanced mathematics"
                             ]
                         }
                     }
