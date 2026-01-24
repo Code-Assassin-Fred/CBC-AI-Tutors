@@ -21,6 +21,7 @@ interface ProgressEvent {
         substrand?: string;
         current?: number;
         total?: number;
+        candidates?: Array<{ title: string; url: string; thumb: string }>;
     };
     timestamp: string;
 }
@@ -274,7 +275,21 @@ export default function GenerationProgress({
                         <span className="text-white/40 text-xs min-w-[70px]">
                             {new Date(event.timestamp).toLocaleTimeString()}
                         </span>
-                        <span className="flex-1">{event.message}</span>
+                        <div className="flex-1 space-y-2">
+                            <span>{event.message}</span>
+                            {event.details?.candidates && (
+                                <div className="flex gap-2 overflow-x-auto py-2">
+                                    {event.details.candidates.map((c, idx) => (
+                                        <div key={idx} className="flex-shrink-0 w-24 space-y-1">
+                                            <div className="aspect-square rounded-lg bg-white/5 border border-white/10 overflow-hidden">
+                                                <img src={c.thumb || c.url} alt={c.title} className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity" />
+                                            </div>
+                                            <div className="text-[8px] text-white/40 truncate">{c.title}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 ))}
 
