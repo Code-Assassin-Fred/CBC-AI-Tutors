@@ -27,7 +27,7 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY || "");
 
 // Image settings - smaller sizes than DALL-E default
 const IMAGE_CONFIG = {
-    model: "gemini-2.0-flash-exp",  // Gemini 2.5 Flash with image generation
+    model: "gemini-3-pro-image-preview",  // Gemini 3 Pro Image Generation
     mimeType: "image/png" as const,
     maxRetries: 3,
     retryDelayMs: 2000,
@@ -180,7 +180,7 @@ export async function generateImageWithGemini(
             imageUrl: storageUrl,
             isGenerated: true,
             generatedAt: new Date(),
-            generationModel: "gemini-2.0-flash-exp"
+            generationModel: "gemini-3-pro-image-preview"
         });
 
         console.log(`[Gemini] Successfully generated: ${imageMetadata.id}`);
@@ -256,7 +256,7 @@ async function uploadImageToStorage(
                 strand: metadata.strand,
                 category: metadata.category,
                 generatedAt: new Date().toISOString(),
-                generator: "gemini-2.0-flash-exp"
+                generator: "gemini-3-pro-image-preview"
             }
         }
     });
@@ -428,7 +428,7 @@ export async function getGenerationStats(): Promise<{
 // ============================================
 
 /**
- * Generate a course thumbnail using Gemini 2.0 Flash
+ * Generate a primary course thumbnail using Gemini 3 Pro
  * Returns the Firebase Storage URL or null if generation fails
  */
 export async function generateCourseThumbnail(params: {
@@ -521,7 +521,7 @@ async function uploadCourseThumbnailToStorage(
             metadata: {
                 courseId,
                 generatedAt: new Date().toISOString(),
-                generator: "gemini-2.0-flash-exp"
+                generator: "gemini-3-pro-image-preview"
             }
         }
     });

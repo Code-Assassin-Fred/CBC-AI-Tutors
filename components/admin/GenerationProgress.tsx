@@ -31,7 +31,6 @@ interface GenerationProgressProps {
     grade: string;
     subject: string;
     strand: string;
-    pipelineMode?: "Standard" | "Agentic";
     generatedBy?: string;
     onComplete?: (success: boolean) => void;
 }
@@ -101,7 +100,6 @@ export default function GenerationProgress({
     grade,
     subject,
     strand,
-    pipelineMode = "Standard",
     generatedBy,
     onComplete
 }: GenerationProgressProps) {
@@ -127,9 +125,7 @@ export default function GenerationProgress({
     }, [isGenerating, grade, subject, strand, pipelineMode]);
 
     const startGeneration = async () => {
-        const endpoint = pipelineMode === "Agentic"
-            ? "/api/generate-strand-agentic"
-            : "/api/generate-strand-stream";
+        const endpoint = "/api/generate-strand-stream";
 
         try {
             const response = await fetch(endpoint, {

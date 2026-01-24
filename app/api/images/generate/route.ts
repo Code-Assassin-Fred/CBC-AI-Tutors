@@ -1,15 +1,7 @@
 /**
  * Image Generation API
  * 
- * Endpoints for generating educational images using Gemini 2.5 Flash.
- * 
- * POST /api/images/generate
- * - Generate images for a textbook or specific image IDs
- * - Supports single or batch generation
- * - Returns progress via streaming for batch operations
- * 
- * GET /api/images/generate
- * - Get generation statistics and pending images
+ * Endpoints for generating educational images using Gemini 3 Pro.
  */
 
 import { NextRequest, NextResponse } from "next/server";
