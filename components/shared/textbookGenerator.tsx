@@ -307,6 +307,7 @@ export default function GeneratePage() {
           grade={selectedGrade}
           subject={selectedSubject}
           strand={selectedStrand}
+          pipelineMode={pipelineMode}
           generatedBy={user?.uid}
           onComplete={handleGenerationComplete}
         />
