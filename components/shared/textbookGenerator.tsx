@@ -72,6 +72,7 @@ export default function GeneratePage() {
   const [teacherHtml, setTeacherHtml] = useState<string>("");
   const [images, setImages] = useState<any[]>([]);
   const [mode, setMode] = useState<"Learner" | "Teacher">("Learner");
+  const [pipelineMode, setPipelineMode] = useState<"Standard" | "Agentic">("Standard");
   const [isGenerating, setIsGenerating] = useState(false);
   const [useStreaming, setUseStreaming] = useState(true);
 
@@ -177,8 +178,33 @@ export default function GeneratePage() {
             )}
           </div>
 
-          {/* Streaming toggle */}
-          <div className="flex items-center gap-3">
+          {/* Pipeline & Streaming Toggles */}
+          <div className="flex items-center gap-6">
+            {/* Pipeline Toggle */}
+            <div className="flex items-center gap-3 border-r border-white/10 pr-6">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#9aa6b2]">Pipeline</span>
+              <div className="flex items-center gap-1.5 p-1 bg-[#10151a] rounded-xl border border-white/5">
+                <button
+                  onClick={() => setPipelineMode("Standard")}
+                  className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${pipelineMode === "Standard"
+                    ? "bg-white/10 text-white shadow-sm"
+                    : "text-[#9aa6b2] hover:text-white"
+                    }`}
+                >
+                  Standard
+                </button>
+                <button
+                  onClick={() => setPipelineMode("Agentic")}
+                  className={`px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all ${pipelineMode === "Agentic"
+                    ? "bg-sky-500/10 text-sky-400 shadow-sm border border-sky-500/20"
+                    : "text-[#9aa6b2] hover:text-white"
+                    }`}
+                >
+                  Agentic (Gemini)
+                </button>
+              </div>
+            </div>
+
             <label className="flex items-center gap-2 cursor-pointer group">
               <span className="text-xs font-medium text-[#9aa6b2] group-hover:text-white/80 transition-colors">Show AI Progress</span>
               <div className="relative">

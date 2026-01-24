@@ -124,8 +124,12 @@ export default function GenerationProgress({
     }, [isGenerating, grade, subject, strand]);
 
     const startGeneration = async () => {
+        const endpoint = (grade === "Grade 5" && subject === "Science and Technology") || window.location.href.includes("agentic")
+            ? "/api/generate-strand-agentic"
+            : "/api/generate-strand-stream";
+
         try {
-            const response = await fetch("/api/generate-strand-stream", {
+            const response = await fetch(endpoint, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ grade, subject, strand, generatedBy })

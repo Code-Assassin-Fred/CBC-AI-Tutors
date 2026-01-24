@@ -5,14 +5,12 @@
  * This is Step 1 of course generation - creating the high-level outline.
  */
 
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { CourseOutline, LessonOutline, CourseDifficulty } from '@/types/course';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
-const MODEL = 'gpt-4o-mini';
+const GEMINI_API_KEY = process.env.GEMINI_IMAGE_API_KEY || process.env.GOOGLE_API_KEY;
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY || "");
+const MODEL = "gemini-2.0-flash-exp";
 
 // ============================================
 // STEP 1: RESEARCH TOPIC
@@ -50,14 +48,16 @@ Respond with ONLY a JSON object:
     "possibleTags": ["tag1", "tag2", ...]
 }`;
 
-    const response = await openai.chat.completions.create({
+    const model = genAI.getGenerativeModel({
         model: MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
+        generationConfig: {
+            temperature: 0.7,
+            responseMimeType: "application/json",
+        }
     });
 
-    const text = response.choices[0]?.message?.content || '{}';
+    const response = await model.generateContent(prompt);
+    const text = response.response.text() || '{}';
     return JSON.parse(text) as TopicResearch;
 }
 
@@ -98,14 +98,16 @@ Respond with ONLY a JSON object:
     "lessonTitles": ["Lesson 1 Title", "Lesson 2 Title", ...]
 }`;
 
-    const response = await openai.chat.completions.create({
+    const model = genAI.getGenerativeModel({
         model: MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
+        generationConfig: {
+            temperature: 0.7,
+            responseMimeType: "application/json",
+        }
     });
 
-    const text = response.choices[0]?.message?.content || '{}';
+    const response = await model.generateContent(prompt);
+    const text = response.response.text() || '{}';
     return JSON.parse(text) as CourseStructure;
 }
 
@@ -148,14 +150,16 @@ Respond with ONLY a JSON object:
     ]
 }`;
 
-    const response = await openai.chat.completions.create({
+    const model = genAI.getGenerativeModel({
         model: MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
+        generationConfig: {
+            temperature: 0.7,
+            responseMimeType: "application/json",
+        }
     });
 
-    const text = response.choices[0]?.message?.content || '{}';
+    const response = await model.generateContent(prompt);
+    const text = response.response.text() || '{}';
     const parsed = JSON.parse(text);
     return parsed.lessons as LessonOutline[];
 }
