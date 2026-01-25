@@ -34,7 +34,17 @@ export default function HeroSection() {
     };
 
     return (
-        <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#0a1410] via-[#0d1912] to-[#080f0c]">
+        <section className="relative min-h-screen w-full overflow-hidden bg-[#050a08]">
+            {/* Background Effects */}
+            <div className="absolute top-0 left-0 w-full h-[800px] overflow-hidden pointer-events-none">
+                {/* Main Green Beam/Spotlight */}
+                <div
+                    className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] bg-[#00E18A]/10 blur-[120px] rounded-full mix-blend-screen"
+                    style={{ transform: 'rotate(15deg)' }}
+                />
+                {/* Secondary softer glow */}
+                <div className="absolute top-[10%] left-[20%] w-[40%] h-[40%] bg-[#00E18A]/5 blur-[80px] rounded-full" />
+            </div>
             <Navbar />
 
             <div className="relative z-10 flex items-center min-h-screen pt-32 pb-20 px-6 md:px-12 lg:px-20">
@@ -58,12 +68,12 @@ export default function HeroSection() {
                         <div className="flex flex-col sm:flex-row gap-4 pt-4">
                             <button
                                 onClick={handleGetStarted}
-                                className="group bg-[#00E18A] text-slate-900 px-8 py-4 rounded-xl font-semibold hover:bg-[#00c978] hover:shadow-lg hover:shadow-[#00E18A]/30 transition-all duration-300"
+                                className="group bg-[#00E18A] text-slate-900 px-6 py-2.5 rounded-lg text-sm font-bold hover:bg-[#00c978] hover:shadow-lg hover:shadow-[#00E18A]/30 transition-all duration-300"
                             >
                                 <span className="flex items-center justify-center gap-2">
                                     Get Started
                                     <svg
-                                        className="w-5 h-5 group-hover:translate-x-0.5 transition-transform"
+                                        className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -78,7 +88,7 @@ export default function HeroSection() {
                                 </span>
                             </button>
 
-                            <button className="border-2 border-slate-600 text-slate-200 px-8 py-4 rounded-xl font-semibold hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300">
+                            <button className="border-2 border-slate-600 text-slate-200 px-6 py-2.5 rounded-lg text-sm font-bold hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300">
                                 View Features
                             </button>
                         </div>

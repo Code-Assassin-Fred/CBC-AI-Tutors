@@ -35,17 +35,17 @@ export default function Navbar() {
 
     const links = [
         { name: "Home", href: "/" },
-        { name: "About", href: "/about" },
-        { name: "Features", href: "/features" },
-        { name: "Contact Us", href: "/contact" },
+        { name: "About", href: "#about" },
+        { name: "Features", href: "#features" },
+        { name: "Contact Us", href: "#contact" },
     ];
 
     return (
         <nav
             className={`${isScrolled
-                    ? `fixed top-0 bg-black/80 backdrop-blur-md py-5 shadow-lg border-b border-white/10 ${!isVisible ? "-translate-y-full" : "translate-y-0"
-                    }`
-                    : "absolute top-0 bg-transparent py-6 border-b border-transparent"
+                ? `fixed top-0 bg-[#050a08]/95 backdrop-blur-md py-5 shadow-lg border-b border-white/5 ${!isVisible ? "-translate-y-full" : "translate-y-0"
+                }`
+                : "absolute top-0 bg-transparent py-6 border-b border-transparent"
                 } left-0 right-0 z-50 transition-all duration-300`}
         >
             <div className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
