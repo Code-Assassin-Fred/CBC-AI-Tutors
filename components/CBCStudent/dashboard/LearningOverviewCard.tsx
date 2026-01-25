@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '../shared/Card';
 import { useSchedule } from '@/lib/context/ScheduleContext';
 import { useCourses } from '@/lib/context/CoursesContext';
 import { useAuth } from '@/lib/context/AuthContext';
-import { useEffect, useState } from 'react';
 
 interface LearningOverviewCardProps {
   isLoading?: boolean;
