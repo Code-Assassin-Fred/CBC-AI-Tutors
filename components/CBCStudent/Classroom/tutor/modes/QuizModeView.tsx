@@ -429,7 +429,14 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
                 {!isExplanationQuestion && (
                     <div className="space-y-2 mb-4">
                         {currentQuestion.options?.map((option, index) => {
-                            const optionLetter = option.charAt(0);
+                            // Extract letter (A, B, C, D) from "A. Label" or use index as fallback
+                            // Also handle cases where AI might just give "True" or "False"
+                            const match = option.match(/^([A-D])\.\s*(.*)/i);
+                            const optionLetter = match ? match[1].toUpperCase() :
+                                (option.toUpperCase() === 'TRUE' ? 'A' :
+                                    option.toUpperCase() === 'FALSE' ? 'B' :
+                                        option.charAt(0).toUpperCase());
+
                             const isSelected = selectedAnswer === optionLetter;
                             const isCorrectOption = optionLetter === currentQuestion.correctAnswer;
 

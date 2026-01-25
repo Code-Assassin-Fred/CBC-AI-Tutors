@@ -96,12 +96,23 @@ Respond with ONLY a JSON object:
       "id": "q1",
       "type": "multiple_choice",
       "question": "Question text?",
-      "options": ["A. Option 1", "B. Option 2", "C. Option 3", "D. Option 4"],
+      "options": ["A. Choice 1", "B. Choice 2", "C. Choice 3", "D. Choice 4"],
       "correctAnswer": "C",
-      "explanation": "Detailed explanation of why C is correct...",
+      "explanation": "Detailed explanation...",
       "difficulty": "easy",
       "concept": "Concept being tested",
       "hint": "Optional hint for struggling students"
+    },
+    {
+      "id": "q4",
+      "type": "true_false",
+      "question": "Is the earth flat?",
+      "options": ["A. True", "B. False"],
+      "correctAnswer": "B",
+      "explanation": "The earth is an oblate spheroid.",
+      "difficulty": "easy",
+      "concept": "Concept being tested",
+      "hint": "Think about the shape of planets."
     },
     {
       "id": "q8",
