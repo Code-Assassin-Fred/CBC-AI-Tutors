@@ -37,14 +37,14 @@ export default function HeroSection() {
     <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#0a1410] via-[#0d1912] to-[#080f0c]">
       <Navbar />
 
-      <div className="relative z-10 flex items-center min-h-screen pt-32 pb-20 px-6 md:px-12 lg:px-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center w-full max-w-7xl mx-auto">
+      <div className="relative z-10 flex items-center min-h-screen pt-24 pb-20 px-6 md:px-12 lg:px-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full max-w-7xl mx-auto">
 
           {/* Left: Text Section */}
-          <div className="text-left space-y-6 mt-4">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+          <div className="text-left space-y-6 mt-4 lg:mt-0 order-2 lg:order-1">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
               AI-Powered Learning{" "}
-              <span className="text-[#00E18A]">for CBC</span>{" "}
+              <span className="text-blue-500">for CBC</span>{" "}
               <span className="italic font-serif text-slate-300">Students & Teachers</span>
             </h1>
 
@@ -58,7 +58,7 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button
                 onClick={handleGetStarted}
-                className="group bg-[#00E18A] text-slate-900 px-8 py-4 rounded-xl font-semibold hover:bg-[#00c978] hover:shadow-lg hover:shadow-[#00E18A]/30 transition-all duration-300"
+                className="group bg-blue-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 text-center"
               >
                 <span className="flex items-center justify-center gap-2">
                   Get Started
@@ -85,23 +85,21 @@ export default function HeroSection() {
           </div>
 
           {/* Right: Smooth Peek Transition Carousel */}
-          <div className="hidden lg:flex relative h-[480px] w-full flex-col justify-start items-center overflow-visible">
+          <div className="order-1 lg:order-2 relative h-[300px] sm:h-[400px] lg:h-[480px] w-full flex flex-col justify-start items-center overflow-visible">
             <AnimatePresence mode="popLayout">
               {/* Main Slide */}
               <motion.div
                 key={`main-${currentIndex}`}
-                className="absolute top-0 left-0 right-0 mx-auto w-full h-[340px] rounded-2xl overflow-hidden border-[10px] border-white/50"
+                className="absolute top-0 left-0 right-0 mx-auto w-full h-[220px] sm:h-[300px] lg:h-[340px] rounded-2xl overflow-hidden border-[6px] lg:border-[10px] border-white/50 bg-black/20"
                 initial={{
-                  top: 360,
-                  height: 120,
-                  width: "auto",
+                  top: 240,
+                  height: 100,
                   scale: 0.95,
                   opacity: 0.7,
                 }}
                 animate={{
                   top: 0,
-                  height: 340,
-                  width: "100%",
+                  height: "100%", // Controlled by container height class
                   scale: 1,
                   opacity: 1,
                 }}
@@ -118,15 +116,15 @@ export default function HeroSection() {
                 <img
                   src={slides[currentIndex]}
                   alt={`Slide ${currentIndex + 1}`}
-                  className="w-full h-full object-contain rounded-xl"
+                  className="w-full h-full object-contain rounded-xl p-1"
                 />
               </motion.div>
             </AnimatePresence>
 
-            {/* Next Slide (peek below) */}
+            {/* Next Slide (peek below) - Hidden on smallest mobile for cleaner look */}
             <motion.div
               key={`peek-${nextIndex}`}
-              className="absolute top-[360px] w-auto max-w-full h-[120px] rounded-2xl overflow-hidden border-[10px] border-white/50 opacity-70"
+              className="absolute top-[240px] sm:top-[320px] lg:top-[360px] w-[80%] lg:w-auto max-w-full h-[80px] sm:h-[100px] lg:h-[120px] rounded-2xl overflow-hidden border-[4px] lg:border-[10px] border-white/50 opacity-50 lg:opacity-70 bg-black/20"
               initial={{ y: 20, scale: 0.85, opacity: 0 }}
               animate={{ y: 0, scale: 0.95, opacity: 0.7 }}
               transition={{ duration: 1, ease: "easeOut" }}
@@ -134,15 +132,15 @@ export default function HeroSection() {
               <img
                 src={slides[nextIndex]}
                 alt={`Next slide`}
-                className="h-full w-auto object-contain rounded-xl"
+                className="h-full w-full object-contain rounded-xl p-1"
               />
             </motion.div>
           </div>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+      {/* Scroll Indicator - Hidden on mobile to save space */}
+      <div className="hidden md:block absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
         <svg
           className="w-6 h-6 text-white/60"
           fill="none"
