@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/firebase';
 import { adminDb } from '@/lib/firebaseAdmin';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { generateQuizSummary } from '@/lib/agents/summaryAgent';
 import { UserActivity, QuizActivity } from '@/lib/types/agents';
+import * as admin from 'firebase-admin';
 
 /**
  * User Activity Persistence API
@@ -46,16 +45,17 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // Save to Firestore
+        // Save to Firestore using Admin SDK
         console.log('[User Activity API] Saving to Firestore...');
-        const activityRef = collection(db, 'userActivities');
-        const docRef = await addDoc(activityRef, {
+        const activityData = {
             userId,
             type,
             context,
             ...finalData,
-            timestamp: Timestamp.now(),
-        });
+            timestamp: admin.firestore.Timestamp.now(),
+        };
+
+        const docRef = await adminDb.collection('userActivities').add(activityData);
 
         // --- STREAK UPDATE LOGIC ---
         try {
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
                         longestStreak: Math.max(currentStreak.longestStreak || 0, nextStreakCount),
                         lastStudyDate: todayStr,
                         totalStudyDays: (currentStreak.totalStudyDays || 0) + 1,
-                        updatedAt: Timestamp.now(),
+                        updatedAt: admin.firestore.Timestamp.now(),
                     }, { merge: true });
 
                     console.log(`[User Activity API] Streak updated to ${nextStreakCount}`);
@@ -97,8 +97,8 @@ export async function POST(request: NextRequest) {
                     longestStreak: 1,
                     lastStudyDate: todayStr,
                     totalStudyDays: 1,
-                    createdAt: Timestamp.now(),
-                    updatedAt: Timestamp.now(),
+                    createdAt: admin.firestore.Timestamp.now(),
+                    updatedAt: admin.firestore.Timestamp.now(),
                 });
                 console.log('[User Activity API] Initial streak created');
             }
