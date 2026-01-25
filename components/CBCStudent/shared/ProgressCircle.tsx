@@ -15,9 +15,10 @@ export default function ProgressCircle({
   color = '#10b981',
   trackColor = '#1a1f26'
 }: ProgressCircleProps) {
+  const safeValue = isNaN(value) ? 0 : value;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (value / 100) * circumference;
+  const offset = circumference - (safeValue / 100) * circumference;
 
   return (
     <div className="relative inline-flex items-center justify-center">
