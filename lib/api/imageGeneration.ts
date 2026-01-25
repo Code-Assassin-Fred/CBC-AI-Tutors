@@ -1,7 +1,7 @@
 /**
  * DALL-E Image Generation Service
  * 
- * Generates educational images using OpenAI's DALL-E 3.
+ * Generates educational images using Gemini 3 Pro.
  * Handles:
  * - Image generation with educational prompts
  * - Firebase Storage upload for permanent hosting
@@ -9,20 +9,13 @@
  * - Rate limiting and error handling
  */
 
-import OpenAI from "openai";
+import { generateImageWithGemini } from "./geminiImageGeneration";
 import { adminDb, adminStorage } from "@/lib/firebaseAdmin";
 import { ImageMetadata } from "@/types/textbook";
 
 // ============================================
 // CONFIGURATION
 // ============================================
-
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-// DALL-E 3 settings
-const DALLE_MODEL = "dall-e-3";
-const IMAGE_SIZE = "1024x1024";
-const IMAGE_QUALITY = "standard";  // "standard" or "hd"
 
 // Rate limiting
 const GENERATION_DELAY_MS = 2000;  // Wait between generations
@@ -132,66 +125,20 @@ export async function generateImage(
         console.log(`[DALL-E] Prompt: ${imageMetadata.generationPrompt.substring(0, 100)}...`);
 
         // Call DALL-E 3
-        const response = await client.images.generate({
-            model: DALLE_MODEL,
-            prompt: imageMetadata.generationPrompt,
-            n: 1,
-            size: IMAGE_SIZE,
-            quality: IMAGE_QUALITY,
-            response_format: "url"
-        });
+        const result = await generateImageWithGemini(imageMetadata);
 
-        const dalleImageUrl = response.data?.[0]?.url;
-        const revisedPrompt = response.data?.[0]?.revised_prompt;
-
-        if (!dalleImageUrl) {
-            throw new Error("No image URL returned from DALL-E");
+        if (!result.success) {
+            throw new Error(result.error || "Gemini image generation failed");
         }
-
-        console.log(`[DALL-E] Generated successfully: ${imageMetadata.id}`);
-
-        let finalImageUrl = dalleImageUrl;
-        let storageUrl: string | undefined;
-
-        // Upload to Firebase Storage for permanent hosting
-        if (uploadToStorage) {
-            try {
-                storageUrl = await uploadToFirebaseStorage(
-                    dalleImageUrl,
-                    imageMetadata.id,
-                    {
-                        grade: imageMetadata.grade,
-                        subject: imageMetadata.subject,
-                        strand: imageMetadata.strand
-                    }
-                );
-                finalImageUrl = storageUrl;
-            } catch (storageError: any) {
-                console.error(`[Storage] Upload failed, using DALL-E URL:`, storageError.message);
-                // Fall back to DALL-E URL if storage upload fails
-            }
-        }
-
-        // Update Firestore with the image URLs
-        await adminDb.collection("images").doc(imageMetadata.id).update({
-            imageUrl: finalImageUrl,
-            storageUrl: storageUrl || null,
-            dalleUrl: dalleImageUrl,  // Keep original DALL-E URL as backup
-            isGenerated: true,
-            generatedAt: new Date(),
-            revisedPrompt: revisedPrompt || null
-        });
 
         return {
             success: true,
             imageId: imageMetadata.id,
-            imageUrl: finalImageUrl,
-            storageUrl,
-            revisedPrompt
+            imageUrl: result.imageUrl,
+            storageUrl: result.imageUrl,
         };
-
     } catch (error: any) {
-        console.error(`[DALL-E] Error generating ${imageMetadata.id}:`, error.message);
+        console.error(`[Gemini Image] Error generating ${imageMetadata.id}:`, error.message);
 
         // Update Firestore with error
         await adminDb.collection("images").doc(imageMetadata.id).update({

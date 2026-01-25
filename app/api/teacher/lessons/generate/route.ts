@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { generateGeminiJSON, MODELS } from '@/lib/api/gemini';
 import { v4 as uuidv4 } from 'uuid';
 import { adminDb } from '@/lib/firebaseAdmin';
 import {
@@ -19,11 +19,7 @@ import {
 export const runtime = 'nodejs';
 export const maxDuration = 120;
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
-const MODEL = 'gpt-4o-mini';
+const MODEL = MODELS.flash;
 
 export async function POST(request: NextRequest) {
     try {
@@ -104,18 +100,7 @@ Format your response as JSON matching this structure:
     "summary": "Key takeaways paragraph"
 }`;
 
-                    const completion = await openai.chat.completions.create({
-                        model: MODEL,
-                        messages: [
-                            {
-                                role: 'system',
-                                content: 'You are an expert curriculum designer. Always respond with valid JSON only.',
-                            },
-                            { role: 'user', content: lessonPrompt },
-                        ],
-                        response_format: { type: 'json_object' },
-                        temperature: 0.7,
-                    });
+                    const lessonData = await generateGeminiJSON<any>(lessonPrompt, MODEL);
 
                     sendEvent({
                         type: 'progress',
@@ -124,8 +109,7 @@ Format your response as JSON matching this structure:
                         percentage: 70,
                     });
 
-                    const responseText = completion.choices[0]?.message?.content || '{}';
-                    const lessonData = JSON.parse(responseText);
+                    // Response already parsed
 
                     sendEvent({
                         type: 'progress',

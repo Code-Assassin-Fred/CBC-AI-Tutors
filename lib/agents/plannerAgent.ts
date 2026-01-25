@@ -10,7 +10,7 @@
  * 6. Refine - Polish all content
  */
 
-import OpenAI from 'openai';
+import { generateGeminiJSON, MODELS } from '@/lib/api/gemini';
 import {
   SubstrandContext,
   ConceptAnalysis,
@@ -21,12 +21,7 @@ import {
   PlannerOutput,
 } from '@/lib/types/agents';
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const MODEL = 'gpt-4o-mini';
+const MODEL = MODELS.flash;
 
 // ============================================
 // STEP 1: ANALYZE
@@ -55,15 +50,8 @@ Respond with ONLY a JSON object:
   "estimatedLearningTime": "X minutes"
 }`;
 
-  const response = await openai.chat.completions.create({
-    model: MODEL,
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.7,
-    response_format: { type: 'json_object' },
-  });
-
-  const text = response.choices[0]?.message?.content || '{}';
-  return JSON.parse(text) as ConceptAnalysis;
+  const data = await generateGeminiJSON<ConceptAnalysis>(prompt, MODEL);
+  return data;
 }
 
 // ============================================
@@ -108,15 +96,8 @@ Respond with ONLY a JSON object:
   }
 }`;
 
-  const response = await openai.chat.completions.create({
-    model: MODEL,
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.7,
-    response_format: { type: 'json_object' },
-  });
-
-  const text = response.choices[0]?.message?.content || '{}';
-  return JSON.parse(text) as LessonOutlines;
+  const data = await generateGeminiJSON<LessonOutlines>(prompt, MODEL);
+  return data;
 }
 
 // ============================================
@@ -167,15 +148,8 @@ Respond with ONLY a JSON object:
   "reviewQuestions": ["Question 1?", "Question 2?"]
 }`;
 
-  const response = await openai.chat.completions.create({
-    model: MODEL,
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.7,
-    response_format: { type: 'json_object' },
-  });
-
-  const text = response.choices[0]?.message?.content || '{}';
-  return JSON.parse(text) as ReadModeContent;
+  const data = await generateGeminiJSON<ReadModeContent>(prompt, MODEL);
+  return data;
 }
 
 // ============================================
@@ -219,15 +193,8 @@ Respond with ONLY a JSON object:
   "conclusion": "Closing message"
 }`;
 
-  const response = await openai.chat.completions.create({
-    model: MODEL,
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.8,
-    response_format: { type: 'json_object' },
-  });
-
-  const text = response.choices[0]?.message?.content || '{}';
-  return JSON.parse(text) as PodcastScript;
+  const data = await generateGeminiJSON<PodcastScript>(prompt, MODEL);
+  return data;
 }
 
 // ============================================
@@ -280,15 +247,8 @@ Respond with ONLY a JSON object:
   "completionMessage": "Congratulations message when all chunks are mastered"
 }`;
 
-  const response = await openai.chat.completions.create({
-    model: MODEL,
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.7,
-    response_format: { type: 'json_object' },
-  });
-
-  const text = response.choices[0]?.message?.content || '{}';
-  return JSON.parse(text) as ImmersiveContent;
+  const data = await generateGeminiJSON<ImmersiveContent>(prompt, MODEL);
+  return data;
 }
 
 // ============================================

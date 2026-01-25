@@ -7,7 +7,7 @@
  * 3. Validate - Check quality and accuracy
  */
 
-import OpenAI from 'openai';
+import { generateGeminiJSON, MODELS } from '@/lib/api/gemini';
 import {
   SubstrandContext,
   ExtractedConcepts,
@@ -15,11 +15,7 @@ import {
   QuizOutput,
 } from '@/lib/types/agents';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const MODEL = 'gpt-4o-mini';
+const MODEL = MODELS.flash;
 
 // ============================================
 // STEP 1: EXTRACT CONCEPTS
@@ -56,15 +52,8 @@ Respond with ONLY a JSON object:
   ]
 }`;
 
-  const response = await openai.chat.completions.create({
-    model: MODEL,
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.7,
-    response_format: { type: 'json_object' },
-  });
-
-  const text = response.choices[0]?.message?.content || '{}';
-  return JSON.parse(text) as ExtractedConcepts;
+  const data = await generateGeminiJSON<ExtractedConcepts>(prompt, MODEL);
+  return data;
 }
 
 // ============================================
@@ -135,16 +124,8 @@ Respond with ONLY a JSON object:
 
 Create exactly 10 questions: 7 choice-based (multiple_choice/true_false) and 3 explanation type.`;
 
-  const response = await openai.chat.completions.create({
-    model: MODEL,
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.7,
-    response_format: { type: 'json_object' },
-  });
-
-  const text = response.choices[0]?.message?.content || '{}';
-  const parsed = JSON.parse(text);
-  return parsed.questions as QuizQuestion[];
+  const data = await generateGeminiJSON<{ questions: QuizQuestion[] }>(prompt, MODEL);
+  return data.questions;
 }
 
 // ============================================

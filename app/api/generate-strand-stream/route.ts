@@ -14,7 +14,7 @@
 import { NextRequest } from "next/server";
 import fs from "fs";
 import path from "path";
-import OpenAI from "openai";
+import { generateGeminiText, MODELS } from '@/lib/api/gemini';
 import { adminDb } from "@/lib/firebaseAdmin";
 import {
     buildLanguageInstructions,
@@ -31,8 +31,7 @@ import { generateImageBatch, BatchGenerationProgress } from "@/lib/api/geminiIma
 // CONFIGURATION
 // ============================================
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const MODEL = "gpt-4.1";
+const MODEL = MODELS.pro;
 const TEMPERATURE = 0.4;
 const MAX_TOKENS = 8000;
 
@@ -210,17 +209,10 @@ export async function POST(req: NextRequest) {
 
                 const studentPrompt = buildStudentPrompt(grade, subject, strand, subName, outcomes, template, languageInstructions, subjectInstructions);
 
-                const studentResponse = await client.chat.completions.create({
-                    model: MODEL,
-                    messages: [
-                        { role: "system", content: buildSystemPrompt(grade, subject) },
-                        { role: "user", content: studentPrompt }
-                    ],
-                    temperature: TEMPERATURE,
-                    max_tokens: MAX_TOKENS
-                });
-
-                const studentHtml = studentResponse.choices[0]?.message?.content || "";
+                const studentHtml = await generateGeminiText(
+                    `System: ${buildSystemPrompt(grade, subject)}\n\nUser: ${studentPrompt}`,
+                    MODEL
+                );
                 allStudentHtml.push(studentHtml);
 
                 send({
@@ -240,17 +232,10 @@ export async function POST(req: NextRequest) {
 
                 const teacherPrompt = buildTeacherPrompt(grade, subject, strand, subName, outcomes, languageInstructions);
 
-                const teacherResponse = await client.chat.completions.create({
-                    model: MODEL,
-                    messages: [
-                        { role: "system", content: buildSystemPrompt(grade, subject).replace("Learner's Book", "Teacher's Guide") },
-                        { role: "user", content: teacherPrompt }
-                    ],
-                    temperature: TEMPERATURE,
-                    max_tokens: MAX_TOKENS
-                });
-
-                const teacherHtml = teacherResponse.choices[0]?.message?.content || "";
+                const teacherHtml = await generateGeminiText(
+                    `System: ${buildSystemPrompt(grade, subject).replace("Learner's Book", "Teacher's Guide")}\n\nUser: ${teacherPrompt}`,
+                    MODEL
+                );
                 allTeacherHtml.push(teacherHtml);
 
                 send({

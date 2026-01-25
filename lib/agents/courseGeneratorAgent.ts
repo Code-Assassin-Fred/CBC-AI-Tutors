@@ -5,7 +5,7 @@
  * and quiz creation for on-demand course generation.
  */
 
-import OpenAI from 'openai';
+import { generateGeminiJSON, MODELS } from '@/lib/api/gemini';
 import { v4 as uuidv4 } from 'uuid';
 import {
     Course,
@@ -33,11 +33,7 @@ import {
 } from '@/lib/prompts/coursePrompts';
 import { generateCourseThumbnail } from '@/lib/api/geminiImageGeneration';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
-const MODEL = 'gpt-4o-mini';
+const MODEL = MODELS.flash;
 
 // ============================================
 // LESSON CONTENT GENERATION
@@ -58,15 +54,8 @@ async function analyzeLesson(outline: LessonOutline): Promise<LessonAnalysis> {
         outline.learningObjectives
     );
 
-    const response = await openai.chat.completions.create({
-        model: MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
-    });
-
-    const text = response.choices[0]?.message?.content || '{}';
-    return JSON.parse(text) as LessonAnalysis;
+    const data = await generateGeminiJSON<LessonAnalysis>(prompt, MODEL);
+    return data;
 }
 
 async function generateReadContent(
@@ -80,15 +69,8 @@ async function generateReadContent(
         analysis.keyConcepts
     );
 
-    const response = await openai.chat.completions.create({
-        model: MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
-    });
-
-    const text = response.choices[0]?.message?.content || '{}';
-    return JSON.parse(text) as ReadModeContent;
+    const data = await generateGeminiJSON<ReadModeContent>(prompt, MODEL);
+    return data;
 }
 
 async function generatePodcastScript(
@@ -107,15 +89,8 @@ async function generatePodcastScript(
         analysis.keyConcepts
     );
 
-    const response = await openai.chat.completions.create({
-        model: MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.8, // Slightly higher for more natural conversation
-        response_format: { type: 'json_object' },
-    });
-
-    const text = response.choices[0]?.message?.content || '{}';
-    return JSON.parse(text) as PodcastScript;
+    const data = await generateGeminiJSON<PodcastScript>(prompt, MODEL);
+    return data;
 }
 
 async function generateImmersiveContent(
@@ -128,15 +103,8 @@ async function generateImmersiveContent(
         outline.learningObjectives
     );
 
-    const response = await openai.chat.completions.create({
-        model: MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
-    });
-
-    const text = response.choices[0]?.message?.content || '{}';
-    return JSON.parse(text) as ImmersiveContent;
+    const data = await generateGeminiJSON<ImmersiveContent>(prompt, MODEL);
+    return data;
 }
 
 async function generateLessonQuiz(
@@ -149,16 +117,8 @@ async function generateLessonQuiz(
         outline.learningObjectives
     );
 
-    const response = await openai.chat.completions.create({
-        model: MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
-    });
-
-    const text = response.choices[0]?.message?.content || '{}';
-    const parsed = JSON.parse(text);
-    return parsed.questions as QuizQuestion[];
+    const data = await generateGeminiJSON<{ questions: QuizQuestion[] }>(prompt, MODEL);
+    return data.questions;
 }
 
 // ============================================
@@ -224,15 +184,7 @@ async function generateFinalExam(
 ): Promise<CourseQuiz> {
     const prompt = FINAL_EXAM_PROMPT(courseTitle, lessons);
 
-    const response = await openai.chat.completions.create({
-        model: MODEL,
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.7,
-        response_format: { type: 'json_object' },
-    });
-
-    const text = response.choices[0]?.message?.content || '{}';
-    const parsed = JSON.parse(text);
+    const data = await generateGeminiJSON<{ questions: QuizQuestion[] }>(prompt, MODEL);
 
     return {
         id: uuidv4(),
@@ -240,7 +192,7 @@ async function generateFinalExam(
         type: 'final',
         title: `Final Exam: ${courseTitle}`,
         description: 'Comprehensive exam covering all course material',
-        questions: parsed.questions as QuizQuestion[],
+        questions: data.questions,
         passingScore: 70,
         timeLimit: 30,
     };

@@ -253,7 +253,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
     }, [stopSpeaking]);
 
     // ============================================
-    // LISTENING (STT) - OpenAI Whisper (Record then Transcribe)
+    // LISTENING (STT) - Gemini (Record then Transcribe)
     // ============================================
 
     // Record audio, then send to Whisper for accurate transcription

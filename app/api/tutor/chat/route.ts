@@ -5,12 +5,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { generateGeminiText, MODELS } from '@/lib/api/gemini';
 import { SubstrandContext, PlannerOutput, ChatMessage } from '@/lib/types/agents';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+const MODEL = MODELS.flash;
 
 interface ChatRequest {
     message: string;
@@ -71,14 +69,7 @@ INSTRUCTIONS:
 
 Respond directly as the tutor (don't include "Tutor:" prefix).`;
 
-        const response = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
-            messages: [{ role: 'user', content: prompt }],
-            temperature: 0.7,
-            max_tokens: 500,
-        });
-
-        const reply = response.choices[0]?.message?.content || 'I apologize, I could not generate a response. Please try again.';
+        const reply = await generateGeminiText(prompt, MODEL);
 
         return NextResponse.json({ response: reply });
     } catch (error) {

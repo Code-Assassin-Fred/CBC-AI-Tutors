@@ -1,36 +1,38 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
+import { genAI, MODELS } from "@/lib/api/gemini";
 
 export const revalidate = 0;
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(request: Request) {
     try {
-        // Get the audio file from form data
         const formData = await request.formData();
         const audioFile = formData.get('audio') as File;
 
         if (!audioFile) {
-            return NextResponse.json(
-                { error: "No audio file provided" },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: "No audio file provided" }, { status: 400 });
         }
 
-        console.log("[Whisper] Transcribing audio:", audioFile.name, "size:", audioFile.size);
+        console.log("[Gemini STT] Transcribing audio:", audioFile.name, "type:", audioFile.type);
 
-        // Send to OpenAI Whisper API
-        const transcription = await openai.audio.transcriptions.create({
-            file: audioFile,
-            model: "whisper-1",
-            language: "en",
-            response_format: "text",
-        });
+        // Convert File to base64
+        const arrayBuffer = await audioFile.arrayBuffer();
+        const base64Audio = Buffer.from(arrayBuffer).toString('base64');
 
-        console.log("[Whisper] Transcription complete:", transcription.substring(0, 100) + "...");
+        const model = genAI.getGenerativeModel({ model: MODELS.flash });
+
+        const result = await model.generateContent([
+            {
+                inlineData: {
+                    data: base64Audio,
+                    mimeType: audioFile.type || "audio/wav"
+                }
+            },
+            "Please transcribe this audio accurately. If it is empty or silent, ignore it. Respond only with the transcript text."
+        ]);
+
+        const transcription = result.response.text();
+
+        console.log("[Gemini STT] Transcription complete:", transcription.substring(0, 100) + "...");
 
         return NextResponse.json({
             transcript: transcription,
@@ -38,7 +40,7 @@ export async function POST(request: Request) {
         });
 
     } catch (err: any) {
-        console.error("[Whisper] Transcription error:", err);
+        console.error("[Gemini STT] Transcription error:", err);
         return NextResponse.json(
             { error: "Transcription failed", details: err.message },
             { status: 500 }

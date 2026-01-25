@@ -7,9 +7,9 @@
  */
 
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
+import { generateGeminiText, MODELS } from '@/lib/api/gemini';
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const MODEL = MODELS.flash;
 
 interface ChatRequest {
     message: string;
@@ -66,24 +66,10 @@ ${guideContent.slice(0, 12000)}
         }
 
         // Build conversation messages
-        const messages: OpenAI.ChatCompletionMessageParam[] = [
-            { role: "system", content: systemPrompt },
-            // Include recent history (last 10 messages)
-            ...history.slice(-10).map(h => ({
-                role: h.role as "user" | "assistant",
-                content: h.content
-            })),
-            { role: "user", content: message }
-        ];
-
-        const completion = await client.chat.completions.create({
-            model: "gpt-4.1-mini",
-            messages,
-            temperature: 0.7,
-            max_tokens: 1500,
-        });
-
-        const response = completion.choices[0]?.message?.content || "I'm here to help. Could you please rephrase your question?";
+        const response = await generateGeminiText(
+            `System: ${systemPrompt}\n\nUser: ${message}`,
+            MODEL
+        );
 
         return NextResponse.json({ response });
 

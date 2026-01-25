@@ -9,7 +9,7 @@
  * - Image placeholders with AI tutor descriptions
  */
 
-import OpenAI from "openai";
+import { generateGeminiText, MODELS } from '@/lib/api/gemini';
 import {
     EnhancedTextbook,
     TextbookContent,
@@ -31,9 +31,7 @@ import {
 // CONFIGURATION
 // ============================================
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-const MODEL = "gpt-4.1";
+const MODEL = MODELS.pro;
 const TEMPERATURE = 0.4;
 const MAX_TOKENS_OUTLINE = 2000;
 const MAX_TOKENS_CONTENT = 8000;
@@ -190,17 +188,9 @@ OUTPUT RULES:
 Write the complete textbook content now:
   `.trim();
 
-    const response = await client.chat.completions.create({
-        model: MODEL,
-        messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt }
-        ],
-        temperature: TEMPERATURE,
-        max_tokens: MAX_TOKENS_CONTENT
-    });
+    const response = await generateGeminiText(userPrompt, MODEL);
 
-    return response.choices[0]?.message?.content || "";
+    return response || "";
 }
 
 // ============================================
@@ -280,17 +270,9 @@ Only the sub-strand title at the very top uses <h2>.
 Write the complete Teacher's Guide now:
   `.trim();
 
-    const response = await client.chat.completions.create({
-        model: MODEL,
-        messages: [
-            { role: "system", content: systemPrompt.replace("Learner's Book", "Teacher's Guide") },
-            { role: "user", content: userPrompt }
-        ],
-        temperature: TEMPERATURE,
-        max_tokens: MAX_TOKENS_CONTENT
-    });
+    const response = await generateGeminiText(userPrompt, MODEL);
 
-    return response.choices[0]?.message?.content || "";
+    return response || "";
 }
 
 // ============================================
