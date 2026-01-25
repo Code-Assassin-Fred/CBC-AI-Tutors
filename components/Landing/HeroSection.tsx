@@ -44,14 +44,14 @@ export default function HeroSection() {
           <div className="text-left space-y-6 mt-4">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
               AI-Powered Learning{" "}
-              <span className="text-[#00E18A]">Beyond</span>{" "}
-              <span className="italic font-serif text-slate-300">the Classroom</span>
+              <span className="text-[#00E18A]">for CBC</span>{" "}
+              <span className="italic font-serif text-slate-300">Students & Teachers</span>
             </h1>
 
             <p className="text-slate-300 text-base md:text-lg leading-relaxed max-w-xl">
-              Master CBC curricula with personalized AI lessons.
-              From students seeking structured guidance to teachers creating engaging content — adaptive
-              learning for everyone.
+              Transform your CBC learning experience with AI-driven textbook lessons,
+              interactive quizzes, and personalized tutoring. Teachers can effortlessly
+              create custom content while students master the curriculum at their own pace.
             </p>
 
             {/* CTA Buttons */}
@@ -90,7 +90,7 @@ export default function HeroSection() {
               {/* Main Slide */}
               <motion.div
                 key={`main-${currentIndex}`}
-                className="absolute top-0 left-0 right-0 mx-auto w-full h-[340px] rounded-2xl overflow-hidden bg-[#0a1410] shadow-[0_8px_40px_rgba(0,0,0,0.6)]"
+                className="absolute top-0 left-0 right-0 mx-auto w-full h-[340px] rounded-2xl overflow-hidden border-[10px] border-white/50"
                 initial={{
                   top: 360,
                   height: 120,
@@ -126,7 +126,7 @@ export default function HeroSection() {
             {/* Next Slide (peek below) */}
             <motion.div
               key={`peek-${nextIndex}`}
-              className="absolute top-[360px] w-auto max-w-full h-[120px] rounded-2xl overflow-hidden bg-[#0a1410] shadow-[0_8px_40px_rgba(0,0,0,0.4)] opacity-70"
+              className="absolute top-[360px] w-auto max-w-full h-[120px] rounded-2xl overflow-hidden border-[10px] border-white/50 opacity-70"
               initial={{ y: 20, scale: 0.85, opacity: 0 }}
               animate={{ y: 0, scale: 0.95, opacity: 0.7 }}
               transition={{ duration: 1, ease: "easeOut" }}
