@@ -38,7 +38,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
         },
         {
             id: 'Teachers Guide',
-            label: 'Teachers Guide',
+            label: 'AI Teachers Guide',
             href: '/dashboard/teacher/guide',
             icon: (
                 <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">

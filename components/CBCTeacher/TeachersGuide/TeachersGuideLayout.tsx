@@ -309,10 +309,10 @@ export default function TeachersGuideLayout() {
                                     <div className="flex flex-col items-center justify-center h-full text-center px-8">
                                         <div className="text-8xl mb-6 opacity-30">📖</div>
                                         <h2 className="text-2xl font-bold text-white mb-3">
-                                            Welcome to Teacher's Guide
+                                            Welcome to AI Teacher's Guide
                                         </h2>
                                         <p className="text-white/60 text-lg max-w-md">
-                                            Select a grade, subject, and strand above to view the teaching guide.
+                                            Select a grade, subject, and strand above to view the teaching guide and get real-time AI assistance.
                                         </p>
                                     </div>
                                 )}
