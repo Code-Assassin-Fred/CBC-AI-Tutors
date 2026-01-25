@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
+import { adminDb } from '@/lib/firebaseAdmin';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { generateQuizSummary } from '@/lib/agents/summaryAgent';
 import { UserActivity, QuizActivity } from '@/lib/types/agents';
@@ -55,6 +56,57 @@ export async function POST(request: NextRequest) {
             ...finalData,
             timestamp: Timestamp.now(),
         });
+
+        // --- STREAK UPDATE LOGIC ---
+        try {
+            const streakRef = adminDb.collection('users').doc(userId).collection('metadata').doc('studyStreak');
+            const streakDoc = await streakRef.get();
+
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+
+            if (streakDoc.exists) {
+                const currentStreak = streakDoc.data() as any;
+
+                // Only update if not already studied today
+                if (currentStreak.lastStudyDate !== todayStr) {
+                    const yesterday = new Date(now);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+                    let nextStreakCount = 1;
+                    if (currentStreak.lastStudyDate === yesterdayStr) {
+                        nextStreakCount = (currentStreak.currentStreak || 0) + 1;
+                    }
+
+                    await streakRef.set({
+                        currentStreak: nextStreakCount,
+                        longestStreak: Math.max(currentStreak.longestStreak || 0, nextStreakCount),
+                        lastStudyDate: todayStr,
+                        totalStudyDays: (currentStreak.totalStudyDays || 0) + 1,
+                        updatedAt: Timestamp.now(),
+                    }, { merge: true });
+
+                    console.log(`[User Activity API] Streak updated to ${nextStreakCount}`);
+                }
+            } else {
+                // Initial streak
+                await streakRef.set({
+                    userId,
+                    currentStreak: 1,
+                    longestStreak: 1,
+                    lastStudyDate: todayStr,
+                    totalStudyDays: 1,
+                    createdAt: Timestamp.now(),
+                    updatedAt: Timestamp.now(),
+                });
+                console.log('[User Activity API] Initial streak created');
+            }
+        } catch (streakError) {
+            console.error('[User Activity API] Streak update failed (non-fatal):', streakError);
+        }
+        // ---------------------------
+
         console.log('[User Activity API] Saved successfully, ID:', docRef.id);
 
         return NextResponse.json({

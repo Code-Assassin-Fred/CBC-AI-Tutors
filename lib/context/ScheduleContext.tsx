@@ -10,6 +10,7 @@ import {
     UpcomingReminder,
     StudyBlockColor,
 } from '@/types/schedule';
+import { validateStreak, calculateNextStreak } from '../utils/streak-utils';
 import { useAuth } from './AuthContext';
 
 // ============================================
@@ -231,7 +232,16 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
                 const data = await response.json();
                 setBlocks(data.blocks || []);
                 setGoals(data.goals || []);
-                setStreak(data.streak || null);
+
+                // Validate streak on load (check if broken)
+                const loadedStreak = data.streak || null;
+                const validated = validateStreak(loadedStreak);
+                setStreak(validated);
+
+                // If streak was reset on load, sync with server
+                if (loadedStreak && validated && loadedStreak.currentStreak !== validated.currentStreak) {
+                    syncStreakToServer(validated);
+                }
             }
         } catch (error) {
             console.error('Failed to load schedule:', error);
@@ -335,25 +345,21 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
             console.error('Failed to complete block:', error);
         }
 
-        // Update streak (should also persist to Firestore ideally)
+        // Update streak using new utility (handles daily increment and resets correctly)
         setStreak(prev => {
-            const nextStreak = prev ? {
-                ...prev,
-                currentStreak: prev.currentStreak + 1,
-                longestStreak: Math.max(prev.longestStreak, prev.currentStreak + 1),
-                lastStudyDate: formatDate(new Date()),
-                totalStudyDays: prev.totalStudyDays + 1,
-            } : {
-                userId: user.uid,
-                currentStreak: 1,
-                longestStreak: 1,
-                lastStudyDate: formatDate(new Date()),
-                totalStudyDays: 1,
-                weeklyStudyDays: [1, 0, 0, 0, 0, 0, 0],
-            };
+            const nextStreak = calculateNextStreak(prev, user.uid);
 
             // Persist streak
-            fetch('/api/schedule', {
+            syncStreakToServer(nextStreak);
+
+            return nextStreak;
+        });
+    }, [user]);
+
+    const syncStreakToServer = useCallback(async (nextStreak: StudyStreak) => {
+        if (!user) return;
+        try {
+            await fetch('/api/schedule', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -362,10 +368,10 @@ export function ScheduleProvider({ children }: ScheduleProviderProps) {
                     updates: nextStreak,
                     userId: user.uid
                 }),
-            }).catch(err => console.error('Failed to persist streak:', err));
-
-            return nextStreak;
-        });
+            });
+        } catch (err) {
+            console.error('Failed to sync streak:', err);
+        }
     }, [user]);
 
     // Create goal
