@@ -13,6 +13,7 @@ import {
     CourseProgress,
 } from '@/types/course';
 import { useAuth } from './AuthContext';
+import { useActivityTimer } from '@/hooks/useActivityTimer';
 
 // ============================================
 // CONTEXT TYPE
@@ -105,6 +106,13 @@ export function CoursesProvider({ children }: CoursesProviderProps) {
     // Audio state
     const [isPlaying, setIsPlaying] = useState(false);
     const [audioRef] = useState<{ current: HTMLAudioElement | null }>({ current: null });
+
+    // Automatically track time spent in courses
+    useActivityTimer('course', currentCourse ? {
+        courseId: currentCourse.id,
+        lessonId: currentLesson?.id,
+        subject: currentCourse.title, // Use title as subject for courses
+    } : null);
 
     // ========================================
     // COURSE GENERATION

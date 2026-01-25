@@ -122,7 +122,7 @@ export default function GenerationProgress({
         setProgress({ current: 0, total: 0 });
 
         startGeneration();
-    }, [isGenerating, grade, subject, strand, pipelineMode]);
+    }, [isGenerating, grade, subject, strand]);
 
     const startGeneration = async () => {
         const endpoint = "/api/generate-strand-stream";

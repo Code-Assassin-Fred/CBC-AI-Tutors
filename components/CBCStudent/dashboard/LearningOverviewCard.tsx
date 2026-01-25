@@ -4,26 +4,84 @@ import React, { useState } from 'react';
 import Card from '../shared/Card';
 import { useSchedule } from '@/lib/context/ScheduleContext';
 import { useCourses } from '@/lib/context/CoursesContext';
+import { useAuth } from '@/lib/context/AuthContext';
+import { useEffect, useState } from 'react';
 
 interface LearningOverviewCardProps {
   isLoading?: boolean;
 }
 
-export default function LearningOverviewCard({ isLoading = false }: LearningOverviewCardProps) {
+export default function LearningOverviewCard({ isLoading: initialLoading = false }: LearningOverviewCardProps) {
   const [period, setPeriod] = useState('Weekly');
   const { daySchedules, weeklySchedule } = useSchedule();
   const { myCourses } = useCourses();
+  const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(initialLoading);
+  const [automatedMinutes, setAutomatedMinutes] = useState<{ [day: string]: number }>({});
 
-  // Calculate total hours from schedule data
-  const totalMinutes = weeklySchedule?.totalCompletedMinutes || 0;
-  const totalHours = (totalMinutes / 60).toFixed(1);
+  // Fetch manual sessions / activity logs that weren't scheduled
+  useEffect(() => {
+    if (!user) return;
 
-  // Build chart data from day schedules
-  const chartData = daySchedules.map(day => ({
-    day: day.dayName.charAt(0),
-    thisWeek: Math.round(day.totalMinutes / 60 * 10) / 10, // Convert to hours
-    lastWeek: 0, // Historical data not available yet
-  }));
+    const fetchAutomatedDurations = async () => {
+      try {
+        const res = await fetch(`/api/user/activity?userId=${user.uid}`);
+        const data = await res.json();
+        const activities = data.activities || [];
+
+        // Group additional minutes by day for the current week
+        const now = new Date();
+        const weekStart = new Date(now);
+        weekStart.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
+        weekStart.setHours(0, 0, 0, 0);
+
+        const dailyMinutes: { [day: string]: number } = {};
+
+        activities.forEach((act: any) => {
+          const actDate = new Date(act.timestamp);
+          if (actDate >= weekStart) {
+            const dayKey = actDate.toLocaleDateString('en-US', { weekday: 'short' }).charAt(0);
+
+            // Extract duration
+            let mins = 0;
+            if (act.type === 'study_session' && act.durationSeconds) {
+              mins = act.durationSeconds / 60;
+            } else if (act.type === 'quiz') {
+              mins = 10; // Assume 10 mins for a quiz if not tracked
+            } else if (act.type === 'chat') {
+              mins = 5; // Assume 5 mins for a chat if not tracked
+            }
+
+            dailyMinutes[dayKey] = (dailyMinutes[dayKey] || 0) + mins;
+          }
+        });
+
+        setAutomatedMinutes(dailyMinutes);
+      } catch (err) {
+        console.error('Failed to fetch automated durations:', err);
+      }
+    };
+
+    fetchAutomatedDurations();
+  }, [user]);
+
+  // Calculate total hours from schedule data + automated data
+  const totalScheduleMinutes = weeklySchedule?.totalCompletedMinutes || 0;
+  const totalAutomatedMinutes = Object.values(automatedMinutes).reduce((a, b) => a + b, 0);
+  const totalHours = ((totalScheduleMinutes + totalAutomatedMinutes) / 60).toFixed(1);
+
+  // Build chart data from day schedules + automated data
+  const chartData = daySchedules.map(day => {
+    const dayKey = day.dayName.charAt(0);
+    const scheduledMins = day.totalMinutes;
+    const autoMins = automatedMinutes[dayKey] || 0;
+
+    return {
+      day: dayKey,
+      thisWeek: Math.round((scheduledMins + autoMins) / 60 * 10) / 10,
+      lastWeek: 0,
+    };
+  });
 
   // If no schedule data, use placeholder
   const hasScheduleData = daySchedules.some(d => d.totalMinutes > 0);

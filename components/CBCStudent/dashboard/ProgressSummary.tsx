@@ -1,64 +1,125 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '../shared/Card';
 import ProgressCircle from '../shared/ProgressCircle';
 import { useCourses } from '@/lib/context/CoursesContext';
+import { useAuth } from '@/lib/context/AuthContext';
 import { useRouter } from 'next/navigation';
 
 interface ProgressSummaryProps {
   isLoading?: boolean;
 }
 
-export default function ProgressSummary({ isLoading = false }: ProgressSummaryProps) {
+export default function ProgressSummary({ isLoading: initialLoading = false }: ProgressSummaryProps) {
   const { myCourses, currentCourse } = useCourses();
+  const { user } = useAuth();
   const router = useRouter();
 
-  // Calculate progress metrics from real data
+  const [isLoading, setIsLoading] = useState(initialLoading);
+  const [cbeData, setCbeData] = useState({
+    totalSubstrands: 0,
+    completedSubstrands: 0,
+    averageQuizScore: 0,
+  });
+
+  // Fetch CBE Progress data
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchCbeProgress = async () => {
+      setIsLoading(true);
+      try {
+        // 1. Get user grade
+        const settingsRes = await fetch(`/api/user/${user.uid}/settings`);
+        const settingsData = await settingsRes.json();
+        const grade = settingsData.settings?.grade || '8'; // Default to 8 if not set
+
+        // 2. Fetch curriculum for total substrands
+        const curriculumRes = await fetch(`/api/curriculum?grade=${grade}`);
+        const curriculum = await curriculumRes.json();
+
+        // Count total substrands
+        let totalCount = 0;
+        Object.values(curriculum).forEach((subject: any) => {
+          if (subject.Strands) {
+            Object.values(subject.Strands).forEach((strand: any) => {
+              if (strand.SubStrands) {
+                totalCount += Object.keys(strand.SubStrands).length;
+              }
+            });
+          }
+        });
+
+        // 3. Fetch user activities
+        const activityRes = await fetch(`/api/user/activity?userId=${user.uid}`);
+        const activityData = await activityRes.json();
+        const activities = activityData.activities || [];
+
+        // Identify unique substrands with activity
+        const uniqueSubstrands = new Set();
+        let totalQuizScore = 0;
+        let quizCount = 0;
+
+        activities.forEach((act: any) => {
+          if (act.context?.substrand) {
+            uniqueSubstrands.add(`${act.context.subject}_${act.context.substrand}`);
+          }
+          if (act.type === 'quiz' && typeof act.score === 'number') {
+            totalQuizScore += act.score;
+            quizCount++;
+          }
+        });
+
+        const avgScore = quizCount > 0 ? Math.round(totalQuizScore / quizCount) : 0;
+
+        setCbeData({
+          totalSubstrands: Math.max(totalCount, 1),
+          completedSubstrands: uniqueSubstrands.size,
+          averageQuizScore: avgScore,
+        });
+      } catch (error) {
+        console.error('Failed to fetch CBE progress:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCbeProgress();
+  }, [user]);
+
+  // Calculate Course metric
   const totalCourses = myCourses.length;
+  const coursesCompleted = myCourses.filter(c => c.lessonCount > 0 && c.lessonCount === (currentCourse?.progress?.completedLessons?.length || 0)).length; // Simple heuristic
+  const coursesProgress = totalCourses > 0 ? Math.round((coursesCompleted / totalCourses) * 100) : 0;
 
-  // Count courses with lessons as "active"
-  const inProgressCount = myCourses.filter(c => c.lessonCount > 0).length;
+  // CBE Lesson Progress
+  const cbeLessonProgress = Math.round((cbeData.completedSubstrands / cbeData.totalSubstrands) * 100);
 
-  // Calculate total lessons across all courses
-  const totalLessons = myCourses.reduce((sum, course) => sum + (course.lessonCount || 0), 0);
+  // CBE Performance: (Avg Quiz * 0.7) + (Lesson Progress * 0.3)
+  const cbePerformance = Math.min(100, Math.round((cbeData.averageQuizScore * 0.7) + (cbeLessonProgress * 0.3)));
 
-  // For lessons completed, we'd need to fetch CourseProgress for each course
-  // For now, estimate based on current course progress if available
-  const lessonsCompleted = currentCourse?.progress?.completedLessons?.length || 0;
-  const lessonProgress = totalLessons > 0
-    ? Math.min(100, Math.round((lessonsCompleted / totalLessons) * 100))
-    : 0;
-
-  // Calculate average quiz score from current course progress
-  const quizScores = currentCourse?.progress?.quizScores || {};
-  const quizScoreValues = Object.values(quizScores);
-  const averageQuizScore = quizScoreValues.length > 0
-    ? Math.round(quizScoreValues.reduce((sum, q) => sum + (q.bestScore || 0), 0) / quizScoreValues.length)
-    : 0;
-  const totalQuizzesTaken = quizScoreValues.length;
-
-  // Progress circles data - showing learning-focused metrics
+  // Progress circles data
   const progressData = [
     {
-      value: totalCourses > 0 ? Math.round((inProgressCount / Math.max(totalCourses, 1)) * 100) : 0,
-      label: 'Active',
-      count: inProgressCount,
-      unit: 'courses',
+      value: coursesProgress,
+      label: 'Courses',
+      count: coursesCompleted,
+      unit: 'completed',
       color: '#10b981'
     },
     {
-      value: lessonProgress,
-      label: 'Lessons',
-      count: lessonsCompleted,
-      unit: 'completed',
+      value: cbeLessonProgress,
+      label: 'CBE Lessons',
+      count: cbeData.completedSubstrands,
+      unit: 'started',
       color: '#06b6d4'
     },
     {
-      value: averageQuizScore,
-      label: 'Quiz Score',
-      count: averageQuizScore,
-      unit: totalQuizzesTaken > 0 ? `avg (${totalQuizzesTaken})` : 'no quizzes',
+      value: cbePerformance,
+      label: 'CBE Performance',
+      count: cbePerformance,
+      unit: '% score',
       color: '#f59e0b'
     }
   ];

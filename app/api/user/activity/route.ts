@@ -70,3 +70,35 @@ export async function POST(request: NextRequest) {
         );
     }
 }
+
+export async function GET(request: NextRequest) {
+    try {
+        const searchParams = request.nextUrl.searchParams;
+        const userId = searchParams.get('userId');
+
+        if (!userId) {
+            return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+        }
+
+        const activityRef = adminDb.collection('userActivities');
+        const snapshot = await activityRef
+            .where('userId', '==', userId)
+            .orderBy('timestamp', 'desc')
+            .limit(100)
+            .get();
+
+        const activities = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+            timestamp: doc.data().timestamp?.toDate?.() || new Date(),
+        }));
+
+        return NextResponse.json({ success: true, activities });
+    } catch (error: any) {
+        console.error('[User Activity API] GET error:', error);
+        return NextResponse.json(
+            { error: 'Failed to fetch activities' },
+            { status: 500 }
+        );
+    }
+}

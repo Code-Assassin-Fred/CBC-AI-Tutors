@@ -17,7 +17,7 @@ function DashboardContent() {
     const { loadWeeklySchedule, isLoading: isScheduleLoading } = useSchedule();
     const { loadMyCourses, isLoadingMyCourses } = useCourses();
 
-    const displayName = user?.displayName || 'Student';
+    const displayName = user?.displayName?.split(' ')[0] || 'Student';
 
     // Load data on mount
     useEffect(() => {

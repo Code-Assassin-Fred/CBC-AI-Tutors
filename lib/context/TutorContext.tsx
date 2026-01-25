@@ -13,6 +13,7 @@ import {
     AudioState,
     VoiceConfig,
 } from '@/lib/types/agents';
+import { useActivityTimer } from '@/hooks/useActivityTimer';
 
 // LocalStorage key for persisting tutor state
 const TUTOR_STATE_KEY = 'curio_tutor_state';
@@ -77,6 +78,14 @@ export function TutorProvider({ children }: TutorProviderProps) {
         isPlaying: false,
         isListening: false,
     });
+
+    // Automatically track time spent in classroom sessions
+    useActivityTimer('classroom', context ? {
+        grade: context.grade,
+        subject: context.subject,
+        strand: context.strand,
+        substrand: context.substrand,
+    } : null);
 
     // Refs for audio and recording
     const audioRef = React.useRef<HTMLAudioElement | null>(null);
