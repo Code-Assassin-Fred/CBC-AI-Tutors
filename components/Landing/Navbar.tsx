@@ -40,11 +40,10 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-5 border-b
       transition-all duration-700 ease-in-out
-      ${
-        isScrolled
+      ${isScrolled
           ? "bg-black border-white/10"
           : "bg-transparent border-transparent"
-      }
+        }
       ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-5"}
       `}
     >
@@ -52,14 +51,14 @@ export default function Navbar() {
       <a href="/" className="flex items-center space-x-2">
         <Image
           src="/logo.jpg"
-          alt="Mindhive logo"
+          alt="Curio logo"
           width={28}
           height={28}
           className="rounded-sm"
           priority
         />
         <span className="font-semibold text-lg tracking-wide text-white">
-          Mindhive
+          Curio
         </span>
       </a>
 
@@ -72,10 +71,9 @@ export default function Navbar() {
               key={link.name}
               href={link.href}
               className={`relative text-white transition-colors after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:transition-all after:duration-300
-                ${
-                  isActive
-                    ? "after:w-full after:bg-orange-400"
-                    : "after:w-0 hover:after:w-full after:bg-orange-400"
+                ${isActive
+                  ? "after:w-full after:bg-orange-400"
+                  : "after:w-0 hover:after:w-full after:bg-orange-400"
                 }`}
             >
               {link.name}

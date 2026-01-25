@@ -109,7 +109,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
                     className={`text-lg font-semibold text-white/95 transition-all duration-300 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
                         }`}
                 >
-                    Curio Teacher
+                    Curio
                 </span>
             </div>
 

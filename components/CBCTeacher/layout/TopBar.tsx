@@ -9,6 +9,7 @@ export default function TopBar() {
     const [scrolled, setScrolled] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [imgError, setImgError] = useState(false);
     const { user } = useAuth();
 
     React.useEffect(() => {
@@ -22,6 +23,8 @@ export default function TopBar() {
         mainElement?.addEventListener('scroll', handleScroll, { passive: true });
         return () => mainElement?.removeEventListener('scroll', handleScroll);
     }, []);
+
+    const userInitial = (user?.displayName?.[0] || user?.email?.[0] || 'U').toUpperCase();
 
     return (
         <>
@@ -82,12 +85,19 @@ export default function TopBar() {
                     </button>
 
                     {/* Avatar */}
-                    <div className="w-10 h-10 rounded-full border-2 border-white/10 overflow-hidden shadow-[0_2px_0_rgba(255,255,255,0.04)_inset]">
-                        <img
-                            src={user?.photoURL ?? 'https://i.pravatar.cc/150?img=25'}
-                            alt="User avatar"
-                            className="w-full h-full object-cover"
-                        />
+                    <div className="w-10 h-10 rounded-full border-2 border-white/10 overflow-hidden shadow-[0_2px_0_rgba(255,255,255,0.04)_inset] bg-[#1a1f23] flex items-center justify-center">
+                        {user?.photoURL && !imgError ? (
+                            <img
+                                src={user.photoURL}
+                                alt={user.displayName || 'User'}
+                                className="w-full h-full object-cover"
+                                onError={() => setImgError(true)}
+                            />
+                        ) : (
+                            <div className="flex items-center justify-center w-full h-full text-[#0ea5e9] font-bold text-sm bg-[#0ea5e9]/10">
+                                {userInitial}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
