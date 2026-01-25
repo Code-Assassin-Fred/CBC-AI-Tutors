@@ -5,12 +5,10 @@
  * This is Step 1 of course generation - creating the high-level outline.
  */
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generateGeminiJSON, MODELS } from '@/lib/api/gemini';
 import { CourseOutline, LessonOutline, CourseDifficulty } from '@/types/course';
 
-const GEMINI_API_KEY = process.env.GEMINI_IMAGE_API_KEY || process.env.GOOGLE_API_KEY;
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY || "");
-const MODEL = "gemini-2.0-flash-exp";
+const MODEL = MODELS.flash;
 
 // ============================================
 // STEP 1: RESEARCH TOPIC
@@ -48,17 +46,8 @@ Respond with ONLY a JSON object:
     "possibleTags": ["tag1", "tag2", ...]
 }`;
 
-    const model = genAI.getGenerativeModel({
-        model: MODEL,
-        generationConfig: {
-            temperature: 0.7,
-            responseMimeType: "application/json",
-        }
-    });
-
-    const response = await model.generateContent(prompt);
-    const text = response.response.text() || '{}';
-    return JSON.parse(text) as TopicResearch;
+    const data = await generateGeminiJSON<TopicResearch>(prompt, MODEL);
+    return data;
 }
 
 // ============================================
@@ -98,17 +87,8 @@ Respond with ONLY a JSON object:
     "lessonTitles": ["Lesson 1 Title", "Lesson 2 Title", ...]
 }`;
 
-    const model = genAI.getGenerativeModel({
-        model: MODEL,
-        generationConfig: {
-            temperature: 0.7,
-            responseMimeType: "application/json",
-        }
-    });
-
-    const response = await model.generateContent(prompt);
-    const text = response.response.text() || '{}';
-    return JSON.parse(text) as CourseStructure;
+    const data = await generateGeminiJSON<CourseStructure>(prompt, MODEL);
+    return data;
 }
 
 // ============================================
@@ -150,18 +130,8 @@ Respond with ONLY a JSON object:
     ]
 }`;
 
-    const model = genAI.getGenerativeModel({
-        model: MODEL,
-        generationConfig: {
-            temperature: 0.7,
-            responseMimeType: "application/json",
-        }
-    });
-
-    const response = await model.generateContent(prompt);
-    const text = response.response.text() || '{}';
-    const parsed = JSON.parse(text);
-    return parsed.lessons as LessonOutline[];
+    const data = await generateGeminiJSON<{ lessons: LessonOutline[] }>(prompt, MODEL);
+    return data.lessons;
 }
 
 // ============================================

@@ -1,15 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-
-/**
- * Conversational AI Endpoint
- * 
- * Handles back-and-forth conversation with the AI tutor using Gemini.
- * Maintains context awareness of the current lesson being studied.
- */
-
-// Initialize Gemini client
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_IMAGE_API_KEY || '');
+import { genAI, MODELS } from '@/lib/api/gemini';
 
 interface ConversationMessage {
     role: 'user' | 'assistant';
@@ -37,12 +27,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Message is required' }, { status: 400 });
         }
 
-        if (!process.env.GEMINI_IMAGE_API_KEY) {
-            return NextResponse.json(
-                { error: 'Gemini API key not configured' },
-                { status: 500 }
-            );
-        }
+        // API Key is managed in gemini.ts
 
         // Build the system prompt with lesson context
         const systemPrompt = buildSystemPrompt(lessonContext);
@@ -59,9 +44,9 @@ export async function POST(request: NextRequest) {
             chatHistory.shift();
         }
 
-        // Use Gemini 2.0 Flash for fast responses
+        // Use Latest Flash for fast responses
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.0-flash-exp',
+            model: MODELS.flash,
             systemInstruction: systemPrompt,
         });
 

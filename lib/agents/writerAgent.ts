@@ -1,8 +1,6 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { generateGeminiJSON, MODELS } from '@/lib/api/gemini';
 import { ResearchBrief, DraftArticle, AgentConfig, ArticleSection } from '@/types/resourceAgents';
 import { ResourceDifficulty } from '@/types/resource';
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
 export class WriterAgent {
     private model: any;
@@ -10,17 +8,10 @@ export class WriterAgent {
 
     constructor(config?: Partial<AgentConfig>) {
         this.config = {
-            model: 'gemini-2.0-flash-exp',
+            model: MODELS.flash,
             temperature: 0.4, // Slightly higher for creativity in writing
             ...config
         };
-        this.model = genAI.getGenerativeModel({
-            model: this.config.model,
-            generationConfig: {
-                temperature: this.config.temperature,
-                responseMimeType: "application/json",
-            }
-        });
     }
 
     async writeArticle(brief: ResearchBrief): Promise<DraftArticle> {
@@ -56,10 +47,7 @@ export class WriterAgent {
         `;
 
         try {
-            const result = await this.model.generateContent(prompt);
-            const response = await result.response;
-            const text = response.text();
-            const data = JSON.parse(text);
+            const data = await generateGeminiJSON<any>(prompt, this.config.model);
 
             return {
                 ...data,
@@ -88,10 +76,7 @@ export class WriterAgent {
         `;
 
         try {
-            const result = await this.model.generateContent(prompt);
-            const response = await result.response;
-            const text = response.text();
-            const data = JSON.parse(text);
+            const data = await generateGeminiJSON<any>(prompt, this.config.model);
 
             return {
                 ...data,

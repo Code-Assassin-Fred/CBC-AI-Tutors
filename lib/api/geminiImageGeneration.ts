@@ -9,7 +9,7 @@
  * - Firebase Storage integration
  */
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { genAI } from "@/lib/api/gemini";
 import { adminDb, adminStorage } from "@/lib/firebaseAdmin";
 import { ImageMetadata, ImageCategory } from "@/types/textbook";
 
@@ -17,13 +17,7 @@ import { ImageMetadata, ImageCategory } from "@/types/textbook";
 // CONFIGURATION
 // ============================================
 
-const GEMINI_API_KEY = process.env.GEMINI_IMAGE_API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
-
-if (!GEMINI_API_KEY) {
-    console.warn("[Gemini] Warning: GEMINI_IMAGE_API_KEY not set");
-}
-
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY || "");
+// genAI is now imported from @/lib/api/gemini
 
 // Image settings - smaller sizes than DALL-E default
 const IMAGE_CONFIG = {

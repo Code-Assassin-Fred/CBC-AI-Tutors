@@ -4,11 +4,10 @@
  * Generates brief, encouraging AI summaries for quiz and learning results.
  */
 
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { generateGeminiText, MODELS } from '@/lib/api/gemini';
 import { QuizActivity } from '@/lib/types/agents';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_IMAGE_API_KEY || '');
-const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+const MODEL = MODELS.flash;
 
 export async function generateQuizSummary(activity: Partial<QuizActivity>): Promise<string> {
     const prompt = `You are a supportive CBC (Competency Based Curriculum) tutor in Kenya.
@@ -27,9 +26,8 @@ export async function generateQuizSummary(activity: Partial<QuizActivity>): Prom
   Do NOT use emojis. Respond with only the summary text.`;
 
     try {
-        const result = await model.generateContent(prompt);
-        const response = result.response;
-        return response.text() || "Great effort on completing the quiz! Keep reviewing the material to strengthen your understanding.";
+        const text = await generateGeminiText(prompt, MODEL);
+        return text || "Great effort on completing the quiz! Keep reviewing the material to strengthen your understanding.";
     } catch (error) {
         console.error('Summary Agent error:', error);
         return "Well done on completing the quiz. Continue practicing to master these concepts.";

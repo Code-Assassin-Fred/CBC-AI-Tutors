@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || "";
+const GEMINI_API_KEY = process.env.GEMINI_IMAGE_API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || "";
 
 if (!GEMINI_API_KEY) {
     console.warn("[Gemini] Warning: GEMINI_API_KEY is not set in environment variables");
@@ -9,11 +9,12 @@ if (!GEMINI_API_KEY) {
 export const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 /**
- * Models
+ * Models 
+ * Upgraded to Gemini 3.0 as requested
  */
 export const MODELS = {
-    flash: "gemini-1.5-flash",
-    pro: "gemini-1.5-pro",
+    flash: "gemini-3-flash-preview",
+    pro: "gemini-3-pro-preview",
 };
 
 /**

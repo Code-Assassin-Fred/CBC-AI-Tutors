@@ -1,14 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-
-/**
- * AI Assessment Endpoint
- * 
- * Evaluates student explanations against key points using Gemini AI.
- * Returns a semantic assessment with score, matched/missed points, and feedback.
- */
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_IMAGE_API_KEY || '');
+import { generateGeminiJSON, MODELS } from '@/lib/api/gemini';
 
 interface AssessmentRequest {
     studentAnswer: string;
@@ -43,45 +34,12 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (!process.env.GEMINI_IMAGE_API_KEY) {
-            return NextResponse.json(
-                { error: 'Gemini API key not configured' },
-                { status: 500 }
-            );
-        }
-
-        const model = genAI.getGenerativeModel({
-            model: 'gemini-2.0-flash-exp',
-        });
+        // API Key is managed in gemini.ts
 
         const prompt = buildAssessmentPrompt(studentAnswer, concept, keyPointsToCheck, rubric, promptForStudent);
+        const assessment = await generateGeminiJSON<AssessmentResponse>(prompt, MODELS.flash);
 
-        const result = await model.generateContent({
-            contents: [{ role: 'user', parts: [{ text: prompt }] }],
-            generationConfig: {
-                maxOutputTokens: 1000,
-                temperature: 0.3, // Lower temperature for more consistent grading
-                responseMimeType: 'application/json',
-            },
-        });
-
-        const responseText = result.response.text();
-
-        let assessment: AssessmentResponse;
-        try {
-            assessment = JSON.parse(responseText);
-        } catch {
-            console.error('[Assess] Failed to parse AI response:', responseText);
-            // Fallback assessment if parsing fails
-            assessment = {
-                score: 50,
-                level: 'good',
-                matchedKeyPoints: [],
-                missedKeyPoints: keyPointsToCheck,
-                feedback: 'Unable to fully assess your explanation. Please try to cover all key points more clearly.',
-                shouldRetry: true,
-            };
-        }
+        // Response already parsed by generateGeminiJSON
 
         // Validate and normalize the response
         assessment.score = Math.max(0, Math.min(100, assessment.score || 0));

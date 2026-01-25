@@ -1,15 +1,7 @@
-/**
- * Career Path Generator
- * 
- * Single AI function that generates a complete career learning path
- * with courses.
- */
-
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { generateGeminiJSON, MODELS } from '@/lib/api/gemini';
 import { CareerPath, CareerCourse } from '@/types/careerPath';
 
-const apiKey = process.env.GEMINI_IMAGE_API_KEY || '';
-const genAI = new GoogleGenerativeAI(apiKey);
+const MODEL = MODELS.flash;
 
 interface GenerationCallbacks {
     onProgress: (message: string, percentage: number) => void;
@@ -22,25 +14,8 @@ export async function generateCareerPath(
 ): Promise<CareerPath> {
     callbacks?.onProgress('Analyzing career requirements...', 10);
 
-    const model = genAI.getGenerativeModel({
-        model: 'gemini-2.0-flash',
-        generationConfig: {
-            responseMimeType: 'application/json',
-            temperature: 0.7,
-        },
-    });
-
     const prompt = buildCareerPrompt(careerTitle);
-
-    callbacks?.onProgress('Curating learning path...', 30);
-
-    const result = await model.generateContent(prompt);
-    const response = result.response;
-    const text = response.text();
-
-    callbacks?.onProgress('Building course structure...', 70);
-
-    const parsed = JSON.parse(text);
+    const parsed = await generateGeminiJSON<any>(prompt, MODEL);
 
     callbacks?.onProgress('Finalizing career path...', 90);
 

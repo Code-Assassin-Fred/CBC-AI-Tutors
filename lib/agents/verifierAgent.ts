@@ -1,7 +1,5 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { generateGeminiJSON, MODELS } from '@/lib/api/gemini';
 import { DraftArticle, VerificationResult, AgentConfig } from '@/types/resourceAgents';
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
 export class VerifierAgent {
     private model: any;
@@ -9,17 +7,10 @@ export class VerifierAgent {
 
     constructor(config?: Partial<AgentConfig>) {
         this.config = {
-            model: 'gemini-2.0-flash-exp',
+            model: MODELS.flash,
             temperature: 0.1, // Very low temperature for strict evaluation
             ...config
         };
-        this.model = genAI.getGenerativeModel({
-            model: this.config.model,
-            generationConfig: {
-                temperature: this.config.temperature,
-                responseMimeType: "application/json",
-            }
-        });
     }
 
     async verifyArticle(article: DraftArticle, topic: string): Promise<VerificationResult> {
@@ -60,10 +51,7 @@ export class VerifierAgent {
         `;
 
         try {
-            const result = await this.model.generateContent(prompt);
-            const response = await result.response;
-            const text = response.text();
-            const data = JSON.parse(text);
+            const data = await generateGeminiJSON<any>(prompt, this.config.model);
 
             return {
                 ...data,

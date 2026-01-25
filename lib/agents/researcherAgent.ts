@@ -1,8 +1,6 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { generateGeminiJSON, MODELS } from '@/lib/api/gemini';
 import { ResourceCategory } from '@/types/resource';
 import { ResearchBrief, AgentConfig } from '@/types/resourceAgents';
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
 export class ResearcherAgent {
     private model: any;
@@ -10,17 +8,10 @@ export class ResearcherAgent {
 
     constructor(config?: Partial<AgentConfig>) {
         this.config = {
-            model: 'gemini-2.0-flash-exp',
+            model: MODELS.flash,
             temperature: 0.2, // Low temperature for factual accuracy
             ...config
         };
-        this.model = genAI.getGenerativeModel({
-            model: this.config.model,
-            generationConfig: {
-                temperature: this.config.temperature,
-                responseMimeType: "application/json",
-            }
-        });
     }
 
     async generateResearchBrief(
@@ -57,11 +48,7 @@ export class ResearcherAgent {
         `;
 
         try {
-            const result = await this.model.generateContent(prompt);
-            const response = await result.response;
-            const text = response.text();
-
-            const data = JSON.parse(text);
+            const data = await generateGeminiJSON<any>(prompt, this.config.model);
 
             return {
                 ...data,
@@ -83,10 +70,8 @@ export class ResearcherAgent {
         `;
 
         try {
-            const result = await this.model.generateContent(prompt);
-            const response = result.response;
-            const text = response.text();
-            return JSON.parse(text);
+            const data = await generateGeminiJSON<string[]>(prompt, this.config.model);
+            return data;
         } catch (error) {
             console.error('[ResearcherAgent] Error identifying topics:', error);
             // Fallback topics if generation fails
