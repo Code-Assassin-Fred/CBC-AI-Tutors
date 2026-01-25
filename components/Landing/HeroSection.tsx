@@ -8,7 +8,17 @@ import Navbar from "@/components/Landing/Navbar";
 export default function HeroSection() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const slides = ["/slide1.png", "/slide2.png", "/slide3.png"];
+  const slides = [
+    "/Curio Student Dashboard.PNG",
+    "/Empty Classroom.PNG",
+    "/Interactive Quizes.PNG",
+    "/Lesson in progress.PNG",
+    "/interactive Quizes1.PNG",
+    "/Natural Chat with AI.PNG",
+    "/Podcast.PNG",
+    "/Teacher Dashboard Overview.PNG",
+    "/Courses Page.PNG",
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {

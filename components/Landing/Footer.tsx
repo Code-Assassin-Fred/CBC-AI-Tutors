@@ -6,12 +6,12 @@ export default function Footer() {
   return (
     <footer className="bg-black text-gray-400 px-6 py-12 md:py-16 border-t border-gray-800">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 text-sm">
-        
+
         {/* Brand Section */}
         <div>
           <h2 className="text-white text-lg font-semibold mb-3">Learning.ai</h2>
           <p className="leading-relaxed">
-            Learn anything, anytime, anywhere.  
+            Learn anything, anytime, anywhere.
             AI-personalized learning for students, schools, and professionals.
           </p>
         </div>
