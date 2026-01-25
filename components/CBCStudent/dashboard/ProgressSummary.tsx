@@ -90,7 +90,8 @@ export default function ProgressSummary({ isLoading: initialLoading = false }: P
 
   // Calculate Course metric
   const totalCourses = myCourses.length;
-  const coursesCompleted = myCourses.filter(c => c.lessonCount > 0 && c.lessonCount === (currentCourse?.progress?.completedLessons?.length || 0)).length; // Simple heuristic
+  // Aggregate completed courses from the progress property now returned by the updated API
+  const coursesCompleted = myCourses.filter(c => (c as any).progress?.isCompleted || (c as any).progress?.overallProgress === 100).length;
   const coursesProgress = totalCourses > 0 ? Math.round((coursesCompleted / totalCourses) * 100) : 0;
 
   // CBE Lesson Progress

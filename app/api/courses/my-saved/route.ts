@@ -47,13 +47,29 @@ export async function GET(request: NextRequest) {
                 .where('__name__', 'in', batch)
                 .get();
 
-            coursesSnapshot.docs.forEach(doc => {
-                courses.push({
+            for (const doc of coursesSnapshot.docs) {
+                const courseData = {
                     id: doc.id,
                     ...doc.data(),
                     createdAt: doc.data().createdAt?.toDate?.() || new Date(),
-                } as Course);
-            });
+                } as any;
+
+                // Fetch progress for this specific course
+                const progressDoc = await adminDb
+                    .collection('courseProgress')
+                    .doc(`${userId}_${doc.id}`)
+                    .get();
+
+                if (progressDoc.exists) {
+                    courseData.progress = {
+                        ...progressDoc.data(),
+                        startedAt: progressDoc.data()?.startedAt?.toDate?.() || new Date(),
+                        lastAccessedAt: progressDoc.data()?.lastAccessedAt?.toDate?.() || new Date(),
+                    };
+                }
+
+                courses.push(courseData);
+            }
         }
 
         return NextResponse.json({ courses });

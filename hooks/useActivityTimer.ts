@@ -26,17 +26,28 @@ export function useActivityTimer(type: 'classroom' | 'course', context: Activity
     useEffect(() => {
         if (!user || !context) return;
 
-        // Start timer
+        // 1. Log session start immediately so it shows up on dashboard
+        const startData = {
+            userId: user.uid,
+            type: 'study_session',
+            sessionType: type,
+            context,
+            durationSeconds: 0,
+            timestamp: new Date(),
+        };
+        axios.post('/api/user/activity', startData).catch(() => { });
+
+        // 2. Start timer for duration tracking
         startTimeRef.current = Date.now();
 
         return () => {
-            // Save on unmount
+            // Save duration on unmount
             if (startTimeRef.current && user && contextRef.current) {
                 const endTime = Date.now();
                 const durationSeconds = Math.round((endTime - startTimeRef.current) / 1000);
 
-                // Only save if session was more than 10 seconds to avoid noise
-                if (durationSeconds > 10) {
+                // Only save if session was more than 5 seconds to avoid noise
+                if (durationSeconds > 5) {
                     const activityData = {
                         userId: user.uid,
                         type: 'study_session',
@@ -46,9 +57,13 @@ export function useActivityTimer(type: 'classroom' | 'course', context: Activity
                         timestamp: new Date(),
                     };
 
-                    // Using navigator.sendBeacon for more reliable saving on unmount
-                    // or just a standard axios post if beacon isn't suitable
-                    axios.post('/api/user/activity', activityData).catch(err => {
+                    // Use fetch with keepalive for reliable saving during unmount/page hide
+                    fetch('/api/user/activity', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(activityData),
+                        keepalive: true,
+                    }).catch(err => {
                         console.error('Failed to auto-save activity duration:', err);
                     });
                 }
