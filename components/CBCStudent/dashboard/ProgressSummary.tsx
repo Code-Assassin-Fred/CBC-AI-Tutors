@@ -94,7 +94,9 @@ export default function ProgressSummary({ isLoading: initialLoading = false }: P
   const coursesProgress = totalCourses > 0 ? Math.round((coursesCompleted / totalCourses) * 100) : 0;
 
   // CBE Lesson Progress
-  const cbeLessonProgress = Math.round((cbeData.completedSubstrands / cbeData.totalSubstrands) * 100);
+  const cbeLessonProgress = cbeData.totalSubstrands > 0
+    ? Math.round((cbeData.completedSubstrands / cbeData.totalSubstrands) * 100)
+    : 0;
 
   // CBE Performance: (Avg Quiz * 0.7) + (Lesson Progress * 0.3)
   const cbePerformance = Math.min(100, Math.round((cbeData.averageQuizScore * 0.7) + (cbeLessonProgress * 0.3)));
