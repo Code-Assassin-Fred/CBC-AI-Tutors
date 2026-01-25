@@ -68,9 +68,9 @@ export default function Navbar() {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`relative text-gray-200 hover:text-[#00E18A] transition-colors duration-200 text-sm font-medium uppercase tracking-wider py-2
+                    className={`relative text-gray-200 hover:text-blue-400 transition-colors duration-200 text-sm font-medium uppercase tracking-wider py-2
                     after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:transition-all after:duration-300 after:bg-blue-500
-                    ${isActive ? "text-[#00E18A] after:w-full" : "after:w-0 hover:after:w-full"}`}
+                    ${isActive ? "text-blue-400 after:w-full" : "after:w-0 hover:after:w-full"}`}
                   >
                     {link.name}
                   </Link>
