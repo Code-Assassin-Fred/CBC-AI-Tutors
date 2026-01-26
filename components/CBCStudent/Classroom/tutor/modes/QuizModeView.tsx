@@ -112,29 +112,7 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
         setState(prev => ({ ...prev, showResult: true }));
     };
 
-    // Submit choice question answer
-    const handleSubmitChoiceAnswer = async () => {
-        const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
 
-        if (isCorrect) {
-            const newStreak = correctStreak + 1;
-            setCorrectStreak(newStreak);
-            if (newStreak >= 3 && streakMultiplier < 2) {
-                setStreakMultiplier(1.25);
-            } else if (newStreak >= 5) {
-                setStreakMultiplier(1.5);
-            }
-            // Award XP for correct multiple choice answer
-            const xpAmount = Math.round(XP_CONFIG.quizCorrect * streakMultiplier);
-            await addXP(xpAmount, 'quiz', `Correct answer: ${currentQuestion.question.substring(0, 30)}...`);
-            showXPPopup(xpAmount);
-        } else {
-            setCorrectStreak(0);
-            setStreakMultiplier(1);
-        }
-
-        setState(prev => ({ ...prev, showResult: true }));
-    };
 
     // Submit explanation question answer
     const handleSubmitExplanation = async () => {
@@ -407,19 +385,13 @@ export default function QuizModeView({ quiz }: QuizModeViewProps) {
             <div className="flex-1 overflow-y-auto scrollbar-hide">
                 {/* Question */}
                 <div className="mb-4">
-                    <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-medium mb-2 ${currentQuestion.difficulty === 'easy'
-                        ? 'bg-green-500/20 text-green-400'
-                        : currentQuestion.difficulty === 'medium'
-                            ? 'bg-yellow-500/20 text-yellow-400'
-                            : 'bg-red-500/20 text-red-400'
+                    <span className={`inline-block text-[10px] font-medium mb-2 uppercase tracking-wider ${currentQuestion.difficulty === 'easy' ? 'text-green-400' :
+                        currentQuestion.difficulty === 'medium' ? 'text-yellow-400' :
+                            'text-red-400'
                         }`}>
                         {currentQuestion.difficulty}
                     </span>
-                    {isExplanationQuestion && (
-                        <span className="inline-block px-2 py-0.5 rounded text-[10px] font-medium mb-2 ml-2 bg-purple-500/20 text-purple-400">
-                            Explanation
-                        </span>
-                    )}
+
                     <h3 className="text-sm font-medium text-white leading-relaxed">
                         {currentQuestion.question}
                     </h3>

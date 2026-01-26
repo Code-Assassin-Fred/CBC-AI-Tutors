@@ -531,6 +531,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
 
             case 'error':
                 console.error('Planner error:', event.error);
+                alert('Oops! I had trouble planning this lesson. Please try again.');
                 setMode('idle');
                 setLoadingProgress(null);
                 break;
@@ -645,6 +646,7 @@ export function TutorProvider({ children }: TutorProviderProps) {
 
             case 'error':
                 console.error('Quiz error:', event.error);
+                alert('I had some trouble crafting your quiz. Let me try again!');
                 setMode('idle');
                 setLoadingProgress(null);
                 break;

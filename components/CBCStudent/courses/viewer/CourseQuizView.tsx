@@ -327,11 +327,9 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
 
             {/* Question */}
             <div className="mb-6">
-                <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-medium mb-3 ${currentQuestion.difficulty === 'easy'
-                    ? 'bg-green-500/20 text-green-400'
-                    : currentQuestion.difficulty === 'medium'
-                        ? 'bg-yellow-500/20 text-yellow-400'
-                        : 'bg-red-500/20 text-red-400'
+                <span className={`inline-block text-[10px] font-medium mb-3 uppercase tracking-wider ${currentQuestion.difficulty === 'easy' ? 'text-green-400' :
+                    currentQuestion.difficulty === 'medium' ? 'text-yellow-400' :
+                        'text-red-400'
                     }`}>
                     {currentQuestion.difficulty}
                 </span>
@@ -345,7 +343,8 @@ export default function CourseQuizView({ quiz }: CourseQuizViewProps) {
                 {currentQuestion.options && currentQuestion.options.length > 0 ? (
                     /* Multiple choice options */
                     currentQuestion.options.map((option, index) => {
-                        const optionLetter = option.charAt(0);
+                        const match = option.match(/^([A-D])\.\s*(.*)/i);
+                        const optionLetter = match ? match[1].toUpperCase() : option.charAt(0).toUpperCase();
                         const isSelected = selectedAnswer === optionLetter;
                         const isCorrectOption = optionLetter === currentQuestion.correctAnswer;
 

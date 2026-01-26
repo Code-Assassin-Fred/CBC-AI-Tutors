@@ -147,10 +147,40 @@ export async function validateQuestions(
   context: SubstrandContext,
   questions: QuizQuestion[]
 ): Promise<QuizQuestion[]> {
-  // For now, skip validation API call to save costs
-  // Questions are already high quality from step 2
-  console.log('Quiz validation: Questions validated');
-  return questions;
+  console.log('Quiz validation: Starting validation of questions...');
+
+  const prompt = `You are a strict Quality Assurance auditor for educational content.
+
+Review the following ${questions.length} quiz questions for ACCURACY and CONSISTENCY.
+
+INPUT QUESTIONS:
+${JSON.stringify(questions, null, 2)}
+
+YOUR TASK:
+1. For each question, THINK STEP-BY-STEP to solve it. Show your reasoning hidden from the student but used for your own verification.
+2. Verify:
+   - Does the 'correctAnswer' match your step-by-step solution?
+   - Is the 'correctAnswer' (e.g. 'A') actually listed in the 'options'?
+   - If it's a math/science problem, calculate the numbers carefully.
+   - Does the 'explanation' explain the correct answer clearly?
+3. If a question is CORRECT, keep it exactly as is.
+4. If a question has ANY flaw (math error, option mismatch, typo), you MUST FIX IT.
+   - Rewrite the question, options, answer, and explanation so they are perfectly consistent.
+   - ENSURE the final 'correctAnswer' is one of the choices in the 'options' array.
+
+Respond with ONLY a JSON object containing the validated (and fixed) questions:
+{
+  "questions": [ ... ]
+}`;
+
+  try {
+    const data = await generateGeminiJSON<{ questions: QuizQuestion[] }>(prompt, MODEL);
+    console.log(`Quiz validation: validated ${data.questions.length} questions.`);
+    return data.questions;
+  } catch (error) {
+    console.warn('Quiz validation failed, returning original questions:', error);
+    return questions;
+  }
 }
 
 // ============================================
