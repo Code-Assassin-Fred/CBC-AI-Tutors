@@ -65,15 +65,15 @@ export default function HeroSection() {
                         </p>
 
                         {/* CTA Buttons */}
-                        <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                        <div className="flex flex-row gap-3 sm:gap-4 pt-4 lg:justify-start justify-center">
                             <button
                                 onClick={handleGetStarted}
-                                className="group bg-[#00E18A] text-slate-900 px-6 py-2.5 rounded-lg text-sm font-bold hover:bg-[#00c978] hover:shadow-lg hover:shadow-[#00E18A]/30 transition-all duration-300"
+                                className="group flex-1 sm:flex-none bg-[#00E18A] text-slate-900 px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl text-xs sm:text-base font-bold hover:bg-[#00c978] hover:scale-105 transition-all duration-300 shadow-lg shadow-[#00E18A]/20"
                             >
-                                <span className="flex items-center justify-center gap-2">
+                                <span className="flex items-center justify-center gap-1.5 sm:gap-2">
                                     Get Started
                                     <svg
-                                        className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                                        className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-0.5 transition-transform"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -87,65 +87,34 @@ export default function HeroSection() {
                                     </svg>
                                 </span>
                             </button>
-
-                            <button className="border-2 border-slate-600 text-slate-200 px-6 py-2.5 rounded-lg text-sm font-bold hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300">
+                            <button className="flex-1 sm:flex-none border-2 border-slate-700 text-slate-200 px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl text-xs sm:text-base font-bold hover:bg-white/5 hover:border-slate-500 transition-all duration-300">
                                 View Features
                             </button>
                         </div>
                     </div>
 
                     {/* Right: Smooth Peek Transition Carousel */}
-                    {/* Mobile: shown (flex), Desktop: flex. Removed 'hidden' */}
-                    <div className="relative h-[420px] md:h-[500px] w-full flex flex-col justify-start items-center overflow-visible mt-8 lg:mt-0">
-                        <AnimatePresence mode="popLayout">
-                            {/* Main Slide */}
+                    <div className="relative h-[300px] sm:h-[450px] md:h-[550px] w-full mt-8 lg:mt-0 perspective-1000">
+                        <AnimatePresence mode="wait">
                             <motion.div
-                                key={`main-${currentIndex}`}
-                                className="absolute top-[60px] left-0 right-0 mx-auto w-full rounded-[32px] overflow-hidden border-[12px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] bg-[#0c1410]"
-                                initial={{
-                                    top: 400,
-                                    scale: 0.95,
-                                    opacity: 0,
-                                }}
-                                animate={{
-                                    top: 60,
-                                    scale: 1,
-                                    opacity: 1,
-                                }}
-                                exit={{
-                                    top: 10,
-                                    scale: 0.9,
-                                    opacity: 0,
-                                }}
+                                key={currentIndex}
+                                className="absolute inset-0 w-full h-full rounded-[24px] sm:rounded-[40px] overflow-hidden border-[6px] sm:border-[12px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] bg-[#0c1410]"
+                                initial={{ x: 300, opacity: 0, rotateY: 20 }}
+                                animate={{ x: 0, opacity: 1, rotateY: 0 }}
+                                exit={{ x: -300, opacity: 0, rotateY: -20 }}
                                 transition={{
-                                    duration: 1.2,
-                                    ease: [0.43, 0.13, 0.23, 0.96],
+                                    duration: 0.8,
+                                    ease: [0.4, 0, 0.2, 1]
                                 }}
                             >
                                 <img
                                     src={slides[currentIndex]}
                                     alt={`Slide ${currentIndex + 1}`}
-                                    className="w-full h-auto block"
+                                    className="w-full h-full object-cover sm:object-contain object-top"
                                 />
-                                {/* Subtle inner glow/lighting for depth */}
                                 <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
                             </motion.div>
                         </AnimatePresence>
-
-                        {/* Next Slide (peek below) */}
-                        <motion.div
-                            key={`peek-${nextIndex}`}
-                            className="absolute top-[400px] w-auto max-w-full rounded-2xl overflow-hidden border-[8px] border-[#1a221e] opacity-70 bg-[#0c1410]"
-                            initial={{ y: 20, scale: 0.85, opacity: 0 }}
-                            animate={{ y: 0, scale: 0.95, opacity: 0.7 }}
-                            transition={{ duration: 1, ease: "easeOut" }}
-                        >
-                            <img
-                                src={slides[nextIndex]}
-                                alt={`Next slide`}
-                                className="w-full h-auto max-h-[120px] object-cover object-top"
-                            />
-                        </motion.div>
                     </div>
                 </div>
             </div>

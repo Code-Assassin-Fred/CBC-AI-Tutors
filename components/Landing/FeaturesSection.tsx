@@ -172,12 +172,12 @@ export default function FeaturesSection() {
 
                                 {/* Gamification Section (Students) */}
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20 items-center">
-                                    <motion.div className="space-y-6 md:space-y-8 pl-0 sm:pl-[10px]" initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                                    <motion.div className="space-y-6 md:space-y-8 pl-0 sm:pl-[10px] text-center lg:text-left" initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
                                         <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white leading-[1.1] tracking-tight">Gamification at our <span className="text-[#FF4500] font-newsreader italic font-medium">Core.</span></h2>
                                         <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed font-medium">Earn points, badges, and rewards as you complete lessons and quizzes. Learning has never been this fun!</p>
                                         <div className="grid grid-cols-2 gap-x-4 sm:gap-x-10 gap-y-4 sm:gap-y-8 pt-2 md:pt-4">
                                             {[{ title: "Daily Streaks", desc: "Keep the momentum going" }, { title: "Interactive Badges", desc: "Show off your progress" }, { title: "Instant XP", desc: "Rewards for every answer and activity" }, { title: "Leaderboards", desc: "Compete with other students countrywide" }].map((item, i) => (
-                                                <motion.div key={i} className="pl-0 sm:pl-4 space-y-0.5" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
+                                                <motion.div key={i} className="space-y-0.5 lg:pl-4" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
                                                     <h4 className="text-white text-sm sm:text-lg font-bold tracking-tight font-jakarta">{item.title}</h4>
                                                     <p className="text-slate-500 text-xs sm:text-sm">{item.desc}</p>
                                                 </motion.div>
