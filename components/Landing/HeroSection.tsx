@@ -47,7 +47,7 @@ export default function HeroSection() {
             </div>
             <Navbar />
 
-            <div className="relative z-10 flex items-center min-h-screen pt-32 pb-20 px-6 md:px-12 lg:px-20">
+            <div className="relative z-10 flex items-center min-h-screen pt-24 pb-20 px-6 md:px-12 lg:px-20">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full max-w-7xl mx-auto">
 
                     {/* Left: Text Section */}
@@ -96,28 +96,24 @@ export default function HeroSection() {
 
                     {/* Right: Smooth Peek Transition Carousel */}
                     {/* Mobile: shown (flex), Desktop: flex. Removed 'hidden' */}
-                    <div className="relative h-[480px] w-full flex flex-col justify-start items-center overflow-visible mt-8 lg:mt-0">
+                    <div className="relative h-[420px] md:h-[500px] w-full flex flex-col justify-start items-center overflow-visible mt-8 lg:mt-0">
                         <AnimatePresence mode="popLayout">
                             {/* Main Slide */}
                             <motion.div
                                 key={`main-${currentIndex}`}
-                                className="absolute top-0 left-0 right-0 mx-auto w-full h-[340px] rounded-2xl overflow-hidden border-[10px] border-white/50"
+                                className="absolute top-[60px] left-0 right-0 mx-auto w-full rounded-[32px] overflow-hidden border-[12px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] bg-[#0c1410]"
                                 initial={{
-                                    top: 360,
-                                    height: 120,
-                                    width: "auto",
+                                    top: 400,
                                     scale: 0.95,
-                                    opacity: 0.7,
+                                    opacity: 0,
                                 }}
                                 animate={{
-                                    top: 0,
-                                    height: 340,
-                                    width: "100%",
+                                    top: 60,
                                     scale: 1,
                                     opacity: 1,
                                 }}
                                 exit={{
-                                    top: -50,
+                                    top: 10,
                                     scale: 0.9,
                                     opacity: 0,
                                 }}
@@ -129,15 +125,17 @@ export default function HeroSection() {
                                 <img
                                     src={slides[currentIndex]}
                                     alt={`Slide ${currentIndex + 1}`}
-                                    className="w-full h-full object-contain rounded-xl"
+                                    className="w-full h-auto block"
                                 />
+                                {/* Subtle inner glow/lighting for depth */}
+                                <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
                             </motion.div>
                         </AnimatePresence>
 
                         {/* Next Slide (peek below) */}
                         <motion.div
                             key={`peek-${nextIndex}`}
-                            className="absolute top-[360px] w-auto max-w-full h-[120px] rounded-2xl overflow-hidden border-[10px] border-white/50 opacity-70"
+                            className="absolute top-[400px] w-auto max-w-full rounded-2xl overflow-hidden border-[8px] border-[#1a221e] opacity-70 bg-[#0c1410]"
                             initial={{ y: 20, scale: 0.85, opacity: 0 }}
                             animate={{ y: 0, scale: 0.95, opacity: 0.7 }}
                             transition={{ duration: 1, ease: "easeOut" }}
@@ -145,7 +143,7 @@ export default function HeroSection() {
                             <img
                                 src={slides[nextIndex]}
                                 alt={`Next slide`}
-                                className="h-full w-auto object-contain rounded-xl"
+                                className="w-full h-auto max-h-[120px] object-cover object-top"
                             />
                         </motion.div>
                     </div>

@@ -31,12 +31,12 @@ export default function PricingSection() {
 
             <div className="container mx-auto px-6 relative z-10">
                 {/* Header */}
-                <div className="text-center mb-20">
+                <div className="text-center mb-16">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-6xl font-black text-white leading-tight tracking-tight mb-6"
+                        className="text-3xl md:text-5xl font-black text-white leading-tight tracking-tight mb-4"
                     >
                         Simple and Affordable <br />
                         <span className="text-[#10b981] font-newsreader italic font-medium">Pricing Plans</span>
@@ -46,36 +46,36 @@ export default function PricingSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-slate-400 text-xl font-medium max-w-2xl mx-auto"
+                        className="text-slate-400 text-lg font-medium max-w-2xl mx-auto"
                     >
-                        Start your 7-day free trial today. No credit card required.
+                        Start your 7-day free trial today. No Payment required.
                     </motion.p>
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {/* 7-Day Free Trial Card */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[40px] p-10 flex flex-col hover:bg-white/[0.05] transition-all group"
+                        className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[32px] p-8 flex flex-col hover:bg-white/[0.05] transition-all group"
                     >
-                        <div className="mb-8">
-                            <span className="text-slate-400 font-bold uppercase tracking-widest text-sm">Free Trial</span>
-                            <div className="flex items-baseline gap-1 mt-4">
-                                <span className="text-5xl font-black text-white">7</span>
-                                <span className="text-xl text-slate-400 font-medium">Days</span>
+                        <div className="mb-6">
+                            <span className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Free Trial</span>
+                            <div className="flex items-baseline gap-1 mt-3">
+                                <span className="text-4xl font-black text-white">7</span>
+                                <span className="text-lg text-slate-400 font-medium">Days</span>
                             </div>
-                            <p className="text-slate-500 mt-4 leading-relaxed">Perfect for exploring all features without any commitment.</p>
+                            <p className="text-slate-500 mt-3 text-sm leading-relaxed">Perfect for exploring all features without any commitment.</p>
                         </div>
 
-                        <button className="w-full py-4 rounded-2xl bg-white/10 text-white font-bold text-lg hover:bg-white/20 transition-all mb-10">
+                        <button className="w-full py-3.5 rounded-xl bg-white/10 text-white font-bold text-base hover:bg-white/20 transition-all mb-8">
                             Start Free Trial
                         </button>
 
-                        <div className="space-y-4">
-                            <p className="text-slate-400 font-black uppercase tracking-widest text-[10px] mb-6">What's Included</p>
+                        <div className="space-y-3">
+                            <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-4">What's Included</p>
                             {[
                                 "Full AI Tutor access",
                                 "All Grade 1-9 subjects",
@@ -83,45 +83,42 @@ export default function PricingSection() {
                                 "7-day history tracking",
                                 "Personalized feedback"
                             ].map((feature, i) => (
-                                <div key={i} className="flex items-center gap-3 text-slate-300">
-                                    <div className="w-5 h-5 rounded-full bg-[#10b981]/20 flex items-center justify-center flex-shrink-0">
-                                        <svg className="w-3 h-3 text-[#10b981]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div key={i} className="flex items-center gap-2.5 text-slate-300">
+                                    <div className="w-4 h-4 rounded-full bg-[#10b981]/20 flex items-center justify-center flex-shrink-0">
+                                        <svg className="w-2.5 h-2.5 text-[#10b981]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                         </svg>
                                     </div>
-                                    <span className="text-sm font-medium">{feature}</span>
+                                    <span className="text-xs font-medium">{feature}</span>
                                 </div>
                             ))}
                         </div>
                     </motion.div>
 
-                    {/* Student Plan Card (Most Popular) */}
+                    {/* Student Plan Card */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="bg-white/[0.05] backdrop-blur-2xl border-2 border-[#10b981]/30 rounded-[48px] p-10 flex flex-col relative scale-105 shadow-[0_0_80px_rgba(16,185,129,0.1)] group"
+                        className="bg-white/[0.05] backdrop-blur-2xl border border-[#10b981]/30 rounded-[32px] p-8 flex flex-col relative group"
                     >
-                        <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#10b981] text-[#020d0a] px-6 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">
-                            Most Popular
-                        </div>
-                        <div className="mb-8">
-                            <span className="text-white font-bold uppercase tracking-widest text-sm">Student Pro</span>
-                            <div className="flex items-baseline gap-1 mt-4">
-                                <span className="text-xl text-slate-400 font-medium self-start mt-2">KES</span>
-                                <span className="text-6xl font-black text-white tracking-tighter">1,000</span>
-                                <span className="text-slate-400 font-medium">/mo</span>
+                        <div className="mb-6">
+                            <span className="text-white font-bold uppercase tracking-widest text-[10px]">Student Pro</span>
+                            <div className="flex items-baseline gap-1 mt-3">
+                                <span className="text-sm text-slate-400 font-medium self-start mt-1">KES</span>
+                                <span className="text-5xl font-black text-white tracking-tighter">1,000</span>
+                                <span className="text-slate-400 font-medium text-sm">/mo</span>
                             </div>
-                            <p className="text-slate-300 mt-4 leading-relaxed font-medium">Unlimited learning power for ambitious students.</p>
+                            <p className="text-slate-300 mt-3 text-sm leading-relaxed font-medium">Unlimited learning power for ambitious students.</p>
                         </div>
 
-                        <button className="w-full py-5 rounded-2xl bg-[#10b981] text-[#020d0a] font-black text-lg hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_10px_30px_rgba(16,185,129,0.3)] mb-10">
+                        <button className="w-full py-4 rounded-xl bg-[#10b981] text-[#020d0a] font-black text-base hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_10px_20px_rgba(16,185,129,0.2)] mb-8">
                             Get Student Pro
                         </button>
 
-                        <div className="space-y-4">
-                            <p className="text-slate-400 font-black uppercase tracking-widest text-[10px] mb-6">Everything in Trial, plus:</p>
+                        <div className="space-y-3">
+                            <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-4">Everything in Trial, plus:</p>
                             {[
                                 "Unlimited AI explanations",
                                 "National Leaderboard entry",
@@ -130,13 +127,13 @@ export default function PricingSection() {
                                 "Priority AI training",
                                 "Parent Dashboard access"
                             ].map((feature, i) => (
-                                <div key={i} className="flex items-center gap-3 text-white/90">
-                                    <div className="w-5 h-5 rounded-full bg-[#10b981] flex items-center justify-center flex-shrink-0">
-                                        <svg className="w-3 h-3 text-[#020d0a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div key={i} className="flex items-center gap-2.5 text-white/90">
+                                    <div className="w-4 h-4 rounded-full bg-[#10b981] flex items-center justify-center flex-shrink-0">
+                                        <svg className="w-2.5 h-2.5 text-[#020d0a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                         </svg>
                                     </div>
-                                    <span className="text-sm font-semibold">{feature}</span>
+                                    <span className="text-xs font-semibold">{feature}</span>
                                 </div>
                             ))}
                         </div>
@@ -148,24 +145,24 @@ export default function PricingSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[40px] p-10 flex flex-col hover:bg-white/[0.05] transition-all group"
+                        className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[32px] p-8 flex flex-col hover:bg-white/[0.05] transition-all group"
                     >
-                        <div className="mb-8">
-                            <span className="text-slate-400 font-bold uppercase tracking-widest text-sm">Teacher Hub</span>
-                            <div className="flex items-baseline gap-1 mt-4">
-                                <span className="text-xl text-slate-400 font-medium self-start mt-2">KES</span>
-                                <span className="text-5xl font-black text-white tracking-tighter">800</span>
-                                <span className="text-slate-400 font-medium">/mo</span>
+                        <div className="mb-6">
+                            <span className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Teacher Hub</span>
+                            <div className="flex items-baseline gap-1 mt-3">
+                                <span className="text-sm text-slate-400 font-medium self-start mt-1">KES</span>
+                                <span className="text-4xl font-black text-white tracking-tighter">800</span>
+                                <span className="text-slate-400 font-medium text-sm">/mo</span>
                             </div>
-                            <p className="text-slate-500 mt-4 leading-relaxed">Empower your classes with AI lesson planning.</p>
+                            <p className="text-slate-500 mt-3 text-sm leading-relaxed">Empower your classes with AI lesson planning.</p>
                         </div>
 
-                        <button className="w-full py-4 rounded-2xl bg-white/10 text-white font-bold text-lg hover:bg-white/20 transition-all mb-10">
+                        <button className="w-full py-3.5 rounded-xl bg-white/10 text-white font-bold text-base hover:bg-white/20 transition-all mb-8">
                             Get Teacher Hub
                         </button>
 
-                        <div className="space-y-4">
-                            <p className="text-slate-400 font-black uppercase tracking-widest text-[10px] mb-6">Teacher Special Tools</p>
+                        <div className="space-y-3">
+                            <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-4">Teacher Special Tools</p>
                             {[
                                 "Bulk AI Lesson Planner",
                                 "Classroom Management Suite",
@@ -174,9 +171,9 @@ export default function PricingSection() {
                                 "CBC Standards alignment",
                                 "Exportable reports"
                             ].map((feature, i) => (
-                                <div key={i} className="flex items-center gap-3 text-slate-300">
-                                    <div className="w-5 h-5 rounded-full bg-[#10b981]/20 flex items-center justify-center flex-shrink-0">
-                                        <svg className="w-3 h-3 text-[#10b981]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div key={i} className="flex items-center gap-2.5 text-slate-300">
+                                    <div className="w-4 h-4 rounded-full bg-[#10b981]/20 flex items-center justify-center flex-shrink-0">
+                                        <svg className="w-2.5 h-2.5 text-[#10b981]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                         </svg>
                                     </div>
