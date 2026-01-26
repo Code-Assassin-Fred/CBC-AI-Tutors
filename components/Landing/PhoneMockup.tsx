@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, animate } from "framer-motion";
 import React, { useState, useEffect } from "react";
 import {
     Wifi,
@@ -18,11 +18,23 @@ export default function PhoneMockup({ className = "" }: PhoneMockupProps) {
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
-    const mouseXSpring = useSpring(x);
-    const mouseYSpring = useSpring(y);
+    // Autonomous motion values
+    const autoX = useMotionValue(0);
+    const autoY = useMotionValue(0);
 
-    const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["15deg", "-15deg"]);
-    const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-20deg", "20deg"]);
+    const [isInteracting, setIsInteracting] = useState(false);
+
+    const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
+    const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
+    const autoXSpring = useSpring(autoX, { stiffness: 50, damping: 15 });
+    const autoYSpring = useSpring(autoY, { stiffness: 50, damping: 15 });
+
+    // Combine manual and autonomous movement
+    const combinedX = useTransform([mouseXSpring, autoXSpring], ([mX, aX]) => (mX as number) + (aX as number));
+    const combinedY = useTransform([mouseYSpring, autoYSpring], ([mY, aY]) => (mY as number) + (aY as number));
+
+    const rotateX = useTransform(combinedY, [-0.5, 0.5], ["15deg", "-15deg"]);
+    const rotateY = useTransform(combinedX, [-0.5, 0.5], ["-20deg", "20deg"]);
 
     const [currentTime, setCurrentTime] = useState("2:08 PM");
     const [xpPopups, setXpPopups] = useState<{ id: number; x: number; y: number }[]>([]);
@@ -34,6 +46,25 @@ export default function PhoneMockup({ className = "" }: PhoneMockupProps) {
         }, 1000);
         return () => clearInterval(timer);
     }, []);
+
+    // Autonomous animation loop
+    useEffect(() => {
+        const controlsX = animate(autoX, [0, 0.15, -0.15, 0.05, -0.05, 0], {
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+        });
+        const controlsY = animate(autoY, [0, -0.1, 0.1, -0.05, 0.05, 0], {
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+        });
+
+        return () => {
+            controlsX.stop();
+            controlsY.stop();
+        };
+    }, [autoX, autoY]);
 
     // Simulate XP popups every few seconds
     useEffect(() => {
@@ -50,6 +81,7 @@ export default function PhoneMockup({ className = "" }: PhoneMockupProps) {
     }, []);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        setIsInteracting(true);
         const rect = e.currentTarget.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;
@@ -62,6 +94,7 @@ export default function PhoneMockup({ className = "" }: PhoneMockupProps) {
     };
 
     const handleMouseLeave = () => {
+        setIsInteracting(false);
         x.set(0);
         y.set(0);
     };

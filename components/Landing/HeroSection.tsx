@@ -8,6 +8,7 @@ import Navbar from "@/components/Landing/Navbar";
 export default function HeroSection() {
     const router = useRouter();
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
     const slides = [
         "/Curio Student Dashboard.PNG",
         "/Empty Classroom.PNG",
@@ -19,6 +20,13 @@ export default function HeroSection() {
         "/Teacher Dashboard Overview.PNG",
         "/Courses Page.PNG",
     ];
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -47,33 +55,33 @@ export default function HeroSection() {
             </div>
             <Navbar />
 
-            <div className="relative z-10 flex items-center min-h-screen pt-24 pb-20 px-6 md:px-12 lg:px-20">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center w-full max-w-7xl mx-auto">
+            <div className="relative z-10 flex items-center min-h-screen pt-32 pb-10 lg:pt-24 lg:pb-20 px-6 md:px-12 lg:px-20">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center w-full max-w-7xl mx-auto">
 
                     {/* Left: Text Section */}
-                    <div className="text-left space-y-6 mt-4 z-20">
-                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+                    <div className="text-center lg:text-left space-y-4 md:space-y-6 mt-4 lg:mt-0 z-20">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
                             AI-Powered Learning{" "}
                             <span className="text-[#00E18A]">for CBC</span>{" "}
                             <span className="italic font-serif text-slate-300">Students & Teachers</span>
                         </h1>
 
-                        <p className="text-slate-300 text-base md:text-lg leading-relaxed max-w-xl">
+                        <p className="text-slate-300 text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
                             Transform your CBC learning experience with AI-driven textbook lessons,
                             interactive quizzes, and personalized tutoring. Teachers can effortlessly
                             create custom content while students master the curriculum at their own pace.
                         </p>
 
                         {/* CTA Buttons */}
-                        <div className="flex flex-row gap-3 sm:gap-4 pt-4 lg:justify-start justify-center">
+                        <div className="flex flex-row justify-center lg:justify-start gap-3 sm:gap-4 pt-4">
                             <button
                                 onClick={handleGetStarted}
-                                className="group flex-1 sm:flex-none bg-[#00E18A] text-slate-900 px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl text-xs sm:text-base font-bold hover:bg-[#00c978] hover:scale-105 transition-all duration-300 shadow-lg shadow-[#00E18A]/20"
+                                className="flex-1 sm:flex-none group bg-[#00E18A] text-slate-900 px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-bold hover:bg-[#00c978] hover:shadow-lg hover:shadow-[#00E18A]/30 transition-all duration-300"
                             >
-                                <span className="flex items-center justify-center gap-1.5 sm:gap-2">
+                                <span className="flex items-center justify-center gap-2">
                                     Get Started
                                     <svg
-                                        className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-0.5 transition-transform"
+                                        className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-0.5 transition-transform"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -87,34 +95,79 @@ export default function HeroSection() {
                                     </svg>
                                 </span>
                             </button>
-                            <button className="flex-1 sm:flex-none border-2 border-slate-700 text-slate-200 px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl text-xs sm:text-base font-bold hover:bg-white/5 hover:border-slate-500 transition-all duration-300">
+
+                            <button className="flex-1 sm:flex-none border-2 border-slate-600 text-slate-200 px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-bold hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300">
                                 View Features
                             </button>
                         </div>
                     </div>
 
                     {/* Right: Smooth Peek Transition Carousel */}
-                    <div className="relative h-[300px] sm:h-[450px] md:h-[550px] w-full mt-8 lg:mt-0 perspective-1000">
-                        <AnimatePresence mode="wait">
+                    {/* Mobile: shown (flex), Desktop: flex. Removed 'hidden' */}
+                    <div className="relative h-[250px] sm:h-[320px] lg:h-[500px] w-full flex flex-col justify-start items-center overflow-visible mt-2 lg:mt-0">
+                        <AnimatePresence mode="popLayout">
+                            {/* Main Slide */}
                             <motion.div
-                                key={currentIndex}
-                                className="absolute inset-0 w-full h-full rounded-[24px] sm:rounded-[40px] overflow-hidden border-[6px] sm:border-[12px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] bg-[#0c1410]"
-                                initial={{ x: 300, opacity: 0, rotateY: 20 }}
-                                animate={{ x: 0, opacity: 1, rotateY: 0 }}
-                                exit={{ x: -300, opacity: 0, rotateY: -20 }}
+                                key={`main-${currentIndex}`}
+                                className="absolute top-0 lg:top-[60px] left-0 right-0 mx-auto w-full rounded-[24px] lg:rounded-[32px] overflow-hidden border-[6px] lg:border-[12px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] bg-[#0c1410]"
+                                initial={isMobile ? {
+                                    x: "100%",
+                                    opacity: 0,
+                                    scale: 0.9,
+                                } : {
+                                    top: 400,
+                                    scale: 0.95,
+                                    opacity: 0,
+                                }}
+                                animate={isMobile ? {
+                                    x: 0,
+                                    opacity: 1,
+                                    scale: 1,
+                                } : {
+                                    top: 60,
+                                    scale: 1,
+                                    opacity: 1,
+                                }}
+                                exit={isMobile ? {
+                                    x: "-100%",
+                                    opacity: 0,
+                                    scale: 0.9,
+                                } : {
+                                    top: 10,
+                                    scale: 0.9,
+                                    opacity: 0,
+                                }}
                                 transition={{
-                                    duration: 0.8,
-                                    ease: [0.4, 0, 0.2, 1]
+                                    duration: isMobile ? 0.8 : 1.2,
+                                    ease: [0.43, 0.13, 0.23, 0.96],
                                 }}
                             >
                                 <img
                                     src={slides[currentIndex]}
                                     alt={`Slide ${currentIndex + 1}`}
-                                    className="w-full h-full object-cover sm:object-contain object-top"
+                                    className="w-full h-auto block"
                                 />
+                                {/* Subtle inner glow/lighting for depth */}
                                 <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none" />
                             </motion.div>
                         </AnimatePresence>
+
+                        {/* Next Slide (peek below on desktop, side on mobile) */}
+                        {!isMobile && (
+                            <motion.div
+                                key={`peek-${nextIndex}`}
+                                className="absolute top-[400px] w-auto max-w-full rounded-2xl overflow-hidden border-[8px] border-[#1a221e] opacity-70 bg-[#0c1410]"
+                                initial={{ y: 20, scale: 0.85, opacity: 0 }}
+                                animate={{ y: 0, scale: 0.95, opacity: 0.7 }}
+                                transition={{ duration: 1, ease: "easeOut" }}
+                            >
+                                <img
+                                    src={slides[nextIndex]}
+                                    alt={`Next slide`}
+                                    className="w-full h-auto max-h-[120px] object-cover object-top"
+                                />
+                            </motion.div>
+                        )}
                     </div>
                 </div>
             </div>
