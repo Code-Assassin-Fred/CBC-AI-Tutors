@@ -13,8 +13,8 @@ export const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
  * Upgraded to Gemini 3.0 as requested
  */
 export const MODELS = {
-    flash: "gemini-3-flash-preview",
-    pro: "gemini-3-pro-preview",
+    flash: "gemini-2.0-flash",
+    pro: "gemini-2.0-pro-exp",
 };
 
 /**
