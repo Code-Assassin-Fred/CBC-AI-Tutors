@@ -122,17 +122,17 @@ export default function FeaturesSection() {
                                 className="space-y-16 md:space-y-32"
                             >
                                 {/* The Composition Container (Students) */}
-                                <div className="w-full max-w-7xl mx-auto h-[280px] sm:h-[350px] md:h-[600px] bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0] border border-white/20 rounded-[24px] sm:rounded-[32px] md:rounded-[48px] shadow-2xl relative overflow-hidden flex items-center justify-center">
+                                <div className="w-full max-w-7xl mx-auto h-[280px] sm:h-[350px] md:h-[600px] bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0] border border-white/20 rounded-xl sm:rounded-2xl md:rounded-3xl shadow-2xl relative overflow-hidden flex items-center justify-center">
                                     <div className="absolute top-1/4 -left-20 w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
                                     <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#00E18A]/20 blur-[100px] rounded-full" />
 
                                     <div className="relative w-full h-full max-w-5xl mx-auto">
                                         <motion.div className="absolute -top-12 left-[10%] w-[45%] z-0 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/40 shadow-xl overflow-hidden opacity-30 blur-[1px] hidden sm:block" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 0.3, y: 0 }} transition={{ duration: 1, delay: 0.2 }}><img src="/Empty Classroom.PNG" alt="Classroom" className="w-full h-full object-cover" /></motion.div>
-                                        <motion.div className="absolute top-[5%] -left-2 sm:-left-6 md:-left-12 w-[42%] sm:w-[38%] md:w-[45%] z-10 rounded-xl sm:rounded-2xl md:rounded-[32px] border-[3px] sm:border-[6px] md:border-[10px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}><img src="/Natural Chat with AI.PNG" alt="Natural Chat" className="w-full h-auto" /></motion.div>
-                                        <motion.div className="absolute top-[48%] left-[52%] -translate-x-1/2 -translate-y-1/2 w-[58%] sm:w-[53%] md:w-[62%] z-20 rounded-xl sm:rounded-2xl md:rounded-[40px] border-[4px] sm:border-[8px] md:border-[14px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.1 }}><img src="/Lesson in progress.PNG" alt="Lesson in Progress" className="w-full h-auto" /></motion.div>
-                                        <motion.div className="absolute -bottom-4 sm:-bottom-12 right-0 md:right-4 w-[32%] sm:w-[28%] md:w-[38%] z-30 rounded-xl sm:rounded-2xl md:rounded-[32px] border-[3px] sm:border-[6px] md:border-[10px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: 40, y: 20 }} whileInView={{ opacity: 1, x: 0, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}><img src="/Podcast.PNG" alt="Podcast" className="w-full h-auto" /></motion.div>
+                                        <motion.div className="absolute top-[5%] -left-4 sm:-left-12 md:-left-24 w-[42%] sm:w-[38%] md:w-[45%] z-10 rounded-xl sm:rounded-2xl md:rounded-[32px] border-[3px] sm:border-[6px] md:border-[10px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}><img src="/Natural Chat with AI.PNG" alt="Natural Chat" className="w-full h-auto" /></motion.div>
+                                        <motion.div className="absolute top-[48%] left-[65%] -translate-x-1/2 -translate-y-1/2 w-[55%] sm:w-[50%] md:w-[55%] z-20 rounded-xl sm:rounded-2xl md:rounded-[40px] border-[4px] sm:border-[8px] md:border-[14px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.1 }}><img src="/Lesson in progress.PNG" alt="Lesson in Progress" className="w-full h-auto" /></motion.div>
+                                        <motion.div className="absolute -bottom-4 sm:-bottom-12 right-0 md:right-4 w-[32%] sm:w-[28%] md:w-[35%] z-30 rounded-xl sm:rounded-2xl md:rounded-[32px] border-[3px] sm:border-[6px] md:border-[10px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: 40, y: 20 }} whileInView={{ opacity: 1, x: 0, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}><img src="/Podcast.PNG" alt="Podcast" className="w-full h-auto" /></motion.div>
                                         <motion.div
-                                            className="absolute top-3 sm:top-6 md:top-8 right-3 sm:right-6 md:right-8 z-40 max-w-[140px] sm:max-w-xs text-right"
+                                            className="absolute top-3 sm:top-5 md:top-6 right-3 sm:right-5 md:right-6 z-40 max-w-[140px] sm:max-w-xs text-right"
                                             initial={{ opacity: 0, y: -20 }}
                                             whileInView={{ opacity: 1, y: 0 }}
                                             transition={{ duration: 0.8, delay: 0.5 }}
@@ -144,24 +144,24 @@ export default function FeaturesSection() {
                                             </h2>
                                         </motion.div>
                                         <motion.div
-                                            className="absolute bottom-3 sm:bottom-6 md:bottom-8 left-3 sm:left-6 md:left-8 z-40 max-w-[160px] sm:max-w-sm md:max-w-[320px] hidden sm:block"
+                                            className="absolute bottom-1.5 sm:bottom-4 md:bottom-5 left-2 sm:left-4 md:left-6 z-40 max-w-[130px] sm:max-w-sm md:max-w-[340px]"
                                             initial={{ opacity: 0, x: -20 }}
                                             whileInView={{ opacity: 1, x: 0 }}
                                             transition={{ duration: 0.8, delay: 0.7 }}
                                         >
-                                            <div className="space-y-2 md:space-y-3">
-                                                <p className="text-[#080f0c]/90 font-medium text-[9px] sm:text-xs md:text-sm lg:text-[15px] leading-snug">
+                                            <div className="space-y-2 md:space-y-4">
+                                                <p className="text-[#080f0c]/90 font-medium text-[8.5px] sm:text-sm md:text-base lg:text-lg leading-snug">
                                                     Get instant help with complex topics anytime. Our AI tutor acts as your personal study buddy, explaining concepts clearly.
-                                                    <span className="text-[#080f0c] font-black underline decoration-[#00c978] decoration-2 underline-offset-4 block mt-1">
+                                                    <span className="text-[#080f0c] font-black underline decoration-[#00c978] decoration-2 underline-offset-4 block mt-1.5">
                                                         Personalized lessons that adapt to your pace.
                                                     </span>
                                                 </p>
-                                                <div className="flex flex-col gap-1 md:gap-1.5">
-                                                    <p className="text-[#080f0c] font-black text-[8px] md:text-[11px] lg:text-xs flex items-center gap-1.5 md:gap-2">
-                                                        <span className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-[#00c978]" />
+                                                <div className="flex flex-col gap-1.5 md:gap-2">
+                                                    <p className="text-[#080f0c] font-black text-[7.5px] md:text-xs lg:text-sm flex items-center gap-2">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-[#00c978]" />
                                                         Available for any grade and any subject in CBC
                                                     </p>
-                                                    <p className="text-slate-500 text-[6px] md:text-[8px] lg:text-[9px] font-black uppercase tracking-[0.15em] pl-2 md:pl-3.5">
+                                                    <p className="text-slate-500 text-[5px] md:text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] pl-3.5">
                                                         MODES: PRACTICE • PODCAST • EXPLANATION
                                                     </p>
                                                 </div>
