@@ -77,11 +77,11 @@ export default function PricingSection() {
                         <div className="space-y-2 sm:space-y-3">
                             <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-3 md:mb-4">What's Included</p>
                             {[
-                                "Full AI Tutor access",
-                                "All Grade 1-9 subjects",
-                                "Interactive Quizzes",
-                                "7-day history tracking",
-                                "Personalized feedback"
+                                "Full Access to ALL Features",
+                                "Student & Teacher Tools",
+                                "All Grade 4-12 CBC Subjects",
+                                "Interactive AI Quizzes",
+                                "Personalized AI Feedback"
                             ].map((feature, i) => (
                                 <div key={i} className="flex items-center gap-2.5 text-slate-300">
                                     <div className="w-4 h-4 rounded-full bg-[#10b981]/20 flex items-center justify-center flex-shrink-0">
@@ -120,12 +120,12 @@ export default function PricingSection() {
                         <div className="space-y-2 sm:space-y-3">
                             <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-3 md:mb-4">Everything in Trial, plus:</p>
                             {[
-                                "Unlimited AI explanations",
-                                "National Leaderboard entry",
-                                "Detailed performance analytics",
-                                "Offline study materials",
-                                "Priority AI training",
-                                "Parent Dashboard access"
+                                "Unlimited AI Explanations",
+                                "National Leaderboard Entry",
+                                "Multi-Mode (Podcast & Immersive)",
+                                "Detailed Performance Analytics",
+                                "Voice Discovery (STT/TTS)",
+                                "Offline Study Materials"
                             ].map((feature, i) => (
                                 <div key={i} className="flex items-center gap-2.5 text-white/90">
                                     <div className="w-4 h-4 rounded-full bg-[#10b981] flex items-center justify-center flex-shrink-0">
@@ -165,11 +165,11 @@ export default function PricingSection() {
                             <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-3 md:mb-4">Teacher Special Tools</p>
                             {[
                                 "Bulk AI Lesson Planner",
-                                "Classroom Management Suite",
+                                "Custom Textbook Creator",
                                 "Automated Quiz Generator",
                                 "Student Progress Insights",
-                                "CBC Standards alignment",
-                                "Exportable reports"
+                                "CBC Standards Alignment",
+                                "Exportable CBC Reports"
                             ].map((feature, i) => (
                                 <div key={i} className="flex items-center gap-2.5 text-slate-300">
                                     <div className="w-4 h-4 rounded-full bg-[#10b981]/20 flex items-center justify-center flex-shrink-0">
