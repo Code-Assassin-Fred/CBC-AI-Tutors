@@ -127,17 +127,43 @@ export default function FeaturesSection() {
                                     <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#00E18A]/20 blur-[100px] rounded-full" />
 
                                     <div className="relative w-full h-full max-w-5xl mx-auto">
-                                        <motion.div className="absolute -top-12 left-[10%] w-[45%] z-0 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/40 shadow-xl overflow-hidden opacity-40 blur-[1px] hidden sm:block" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 0.4, y: 0 }} transition={{ duration: 1, delay: 0.2 }}><img src="/Empty Classroom.PNG" alt="Classroom" className="w-full h-full object-cover" /></motion.div>
-                                        <motion.div className="absolute top-[8%] -left-2 sm:-left-10 md:-left-20 w-[50%] sm:w-[45%] md:w-[55%] z-10 rounded-xl sm:rounded-2xl md:rounded-[32px] border-[3px] sm:border-[6px] md:border-[10px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}><img src="/Natural Chat with AI.PNG" alt="Natural Chat" className="w-full h-auto" /></motion.div>
-                                        <motion.div className="absolute top-[48%] left-[45%] -translate-x-1/2 -translate-y-1/2 w-[75%] sm:w-[65%] md:w-[75%] z-20 rounded-xl sm:rounded-2xl md:rounded-[40px] border-[4px] sm:border-[8px] md:border-[16px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.1 }}><img src="/Lesson in progress.PNG" alt="Lesson in Progress" className="w-full h-auto" /></motion.div>
-                                        <motion.div className="absolute -bottom-8 sm:-bottom-20 right-0 md:right-10 w-[40%] sm:w-[35%] md:w-[45%] z-30 rounded-xl sm:rounded-2xl md:rounded-[32px] border-[3px] sm:border-[6px] md:border-[12px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: 40, y: 20 }} whileInView={{ opacity: 1, x: 0, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}><img src="/Podcast.PNG" alt="Podcast" className="w-full h-auto" /></motion.div>
-                                        <motion.div className="absolute top-4 sm:top-16 right-4 sm:right-16 z-40 max-w-[140px] sm:max-w-xs text-right" initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.5 }}><h2 className="text-sm sm:text-2xl md:text-4xl font-black text-[#080f0c] leading-[1.1] tracking-tighter uppercase">AI-Powered <br /><span className="text-[#00E18A]">Personalized</span> <br />Tutoring.</h2></motion.div>
-                                        <motion.div className="absolute bottom-12 left-12 z-40 max-w-lg hidden md:block" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.7 }}>
-                                            <div className="space-y-4">
-                                                <p className="text-[#080f0c]/95 font-medium text-base leading-snug">Get instant help with complex topics anytime. Our AI tutor acts as your personal study buddy, explaining concepts clearly. <span className="text-[#080f0c] font-bold underline decoration-[#00E18A] decoration-2 underline-offset-4">Personalized lessons</span> that adapt to your pace.</p>
-                                                <div className="flex flex-col gap-2">
-                                                    <p className="text-[#080f0c] font-bold text-sm flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#00E18A]" />Available for any grade and any subject in CBC</p>
-                                                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.25em] pl-3.5">Modes: Practice • Podcast • Explanation</p>
+                                        <motion.div className="absolute -top-12 left-[10%] w-[45%] z-0 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/40 shadow-xl overflow-hidden opacity-30 blur-[1px] hidden sm:block" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 0.3, y: 0 }} transition={{ duration: 1, delay: 0.2 }}><img src="/Empty Classroom.PNG" alt="Classroom" className="w-full h-full object-cover" /></motion.div>
+                                        <motion.div className="absolute top-[5%] -left-2 sm:-left-6 md:-left-12 w-[42%] sm:w-[38%] md:w-[45%] z-10 rounded-xl sm:rounded-2xl md:rounded-[32px] border-[3px] sm:border-[6px] md:border-[10px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}><img src="/Natural Chat with AI.PNG" alt="Natural Chat" className="w-full h-auto" /></motion.div>
+                                        <motion.div className="absolute top-[48%] left-[52%] -translate-x-1/2 -translate-y-1/2 w-[58%] sm:w-[53%] md:w-[62%] z-20 rounded-xl sm:rounded-2xl md:rounded-[40px] border-[4px] sm:border-[8px] md:border-[14px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.1 }}><img src="/Lesson in progress.PNG" alt="Lesson in Progress" className="w-full h-auto" /></motion.div>
+                                        <motion.div className="absolute -bottom-4 sm:-bottom-12 right-0 md:right-4 w-[32%] sm:w-[28%] md:w-[38%] z-30 rounded-xl sm:rounded-2xl md:rounded-[32px] border-[3px] sm:border-[6px] md:border-[10px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: 40, y: 20 }} whileInView={{ opacity: 1, x: 0, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}><img src="/Podcast.PNG" alt="Podcast" className="w-full h-auto" /></motion.div>
+                                        <motion.div
+                                            className="absolute top-3 sm:top-6 md:top-8 right-3 sm:right-6 md:right-8 z-40 max-w-[140px] sm:max-w-xs text-right"
+                                            initial={{ opacity: 0, y: -20 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.8, delay: 0.5 }}
+                                        >
+                                            <h2 className="text-sm sm:text-2xl md:text-3xl lg:text-4xl font-black text-[#080f0c] leading-[1.1] tracking-tighter uppercase whitespace-nowrap">
+                                                AI-Powered <br />
+                                                <span className="text-[#00c978]">Personalized</span> <br />
+                                                Tutoring.
+                                            </h2>
+                                        </motion.div>
+                                        <motion.div
+                                            className="absolute bottom-3 sm:bottom-6 md:bottom-8 left-3 sm:left-6 md:left-8 z-40 max-w-[160px] sm:max-w-sm md:max-w-[320px] hidden sm:block"
+                                            initial={{ opacity: 0, x: -20 }}
+                                            whileInView={{ opacity: 1, x: 0 }}
+                                            transition={{ duration: 0.8, delay: 0.7 }}
+                                        >
+                                            <div className="space-y-2 md:space-y-3">
+                                                <p className="text-[#080f0c]/90 font-medium text-[9px] sm:text-xs md:text-sm lg:text-[15px] leading-snug">
+                                                    Get instant help with complex topics anytime. Our AI tutor acts as your personal study buddy, explaining concepts clearly.
+                                                    <span className="text-[#080f0c] font-black underline decoration-[#00c978] decoration-2 underline-offset-4 block mt-1">
+                                                        Personalized lessons that adapt to your pace.
+                                                    </span>
+                                                </p>
+                                                <div className="flex flex-col gap-1 md:gap-1.5">
+                                                    <p className="text-[#080f0c] font-black text-[8px] md:text-[11px] lg:text-xs flex items-center gap-1.5 md:gap-2">
+                                                        <span className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-[#00c978]" />
+                                                        Available for any grade and any subject in CBC
+                                                    </p>
+                                                    <p className="text-slate-500 text-[6px] md:text-[8px] lg:text-[9px] font-black uppercase tracking-[0.15em] pl-2 md:pl-3.5">
+                                                        MODES: PRACTICE • PODCAST • EXPLANATION
+                                                    </p>
                                                 </div>
                                             </div>
                                         </motion.div>
