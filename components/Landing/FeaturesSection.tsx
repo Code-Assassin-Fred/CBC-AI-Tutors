@@ -59,25 +59,25 @@ export default function FeaturesSection() {
     };
 
     return (
-        <section id="features" className="pt-16 pb-24 relative overflow-hidden bg-[#080f0c]">
+        <section id="features" className="pt-10 md:pt-16 pb-16 md:pb-24 relative overflow-hidden bg-[#080f0c]">
             {/* Background Decoration */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                 <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] bg-[#00E18A]/5 blur-[120px] rounded-full" />
                 <div className="absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-[#00E18A]/5 blur-[120px] rounded-full" />
             </div>
 
-            <div className="container mx-auto px-6 relative z-10 space-y-32">
+            <div className="container mx-auto px-4 md:px-6 relative z-10 space-y-16 md:space-y-32">
 
                 <div>
-                    <div className="text-center mb-12">
-                        <p className="text-slate-300 text-xl font-medium max-w-2xl mx-auto">
+                    <div className="text-center mb-8 md:mb-12">
+                        <p className="text-slate-300 text-sm sm:text-base md:text-xl font-medium max-w-2xl mx-auto">
                             Whether you're teaching the next generation or learning for the future,
                             our platform adapts to your specific needs.
                         </p>
                     </div>
 
                     {/* Toggle */}
-                    <div className="flex justify-center mb-16">
+                    <div className="flex justify-center mb-10 md:mb-16">
                         <div className="bg-white/5 p-1.5 rounded-2xl flex items-center relative">
                             {/* Sliding Background */}
                             <motion.div
@@ -93,17 +93,17 @@ export default function FeaturesSection() {
 
                             <button
                                 onClick={() => setActiveTab("students")}
-                                className={`relative px-8 py-3 rounded-xl font-semibold text-lg transition-colors z-10 ${activeTab === "students" ? "text-[#080f0c]" : "text-slate-300 hover:text-white"
+                                className={`relative px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-lg transition-colors z-10 ${activeTab === "students" ? "text-[#080f0c]" : "text-slate-300 hover:text-white"
                                     }`}
-                                style={{ width: '160px' }} // Fixed width for alignment
+                                style={{ width: '120px' }} // Fixed width for alignment - mobile friendly
                             >
                                 Students
                             </button>
                             <button
                                 onClick={() => setActiveTab("teachers")}
-                                className={`relative px-8 py-3 rounded-xl font-semibold text-lg transition-colors z-10 ${activeTab === "teachers" ? "text-[#080f0c]" : "text-slate-300 hover:text-white"
+                                className={`relative px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-lg transition-colors z-10 ${activeTab === "teachers" ? "text-[#080f0c]" : "text-slate-300 hover:text-white"
                                     }`}
-                                style={{ width: '160px' }} // Fixed width for alignment
+                                style={{ width: '120px' }} // Fixed width for alignment - mobile friendly
                             >
                                 Teachers
                             </button>
@@ -119,19 +119,19 @@ export default function FeaturesSection() {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 20 }}
                                 transition={{ duration: 0.5 }}
-                                className="space-y-32"
+                                className="space-y-16 md:space-y-32"
                             >
                                 {/* The Composition Container (Students) */}
-                                <div className="w-[95%] max-w-7xl mx-auto h-[400px] md:h-[600px] bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0] border border-white/20 rounded-[48px] shadow-2xl relative overflow-hidden flex items-center justify-center">
+                                <div className="w-full max-w-7xl mx-auto h-[280px] sm:h-[350px] md:h-[600px] bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0] border border-white/20 rounded-[24px] sm:rounded-[32px] md:rounded-[48px] shadow-2xl relative overflow-hidden flex items-center justify-center">
                                     <div className="absolute top-1/4 -left-20 w-96 h-96 bg-blue-200/40 blur-[100px] rounded-full" />
                                     <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#00E18A]/20 blur-[100px] rounded-full" />
 
                                     <div className="relative w-full h-full max-w-5xl mx-auto">
-                                        <motion.div className="absolute -top-12 left-[10%] w-[45%] z-0 rounded-3xl border border-white/40 shadow-xl overflow-hidden opacity-40 blur-[1px]" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 0.4, y: 0 }} transition={{ duration: 1, delay: 0.2 }}><img src="/Empty Classroom.PNG" alt="Classroom" className="w-full h-full object-cover" /></motion.div>
-                                        <motion.div className="absolute top-[8%] -left-10 md:-left-20 w-[45%] md:w-[55%] z-10 rounded-2xl md:rounded-[32px] border-[6px] md:border-[10px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}><img src="/Natural Chat with AI.PNG" alt="Natural Chat" className="w-full h-auto" /></motion.div>
-                                        <motion.div className="absolute top-[48%] left-[45%] -translate-x-1/2 -translate-y-1/2 w-[65%] md:w-[75%] z-20 rounded-2xl md:rounded-[40px] border-[8px] md:border-[16px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.1 }}><img src="/Lesson in progress.PNG" alt="Lesson in Progress" className="w-full h-auto" /></motion.div>
-                                        <motion.div className="absolute -bottom-20 right-0 md:right-10 w-[35%] md:w-[45%] z-30 rounded-2xl md:rounded-[32px] border-[6px] md:border-[12px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: 40, y: 20 }} whileInView={{ opacity: 1, x: 0, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}><img src="/Podcast.PNG" alt="Podcast" className="w-full h-auto" /></motion.div>
-                                        <motion.div className="absolute top-16 right-16 z-40 max-w-xs text-right hidden md:block" initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.5 }}><h2 className="text-3xl md:text-4xl font-black text-[#080f0c] leading-[1.1] tracking-tighter uppercase">AI-Powered <br /><span className="text-[#00E18A]">Personalized</span> <br />Tutoring.</h2></motion.div>
+                                        <motion.div className="absolute -top-12 left-[10%] w-[45%] z-0 rounded-xl sm:rounded-2xl md:rounded-3xl border border-white/40 shadow-xl overflow-hidden opacity-40 blur-[1px] hidden sm:block" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 0.4, y: 0 }} transition={{ duration: 1, delay: 0.2 }}><img src="/Empty Classroom.PNG" alt="Classroom" className="w-full h-full object-cover" /></motion.div>
+                                        <motion.div className="absolute top-[8%] -left-2 sm:-left-10 md:-left-20 w-[50%] sm:w-[45%] md:w-[55%] z-10 rounded-xl sm:rounded-2xl md:rounded-[32px] border-[3px] sm:border-[6px] md:border-[10px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}><img src="/Natural Chat with AI.PNG" alt="Natural Chat" className="w-full h-auto" /></motion.div>
+                                        <motion.div className="absolute top-[48%] left-[45%] -translate-x-1/2 -translate-y-1/2 w-[75%] sm:w-[65%] md:w-[75%] z-20 rounded-xl sm:rounded-2xl md:rounded-[40px] border-[4px] sm:border-[8px] md:border-[16px] border-[#1a221e] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.1 }}><img src="/Lesson in progress.PNG" alt="Lesson in Progress" className="w-full h-auto" /></motion.div>
+                                        <motion.div className="absolute -bottom-8 sm:-bottom-20 right-0 md:right-10 w-[40%] sm:w-[35%] md:w-[45%] z-30 rounded-xl sm:rounded-2xl md:rounded-[32px] border-[3px] sm:border-[6px] md:border-[12px] border-[#1a221e] shadow-2xl overflow-hidden bg-[#0c1410]" initial={{ opacity: 0, x: 40, y: 20 }} whileInView={{ opacity: 1, x: 0, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }}><img src="/Podcast.PNG" alt="Podcast" className="w-full h-auto" /></motion.div>
+                                        <motion.div className="absolute top-4 sm:top-16 right-4 sm:right-16 z-40 max-w-[140px] sm:max-w-xs text-right" initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.5 }}><h2 className="text-sm sm:text-2xl md:text-4xl font-black text-[#080f0c] leading-[1.1] tracking-tighter uppercase">AI-Powered <br /><span className="text-[#00E18A]">Personalized</span> <br />Tutoring.</h2></motion.div>
                                         <motion.div className="absolute bottom-12 left-12 z-40 max-w-lg hidden md:block" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.7 }}>
                                             <div className="space-y-4">
                                                 <p className="text-[#080f0c]/95 font-medium text-base leading-snug">Get instant help with complex topics anytime. Our AI tutor acts as your personal study buddy, explaining concepts clearly. <span className="text-[#080f0c] font-bold underline decoration-[#00E18A] decoration-2 underline-offset-4">Personalized lessons</span> that adapt to your pace.</p>
@@ -145,33 +145,33 @@ export default function FeaturesSection() {
                                 </div>
 
                                 {/* Gamification Section (Students) */}
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                                    <motion.div className="space-y-8 pl-[10px]" initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                                        <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1] tracking-tight">Gamification at our <span className="text-[#FF4500] font-newsreader italic font-medium">Core.</span></h2>
-                                        <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium">Earn points, badges, and rewards as you complete lessons and quizzes. Learning has never been this fun!</p>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8 pt-4">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20 items-center">
+                                    <motion.div className="space-y-6 md:space-y-8 pl-0 sm:pl-[10px]" initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white leading-[1.1] tracking-tight">Gamification at our <span className="text-[#FF4500] font-newsreader italic font-medium">Core.</span></h2>
+                                        <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed font-medium">Earn points, badges, and rewards as you complete lessons and quizzes. Learning has never been this fun!</p>
+                                        <div className="grid grid-cols-2 gap-x-4 sm:gap-x-10 gap-y-4 sm:gap-y-8 pt-2 md:pt-4">
                                             {[{ title: "Daily Streaks", desc: "Keep the momentum going" }, { title: "Interactive Badges", desc: "Show off your progress" }, { title: "Instant XP", desc: "Rewards for every answer and activity" }, { title: "Leaderboards", desc: "Compete with other students countrywide" }].map((item, i) => (
-                                                <motion.div key={i} className="pl-4 space-y-0.5" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-                                                    <h4 className="text-white text-lg font-bold tracking-tight font-jakarta">{item.title}</h4>
-                                                    <p className="text-slate-500 text-sm">{item.desc}</p>
+                                                <motion.div key={i} className="pl-0 sm:pl-4 space-y-0.5" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
+                                                    <h4 className="text-white text-sm sm:text-lg font-bold tracking-tight font-jakarta">{item.title}</h4>
+                                                    <p className="text-slate-500 text-xs sm:text-sm">{item.desc}</p>
                                                 </motion.div>
                                             ))}
                                         </div>
                                     </motion.div>
-                                    <div className="relative flex justify-center lg:pr-16">
+                                    <div className="relative flex justify-center lg:pr-16 mt-8 lg:mt-0">
                                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#00E18A]/10 blur-[130px] rounded-full pointer-events-none" />
                                         <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }} className="relative z-10"><PhoneMockup /></motion.div>
                                     </div>
                                 </div>
 
                                 {/* Quiz & Tracking Cards (Students) */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white/5 border-[5px] border-[#FF4500] p-6 rounded-[40px] hover:bg-white/10 transition-all group relative overflow-hidden h-[180px] flex flex-col justify-center">
-                                        <div className="relative z-10"><h3 className="text-xl font-bold text-sky-400 mb-2 font-jakarta">Interactive Quizzes</h3><p className="text-slate-400 leading-relaxed text-sm max-w-md">Test your knowledge with dynamic quizzes that adapt to your learning level and provide instant feedback.</p></div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white/5 border-[3px] sm:border-[5px] border-[#FF4500] p-4 sm:p-6 rounded-[24px] sm:rounded-[40px] hover:bg-white/10 transition-all group relative overflow-hidden h-auto min-h-[140px] sm:h-[180px] flex flex-col justify-center">
+                                        <div className="relative z-10"><h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-1 sm:mb-2 font-jakarta">Interactive Quizzes</h3><p className="text-slate-400 leading-relaxed text-xs sm:text-sm max-w-md">Test your knowledge with dynamic quizzes that adapt to your learning level and provide instant feedback.</p></div>
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-[#00E18A]/10 blur-[60px] rounded-full" /><div className="absolute -bottom-4 -right-4 w-24 h-24 bg-blue-500/10 blur-[50px] rounded-full" />
                                     </motion.div>
-                                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="bg-white/5 border-[5px] border-[#FF4500] p-6 rounded-[40px] hover:bg-white/10 transition-all group relative overflow-hidden h-[180px] flex flex-col justify-center">
-                                        <div className="relative z-10"><h3 className="text-xl font-bold text-sky-400 mb-2 font-jakarta">Progress Tracking</h3><p className="text-slate-400 leading-relaxed text-sm max-w-md">Visualize your learning journey with detailed analytics. See where you excel and where you need to focus.</p></div>
+                                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="bg-white/5 border-[3px] sm:border-[5px] border-[#FF4500] p-4 sm:p-6 rounded-[24px] sm:rounded-[40px] hover:bg-white/10 transition-all group relative overflow-hidden h-auto min-h-[140px] sm:h-[180px] flex flex-col justify-center">
+                                        <div className="relative z-10"><h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-1 sm:mb-2 font-jakarta">Progress Tracking</h3><p className="text-slate-400 leading-relaxed text-xs sm:text-sm max-w-md">Visualize your learning journey with detailed analytics. See where you excel and where you need to focus.</p></div>
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 blur-[60px] rounded-full" /><div className="absolute -bottom-4 -right-4 w-24 h-24 bg-[#00E18A]/10 blur-[50px] rounded-full" />
                                     </motion.div>
                                 </div>
@@ -183,35 +183,35 @@ export default function FeaturesSection() {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
                                 transition={{ duration: 0.5 }}
-                                className="space-y-20"
+                                className="space-y-12 md:space-y-20"
                             >
                                 {/* Teacher Hero Section (Figma Inspired) */}
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 items-stretch bg-[#0c1410] rounded-3xl border-2 border-[#FF4500] overflow-hidden relative">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 items-stretch bg-[#0c1410] rounded-2xl md:rounded-3xl border-2 border-[#FF4500] overflow-hidden relative">
                                     <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#00E18A]/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
 
                                     {/* Full Width Heading Section */}
-                                    <div className="lg:col-span-2 p-8 md:p-10 lg:p-12 lg:pb-0 space-y-3 relative z-10">
-                                        <h2 className="text-2xl md:text-4xl font-black text-white leading-tight tracking-tight max-w-3xl">
+                                    <div className="lg:col-span-2 p-5 sm:p-8 md:p-10 lg:p-12 lg:pb-0 space-y-2 sm:space-y-3 relative z-10">
+                                        <h2 className="text-xl sm:text-2xl md:text-4xl font-black text-white leading-tight tracking-tight max-w-3xl">
                                             Crafting simple & intuitive teacher-centric <span className="text-[#00E18A]">CBC AI tools</span>
                                         </h2>
-                                        <p className="text-slate-400 text-lg font-medium max-w-2xl leading-relaxed">
+                                        <p className="text-slate-400 text-sm sm:text-base md:text-lg font-medium max-w-2xl leading-relaxed">
                                             We provide tools that align with your teaching style and convert your hard manual work into automated excellence.
                                         </p>
                                     </div>
 
                                     {/* Features List (Left Column) */}
-                                    <div className="space-y-5 relative z-10 p-8 md:p-10 lg:p-12 lg:pt-8 lg:pr-0">
-                                        <div className="space-y-6">
+                                    <div className="space-y-4 sm:space-y-5 relative z-10 p-5 sm:p-8 md:p-10 lg:p-12 lg:pt-8 lg:pr-0">
+                                        <div className="space-y-4 sm:space-y-6">
                                             {features.teachers.map((f, i) => (
-                                                <div key={i} className="flex items-start gap-4">
-                                                    <div className="w-6 h-6 rounded-lg bg-[#00E18A]/10 flex items-center justify-center flex-shrink-0 mt-1">
-                                                        <svg className="w-4 h-4 text-[#00E18A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <div key={i} className="flex items-start gap-3 sm:gap-4">
+                                                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-[#00E18A]/10 flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
+                                                        <svg className="w-3 h-3 sm:w-4 sm:h-4 text-[#00E18A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" />
                                                         </svg>
                                                     </div>
                                                     <div>
-                                                        <h4 className="text-white font-bold text-lg leading-none mb-1">{f.title}</h4>
-                                                        <p className="text-slate-400 text-sm leading-relaxed">{f.description}</p>
+                                                        <h4 className="text-white font-bold text-base sm:text-lg leading-none mb-0.5 sm:mb-1">{f.title}</h4>
+                                                        <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">{f.description}</p>
                                                     </div>
                                                 </div>
                                             ))}

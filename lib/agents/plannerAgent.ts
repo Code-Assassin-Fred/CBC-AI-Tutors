@@ -51,8 +51,18 @@ Respond with ONLY a JSON object:
 }`;
 
   const data = await generateGeminiJSON<ConceptAnalysis>(prompt, MODEL);
-  return data;
+
+  // Normalize response to ensure all arrays exist (defensive coding)
+  return {
+    keyConcepts: data.keyConcepts || ['General concepts'],
+    difficulty: data.difficulty || 'medium',
+    prerequisites: data.prerequisites || [],
+    commonMisconceptions: data.commonMisconceptions || [],
+    targetAgeRange: data.targetAgeRange || '8-12 years',
+    estimatedLearningTime: data.estimatedLearningTime || '30 minutes',
+  };
 }
+
 
 // ============================================
 // STEP 2: OUTLINE
@@ -282,6 +292,9 @@ export interface PlannerStepCallback {
   onError: (error: string) => void;
 }
 
+// Helper: Sleep to stay within RPM limits
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export async function runPlannerAgent(
   context: SubstrandContext,
   callbacks: PlannerStepCallback
@@ -291,25 +304,35 @@ export async function runPlannerAgent(
   const analysis = await analyzeContent(context);
   callbacks.onStepComplete(1);
 
+  await sleep(1000); // 1s breather
+
   // Step 2: Outline
   callbacks.onStepStart(2, 'Mixing the magic...');
   const outlines = await createOutlines(context, analysis);
   callbacks.onStepComplete(2);
+
+  await sleep(1000); // 1s breather
 
   // Step 3a: Generate Read
   callbacks.onStepStart(3, 'Sprinkling knowledge...');
   const readContent = await generateReadContent(context, analysis, outlines);
   callbacks.onStepComplete(3);
 
+  await sleep(1000); // 1s breather
+
   // Step 3b: Generate Podcast
   callbacks.onStepStart(4, 'Brewing something special...');
   const podcastScript = await generatePodcastScript(context, analysis, outlines);
   callbacks.onStepComplete(4);
 
+  await sleep(1000); // 1s breather
+
   // Step 3c: Generate Immersive
   callbacks.onStepStart(5, 'Adding a dash of wisdom...');
   const immersiveContent = await generateImmersiveContent(context, analysis, outlines);
   callbacks.onStepComplete(5);
+
+  await sleep(1000); // 1s breather
 
   // Step 4: Refine
   callbacks.onStepStart(6, 'Final taste test...');

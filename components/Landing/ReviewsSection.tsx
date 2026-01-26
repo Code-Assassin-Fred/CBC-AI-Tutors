@@ -40,13 +40,13 @@ const duplicatedReviews = [...reviews, ...reviews];
 
 export default function ReviewsSection() {
     return (
-        <section id="reviews" className="py-24 bg-white overflow-hidden">
-            <div className="container mx-auto px-6 mb-16 text-center">
+        <section id="reviews" className="py-12 md:py-24 bg-white overflow-hidden">
+            <div className="container mx-auto px-4 md:px-6 mb-10 md:mb-16 text-center">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter"
+                    className="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tighter"
                 >
                     Loved by <span className="text-[#10b981]">Teachers</span> & Parents.
                 </motion.h2>
@@ -54,7 +54,7 @@ export default function ReviewsSection() {
 
             <div className="relative flex overflow-hidden">
                 <motion.div
-                    className="flex whitespace-nowrap gap-8"
+                    className="flex whitespace-nowrap gap-4 sm:gap-8"
                     animate={{ x: [0, -1920] }} // Adjust based on total width
                     transition={{
                         duration: 30,
@@ -65,10 +65,10 @@ export default function ReviewsSection() {
                     {duplicatedReviews.map((review, i) => (
                         <div
                             key={i}
-                            className="inline-block w-[350px] md:w-[450px] bg-white border-2 border-[#10b981] rounded-[32px] p-8 md:p-10 whitespace-normal flex-shrink-0"
+                            className="inline-block w-[280px] sm:w-[350px] md:w-[450px] bg-white border-2 border-[#10b981] rounded-[24px] sm:rounded-[32px] p-5 sm:p-8 md:p-10 whitespace-normal flex-shrink-0"
                         >
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-900 font-bold">
+                            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-900 font-bold text-sm sm:text-base">
                                     {review.avatar}
                                 </div>
                                 <div>
@@ -76,10 +76,10 @@ export default function ReviewsSection() {
                                     <p className="text-slate-500 text-xs mt-1 font-medium">{review.role}</p>
                                 </div>
                             </div>
-                            <p className="text-slate-600 text-lg md:text-xl font-medium leading-relaxed italic">
+                            <p className="text-slate-600 text-base sm:text-lg md:text-xl font-medium leading-relaxed italic">
                                 "{review.content}"
                             </p>
-                            <div className="mt-6 flex text-[#10b981]">
+                            <div className="mt-4 sm:mt-6 flex text-[#10b981]">
                                 {[1, 2, 3, 4, 5].map(s => (
                                     <svg key={s} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
                                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -91,8 +91,8 @@ export default function ReviewsSection() {
                 </motion.div>
 
                 {/* Gradient Fades for Smooth Transition edges */}
-                <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
-                <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
+                <div className="absolute inset-y-0 left-0 w-12 sm:w-32 bg-gradient-to-r from-white to-transparent z-10" />
+                <div className="absolute inset-y-0 right-0 w-12 sm:w-32 bg-gradient-to-l from-white to-transparent z-10" />
             </div>
         </section>
     );

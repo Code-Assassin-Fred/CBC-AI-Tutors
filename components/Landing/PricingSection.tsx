@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function PricingSection() {
     return (
-        <section id="pricing" className="py-24 relative overflow-hidden bg-[#020d0a]">
+        <section id="pricing" className="py-12 md:py-24 relative overflow-hidden bg-[#020d0a]">
             {/* High-End Smoky Silk Background */}
             <div className="absolute inset-0 z-0">
                 {/* Primary Silky Gradient */}
@@ -29,14 +29,14 @@ export default function PricingSection() {
                 />
             </div>
 
-            <div className="container mx-auto px-6 relative z-10">
+            <div className="container mx-auto px-4 md:px-6 relative z-10">
                 {/* Header */}
-                <div className="text-center mb-16">
+                <div className="text-center mb-10 md:mb-16">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-3xl md:text-5xl font-black text-white leading-tight tracking-tight mb-4"
+                        className="text-2xl sm:text-3xl md:text-5xl font-black text-white leading-tight tracking-tight mb-3 md:mb-4"
                     >
                         Simple and Affordable <br />
                         <span className="text-[#10b981] font-newsreader italic font-medium">Pricing Plans</span>
@@ -46,36 +46,36 @@ export default function PricingSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-slate-400 text-lg font-medium max-w-2xl mx-auto"
+                        className="text-slate-400 text-sm sm:text-base md:text-lg font-medium max-w-2xl mx-auto"
                     >
                         Start your 7-day free trial today. No Payment required.
                     </motion.p>
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 max-w-6xl mx-auto">
                     {/* 7-Day Free Trial Card */}
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[32px] p-8 flex flex-col hover:bg-white/[0.05] transition-all group"
+                        className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[24px] md:rounded-[32px] p-5 sm:p-6 md:p-8 flex flex-col hover:bg-white/[0.05] transition-all group"
                     >
-                        <div className="mb-6">
+                        <div className="mb-4 md:mb-6">
                             <span className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Free Trial</span>
-                            <div className="flex items-baseline gap-1 mt-3">
-                                <span className="text-4xl font-black text-white">7</span>
-                                <span className="text-lg text-slate-400 font-medium">Days</span>
+                            <div className="flex items-baseline gap-1 mt-2 md:mt-3">
+                                <span className="text-3xl sm:text-4xl font-black text-white">7</span>
+                                <span className="text-base sm:text-lg text-slate-400 font-medium">Days</span>
                             </div>
-                            <p className="text-slate-500 mt-3 text-sm leading-relaxed">Perfect for exploring all features without any commitment.</p>
+                            <p className="text-slate-500 mt-2 md:mt-3 text-xs sm:text-sm leading-relaxed">Perfect for exploring all features without any commitment.</p>
                         </div>
 
-                        <button className="w-full py-3.5 rounded-xl bg-white/10 text-white font-bold text-base hover:bg-white/20 transition-all mb-8">
+                        <button className="w-full py-3 md:py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm sm:text-base hover:bg-white/20 transition-all mb-5 md:mb-8">
                             Start Free Trial
                         </button>
 
-                        <div className="space-y-3">
-                            <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-4">What's Included</p>
+                        <div className="space-y-2 sm:space-y-3">
+                            <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-3 md:mb-4">What's Included</p>
                             {[
                                 "Full AI Tutor access",
                                 "All Grade 1-9 subjects",
@@ -101,24 +101,24 @@ export default function PricingSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="bg-white/[0.05] backdrop-blur-2xl border border-[#10b981]/30 rounded-[32px] p-8 flex flex-col relative group"
+                        className="bg-white/[0.05] backdrop-blur-2xl border border-[#10b981]/30 rounded-[24px] md:rounded-[32px] p-5 sm:p-6 md:p-8 flex flex-col relative group"
                     >
-                        <div className="mb-6">
+                        <div className="mb-4 md:mb-6">
                             <span className="text-white font-bold uppercase tracking-widest text-[10px]">Student Pro</span>
-                            <div className="flex items-baseline gap-1 mt-3">
-                                <span className="text-sm text-slate-400 font-medium self-start mt-1">KES</span>
-                                <span className="text-5xl font-black text-white tracking-tighter">1,000</span>
-                                <span className="text-slate-400 font-medium text-sm">/mo</span>
+                            <div className="flex items-baseline gap-1 mt-2 md:mt-3">
+                                <span className="text-xs sm:text-sm text-slate-400 font-medium self-start mt-1">KES</span>
+                                <span className="text-4xl sm:text-5xl font-black text-white tracking-tighter">1,000</span>
+                                <span className="text-slate-400 font-medium text-xs sm:text-sm">/mo</span>
                             </div>
-                            <p className="text-slate-300 mt-3 text-sm leading-relaxed font-medium">Unlimited learning power for ambitious students.</p>
+                            <p className="text-slate-300 mt-2 md:mt-3 text-xs sm:text-sm leading-relaxed font-medium">Unlimited learning power for ambitious students.</p>
                         </div>
 
-                        <button className="w-full py-4 rounded-xl bg-[#10b981] text-[#020d0a] font-black text-base hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_10px_20px_rgba(16,185,129,0.2)] mb-8">
+                        <button className="w-full py-3 md:py-4 rounded-xl bg-[#10b981] text-[#020d0a] font-black text-sm sm:text-base hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_10px_20px_rgba(16,185,129,0.2)] mb-5 md:mb-8">
                             Get Student Pro
                         </button>
 
-                        <div className="space-y-3">
-                            <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-4">Everything in Trial, plus:</p>
+                        <div className="space-y-2 sm:space-y-3">
+                            <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-3 md:mb-4">Everything in Trial, plus:</p>
                             {[
                                 "Unlimited AI explanations",
                                 "National Leaderboard entry",
@@ -145,24 +145,24 @@ export default function PricingSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[32px] p-8 flex flex-col hover:bg-white/[0.05] transition-all group"
+                        className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[24px] md:rounded-[32px] p-5 sm:p-6 md:p-8 flex flex-col hover:bg-white/[0.05] transition-all group"
                     >
-                        <div className="mb-6">
+                        <div className="mb-4 md:mb-6">
                             <span className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Teacher Hub</span>
-                            <div className="flex items-baseline gap-1 mt-3">
-                                <span className="text-sm text-slate-400 font-medium self-start mt-1">KES</span>
-                                <span className="text-4xl font-black text-white tracking-tighter">800</span>
-                                <span className="text-slate-400 font-medium text-sm">/mo</span>
+                            <div className="flex items-baseline gap-1 mt-2 md:mt-3">
+                                <span className="text-xs sm:text-sm text-slate-400 font-medium self-start mt-1">KES</span>
+                                <span className="text-3xl sm:text-4xl font-black text-white tracking-tighter">800</span>
+                                <span className="text-slate-400 font-medium text-xs sm:text-sm">/mo</span>
                             </div>
-                            <p className="text-slate-500 mt-3 text-sm leading-relaxed">Empower your classes with AI lesson planning.</p>
+                            <p className="text-slate-500 mt-2 md:mt-3 text-xs sm:text-sm leading-relaxed">Empower your classes with AI lesson planning.</p>
                         </div>
 
-                        <button className="w-full py-3.5 rounded-xl bg-white/10 text-white font-bold text-base hover:bg-white/20 transition-all mb-8">
+                        <button className="w-full py-3 md:py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm sm:text-base hover:bg-white/20 transition-all mb-5 md:mb-8">
                             Get Teacher Hub
                         </button>
 
-                        <div className="space-y-3">
-                            <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-4">Teacher Special Tools</p>
+                        <div className="space-y-2 sm:space-y-3">
+                            <p className="text-slate-400 font-black uppercase tracking-widest text-[9px] mb-3 md:mb-4">Teacher Special Tools</p>
                             {[
                                 "Bulk AI Lesson Planner",
                                 "Classroom Management Suite",

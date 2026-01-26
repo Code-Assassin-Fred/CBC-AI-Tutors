@@ -4,21 +4,21 @@ import { FaTwitter, FaLinkedin, FaFacebookF, FaInstagram } from "react-icons/fa"
 
 export default function Footer() {
   return (
-    <footer id="contact" className="bg-black text-gray-400 px-6 py-12 md:py-16 border-t border-gray-800">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 text-sm">
+    <footer id="contact" className="bg-black text-gray-400 px-4 md:px-6 py-10 md:py-16 border-t border-gray-800">
+      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 text-sm">
 
         {/* Brand Section */}
-        <div>
-          <h2 className="text-white text-lg font-semibold mb-3">Curio</h2>
-          <p className="leading-relaxed">
+        <div className="col-span-2 md:col-span-1">
+          <h2 className="text-white text-lg font-semibold mb-2 md:mb-3">Curio</h2>
+          <p className="leading-relaxed text-xs sm:text-sm">
             Empowering the next generation of CBC learners with AI-driven personalized education.
           </p>
         </div>
 
         {/* Navigation Links */}
         <div>
-          <h3 className="text-white font-semibold mb-3">Explore</h3>
-          <ul className="space-y-2">
+          <h3 className="text-white font-semibold mb-2 md:mb-3">Explore</h3>
+          <ul className="space-y-1 sm:space-y-2">
             <li><a href="#" className="hover:text-white transition">Home</a></li>
             <li><a href="#about" className="hover:text-white transition">About</a></li>
             <li><a href="#features" className="hover:text-white transition">Features</a></li>
@@ -28,8 +28,8 @@ export default function Footer() {
 
         {/* Learning Categories */}
         <div>
-          <h3 className="text-white font-semibold mb-3">Learning Paths</h3>
-          <ul className="space-y-2">
+          <h3 className="text-white font-semibold mb-2 md:mb-3">Learning Paths</h3>
+          <ul className="space-y-1 sm:space-y-2">
             <li><a href="#" className="hover:text-white transition">For Students</a></li>
             <li><a href="#" className="hover:text-white transition">For Teachers</a></li>
             <li><a href="#" className="hover:text-white transition">For Schools</a></li>
@@ -38,7 +38,7 @@ export default function Footer() {
 
         {/* Contact / Social */}
         <div>
-          <h3 className="text-white font-semibold mb-3">Connect</h3>
+          <h3 className="text-white font-semibold mb-2 md:mb-3">Connect</h3>
           <ul className="space-y-1">
             <li>Email: <a href="mailto:hello@curio.ke" className="hover:text-white transition">hello@curio.ke</a></li>
             <li>Phone: <span className="text-gray-300">+254 700 000 000</span></li>

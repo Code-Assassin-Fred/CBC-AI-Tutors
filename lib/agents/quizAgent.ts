@@ -193,6 +193,9 @@ export interface QuizStepCallback {
   onError: (error: string) => void;
 }
 
+// Helper: Sleep to stay within RPM limits
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export async function runQuizAgent(
   context: SubstrandContext,
   callbacks: QuizStepCallback
@@ -202,10 +205,14 @@ export async function runQuizAgent(
   const concepts = await extractConcepts(context);
   callbacks.onStepComplete(1);
 
+  await sleep(1000); // 1s breather
+
   // Step 2: Generate questions
   callbacks.onStepStart(2, 'Crafting challenges...');
   const questions = await generateQuestions(context, concepts);
   callbacks.onStepComplete(2);
+
+  await sleep(1000); // 1s breather
 
   // Step 3: Validate
   callbacks.onStepStart(3, 'Polishing the gems...');
