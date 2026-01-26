@@ -94,11 +94,11 @@ export default function VisionSection() {
                             </div>
 
                             <div className="relative z-10 space-y-4">
-                                <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-[#10b981] shadow-2xl">
+                                {/* <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-[#10b981] shadow-2xl">
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                                     </svg>
-                                </div>
+                                </div> */}
                                 <h3 className="text-3xl font-black text-white leading-[0.9] tracking-tighter">
                                     Real <br />
                                     Impact.
