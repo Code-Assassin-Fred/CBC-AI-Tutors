@@ -135,7 +135,7 @@ export default function FeaturesSection() {
                                             className="absolute top-3 sm:top-5 md:top-6 right-3 sm:right-5 md:right-6 z-40 max-w-[140px] sm:max-w-xs text-right"
                                             initial={{ opacity: 0, y: -20 }}
                                             whileInView={{ opacity: 1, y: 0 }}
-                                            transition={{ duration: 0.8, delay: 0.5 }}
+                                            transition={{ duration: 0.6, delay: 0.2 }}
                                         >
                                             <h2 className="text-sm sm:text-2xl md:text-3xl lg:text-4xl font-black text-[#080f0c] leading-[1.1] tracking-tighter uppercase whitespace-nowrap">
                                                 AI-Powered <br />
@@ -144,10 +144,10 @@ export default function FeaturesSection() {
                                             </h2>
                                         </motion.div>
                                         <motion.div
-                                            className="absolute bottom-1.5 sm:bottom-4 md:bottom-5 left-2 sm:left-4 md:left-6 z-40 max-w-[130px] sm:max-w-sm md:max-w-[340px]"
+                                            className="absolute bottom-1.5 sm:bottom-4 md:bottom-5 left-2 sm:left-4 md:left-6 z-40 max-w-[65%] sm:max-w-sm md:max-w-[340px]"
                                             initial={{ opacity: 0, x: -20 }}
                                             whileInView={{ opacity: 1, x: 0 }}
-                                            transition={{ duration: 0.8, delay: 0.7 }}
+                                            transition={{ duration: 0.6, delay: 0.3 }}
                                         >
                                             <div className="space-y-2 md:space-y-4">
                                                 <p className="text-[#080f0c]/90 font-medium text-[8.5px] sm:text-sm md:text-base lg:text-lg leading-snug">
@@ -173,12 +173,12 @@ export default function FeaturesSection() {
                                 {/* Gamification Section (Students) */}
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20 items-center">
                                     <motion.div className="space-y-6 md:space-y-8 pl-0 sm:pl-[10px] text-center lg:text-left" initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white leading-[1.1] tracking-tight">Gamification at our <span className="text-[#FF4500] font-newsreader italic font-medium">Core.</span></h2>
+                                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white leading-[1.1] tracking-tight">Gamification at our <span className="text-[#FF4500] font-newsreader italic font-black">Core.</span></h2>
                                         <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed font-medium">Earn points, badges, and rewards as you complete lessons and quizzes. Learning has never been this fun!</p>
                                         <div className="grid grid-cols-2 gap-x-4 sm:gap-x-10 gap-y-4 sm:gap-y-8 pt-2 md:pt-4">
                                             {[{ title: "Daily Streaks", desc: "Keep the momentum going" }, { title: "Interactive Badges", desc: "Show off your progress" }, { title: "Instant XP", desc: "Rewards for every answer and activity" }, { title: "Leaderboards", desc: "Compete with other students countrywide" }].map((item, i) => (
                                                 <motion.div key={i} className="space-y-0.5 lg:pl-4" initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-                                                    <h4 className="text-white text-sm sm:text-lg font-bold tracking-tight font-jakarta">{item.title}</h4>
+                                                    <h4 className="text-white text-sm sm:text-lg font-bold tracking-tight font-heading">{item.title}</h4>
                                                     <p className="text-slate-500 text-xs sm:text-sm">{item.desc}</p>
                                                 </motion.div>
                                             ))}
@@ -193,11 +193,11 @@ export default function FeaturesSection() {
                                 {/* Quiz & Tracking Cards (Students) */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white/5 border-[3px] sm:border-[5px] border-[#FF4500] p-4 sm:p-6 rounded-[24px] sm:rounded-[40px] hover:bg-white/10 transition-all group relative overflow-hidden h-auto min-h-[140px] sm:h-[180px] flex flex-col justify-center">
-                                        <div className="relative z-10"><h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-1 sm:mb-2 font-jakarta">Interactive Quizzes</h3><p className="text-slate-400 leading-relaxed text-xs sm:text-sm max-w-md">Test your knowledge with dynamic quizzes that adapt to your learning level and provide instant feedback.</p></div>
+                                        <div className="relative z-10"><h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-1 sm:mb-2 font-heading">Interactive Quizzes</h3><p className="text-slate-400 leading-relaxed text-xs sm:text-sm max-w-md">Test your knowledge with dynamic quizzes that adapt to your learning level and provide instant feedback.</p></div>
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-[#00E18A]/10 blur-[60px] rounded-full" /><div className="absolute -bottom-4 -right-4 w-24 h-24 bg-blue-500/10 blur-[50px] rounded-full" />
                                     </motion.div>
                                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="bg-white/5 border-[3px] sm:border-[5px] border-[#FF4500] p-4 sm:p-6 rounded-[24px] sm:rounded-[40px] hover:bg-white/10 transition-all group relative overflow-hidden h-auto min-h-[140px] sm:h-[180px] flex flex-col justify-center">
-                                        <div className="relative z-10"><h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-1 sm:mb-2 font-jakarta">Progress Tracking</h3><p className="text-slate-400 leading-relaxed text-xs sm:text-sm max-w-md">Visualize your learning journey with detailed analytics. See where you excel and where you need to focus.</p></div>
+                                        <div className="relative z-10"><h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-1 sm:mb-2 font-heading">Progress Tracking</h3><p className="text-slate-400 leading-relaxed text-xs sm:text-sm max-w-md">Visualize your learning journey with detailed analytics. See where you excel and where you need to focus.</p></div>
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 blur-[60px] rounded-full" /><div className="absolute -bottom-4 -right-4 w-24 h-24 bg-[#00E18A]/10 blur-[50px] rounded-full" />
                                     </motion.div>
                                 </div>

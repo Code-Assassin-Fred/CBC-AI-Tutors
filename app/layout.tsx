@@ -1,22 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Plus_Jakarta_Sans, Newsreader } from "next/font/google";
+import { Outfit, Inter, Newsreader } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/context/AuthContext";
 import { SidebarProvider } from "@/lib/context/SidebarContext";
 import { GamificationProvider } from "@/lib/context/GamificationContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -25,6 +20,7 @@ const newsreader = Newsreader({
   subsets: ["latin"],
   style: ["normal", "italic"],
 });
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -39,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${jakarta.variable} ${newsreader.variable} antialiased`}
+        className={`${outfit.variable} ${inter.variable} ${newsreader.variable} antialiased`}
       >
         <AuthProvider>
           <SidebarProvider>

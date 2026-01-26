@@ -14,28 +14,21 @@ export default function ContactSection() {
             <div className="container mx-auto px-4 md:px-6 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
                     {/* Left: Contact Info */}
-                    <div className="space-y-8">
+                    <div className="space-y-8 text-center lg:text-left">
                         <div className="space-y-4 md:space-y-6">
-                            <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-white leading-tight tracking-tighter">
-                                Let's build the <br />
-                                <span className="text-[#10b981]">next generation</span> together.
+                            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white leading-tight tracking-tight font-heading">
+                                Got questions? <br />
+                                <span className="text-[#10b981]">Let's chat</span>
                             </h2>
-                            <p className="text-slate-400 text-sm sm:text-base md:text-lg font-medium leading-relaxed max-w-lg">
-                                Have questions about the CBC curriculum or our platform? Our team is here to support your journey.
+                            <p className="text-slate-400 text-sm sm:text-base md:text-lg font-medium leading-relaxed max-w-lg mx-auto lg:mx-0">
+                                Whether it's about our AI tools or the curriculum, our team is ready to help you navigate the future of learning.
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
-                            <div className="space-y-3">
-                                <h4 className="text-white font-bold text-base">General Enquiries</h4>
-                                <p className="text-slate-400 text-sm">hello@cbc-aitutors.com</p>
-                                <p className="text-slate-400 text-sm">+254 700 000 000</p>
-                            </div>
-                            <div className="space-y-3">
-                                <h4 className="text-white font-bold text-base">School Partnerships</h4>
-                                <p className="text-slate-400 text-sm">partners@cbc-aitutors.com</p>
-                                <p className="text-slate-400 text-sm">Mon - Fri, 8am - 5pm</p>
-                            </div>
+                        <div className="space-y-3">
+                            <h4 className="text-white font-bold text-base">General Enquiries</h4>
+                            <p className="text-slate-400 text-sm">fredjm40@gmail.com</p>
+                            <p className="text-slate-400 text-sm">+254 768094564</p>
                         </div>
 
 
@@ -75,8 +68,8 @@ export default function ContactSection() {
                                     className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 text-white placeholder:text-slate-600 focus:outline-none focus:border-[#FF8A00]/50 transition-all resize-none text-sm"
                                 />
                             </div>
-                            <button className="w-full sm:w-max px-8 sm:ml-auto block bg-[#10b981] text-[#0a1410] py-3 sm:py-3.5 rounded-2xl font-black text-sm sm:text-base hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_10px_20px_rgba(16,185,129,0.15)] mt-2">
-                                Send Message
+                            <button className="w-1/2 sm:w-max px-8 ml-auto block bg-[#10b981] text-[#0a1410] py-3 sm:py-3.5 rounded-2xl font-black text-sm sm:text-base hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_10px_20px_rgba(16,185,129,0.15)] mt-2">
+                                Submit
                             </button>
                         </form>
                     </motion.div>

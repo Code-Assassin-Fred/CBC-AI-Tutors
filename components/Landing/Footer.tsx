@@ -1,6 +1,6 @@
 "use client";
 
-import { FaTwitter, FaLinkedin, FaFacebookF, FaInstagram } from "react-icons/fa";
+
 
 export default function Footer() {
   return (
@@ -28,27 +28,25 @@ export default function Footer() {
 
         {/* Learning Categories */}
         <div>
-          <h3 className="text-white font-semibold mb-2 md:mb-3">Learning Paths</h3>
+          <h3 className="text-white font-semibold mb-2 md:mb-3">For who?</h3>
           <ul className="space-y-1 sm:space-y-2">
             <li><a href="#" className="hover:text-white transition">For Students</a></li>
             <li><a href="#" className="hover:text-white transition">For Teachers</a></li>
-            <li><a href="#" className="hover:text-white transition">For Schools</a></li>
           </ul>
         </div>
 
         {/* Contact / Social */}
         <div>
           <h3 className="text-white font-semibold mb-2 md:mb-3">Connect</h3>
-          <ul className="space-y-1">
-            <li>Email: <a href="mailto:hello@curio.ke" className="hover:text-white transition">hello@curio.ke</a></li>
-            <li>Phone: <span className="text-gray-300">+254 700 000 000</span></li>
+          <ul className="space-y-2">
+            <li>Email: <a href="mailto:fredjm40@gmail.com" className="hover:text-white transition">fredjm40@gmail.com</a></li>
+            <li className="space-y-1">
+              <p className="text-gray-300 font-medium">Contact Tech Lead:</p>
+              <p className="text-gray-400">+254 768094564</p>
+              <p className="text-[10px] uppercase tracking-wider text-gray-500 font-bold">WhatsApp & Calls</p>
+            </li>
           </ul>
-          <div className="flex space-x-4 mt-4">
-            <a href="#" className="hover:text-white transition"><FaTwitter /></a>
-            <a href="#" className="hover:text-white transition"><FaLinkedin /></a>
-            <a href="#" className="hover:text-white transition"><FaFacebookF /></a>
-            <a href="#" className="hover:text-white transition"><FaInstagram /></a>
-          </div>
+
         </div>
       </div>
 
@@ -56,7 +54,7 @@ export default function Footer() {
       <div className="mt-10 border-t border-gray-800 pt-6 text-center text-xs text-gray-500">
         <p>© {new Date().getFullYear()} Curio — All rights reserved.</p>
         <p className="mt-2 text-gray-600 italic">
-          Building the future of education in Africa.
+          Building the future of education in Kenya.
         </p>
       </div>
     </footer>

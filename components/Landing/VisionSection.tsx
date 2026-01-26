@@ -1,6 +1,34 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { motion, useInView, useAnimate } from "framer-motion";
+
+function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const [scope, animate] = useAnimate();
+
+    useEffect(() => {
+        if (isInView) {
+            animate(0, value, {
+                duration: 2,
+                ease: "easeOut",
+                onUpdate: (latest) => {
+                    if (scope.current) {
+                        scope.current.textContent = Math.round(latest).toString();
+                    }
+                },
+            });
+        }
+    }, [isInView, value, animate, scope]);
+
+    return (
+        <span ref={ref}>
+            <span ref={scope}>0</span>
+            {suffix}
+        </span>
+    );
+}
 
 export default function VisionSection() {
     return (
@@ -40,8 +68,9 @@ export default function VisionSection() {
                                     <span className="text-slate-500">Human-Centric Design.</span>
                                 </h3>
                                 <p className="text-slate-400 text-sm sm:text-base md:text-lg leading-relaxed font-medium">
-                                    Our AI engine doesn't replace teachers—it empowers them. By automating the routine,
-                                    we unlock time for what matters: mentorship and student growth.
+                                    We're bridging the gap between curriculum and intelligence. Our platform delivers
+                                    personalized, gamified tutoring for students and high-efficiency AI tools for teachers,
+                                    making CBC excellence accessible to all.
                                 </p>
 
 
@@ -107,12 +136,16 @@ export default function VisionSection() {
 
                             <div className="relative z-10 space-y-4 md:space-y-6 mt-4 md:mt-0">
                                 <div>
-                                    <div className="text-4xl sm:text-5xl font-black text-[#10b981] tracking-tighter">10k+</div>
+                                    <div className="text-4xl sm:text-5xl font-black text-[#10b981] tracking-tighter">
+                                        <AnimatedNumber value={500} suffix="+" />
+                                    </div>
                                     <div className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1">Active Minds</div>
                                 </div>
                                 <div>
-                                    <div className="text-4xl sm:text-5xl font-black text-[#10b981] tracking-tighter">98%</div>
-                                    <div className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1">Success Rate</div>
+                                    <div className="text-4xl sm:text-5xl font-black text-[#10b981] tracking-tighter">
+                                        <AnimatedNumber value={94} suffix="%" />
+                                    </div>
+                                    <div className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-1">Positive Feedback Rate</div>
                                 </div>
                             </div>
 

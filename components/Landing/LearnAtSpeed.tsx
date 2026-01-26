@@ -46,7 +46,7 @@ export default function LearnAtSpeed() {
                             variants={{
                                 visible: {
                                     transition: {
-                                        staggerChildren: 0.12,
+                                        staggerChildren: 0.05,
                                     }
                                 }
                             }}
@@ -69,7 +69,7 @@ export default function LearnAtSpeed() {
                                     hidden: { opacity: 0, scale: 0.95, filter: "blur(8px)" },
                                     visible: { opacity: 1, scale: 1, filter: "blur(0px)" }
                                 }}
-                                transition={{ duration: 1, delay: 0.8 }}
+                                transition={{ duration: 0.8, delay: 0.3 }}
                             >
                                 speed of thought
                             </motion.span>
@@ -79,7 +79,7 @@ export default function LearnAtSpeed() {
                     <motion.p
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
-                        transition={{ delay: 1.2, duration: 1 }}
+                        transition={{ delay: 0.5, duration: 0.8 }}
                         className="text-slate-400 text-sm md:text-lg font-medium tracking-tight"
                     >
                         Aligned with Kenya Institute of Curriculum Development (KICD) expected learning outcomes
