@@ -159,7 +159,7 @@ export default function FeaturesSection() {
                                                 <div className="flex flex-col gap-1.5 md:gap-2">
                                                     <p className="text-[#080f0c] font-black text-[7.5px] md:text-xs lg:text-sm flex items-center gap-2">
                                                         <span className="w-1.5 h-1.5 rounded-full bg-[#00c978]" />
-                                                        Available for any grade and any subject in CBC
+                                                        Available for Grade 4 to 12 and any subject in CBC
                                                     </p>
                                                     <p className="text-slate-500 text-[5px] md:text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] pl-3.5">
                                                         MODES: PRACTICE • PODCAST • EXPLANATION
