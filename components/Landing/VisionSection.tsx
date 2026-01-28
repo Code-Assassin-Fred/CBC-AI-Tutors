@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-100px" });
+    const isInView = useInView(ref, { once: true, amount: 0.1 });
     const [scope, animate] = useAnimate();
 
     useEffect(() => {
