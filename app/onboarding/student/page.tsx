@@ -18,20 +18,12 @@ const GRADES = [
   'Grade 10 (SSS 1)', 'Grade 11 (SSS 2)', 'Grade 12 (SSS 3)'
 ];
 
-const STUDENT_FEATURES = [
-  'Interactive Classroom - Get real-time feedback and assistance from your AI tutor',
-  'Personalized Courses - AI-generated study plans and materials for your specific needs',
-  'Curated Resources - Access a rich library of learning materials for every topic',
-  'Career Pathing - Discover and prepare for your future career opportunities',
-  'Learning Community - Connect and learn with other students in a safe environment',
-];
-
 export default function StudentOnboardingPage() {
   const router = useRouter();
   const { user, setOnboardingComplete, loading: authLoading } = useAuth();
   const { isLoading: guardLoading } = useOnboardingProtection();
 
-  const [formValues, setFormValues] = useState<StudentFormValues>({ grade: '' });
+  const [grade, setGrade] = useState('');
   const [formErrors, setFormErrors] = useState<{ [key: string]: string | undefined }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -43,7 +35,7 @@ export default function StudentOnboardingPage() {
 
   const handleSubmit = async () => {
     if (!user) return;
-    if (!formValues.grade) {
+    if (!grade) {
       setFormErrors({ grade: 'Please select your grade' });
       return;
     }
@@ -55,7 +47,7 @@ export default function StudentOnboardingPage() {
       const response = await onboardStudent({
         userId: user.uid,
         name: user.displayName || 'Student',
-        grade: formValues.grade,
+        grade: grade,
       });
 
       if (!response.success) throw new Error(response.message ?? 'Failed to complete onboarding');
@@ -81,29 +73,17 @@ export default function StudentOnboardingPage() {
   return (
     <div className="min-h-screen flex items-center justify-between bg-white px-8 lg:px-16 py-8">
       <div className="w-full max-w-2xl">
-        <h1 className="text-3xl font-bold text-gray-900 mb-5">Welcome to Curio</h1>
-        <p className="text-gray-600 mb-8">We're excited to have you join our learning community. Here's what you can do:</p>
-
-        <ul className="space-y-3 mb-10">
-          {STUDENT_FEATURES.map((feature, idx) => (
-            <li key={idx} className="flex items-start gap-3 text-gray-700">
-              <span className="text-blue-500 font-bold mt-1">•</span>
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mb-8">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Select your grade to get started</label>
+        <div className="mb-8 mt-12">
+          <label className="block text-sm font-medium text-gray-700 mb-4 font-bold text-xl">Select your grade to get started</label>
           <select
-            value={formValues.grade}
-            onChange={(e) => setFormValues({ ...formValues, grade: e.target.value })}
-            className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none ${formErrors.grade ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
-              }`}
+            value={grade}
+            onChange={(e) => setGrade(e.target.value)}
+            className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none ${grade ? 'border-blue-500 bg-blue-50/10' : 'border-gray-300 border-dashed'
+              } ${formErrors.grade ? 'border-red-400 bg-red-50' : ''}`}
           >
             <option value="" disabled>Select your grade</option>
-            {GRADES.map(grade => (
-              <option key={grade} value={grade}>{grade}</option>
+            {GRADES.map(g => (
+              <option key={g} value={g}>{g}</option>
             ))}
           </select>
           {formErrors.grade && <p className="mt-2 text-sm text-red-600">{formErrors.grade}</p>}

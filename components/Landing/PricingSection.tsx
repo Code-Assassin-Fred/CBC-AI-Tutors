@@ -1,8 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function PricingSection() {
+    const router = useRouter();
+
+    const handleAction = () => {
+        router.push("/auth");
+    };
+
     return (
         <section id="pricing" className="py-12 md:py-24 relative overflow-hidden bg-[#020d0a]">
             {/* High-End Smoky Silk Background */}
@@ -70,7 +77,10 @@ export default function PricingSection() {
                             <p className="text-slate-500 mt-2 md:mt-3 text-xs sm:text-sm leading-relaxed">Perfect for exploring all features without any commitment.</p>
                         </div>
 
-                        <button className="w-full py-3 md:py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm sm:text-base hover:bg-white/20 transition-all mb-5 md:mb-8">
+                        <button
+                            onClick={handleAction}
+                            className="w-full py-3 md:py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm sm:text-base hover:bg-white/20 transition-all mb-5 md:mb-8"
+                        >
                             Start Free Trial
                         </button>
 
@@ -113,7 +123,10 @@ export default function PricingSection() {
                             <p className="text-slate-300 mt-2 md:mt-3 text-xs sm:text-sm leading-relaxed font-medium">Unlimited learning power for ambitious students.</p>
                         </div>
 
-                        <button className="w-full py-3 md:py-4 rounded-xl bg-[#10b981] text-[#020d0a] font-black text-sm sm:text-base hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_10px_20px_rgba(16,185,129,0.2)] mb-5 md:mb-8">
+                        <button
+                            onClick={handleAction}
+                            className="w-full py-3 md:py-4 rounded-xl bg-[#10b981] text-[#020d0a] font-black text-sm sm:text-base hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_10px_20px_rgba(16,185,129,0.2)] mb-5 md:mb-8"
+                        >
                             Get Student Pro
                         </button>
 
@@ -157,7 +170,10 @@ export default function PricingSection() {
                             <p className="text-slate-500 mt-2 md:mt-3 text-xs sm:text-sm leading-relaxed">Empower your classes with AI lesson planning.</p>
                         </div>
 
-                        <button className="w-full py-3 md:py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm sm:text-base hover:bg-white/20 transition-all mb-5 md:mb-8">
+                        <button
+                            onClick={handleAction}
+                            className="w-full py-3 md:py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm sm:text-base hover:bg-white/20 transition-all mb-5 md:mb-8"
+                        >
                             Get Teacher Hub
                         </button>
 

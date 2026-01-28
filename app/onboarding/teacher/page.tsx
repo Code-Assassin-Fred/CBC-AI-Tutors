@@ -14,14 +14,6 @@ type TeacherFormValues = {
   api?: string;
 };
 
-const TEACHER_FEATURES = [
-  'AI Teachers Guide - Access structured lesson guides with real-time AI assistance',
-  'Custom Textbooks - Create AI-powered custom textbooks for your curriculum',
-  'Custom Lessons - Generate specialized AI lesson plans for any topic',
-  'Create Assessments - Generate fully AI-powered quizzes & tests or upload your material',
-  'Community - Connect with fellow educators and share resources',
-];
-
 export default function TeacherOnboardingPage() {
   const router = useRouter();
   const { user, setOnboardingComplete, loading: authLoading } = useAuth();
@@ -74,17 +66,7 @@ export default function TeacherOnboardingPage() {
   return (
     <div className="min-h-screen flex items-center justify-between bg-white px-8 lg:px-16 py-8">
       <div className="w-full max-w-2xl">
-        <h1 className="text-3xl font-bold text-gray-900 mb-5">Welcome to Curio</h1>
-        <p className="text-gray-600 mb-8">We're excited to have you join our teaching community. Here's what you can do:</p>
-
-        <ul className="space-y-3 mb-10">
-          {TEACHER_FEATURES.map((feature, idx) => (
-            <li key={idx} className="flex items-start gap-3 text-gray-700">
-              <span className="text-blue-500 font-bold mt-1">•</span>
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
+        <p className="text-gray-600 mb-8 font-medium mt-12 text-xl">We're excited to have you join our teaching community. Click below to get started with your AI-powered teaching tools.</p>
 
         {formErrors.api && (
           <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">

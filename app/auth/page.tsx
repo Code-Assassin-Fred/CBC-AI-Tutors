@@ -191,7 +191,7 @@ export default function AuthPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100">
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f7f9]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto" />
           <p className="mt-4 text-gray-600">Preparing your workspace…</p>
@@ -203,7 +203,7 @@ export default function AuthPage() {
   const isSignup = mode === 'signup';
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-[#f5f7f9] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
 
 
@@ -367,7 +367,7 @@ export default function AuthPage() {
 
         {/* Terms */}
         <div className="text-center text-sm text-gray-500">
-          By continuing, you agree to Learning.ai’s{' '}
+          By continuing, you agree to Curio’s{' '}
           <a href="/terms" className="text-blue-600 hover:text-blue-500 underline">
             Terms of Service
           </a>{' '}

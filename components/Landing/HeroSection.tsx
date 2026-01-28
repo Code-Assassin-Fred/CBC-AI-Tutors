@@ -67,9 +67,11 @@ export default function HeroSection() {
                         </h1>
 
                         <p className="text-slate-300 text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
-                            Transform your CBC learning experience with AI-driven textbook lessons,
-                            interactive quizzes, and personalized tutoring. Teachers can effortlessly
-                            create custom content while students master the curriculum at their own pace.
+                            Learning the CBC curriculum can be tough, but it doesn't have to be.
+                            We provide students with a personal AI tutor to talk through lessons,
+                            while giving teachers an AI guide teaching assistant and a better way
+                            to manage classroom functions. It's just about making learning feel
+                            a bit more natural.
                         </p>
 
                         {/* CTA Buttons */}
