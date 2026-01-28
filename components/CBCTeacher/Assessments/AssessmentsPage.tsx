@@ -88,35 +88,35 @@ export default function AssessmentsPage() {
         return (
             <div className="flex flex-col h-full overflow-hidden bg-[#0a0f14]">
                 {/* Header - Hidden on print */}
-                <div className="p-4 border-b border-white/10 bg-white/5 flex items-center justify-between gap-4 print:hidden">
-                    <div className="flex items-center gap-4">
+                <div className="p-3 sm:p-4 border-b border-white/10 bg-white/5 flex items-center justify-between gap-2 sm:gap-4 sticky top-0 z-10 backdrop-blur-md print:hidden">
+                    <div className="flex items-center gap-2 sm:gap-4">
                         <button
                             onClick={() => setSelectedAssessment(null)}
-                            className="flex items-center gap-2 px-3 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all font-medium"
+                            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all font-medium text-xs sm:text-sm"
                         >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                             </svg>
-                            Back
+                            <span className="hidden sm:inline">Back</span>
                         </button>
                         <div className="min-w-0">
-                            <h1 className="text-lg font-bold text-white truncate">{selectedAssessment.title}</h1>
-                            <div className="flex items-center gap-3 text-sm text-white/50">
-                                <span>{selectedAssessment.questions?.length || 0} Questions</span>
+                            <h1 className="text-sm sm:text-lg font-bold text-white truncate">{selectedAssessment.title}</h1>
+                            <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-sm text-white/50">
+                                <span>{selectedAssessment.questions?.length || 0} Qs</span>
                                 <span>•</span>
-                                <span>{selectedAssessment.totalPoints} Points</span>
+                                <span>{selectedAssessment.totalPoints} Pts</span>
                             </div>
                         </div>
                     </div>
 
                     <button
                         onClick={() => window.print()}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500 text-white hover:bg-cyan-400 transition-all shadow-lg shadow-cyan-500/20 font-semibold"
+                        className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-cyan-500 text-white hover:bg-cyan-400 transition-all shadow-lg shadow-cyan-500/20 font-bold text-[10px] sm:text-sm whitespace-nowrap"
                     >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                         </svg>
-                        Print Assessment
+                        Print
                     </button>
                 </div>
 
@@ -136,9 +136,9 @@ export default function AssessmentsPage() {
                         `}</style>
 
                         {/* Assessment Header */}
-                        <div className="p-10 border-b border-gray-100 bg-gray-50/80">
-                            <h2 className="text-3xl font-serif font-bold text-gray-900 mb-2">{selectedAssessment.title}</h2>
-                            <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 font-medium">
+                        <div className="p-6 sm:p-10 border-b border-gray-100 bg-gray-50/80">
+                            <h2 className="text-xl sm:text-3xl font-serif font-bold text-gray-900 mb-4 sm:mb-2">{selectedAssessment.title}</h2>
+                            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-4 sm:gap-6 text-xs sm:text-sm text-gray-500 font-medium">
                                 <div className="flex items-center gap-2">
                                     <span className="text-gray-400 uppercase tracking-widest text-[10px] font-bold">Points</span>
                                     <span className="text-gray-900 font-bold underline decoration-cyan-500/30 underline-offset-4">{selectedAssessment.totalPoints}</span>
@@ -155,7 +155,7 @@ export default function AssessmentsPage() {
                         </div>
 
                         {/* Content */}
-                        <div className="p-10 space-y-12 flex-1">
+                        <div className="p-6 sm:p-10 space-y-8 sm:space-y-12 flex-1">
                             {/* General Rubric (Teacher Only View) */}
                             {selectedAssessment.rubric && (
                                 <section className="print:hidden rounded-2xl bg-cyan-50 border border-cyan-100 p-6 shadow-sm">
@@ -178,15 +178,15 @@ export default function AssessmentsPage() {
                                 {selectedAssessment.questions?.map((question: Question, index: number) => (
                                     <div key={question.id} className="relative group">
                                         <div className="flex items-start gap-6">
-                                            <span className="flex-shrink-0 w-10 h-10 rounded-xl bg-gray-900 text-white flex items-center justify-center font-bold text-lg shadow-lg">
+                                            <span className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gray-900 text-white flex items-center justify-center font-bold text-base sm:text-lg shadow-lg">
                                                 {index + 1}
                                             </span>
-                                            <div className="flex-1 space-y-4">
+                                            <div className="flex-1 space-y-3 sm:space-y-4">
                                                 <div className="flex items-center justify-between">
                                                     <span className="text-[10px] uppercase tracking-[0.2em] font-black text-gray-400">{QUESTION_TYPE_LABELS[question.type]}</span>
-                                                    <span className="text-sm font-bold text-gray-400">Score: _____ / {question.points}</span>
+                                                    <span className="text-[10px] sm:text-sm font-bold text-gray-400">Score: ____ / {question.points}</span>
                                                 </div>
-                                                <p className="text-2xl text-gray-900 font-serif leading-snug font-medium">{question.question}</p>
+                                                <p className="text-xl sm:text-2xl text-gray-900 font-serif leading-snug font-medium">{question.question}</p>
 
                                                 {/* Multiple Choice Options */}
                                                 {question.type === 'multiple-choice' && question.options && (
@@ -266,7 +266,7 @@ export default function AssessmentsPage() {
     return (
         <div className="flex flex-col h-full overflow-hidden">
             {/* Form Section */}
-            <div className={`border-b border-white/10 transition-all ${showForm ? 'p-6' : 'p-3'}`}>
+            <div className={`border-b border-white/10 transition-all ${showForm ? 'p-4 sm:p-6' : 'p-2 sm:p-3'}`}>
                 <button
                     onClick={() => setShowForm(!showForm)}
                     className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-2"
@@ -278,7 +278,7 @@ export default function AssessmentsPage() {
                 </button>
 
                 {showForm && (
-                    <div className="bg-[#0d1117] border border-white/10 rounded-2xl p-6 space-y-6">
+                    <div className="bg-[#0d1117] border border-white/10 rounded-2xl p-4 sm:p-6 space-y-6 shadow-2xl">
                         {/* Step 1: Upload */}
                         <div>
                             <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
@@ -303,13 +303,13 @@ export default function AssessmentsPage() {
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="md:col-span-2">
-                                    <label className="block text-white/70 text-sm mb-2">Assessment Title *</label>
+                                    <label className="block text-white/70 text-xs sm:text-sm mb-1 sm:mb-2 font-medium">Assessment Title *</label>
                                     <input
                                         type="text"
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
-                                        placeholder="Enter a title for the assessment..."
-                                        className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all"
+                                        placeholder="e.g., Solar System Quiz"
+                                        className="w-full px-4 py-2.5 sm:py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white text-sm focus:ring-2 focus:ring-cyan-500/20 outline-none transition-all"
                                         disabled={isGenerating}
                                     />
                                 </div>
@@ -343,13 +343,13 @@ export default function AssessmentsPage() {
                         </div>
 
                         {/* Action */}
-                        <div className="flex items-center gap-4">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                             <button
                                 onClick={handleGenerate}
                                 disabled={!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0 || isGenerating}
-                                className={`px-8 py-3 rounded-xl font-bold transition-all flex items-center gap-2 ${!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0 || isGenerating
-                                        ? 'bg-white/10 text-white/20'
-                                        : 'bg-cyan-500 text-white hover:bg-cyan-400 shadow-xl shadow-cyan-500/10'
+                                className={`px-4 sm:px-8 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0 || isGenerating
+                                    ? 'bg-white/10 text-white/20'
+                                    : 'bg-cyan-500 text-white hover:bg-cyan-400 shadow-xl shadow-cyan-500/10'
                                     }`}
                             >
                                 {isGenerating ? 'Generating...' : 'Start Intelligence Engine'}
@@ -366,11 +366,11 @@ export default function AssessmentsPage() {
             </div>
 
             {/* List Section */}
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 scrollbar-hide">
                 <div className="max-w-7xl mx-auto">
-                    <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                    <h2 className="text-base sm:text-xl font-bold text-white mb-4 sm:mb-6 flex items-center justify-between">
                         Assessment Library
-                        <span className="px-2 py-0.5 rounded-md bg-white/5 text-[10px] text-white/40">{assessments.length} Available</span>
+                        <span className="px-2 py-0.5 rounded-md bg-white/5 text-[10px] text-white/40 uppercase tracking-widest">{assessments.length} Available</span>
                     </h2>
 
                     {isLoadingAssessments ? (

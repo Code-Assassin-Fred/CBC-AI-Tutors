@@ -51,44 +51,43 @@ export default function CustomTextbooksPage() {
         return (
             <div className="flex flex-col h-full overflow-hidden">
                 {/* Header Bar */}
-                <div className="p-4 border-b border-white/10 bg-white/5 flex items-center gap-4">
+                <div className="p-3 sm:p-4 border-b border-white/10 bg-white/5 flex items-center gap-2 sm:gap-4 sticky top-0 z-10 backdrop-blur-md">
                     <button
                         onClick={() => setSelectedTextbook(null)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all"
+                        className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all text-sm"
                     >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
-                        Back
+                        <span className="hidden sm:inline">Back</span>
                     </button>
                     <div className="flex-1 min-w-0">
-                        <h1 className="text-lg font-bold text-white truncate">{selectedTextbook.title}</h1>
-                        <div className="flex items-center gap-3 text-sm text-white/50">
+                        <h1 className="text-sm sm:text-lg font-bold text-white truncate">{selectedTextbook.title}</h1>
+                        <div className="flex items-center gap-3 text-[10px] sm:text-sm text-white/50">
                             {selectedTextbook.estimatedReadingTime && (
-                                <span>{selectedTextbook.estimatedReadingTime}</span>
+                                <span className="truncate">{selectedTextbook.estimatedReadingTime}</span>
                             )}
                         </div>
                     </div>
                 </div>
 
                 {/* Content Area - Inline Viewer */}
-                {/* Content Area - Inline Viewer */}
-                <div className="flex-1 overflow-y-auto p-8 max-w-5xl mx-auto space-y-10">
+                <div className="flex-1 overflow-y-auto p-4 sm:p-8 max-w-5xl mx-auto space-y-8 sm:space-y-10 scrollbar-hide">
                     {/* Introduction */}
                     {content?.introduction && (
                         <section>
-                            <h3 className="text-2xl font-bold text-white mb-4">Introduction</h3>
-                            <p className="text-white/85 leading-relaxed text-lg">{content.introduction}</p>
+                            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Introduction</h3>
+                            <p className="text-white/85 leading-relaxed text-base sm:text-lg">{content.introduction}</p>
                         </section>
                     )}
 
                     {/* Learning Objectives */}
                     {content?.learningObjectives && content.learningObjectives.length > 0 && (
-                        <section className="my-8">
-                            <h3 className="text-xl font-bold text-cyan-400 mb-4">Learning Objectives</h3>
-                            <ul className="space-y-3">
+                        <section className="my-6 sm:my-8">
+                            <h3 className="text-lg sm:text-xl font-bold text-cyan-400 mb-3 sm:mb-4">Learning Objectives</h3>
+                            <ul className="space-y-2 sm:space-y-3">
                                 {content.learningObjectives.map((objective, index) => (
-                                    <li key={index} className="flex items-start gap-3 text-white/85 text-lg">
+                                    <li key={index} className="flex items-start gap-2 sm:gap-3 text-white/85 text-base sm:text-lg">
                                         <span className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-400" />
                                         {objective}
                                     </li>
@@ -99,14 +98,14 @@ export default function CustomTextbooksPage() {
 
                     {/* Chapters */}
                     {content?.chapters && content.chapters.length > 0 && (
-                        <div className="space-y-12">
+                        <div className="space-y-8 sm:space-y-12">
                             {content.chapters.map((chapter, index) => (
-                                <section key={index} className="border-t border-white/10 pt-8 first:border-0 first:pt-0">
-                                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                                <section key={index} className="border-t border-white/10 pt-6 sm:pt-8 first:border-0 first:pt-0">
+                                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
                                         <span className="text-cyan-400">{index + 1}.</span>
                                         {chapter.title}
                                     </h2>
-                                    <div className="text-white/85 leading-relaxed text-lg space-y-4 whitespace-pre-wrap">
+                                    <div className="text-white/85 leading-relaxed text-base sm:text-lg space-y-4 whitespace-pre-wrap">
                                         {chapter.content}
                                     </div>
 
@@ -197,7 +196,7 @@ export default function CustomTextbooksPage() {
     return (
         <div className="flex flex-col h-full overflow-hidden">
             {/* Collapsible Form Section */}
-            <div className={`border-b border-white/10 transition-all ${showForm ? 'p-6' : 'p-3'}`}>
+            <div className={`border-b border-white/10 transition-all ${showForm ? 'p-4 sm:p-6' : 'p-2 sm:p-3'}`}>
                 <button
                     onClick={() => setShowForm(!showForm)}
                     className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-2"
@@ -214,17 +213,17 @@ export default function CustomTextbooksPage() {
                 </button>
 
                 {showForm && (
-                    <div className="bg-[#0d1117] border border-white/10 rounded-2xl p-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div className="bg-[#0d1117] border border-white/10 rounded-2xl p-4 sm:p-6 shadow-2xl">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4">
                             {/* Topic Input */}
                             <div className="md:col-span-2">
-                                <label className="block text-white/70 text-sm mb-2">Topic *</label>
+                                <label className="block text-white/70 text-xs sm:text-sm mb-1 sm:mb-2 font-medium">Topic *</label>
                                 <input
                                     type="text"
                                     value={topic}
                                     onChange={(e) => setTopic(e.target.value)}
-                                    placeholder="e.g., The Solar System, Introduction to Fractions"
-                                    className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all"
+                                    placeholder="e.g., The Solar System"
+                                    className="w-full px-4 py-2.5 sm:py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all"
                                     disabled={isGenerating}
                                 />
                             </div>
@@ -263,11 +262,11 @@ export default function CustomTextbooksPage() {
                         </div>
 
                         {/* Generate Button */}
-                        <div className="flex items-center gap-4">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                             <button
                                 onClick={handleGenerate}
                                 disabled={!topic.trim() || isGenerating}
-                                className={`px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${!topic.trim() || isGenerating
+                                className={`px-4 sm:px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${!topic.trim() || isGenerating
                                     ? 'bg-white/10 text-white/30 cursor-not-allowed'
                                     : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/25'
                                     }`}
@@ -293,8 +292,8 @@ export default function CustomTextbooksPage() {
                             {/* Progress */}
                             {isGenerating && generationProgress && (
                                 <div className="flex-1">
-                                    <div className="text-white/60 text-sm mb-1">{generationProgress.message}</div>
-                                    <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                                    <div className="text-white/60 text-xs sm:text-sm mb-1">{generationProgress.message}</div>
+                                    <div className="w-full h-1.5 sm:h-2 bg-white/10 rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300"
                                             style={{ width: `${generationProgress.percentage}%` }}
@@ -315,9 +314,10 @@ export default function CustomTextbooksPage() {
             </div>
 
             {/* Textbooks List */}
-            <div className="flex-1 overflow-y-auto p-6">
-                <h2 className="text-lg font-semibold text-cyan-400 mb-4">
-                    Your Textbooks {textbooks.length > 0 && `(${textbooks.length})`}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 scrollbar-hide">
+                <h2 className="text-base sm:text-lg font-bold text-cyan-400 mb-4 sm:mb-6 flex items-center justify-between">
+                    Your Library
+                    <span className="text-[10px] sm:text-xs font-medium text-white/30 uppercase tracking-widest">{textbooks.length} Items</span>
                 </h2>
 
                 {isLoadingTextbooks ? (

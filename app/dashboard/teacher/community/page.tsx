@@ -12,11 +12,11 @@ function CommunityContent() {
     const { activePost } = useCommunity();
 
     return (
-        <div className="max-w-7xl mx-auto space-y-6 lg:space-y-0 h-full">
+        <div className="max-w-7xl mx-auto space-y-6 lg:space-y-0 h-full pb-20 lg:pb-0">
             {/* Main layout with independent scrolling */}
-            <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-140px)]">
-                {/* Main content - scrolls independently */}
-                <div className="flex-1 min-w-0 overflow-y-auto pr-2 custom-scrollbar">
+            <div className="flex flex-col lg:flex-row gap-6 h-auto lg:h-[calc(100vh-140px)]">
+                {/* Main content - scrolls independently on desktop */}
+                <div className="flex-1 min-w-0 lg:overflow-y-auto lg:pr-2 custom-scrollbar">
                     {activePost ? (
                         <PostDetail />
                     ) : (
@@ -24,8 +24,8 @@ function CommunityContent() {
                     )}
                 </div>
 
-                {/* Sidebar - scrolls independently */}
-                <div className="w-full lg:w-80 flex-shrink-0 lg:overflow-y-auto pl-2">
+                {/* Sidebar - scrolls independently on desktop */}
+                <div className="w-full lg:w-80 flex-shrink-0 lg:overflow-y-auto lg:pl-2 pb-8 lg:pb-0">
                     <TeacherCommunitySidebar />
                 </div>
             </div>

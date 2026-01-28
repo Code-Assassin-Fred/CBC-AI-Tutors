@@ -51,7 +51,7 @@ export default function CustomLessonsPage() {
     };
 
     return (
-        <div className="flex flex-col p-6 min-h-screen">
+        <div className="flex flex-col p-4 sm:p-6 min-h-screen">
             {/* Collapsible Generation Form */}
             <div className="mb-8">
                 <button
@@ -70,17 +70,17 @@ export default function CustomLessonsPage() {
                 </button>
 
                 {!isFormCollapsed && (
-                    <div className="bg-[#0d1117] border border-white/10 rounded-2xl p-6 transition-all duration-300">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div className="bg-[#0d1117] border border-white/10 rounded-2xl p-4 sm:p-6 transition-all duration-300 shadow-2xl">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4">
                             {/* Topic Input */}
                             <div className="md:col-span-2">
-                                <label className="block text-white/70 text-sm mb-2">Topic *</label>
+                                <label className="block text-white/70 text-xs sm:text-sm mb-1 sm:mb-2 font-medium">Topic *</label>
                                 <input
                                     type="text"
                                     value={topic}
                                     onChange={(e) => setTopic(e.target.value)}
-                                    placeholder="e.g., Introduction to Photosynthesis"
-                                    className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all"
+                                    placeholder="e.g., Photosynthesis"
+                                    className="w-full px-4 py-2.5 sm:py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white text-sm placeholder-white/30 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all"
                                     disabled={isGenerating}
                                 />
                             </div>
@@ -119,11 +119,11 @@ export default function CustomLessonsPage() {
                         </div>
 
                         {/* Generate Button */}
-                        <div className="flex items-center gap-4">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                             <button
                                 onClick={handleGenerate}
                                 disabled={!topic.trim() || isGenerating}
-                                className={`px-6 py-3 rounded-xl font-medium transition-all flex items-center gap-2 ${!topic.trim() || isGenerating
+                                className={`px-4 sm:px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${!topic.trim() || isGenerating
                                     ? 'bg-white/10 text-white/30 cursor-not-allowed'
                                     : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/25'
                                     }`}
@@ -149,8 +149,8 @@ export default function CustomLessonsPage() {
                             {/* Progress */}
                             {isGenerating && generationProgress && (
                                 <div className="flex-1">
-                                    <div className="text-white/60 text-sm mb-1">{generationProgress.message}</div>
-                                    <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                                    <div className="text-white/60 text-xs sm:text-sm mb-1">{generationProgress.message}</div>
+                                    <div className="w-full h-1.5 sm:h-2 bg-white/10 rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300"
                                             style={{ width: `${generationProgress.percentage}%` }}
@@ -213,29 +213,29 @@ export default function CustomLessonsPage() {
                     // Inline Lesson Viewer
                     <div className="flex flex-col h-full animate-in fade-in slide-in-from-bottom-4 duration-500">
                         {/* Inline Header */}
-                        <div className="flex items-center gap-4 mb-8">
+                        <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8 sticky top-0 z-10 backdrop-blur-md bg-[#0a0f14]/80 p-2 rounded-2xl">
                             <button
                                 onClick={() => setSelectedLesson(null)}
-                                className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-all"
+                                className="group flex items-center justify-center w-10 h-10 sm:w-auto sm:px-4 sm:py-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-all shadow-lg"
                             >
                                 <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg>
-                                Back
+                                <span className="hidden sm:inline ml-2">Back</span>
                             </button>
-                            <div>
-                                <h2 className="text-2xl font-bold text-white">{selectedLesson.title}</h2>
-                                <p className="text-white/40 text-sm mt-1">{selectedLesson.topic}</p>
+                            <div className="min-w-0">
+                                <h2 className="text-lg sm:text-2xl font-bold text-white truncate">{selectedLesson.title}</h2>
+                                <p className="text-white/40 text-[10px] sm:text-sm mt-0.5 truncate uppercase tracking-widest">{selectedLesson.topic}</p>
                             </div>
                         </div>
 
                         {/* Content Area */}
-                        <div className="flex-1 overflow-y-auto px-4 max-w-5xl mx-auto w-full space-y-12 pb-20">
+                        <div className="flex-1 overflow-y-auto px-2 sm:px-4 max-w-5xl mx-auto w-full space-y-8 sm:space-y-12 pb-24 scrollbar-hide">
                             {/* Introduction */}
                             {selectedLesson.content?.introduction && (
                                 <section>
-                                    <h3 className="text-2xl font-bold text-white mb-4">Introduction</h3>
-                                    <p className="text-white/85 leading-relaxed text-lg">{selectedLesson.content.introduction}</p>
+                                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4 pr-4 border-l-4 border-cyan-500/50 pl-4">Introduction</h3>
+                                    <p className="text-white/85 leading-relaxed text-base sm:text-lg">{selectedLesson.content.introduction}</p>
                                 </section>
                             )}
 
@@ -243,12 +243,12 @@ export default function CustomLessonsPage() {
                             {selectedLesson.content?.sections && selectedLesson.content.sections.length > 0 && (
                                 <div className="space-y-12">
                                     {selectedLesson.content.sections.map((section, index) => (
-                                        <section key={index} className="border-t border-white/10 pt-8 first:border-0 first:pt-0">
-                                            <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                                        <section key={index} className="border-t border-white/10 pt-6 sm:pt-8 first:border-0 first:pt-0">
+                                            <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
                                                 <span className="text-cyan-400">{index + 1}.</span>
                                                 {section.title}
                                             </h3>
-                                            <p className="text-white/85 leading-relaxed text-lg whitespace-pre-wrap mb-6">
+                                            <p className="text-white/85 leading-relaxed text-base sm:text-lg whitespace-pre-wrap mb-4 sm:mb-6">
                                                 {section.content}
                                             </p>
 
