@@ -39,6 +39,9 @@ export default function TeachersGuideLayout() {
     // View toggle state (matching student classroom)
     const [view, setView] = useState<"both" | "left" | "right">("both");
 
+    // Mobile panel state: 'default' = 90:10 (guide large), 'assistantExpanded' = 10:90 (assistant large)
+    const [mobilePanelState, setMobilePanelState] = useState<"default" | "assistantExpanded">("default");
+
     // TOC state
     const [toc, setToc] = useState<TocItem[]>([]);
 
@@ -172,10 +175,14 @@ export default function TeachersGuideLayout() {
         return `${base} ${width}`;
     }, [view]);
 
+    // Mobile panel heights
+    const mainPanelHeight = mobilePanelState === "default" ? "h-[90%]" : "h-[10%]";
+    const assistantPanelHeight = mobilePanelState === "default" ? "h-[10%]" : "h-[90%]";
+
     return (
         <div className="relative flex flex-col h-[calc(85vh-4rem)] md:h-[87vh] lg:h-[90vh] w-full bg-[#0a0f14]/80 backdrop-blur-sm text-white overflow-hidden rounded-2xl shadow-xl shadow-black/40 border border-white/10">
-            {/* Top controls - View Toggle (matching student classroom) */}
-            <div className="flex items-center justify-center gap-2 p-3 border-b border-white/10 bg-black/20">
+            {/* Top controls - View Toggle (hidden on mobile) */}
+            <div className="hidden sm:flex items-center justify-center gap-2 p-3 border-b border-white/10 bg-black/20">
                 <div className="flex items-center gap-2">
                     <button
                         className={`px-3 py-1 text-xs border border-white/10 rounded-md transition-colors ${view === "left"
@@ -209,8 +216,176 @@ export default function TeachersGuideLayout() {
                 </div>
             </div>
 
-            {/* Main layout area */}
-            <div className="flex flex-1 overflow-hidden">
+            {/* Mobile layout: Vertical stack with toggle controls */}
+            <div className="flex flex-col flex-1 overflow-hidden sm:hidden p-2 gap-2">
+                {/* Main Panel Card (Guide Content) */}
+                <div className={`${mainPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border-2 border-white/30 transition-all duration-300`}>
+                    <div className={`h-full flex flex-col overflow-hidden ${mobilePanelState === "assistantExpanded" ? "invisible" : ""}`}>
+                        {/* Selector Bar - Matching Student Classroom */}
+                        <div className="p-3 sm:p-5 border-b border-white/10 bg-white/5">
+                            <div className="flex gap-2">
+                                <select
+                                    value={selectedGrade}
+                                    onChange={(e) => setSelectedGrade(e.target.value)}
+                                    className="flex-1 min-w-0 px-2 py-2 bg-[#1a1f25] border border-white/20 rounded-lg text-white text-xs focus:outline-none focus:border-white/40 transition-all [&>option]:bg-[#1a1f25] [&>option]:text-white"
+                                >
+                                    <option value="">Grade</option>
+                                    {getGroupedGrades(grades).map((section) => (
+                                        <optgroup key={section.label} label={section.label}>
+                                            {section.grades.map((g) => (
+                                                <option key={g} value={g}>Grade {g}</option>
+                                            ))}
+                                        </optgroup>
+                                    ))}
+                                </select>
+
+                                <select
+                                    value={selectedSubject}
+                                    onChange={(e) => setSelectedSubject(e.target.value)}
+                                    disabled={!subjects.length}
+                                    className="flex-1 min-w-0 px-2 py-2 bg-[#1a1f25] border border-white/20 rounded-lg text-white text-xs focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
+                                >
+                                    <option value="">Subject</option>
+                                    {subjects.map((s) => (
+                                        <option key={s} value={s}>{s}</option>
+                                    ))}
+                                </select>
+
+                                <select
+                                    value={selectedStrand}
+                                    onChange={(e) => setSelectedStrand(e.target.value)}
+                                    disabled={!strands.length}
+                                    className="flex-1 min-w-0 px-2 py-2 bg-[#1a1f25] border border-white/20 rounded-lg text-white text-xs focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
+                                >
+                                    <option value="">Strand</option>
+                                    {strands.map((s) => (
+                                        <option key={s} value={s}>{s}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Scrollable Content Area */}
+                        <div className="flex-1 overflow-y-auto p-2 scrollbar-hide">
+                            {loading ? (
+                                <div className="flex items-center justify-center h-full">
+                                    <div className="text-white/60 animate-pulse text-sm">Loading...</div>
+                                </div>
+                            ) : guideContent ? (
+                                <TeacherTextbookRenderer
+                                    content={guideContent}
+                                    images={guideImages}
+                                    onTocUpdate={setToc}
+                                />
+                            ) : error === "Guide not found" ? (
+                                <div className="h-full flex flex-col items-center justify-center text-center p-4">
+                                    <h3 className="text-sm font-bold text-white mb-2">Guide Not Found</h3>
+                                    <Link href="/dashboard/admin" className="text-sky-400 text-xs hover:underline mt-2">Go to Admin →</Link>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center h-full text-center p-4">
+                                    <p className="text-white/40 text-sm">Select options to view guide</p>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* TOC Button */}
+                        {mobilePanelState !== "assistantExpanded" && <TeacherTOCIcon toc={toc} />}
+                    </div>
+
+                    {/* Overlay "Guide" text when collapsed */}
+                    {mobilePanelState === "assistantExpanded" && (
+                        <div
+                            className="absolute inset-0 flex items-center justify-center cursor-pointer hover:bg-white/5 transition-colors"
+                            onClick={() => setMobilePanelState("default")}
+                        >
+                            <h3 className="text-sm font-bold text-white/60 uppercase tracking-widest">Teacher Guide</h3>
+                        </div>
+                    )}
+
+                    {/* Minimize/Maximize button */}
+                    <button
+                        onClick={() => setMobilePanelState(mobilePanelState === "default" ? "assistantExpanded" : "default")}
+                        className="absolute bottom-1 right-2 z-20 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full transition-colors flex items-center gap-1"
+                    >
+                        {mobilePanelState === "default" ? (
+                            <>
+                                <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                                <span className="text-[10px] text-white/60">Min</span>
+                            </>
+                        ) : (
+                            <>
+                                <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                </svg>
+                                <span className="text-[10px] text-white/60">Max</span>
+                            </>
+                        )}
+                    </button>
+                </div>
+
+                {/* Assistant Panel Card */}
+                <div
+                    className={`${assistantPanelHeight} overflow-hidden relative rounded-xl bg-[#0b0f12] border-2 border-white/30 transition-all duration-300 ${mobilePanelState === "default" ? 'cursor-pointer hover:bg-white/5' : ''}`}
+                    onClick={() => mobilePanelState === "default" && setMobilePanelState("assistantExpanded")}
+                >
+                    {/* Header row with title + Min/Max button */}
+                    <div className="absolute top-1 left-2 right-2 z-20 flex items-center justify-between">
+                        {mobilePanelState === "assistantExpanded" && (
+                            <span className="text-[10px] font-bold text-white uppercase tracking-widest truncate max-w-[60%]">
+                                {selectedStrand || 'Teaching Assistant'}
+                            </span>
+                        )}
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setMobilePanelState(mobilePanelState === "default" ? "assistantExpanded" : "default");
+                            }}
+                            className="ml-auto px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full transition-colors flex items-center gap-1"
+                        >
+                            {mobilePanelState === "assistantExpanded" ? (
+                                <>
+                                    <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                    <span className="text-[10px] text-white/60">Min</span>
+                                </>
+                            ) : (
+                                <>
+                                    <svg className="w-3 h-3 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                                    </svg>
+                                    <span className="text-[10px] text-white/60">Max</span>
+                                </>
+                            )}
+                        </button>
+                    </div>
+
+                    <div className={`h-full p-3 pt-8 overflow-hidden ${mobilePanelState === "default" ? "invisible" : ""}`}>
+                        <TeacherChatPanel
+                            mobileExpanded={mobilePanelState === "assistantExpanded"}
+                            context={{
+                                grade: selectedGrade,
+                                subject: selectedSubject,
+                                strand: selectedStrand,
+                            }}
+                            guideContent={guideContent || ""}
+                        />
+                    </div>
+
+                    {/* Overlay text when collapsed */}
+                    {mobilePanelState === "default" && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <h3 className="text-sm font-bold text-white/60 uppercase tracking-widest">Assistant</h3>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Main layout area (Desktop Only) */}
+            <div className="hidden sm:flex flex-1 overflow-hidden">
                 {/* LEFT PANEL – Guide Content */}
                 <div className={leftClasses}>
                     <div className="h-full flex flex-col overflow-hidden">
@@ -221,15 +396,15 @@ export default function TeachersGuideLayout() {
                                     : "opacity-100") + " h-full flex flex-col"
                             }
                         >
-                            {/* Selector Bar */}
-                            <div className="p-5 border-b border-white/10 bg-white/5">
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            {/* Selector Bar - Match Student Classroom */}
+                            <div className="p-3 sm:p-5 border-b border-white/10 bg-white/5">
+                                <div className="flex gap-2 sm:gap-4">
                                     <select
                                         value={selectedGrade}
                                         onChange={(e) => setSelectedGrade(e.target.value)}
-                                        className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all [&>option]:bg-[#1a1f25] [&>option]:text-white"
+                                        className="flex-1 min-w-0 px-2 sm:px-4 py-2 sm:py-3 bg-[#1a1f25] border border-white/20 rounded-lg sm:rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-white/40 transition-all [&>option]:bg-[#1a1f25] [&>option]:text-white"
                                     >
-                                        <option value="">Select Grade</option>
+                                        <option value="">Grade</option>
                                         {getGroupedGrades(grades).map((section) => (
                                             <optgroup key={section.label} label={section.label}>
                                                 {section.grades.map((g) => (
@@ -243,9 +418,9 @@ export default function TeachersGuideLayout() {
                                         value={selectedSubject}
                                         onChange={(e) => setSelectedSubject(e.target.value)}
                                         disabled={!subjects.length}
-                                        className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
+                                        className="flex-1 min-w-0 px-2 sm:px-4 py-2 sm:py-3 bg-[#1a1f25] border border-white/20 rounded-lg sm:rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
                                     >
-                                        <option value="">Select Subject</option>
+                                        <option value="">Subject</option>
                                         {subjects.map((s) => (
                                             <option key={s} value={s}>{s}</option>
                                         ))}
@@ -255,9 +430,9 @@ export default function TeachersGuideLayout() {
                                         value={selectedStrand}
                                         onChange={(e) => setSelectedStrand(e.target.value)}
                                         disabled={!strands.length}
-                                        className="px-4 py-3 bg-[#1a1f25] border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
+                                        className="flex-1 min-w-0 px-2 sm:px-4 py-2 sm:py-3 bg-[#1a1f25] border border-white/20 rounded-lg sm:rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-white/40 transition-all disabled:opacity-50 [&>option]:bg-[#1a1f25] [&>option]:text-white"
                                     >
-                                        <option value="">Select Strand</option>
+                                        <option value="">Strand</option>
                                         {strands.map((s) => (
                                             <option key={s} value={s}>{s}</option>
                                         ))}

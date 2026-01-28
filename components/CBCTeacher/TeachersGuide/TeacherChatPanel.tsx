@@ -18,9 +18,10 @@ interface TeacherChatPanelProps {
         strand?: string;
     };
     guideContent?: string;
+    mobileExpanded?: boolean;
 }
 
-export default function TeacherChatPanel({ context, guideContent }: TeacherChatPanelProps) {
+export default function TeacherChatPanel({ context, guideContent, mobileExpanded }: TeacherChatPanelProps) {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -113,12 +114,14 @@ export default function TeacherChatPanel({ context, guideContent }: TeacherChatP
 
     return (
         <div className="flex flex-col h-full">
-            {/* Header - Minimalistic */}
-            <div className="pb-3 border-b border-white/10">
-                <h3 className="text-[10px] font-bold text-white/70 uppercase tracking-[0.2em]">
-                    Teaching Assistant
-                </h3>
-            </div>
+            {/* Header - Minimalistic (Hidden on mobile expanded to avoid duplication) */}
+            {!mobileExpanded && (
+                <div className="pb-3 border-b border-white/10">
+                    <h3 className="text-[10px] font-bold text-white/70 uppercase tracking-[0.2em]">
+                        Teaching Assistant
+                    </h3>
+                </div>
+            )}
 
             {/* Messages Area */}
             <div className="flex-1 overflow-y-auto scrollbar-hide py-4 space-y-4 min-h-0">

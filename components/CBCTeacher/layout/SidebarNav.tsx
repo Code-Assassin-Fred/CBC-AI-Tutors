@@ -94,94 +94,175 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
     ];
 
     return (
-        <div
-            className={`hidden md:flex sticky top-0 h-screen flex-col items-center pt-8 transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'lg:w-72 w-20'
-                }`}
-        >
-            {/* Logo */}
-            <div className={`flex items-center gap-2.5 mb-5 px-2 ${isCollapsed ? 'justify-center' : ''}`}>
-                <img
-                    src="/logo1.jpg"
-                    alt="Curio Logo"
-                    className="w-7 h-7 rounded-lg object-cover flex-shrink-0"
-                />
-                <span
-                    className={`text-lg font-semibold text-white/95 transition-all duration-300 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
-                        }`}
-                >
-                    Curio
-                </span>
-            </div>
-
-            {/* Sidebar */}
-            <aside className="flex flex-col flex-1 w-[90%] bg-linear-to-b from-[#0b0f12] to-[#0c1116] rounded-t-2xl border-t border-l border-r border-white/10 shadow-[inset_-1px_0_0_rgba(255,255,255,0.06)] overflow-hidden">
-                {/* Scrollable Nav */}
-                <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto no-scrollbar">
-                    {navItems.map((item) => {
-                        const isActive = item.href === '/dashboard/teacher'
-                            ? pathname === item.href
-                            : pathname.startsWith(item.href);
-                        return (
-                            <Link
-                                key={item.id}
-                                href={item.href}
-                                className={`group relative flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 ease-in-out ${isActive ? 'text-[#0ea5e9]' : 'text-white/75 hover:text-white'
-                                    } ${isCollapsed ? 'justify-center px-2' : ''}`}
-                                aria-label={item.label}
-                                title={isCollapsed ? item.label : undefined}
-                            >
-                                {isActive && (
-                                    <span className="absolute inset-0 -z-10 rounded-2xl bg-[#0ea5e9]/10 shadow-[0_8px_24px_rgba(14,165,233,0.35)] transition-all duration-300" />
-                                )}
-                                <span
-                                    className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/75 group-hover:text-white'}`}
-                                >
-                                    {item.icon}
-                                </span>
-                                <span
-                                    className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
-                                        } ${isActive ? 'text-[#0ea5e9]' : ''}`}
-                                >
-                                    {item.label}
-                                </span>
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                {/* Collapse Toggle Icon */}
-                <div
-                    className="p-4 border-t border-white/10 flex justify-center cursor-pointer hover:bg-white/5 transition-colors"
-                    onClick={toggleSidebar}
-                    aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-                >
-                    <svg
-                        className="w-5 h-5 text-white/60 hover:text-white/90 transition-all duration-300"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+        <>
+            {/* Desktop/Tablet Sidebar - hidden on mobile */}
+            <div
+                className={`hidden md:flex sticky top-0 h-screen flex-col items-center pt-8 transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'lg:w-72 w-20'
+                    }`}
+            >
+                {/* Logo */}
+                <div className={`flex items-center gap-2.5 mb-5 px-2 ${isCollapsed ? 'justify-center' : ''}`}>
+                    <img
+                        src="/logo1.jpg"
+                        alt="Curio Logo"
+                        className="w-7 h-7 rounded-lg object-cover flex-shrink-0"
+                    />
+                    <span
+                        className={`text-lg font-semibold text-white/95 transition-all duration-300 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
+                            }`}
                     >
-                        {isCollapsed ? (
-                            /* Expand icon >> */
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M13 5l7 7-7 7M5 5l7 7-7 7"
-                            />
-                        ) : (
-                            /* Collapse icon << */
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-                            />
-                        )}
-                    </svg>
+                        Curio
+                    </span>
                 </div>
 
-            </aside>
-        </div>
+                {/* Sidebar */}
+                <aside className="flex flex-col flex-1 w-[90%] bg-linear-to-b from-[#0b0f12] to-[#0c1116] rounded-t-2xl border-t border-l border-r border-white/10 shadow-[inset_-1px_0_0_rgba(255,255,255,0.06)] overflow-hidden">
+                    {/* Scrollable Nav */}
+                    <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto no-scrollbar">
+                        {navItems.map((item) => {
+                            const isActive = item.href === '/dashboard/teacher'
+                                ? pathname === item.href
+                                : pathname.startsWith(item.href);
+                            return (
+                                <Link
+                                    key={item.id}
+                                    href={item.href}
+                                    className={`group relative flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-200 ease-in-out ${isActive ? 'text-[#0ea5e9]' : 'text-white/75 hover:text-white'
+                                        } ${isCollapsed ? 'justify-center px-2' : ''}`}
+                                    aria-label={item.label}
+                                    title={isCollapsed ? item.label : undefined}
+                                >
+                                    {isActive && (
+                                        <span className="absolute inset-0 -z-10 rounded-2xl bg-[#0ea5e9]/10 shadow-[0_8px_24px_rgba(14,165,233,0.35)] transition-all duration-300" />
+                                    )}
+                                    <span
+                                        className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/75 group-hover:text-white'}`}
+                                    >
+                                        {item.icon}
+                                    </span>
+                                    <span
+                                        className={`transition-all duration-300 overflow-hidden whitespace-nowrap ${isCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
+                                            } ${isActive ? 'text-[#0ea5e9]' : ''}`}
+                                    >
+                                        {item.label}
+                                    </span>
+                                </Link>
+                            );
+                        })}
+                    </nav>
+
+                    {/* Collapse Toggle Icon */}
+                    <div
+                        className="p-4 border-t border-white/10 flex justify-center cursor-pointer hover:bg-white/5 transition-colors"
+                        onClick={toggleSidebar}
+                        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+                    >
+                        <svg
+                            className="w-5 h-5 text-white/60 hover:text-white/90 transition-all duration-300"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            {isCollapsed ? (
+                                /* Expand icon >> */
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                                />
+                            ) : (
+                                /* Collapse icon << */
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+                                />
+                            )}
+                        </svg>
+                    </div>
+
+                </aside>
+            </div>
+
+            {/* Mobile Bottom Navigation - visible only on mobile with marquee scroll */}
+            <nav className="md:hidden fixed bottom-1 left-4 right-4 z-50 bg-[#0b0f12]/95 backdrop-blur-xl border border-white/10 rounded-2xl safe-area-inset-bottom overflow-hidden shadow-2xl">
+                <div className="relative h-16 flex">
+                    {/* Two identical marquee tracks side by side for seamless loop */}
+                    <div className="flex items-center h-full marquee-track">
+                        {navItems.map((item) => {
+                            const isActive = item.href === '/dashboard/teacher'
+                                ? pathname === item.href
+                                : pathname.startsWith(item.href);
+
+                            return (
+                                <Link
+                                    key={item.id}
+                                    href={item.href}
+                                    className={`flex flex-col items-center justify-center gap-1 py-1 px-4 min-w-[80px] rounded-xl transition-colors flex-shrink-0 ${isActive
+                                        ? 'text-[#0ea5e9] bg-[#0ea5e9]/10'
+                                        : 'text-white/60 hover:text-white/90'
+                                        }`}
+                                    aria-label={item.label}
+                                >
+                                    <span className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
+                                        {item.icon}
+                                    </span>
+                                    <span className={`text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
+                                        {item.label}
+                                    </span>
+                                </Link>
+                            );
+                        })}
+                    </div>
+                    <div className="flex items-center h-full marquee-track" aria-hidden="true">
+                        {navItems.map((item) => {
+                            const isActive = item.href === '/dashboard/teacher'
+                                ? pathname === item.href
+                                : pathname.startsWith(item.href);
+
+                            return (
+                                <Link
+                                    key={`${item.id}-dup`}
+                                    href={item.href}
+                                    className={`flex flex-col items-center justify-center gap-1 py-1 px-4 min-w-[80px] rounded-xl transition-colors flex-shrink-0 ${isActive
+                                        ? 'text-[#0ea5e9] bg-[#0ea5e9]/10'
+                                        : 'text-white/60 hover:text-white/90'
+                                        }`}
+                                    aria-label={item.label}
+                                    tabIndex={-1}
+                                >
+                                    <span className={`${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
+                                        {item.icon}
+                                    </span>
+                                    <span className={`text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${isActive ? 'text-[#0ea5e9]' : 'text-white/60'}`}>
+                                        {item.label}
+                                    </span>
+                                </Link>
+                            );
+                        })}
+                    </div>
+                </div>
+                {/* Inline keyframes for seamless marquee animation */}
+                <style jsx>{`
+          @keyframes scroll {
+            from {
+              transform: translateX(0);
+            }
+            to {
+              transform: translateX(-100%);
+            }
+          }
+          .marquee-track {
+            animation: scroll 15s linear infinite;
+            will-change: transform;
+          }
+          nav:hover .marquee-track {
+            animation-play-state: paused;
+          }
+        `}</style>
+            </nav>
+        </>
     );
 }
