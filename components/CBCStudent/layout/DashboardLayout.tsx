@@ -9,7 +9,7 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children, active }: DashboardLayoutProps) {
   return (
-    <div className="flex min-h-screen overflow-hidden bg-gradient-to-br from-[#0a0f14] via-[#0b1113] to-[#0a0f14]">
+    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-[#0a0f14] via-[#0b1113] to-[#0a0f14]">
       {/* Sidebar - hidden on mobile via SidebarNav component */}
       <SidebarNav active={active} />
 
