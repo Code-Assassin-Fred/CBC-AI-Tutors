@@ -11,17 +11,16 @@ export async function POST(req: NextRequest) {
       yearsExperience?: string;
     };
 
-    if (!userId || !name || !subject || !school) {
+    if (!userId || !name) {
       return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
     }
 
     const teacherRef = adminDb.collection("teachers").doc(userId);
-
     await teacherRef.set(
       {
         name,
-        subject,
-        school,
+        subject: subject || "",
+        school: school || "",
         yearsExperience: yearsExperience || "0",
         createdAt: new Date(),
         updatedAt: new Date(),

@@ -3,13 +3,14 @@ import { adminDb } from "@/lib/firebaseAdmin";
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId, name, age } = await req.json() as {
+    const { userId, name, grade, age } = await req.json() as {
       userId: string;
       name: string;
+      grade: string;
       age?: number;
     };
 
-    if (!userId || !name) {
+    if (!userId || !name || !grade) {
       return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
     }
 
@@ -18,6 +19,7 @@ export async function POST(req: NextRequest) {
     await studentRef.set(
       {
         name,
+        grade,
         age: age || null,
         createdAt: new Date(),
         updatedAt: new Date(),

@@ -9,16 +9,29 @@ import { onboardStudent } from '@/lib/api/onboarding';
 import type { StudentOnboardingData } from '@/types/onboarding';
 
 type StudentFormValues = {
-  name: string;
-  api?: string;
+  grade: string;
 };
+
+const GRADES = [
+  'Grade 4', 'Grade 5', 'Grade 6',
+  'Grade 7 (JSS 1)', 'Grade 8 (JSS 2)', 'Grade 9 (JSS 3)',
+  'Grade 10 (SSS 1)', 'Grade 11 (SSS 2)', 'Grade 12 (SSS 3)'
+];
+
+const STUDENT_FEATURES = [
+  'Interactive Classroom - Get real-time feedback and assistance from your AI tutor',
+  'Personalized Courses - AI-generated study plans and materials for your specific needs',
+  'Curated Resources - Access a rich library of learning materials for every topic',
+  'Career Pathing - Discover and prepare for your future career opportunities',
+  'Learning Community - Connect and learn with other students in a safe environment',
+];
 
 export default function StudentOnboardingPage() {
   const router = useRouter();
   const { user, setOnboardingComplete, loading: authLoading } = useAuth();
   const { isLoading: guardLoading } = useOnboardingProtection();
 
-  const [formValues, setFormValues] = useState<StudentFormValues>({ name: '' });
+  const [formValues, setFormValues] = useState<StudentFormValues>({ grade: '' });
   const [formErrors, setFormErrors] = useState<{ [key: string]: string | undefined }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -30,16 +43,20 @@ export default function StudentOnboardingPage() {
 
   const handleSubmit = async () => {
     if (!user) return;
+    if (!formValues.grade) {
+      setFormErrors({ grade: 'Please select your grade' });
+      return;
+    }
 
     setIsSubmitting(true);
     setFormErrors({});
 
     try {
       const response = await onboardStudent({
-  userId: user.uid,
-  name: formValues.name.trim(),
-});
-
+        userId: user.uid,
+        name: user.displayName || 'Student',
+        grade: formValues.grade,
+      });
 
       if (!response.success) throw new Error(response.message ?? 'Failed to complete onboarding');
 
@@ -64,18 +81,32 @@ export default function StudentOnboardingPage() {
   return (
     <div className="min-h-screen flex items-center justify-between bg-white px-8 lg:px-16 py-8">
       <div className="w-full max-w-2xl">
-        <h1 className="text-4xl font-bold text-gray-900 mb-6">What is your name?</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-5">Welcome to Curio</h1>
+        <p className="text-gray-600 mb-8">We're excited to have you join our learning community. Here's what you can do:</p>
+
+        <ul className="space-y-3 mb-10">
+          {STUDENT_FEATURES.map((feature, idx) => (
+            <li key={idx} className="flex items-start gap-3 text-gray-700">
+              <span className="text-blue-500 font-bold mt-1">•</span>
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+
         <div className="mb-8">
-          <input
-            type="text"
-            value={formValues.name}
-            onChange={(e) => setFormValues({ ...formValues, name: e.target.value })}
-            placeholder="Enter your name"
-            className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              formErrors.name ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
-            }`}
-          />
-          {formErrors.name && <p className="mt-2 text-sm text-red-600">{formErrors.name}</p>}
+          <label className="block text-sm font-medium text-gray-700 mb-2">Select your grade to get started</label>
+          <select
+            value={formValues.grade}
+            onChange={(e) => setFormValues({ ...formValues, grade: e.target.value })}
+            className={`w-full rounded-xl border-2 px-6 py-4 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none ${formErrors.grade ? 'border-red-400 bg-red-50' : 'border-gray-300 border-dashed'
+              }`}
+          >
+            <option value="" disabled>Select your grade</option>
+            {GRADES.map(grade => (
+              <option key={grade} value={grade}>{grade}</option>
+            ))}
+          </select>
+          {formErrors.grade && <p className="mt-2 text-sm text-red-600">{formErrors.grade}</p>}
         </div>
 
         {formErrors.api && (
@@ -85,13 +116,11 @@ export default function StudentOnboardingPage() {
         )}
 
         <div className="flex items-center gap-4">
-          <BackToRoleSelection />
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className={`px-8 py-3 rounded-lg font-medium text-white transition-all duration-200 flex items-center gap-2 ${
-              isSubmitting ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-900 hover:bg-indigo-800'
-            }`}
+            className={`px-8 py-3 rounded-lg font-medium text-white transition-all duration-200 flex items-center gap-2 ${isSubmitting ? 'bg-gray-300 cursor-not-allowed' : 'bg-indigo-900 hover:bg-indigo-800'
+              }`}
           >
             {isSubmitting ? (
               <>
@@ -107,6 +136,7 @@ export default function StudentOnboardingPage() {
               </>
             )}
           </button>
+          <BackToRoleSelection />
         </div>
       </div>
 

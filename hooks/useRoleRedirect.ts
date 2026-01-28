@@ -29,7 +29,7 @@ export const useRoleRedirect = () => {
       return;
     }
 
-    if (role && !onboardingComplete && !path.startsWith(`/onboarding/${role}`)) {
+    if (role && !onboardingComplete && !path.startsWith(`/onboarding/${role}`) && path !== '/onboarding/choose-role') {
       router.replace(`/onboarding/${role}`);
       return;
     }

@@ -30,6 +30,7 @@ export async function saveRoleToDb(userId: string, role: UserRole) {
 export async function onboardStudent(data: {
   userId: string;
   name: string;
+  grade: string;
   age?: number;
 }) {
   try {

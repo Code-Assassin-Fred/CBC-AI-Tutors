@@ -205,13 +205,7 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-800">{isSignup ? 'Create your account' : 'Welcome back'}</h2>
-          <p className="mt-2 text-gray-600">
-            {isSignup ? 'Start your learning journey today' : 'Sign in to continue your learning'}
-          </p>
-        </div>
+
 
         {/* Auth Form */}
         <div className="bg-white rounded-xl shadow-lg p-8">
@@ -256,9 +250,8 @@ export default function AuthPage() {
                   value={signupForm.values.displayName}
                   onChange={(e) => signupForm.setValue('displayName', e.target.value)}
                   placeholder="Enter your full name"
-                  className={`w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    signupForm.errors.displayName ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-400 ${signupForm.errors.displayName ? 'border-red-300' : 'border-gray-300'
+                    }`}
                   disabled={loading}
                 />
                 {signupForm.errors.displayName && <p className="mt-1 text-sm text-red-600">{signupForm.errors.displayName}</p>}
@@ -278,9 +271,8 @@ export default function AuthPage() {
                   isSignup ? signupForm.setValue('email', e.target.value) : loginForm.setValue('email', e.target.value)
                 }
                 placeholder="Enter your email"
-                className={`w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  (isSignup ? signupForm.errors.email : loginForm.errors.email) ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-400 ${(isSignup ? signupForm.errors.email : loginForm.errors.email) ? 'border-red-300' : 'border-gray-300'
+                  }`}
                 disabled={loading}
               />
               {(isSignup ? signupForm.errors.email : loginForm.errors.email) && (
@@ -300,9 +292,8 @@ export default function AuthPage() {
                   value={isSignup ? signupForm.values.password : loginForm.values.password}
                   onChange={(e) => (isSignup ? signupForm.setValue('password', e.target.value) : loginForm.setValue('password', e.target.value))}
                   placeholder="Enter your password"
-                  className={`w-full px-3 py-2 pr-10 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    (isSignup ? signupForm.errors.password : loginForm.errors.password) ? 'border-red-300' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-3 py-2 pr-10 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-400 ${(isSignup ? signupForm.errors.password : loginForm.errors.password) ? 'border-red-300' : 'border-gray-300'
+                    }`}
                   disabled={loading}
                 />
                 <button type="button" onClick={() => setShowPassword((prev) => !prev)} className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -326,9 +317,8 @@ export default function AuthPage() {
                     value={signupForm.values.confirmPassword}
                     onChange={(e) => signupForm.setValue('confirmPassword', e.target.value)}
                     placeholder="Confirm your password"
-                    className={`w-full px-3 py-2 pr-10 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      signupForm.errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 pr-10 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder:text-gray-400 ${signupForm.errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+                      }`}
                     disabled={loading}
                   />
                   <button type="button" onClick={() => setShowConfirmPassword((prev) => !prev)} className="absolute inset-y-0 right-0 pr-3 flex items-center">
