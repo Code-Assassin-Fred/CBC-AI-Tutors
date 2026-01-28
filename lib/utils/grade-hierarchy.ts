@@ -6,7 +6,7 @@ export interface GradeSection {
 export const GRADE_SECTIONS: GradeSection[] = [
     {
         label: "Primary School",
-        grades: ["1", "2", "3", "4", "5", "6"]
+        grades: ["4", "5", "6"]
     },
     {
         label: "Junior School",
