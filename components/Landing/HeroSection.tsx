@@ -59,23 +59,38 @@ export default function HeroSection() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center w-full max-w-7xl mx-auto">
 
                     {/* Left: Text Section */}
-                    <div className="text-center lg:text-left space-y-4 md:space-y-6 mt-4 lg:mt-0 z-20">
-                        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
+                    <div className="text-center lg:text-left space-y-4 md:space-y-6 mt-4 lg:mt-0 z-20 overflow-hidden">
+                        <motion.h1
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
+                        >
                             AI-Powered Learning{" "}
                             <span className="text-[#00E18A]">for CBC</span>{" "}
                             <span className="italic font-serif text-slate-300">Students & Teachers</span>
-                        </h1>
+                        </motion.h1>
 
-                        <p className="text-slate-300 text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
+                        <motion.p
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                            className="text-slate-300 text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0"
+                        >
                             Learning the CBC curriculum can be tough, but it doesn't have to be.
                             We provide students with a personal AI tutor to talk through lessons,
                             while giving teachers an AI guide teaching assistant and a better way
                             to manage classroom functions. It's just about making learning feel
                             a bit more natural.
-                        </p>
+                        </motion.p>
 
                         {/* CTA Buttons */}
-                        <div className="flex flex-row justify-center lg:justify-start gap-3 sm:gap-4 pt-4">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+                            className="flex flex-row justify-center lg:justify-start gap-3 sm:gap-4 pt-4"
+                        >
                             <button
                                 onClick={handleGetStarted}
                                 className="flex-1 sm:flex-none group bg-[#00E18A] text-slate-900 px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-bold hover:bg-[#00c978] hover:shadow-lg hover:shadow-[#00E18A]/30 transition-all duration-300"
@@ -104,7 +119,7 @@ export default function HeroSection() {
                             >
                                 View Features
                             </button>
-                        </div>
+                        </motion.div>
                     </div>
 
                     {/* Right: Smooth Peek Transition Carousel */}
