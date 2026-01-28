@@ -27,7 +27,6 @@ interface CommunityContextType {
     searchQuery: string;
     setSearchQuery: (query: string) => void;
     isLoadingFeed: boolean;
-    isLoadingFeed: boolean;
     loadPosts: (filterRole?: 'student' | 'teacher') => Promise<void>;
 
     // Active post
