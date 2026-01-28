@@ -183,6 +183,23 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
                         </svg>
                     </div>
 
+                    {/* Promo Card - Hide when collapsed */}
+                    <div className={`transition-all duration-300 overflow-hidden ${isCollapsed ? 'h-0 p-0 opacity-0' : 'p-4 opacity-100'}`}>
+                        <div className="p-4 rounded-xl bg-linear-to-br from-[#0a0f14] to-[#0b1113] border border-white/8 ring-1 ring-white/5">
+                            <div className="flex items-start justify-between mb-3">
+                                <div>
+                                    <p className="text-sm font-medium text-white/95">Free Trial</p>
+                                    <p className="text-xs text-[#9aa6b2] mt-1">7 days left</p>
+                                </div>
+                            </div>
+                            <button
+                                className="w-full px-3 py-2 text-xs font-medium rounded-md border border-[#f59e0b] text-[#f59e0b] hover:bg-[#f59e0b] hover:text-white transition-colors"
+                                aria-label="Upgrade now"
+                            >
+                                Upgrade Now
+                            </button>
+                        </div>
+                    </div>
                 </aside>
             </div>
 
