@@ -161,20 +161,20 @@ export default function PricingSection() {
                         className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[24px] md:rounded-[32px] p-5 sm:p-6 md:p-8 flex flex-col hover:bg-white/[0.05] transition-all group"
                     >
                         <div className="mb-4 md:mb-6">
-                            <span className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Teacher Hub</span>
+                            <span className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Teacher Pro</span>
                             <div className="flex items-baseline gap-1 mt-2 md:mt-3">
                                 <span className="text-xs sm:text-sm text-slate-400 font-medium self-start mt-1">KES</span>
                                 <span className="text-3xl sm:text-4xl font-black text-white tracking-tighter">800</span>
                                 <span className="text-slate-400 font-medium text-xs sm:text-sm">/mo</span>
                             </div>
-                            <p className="text-slate-500 mt-2 md:mt-3 text-xs sm:text-sm leading-relaxed">Empower your classes with AI lesson planning.</p>
+                            <p className="text-slate-500 mt-2 md:mt-3 text-xs sm:text-sm leading-relaxed">The complete toolkit for modern teaching and classroom management.</p>
                         </div>
 
                         <button
                             onClick={handleAction}
                             className="w-full py-3 md:py-3.5 rounded-xl bg-white/10 text-white font-bold text-sm sm:text-base hover:bg-white/20 transition-all mb-5 md:mb-8"
                         >
-                            Get Teacher Hub
+                            Get Teacher Pro
                         </button>
 
                         <div className="space-y-2 sm:space-y-3">
