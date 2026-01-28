@@ -20,7 +20,7 @@ if (fs.existsSync(envPath)) {
 }
 
 const GEMINI_API_KEY = process.env.GEMINI_IMAGE_API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || "";
-const MODEL_NAME = "gemini-2.0-flash";
+const MODEL_NAME = "gemini-2.5-flash";
 
 async function verifyGemini2() {
     console.log('Testing Gemini 2.0 Flash...');

@@ -32,7 +32,7 @@ async function listModels() {
             console.error(`Failed to initialize ${modelName}:`, e.message);
         }
 
-        const model2 = "gemini-2.0-pro-exp";
+        const model2 = "gemini-2.5-flash";
         try {
             const m2 = genAI.getGenerativeModel({ model: model2 });
             console.log(`Successfully initialized model: ${model2}`);
