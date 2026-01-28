@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { motion, useInView, useAnimate } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
     const ref = useRef(null);
@@ -31,6 +32,7 @@ function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string
 }
 
 export default function VisionSection() {
+    const router = useRouter();
     return (
         <section id="vision" className="py-12 md:py-20 relative overflow-hidden bg-[#080f0c]">
             {/* Background Decoration */}
@@ -90,7 +92,10 @@ export default function VisionSection() {
                             </div>
 
                             <div className="mt-6 md:mt-8 lg:mt-0 relative z-10">
-                                <button className="bg-white text-[#080f0c] px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-black text-sm sm:text-base hover:bg-[#10b981] hover:text-white transition-all transform active:scale-95">
+                                <button
+                                    onClick={() => router.push("/auth")}
+                                    className="bg-white text-[#080f0c] px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-black text-sm sm:text-base hover:bg-[#10b981] hover:text-white transition-all transform active:scale-95"
+                                >
                                     Experience the Platform
                                 </button>
                             </div>

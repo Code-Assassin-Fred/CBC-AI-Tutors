@@ -6,10 +6,12 @@ import VisionSection from "@/components/Landing/VisionSection";
 import ReviewsSection from "@/components/Landing/ReviewsSection";
 import ContactSection from "@/components/Landing/ContactSection";
 import Footer from "@/components/Landing/Footer";
+import ScrollSpy from "@/components/Landing/ScrollSpy";
 
 export default function Home() {
   return (
     <main className="overflow-x-hidden">
+      <ScrollSpy />
       <HeroSection />
       <LearnAtSpeed />
       <FeaturesSection />

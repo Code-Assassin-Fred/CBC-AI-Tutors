@@ -42,7 +42,7 @@ export default function HeroSection() {
     };
 
     return (
-        <section className="relative min-h-screen w-full overflow-hidden bg-[#050a08]">
+        <section id="home" className="relative min-h-screen w-full overflow-hidden bg-[#050a08]">
             {/* Background Effects */}
             <div className="absolute top-0 left-0 w-full h-[800px] overflow-hidden pointer-events-none">
                 {/* Main Green Beam/Spotlight */}
@@ -96,7 +96,10 @@ export default function HeroSection() {
                                 </span>
                             </button>
 
-                            <button className="flex-1 sm:flex-none border-2 border-slate-600 text-slate-200 px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-bold hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300">
+                            <button
+                                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+                                className="flex-1 sm:flex-none border-2 border-slate-600 text-slate-200 px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-bold hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300"
+                            >
                                 View Features
                             </button>
                         </div>
