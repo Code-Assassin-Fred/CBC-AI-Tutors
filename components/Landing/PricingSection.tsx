@@ -185,7 +185,6 @@ export default function PricingSection() {
                                 "Automated Quiz Generator",
                                 "Student Progress Insights",
                                 "CBC Standards Alignment",
-                                "Exportable CBC Reports"
                             ].map((feature, i) => (
                                 <div key={i} className="flex items-center gap-2.5 text-slate-300">
                                     <div className="w-4 h-4 rounded-full bg-[#10b981]/20 flex items-center justify-center flex-shrink-0">
