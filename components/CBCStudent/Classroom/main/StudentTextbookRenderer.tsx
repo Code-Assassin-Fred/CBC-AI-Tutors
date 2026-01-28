@@ -180,6 +180,10 @@ export default function StudentTextbookRenderer({
     const container = document.createElement("div");
     container.innerHTML = html;
 
+    // Remove any existing quiz link containers to ensure we start fresh
+    // This prevents duplicates when content is re-rendered
+    container.querySelectorAll('.take-quiz-container').forEach(el => el.remove());
+
     const headings = Array.from(container.querySelectorAll("h1, h2, h3, h4")) as HTMLHeadingElement[];
 
     let h2Count = 0;
@@ -228,26 +232,42 @@ export default function StudentTextbookRenderer({
         // Find where to insert the quiz link (before the next H1/H2)
         let lastContentElement: Element | null = h;
         let sibling = h.nextElementSibling;
+        let quizLinkAlreadyExists = false;
+
         while (sibling && !["H1", "H2"].includes(sibling.tagName)) {
-          lastContentElement = sibling;
+          // Check if a quiz link already exists
+          if (sibling.classList.contains('take-quiz-container')) {
+            quizLinkAlreadyExists = true;
+            // Don't update lastContentElement - the quiz container shouldn't be considered content
+          } else if (sibling.querySelector('.take-quiz-btn')) {
+            // Quiz link exists inside a regular element
+            quizLinkAlreadyExists = true;
+            lastContentElement = sibling;
+          } else {
+            // Regular content element
+            lastContentElement = sibling;
+          }
           sibling = sibling.nextElementSibling;
         }
 
-        // Create Take Quiz text link (not a button, no icon, no border/line)
-        const quizDiv = document.createElement("div");
-        quizDiv.className = "take-quiz-container my-6 text-right";
+        // Only create quiz link if it doesn't already exist
+        if (!quizLinkAlreadyExists) {
+          // Create Take Quiz text link (not a button, no icon, no border/line)
+          const quizDiv = document.createElement("div");
+          quizDiv.className = "take-quiz-container my-6 text-right";
 
-        const quizLink = document.createElement("a");
-        quizLink.className = "take-quiz-btn text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer";
-        quizLink.textContent = "Take Quiz on this Section →";
-        quizLink.setAttribute("data-substrand-id", id);
-        quizLink.setAttribute("data-substrand-title", text);
+          const quizLink = document.createElement("a");
+          quizLink.className = "take-quiz-btn text-sm font-medium text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer";
+          quizLink.textContent = "Take Quiz on this Section →";
+          quizLink.setAttribute("data-substrand-id", id);
+          quizLink.setAttribute("data-substrand-title", text);
 
-        quizDiv.appendChild(quizLink);
+          quizDiv.appendChild(quizLink);
 
-        // Insert after the last content element
-        if (lastContentElement && lastContentElement.parentNode) {
-          lastContentElement.parentNode.insertBefore(quizDiv, lastContentElement.nextSibling);
+          // Insert after the last content element
+          if (lastContentElement && lastContentElement.parentNode) {
+            lastContentElement.parentNode.insertBefore(quizDiv, lastContentElement.nextSibling);
+          }
         }
 
         tocItems.push({ id, title: text, level: 2 });
