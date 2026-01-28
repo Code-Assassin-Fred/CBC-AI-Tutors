@@ -55,11 +55,11 @@ export default function HeroSection() {
             </div>
             <Navbar />
 
-            <div className="relative z-10 flex items-center min-h-screen pt-32 pb-10 lg:pt-24 lg:pb-20 px-6 md:px-12 lg:px-20">
+            <div className="relative z-10 flex items-center min-h-screen pt-32 pb-10 lg:pt-32 lg:pb-20 px-6 md:px-12 lg:px-20">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center w-full max-w-7xl mx-auto">
 
                     {/* Left: Text Section */}
-                    <div className="text-center lg:text-left space-y-4 md:space-y-6 mt-4 lg:mt-0 z-20 overflow-hidden">
+                    <div className="text-center lg:text-left space-y-4 md:space-y-6 mt-4 lg:mt-4 z-20 overflow-hidden">
                         <motion.h1
                             initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: 1, x: 0 }}
