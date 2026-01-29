@@ -1,18 +1,13 @@
-/**
- * Teacher Chat API
- * 
- * GPT-like chatbot for teachers with full guide content context.
- * Teachers can ask questions about the guide, get teaching strategies,
- * and discuss lesson planning based on the actual content.
- */
-
 import { NextResponse } from "next/server";
 import { generateGeminiText, MODELS } from '@/lib/api/gemini';
+import { adminDb, FieldValue } from "@/lib/firebaseAdmin";
 
 const MODEL = MODELS.flash;
 
 interface ChatRequest {
     message: string;
+    userId: string;
+    sessionId: string;
     guideContent?: string;
     context?: {
         grade?: string;
@@ -22,17 +17,90 @@ interface ChatRequest {
     history?: Array<{ role: "user" | "assistant"; content: string }>;
 }
 
+export async function GET(req: Request) {
+    try {
+        const { searchParams } = new URL(req.url);
+        const userId = searchParams.get("userId");
+        const sessionId = searchParams.get("sessionId");
+
+        if (sessionId) {
+            // Fetch messages for a specific session
+            const messagesSnapshot = await adminDb
+                .collection("teacher_chats")
+                .doc(sessionId)
+                .collection("messages")
+                .orderBy("timestamp", "asc")
+                .get();
+
+            const messages = messagesSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                timestamp: doc.data().timestamp?.toDate() || new Date(),
+            }));
+
+            return NextResponse.json({ messages });
+        }
+
+        if (userId) {
+            // Fetch all sessions for a user
+            // Note: Removed orderBy to avoid composite index requirement (userId + lastUpdated)
+            // We'll sort in memory to ensure it works without manual index creation
+            const sessionsSnapshot = await adminDb
+                .collection("teacher_chats")
+                .where("userId", "==", userId)
+                .limit(50)
+                .get();
+
+            const sessions = sessionsSnapshot.docs
+                .map(doc => ({
+                    id: doc.id,
+                    ...doc.data(),
+                    lastUpdated: doc.data().lastUpdated?.toDate() || new Date(),
+                }))
+                .sort((a, b) => b.lastUpdated.getTime() - a.lastUpdated.getTime());
+
+            return NextResponse.json({ sessions });
+        }
+
+        return NextResponse.json({ error: "userId or sessionId is required" }, { status: 400 });
+
+    } catch (error: any) {
+        console.error("[Teacher Chat API GET Error]:", error);
+        return NextResponse.json(
+            { error: error.message || "Failed to fetch chat data" },
+            { status: 500 }
+        );
+    }
+}
+
 export async function POST(req: Request) {
     try {
         const body: ChatRequest = await req.json();
-        const { message, guideContent, context, history = [] } = body;
+        const { message, userId, sessionId, guideContent, context, history = [] } = body;
 
-        if (!message?.trim()) {
+        if (!message?.trim() || !userId || !sessionId) {
             return NextResponse.json(
-                { error: "Message is required" },
+                { error: "Message, userId, and sessionId are required" },
                 { status: 400 }
             );
         }
+
+        // Save User Message to Firestore immediately (for persistence)
+        const chatSessionRef = adminDb.collection("teacher_chats").doc(sessionId);
+        const messagesCollectionRef = chatSessionRef.collection("messages");
+
+        await messagesCollectionRef.add({
+            role: "user",
+            content: message,
+            timestamp: FieldValue.serverTimestamp(),
+        });
+
+        // Update session metadata
+        await chatSessionRef.set({
+            userId,
+            context: context || {},
+            lastUpdated: FieldValue.serverTimestamp(),
+        }, { merge: true });
 
         // Build the system prompt with teaching context
         let systemPrompt = `You are a helpful Teaching Assistant for Kenyan CBC curriculum teachers. 
@@ -71,7 +139,18 @@ ${guideContent.slice(0, 12000)}
             MODEL
         );
 
-        return NextResponse.json({ response });
+        // Save AI Response to Firestore
+        await messagesCollectionRef.add({
+            role: "assistant",
+            content: response,
+            timestamp: FieldValue.serverTimestamp(),
+        });
+
+        return NextResponse.json({
+            response,
+            sessionId,
+            timestamp: new Date().toISOString()
+        });
 
     } catch (error: any) {
         console.error("[Teacher Chat API Error]:", error);

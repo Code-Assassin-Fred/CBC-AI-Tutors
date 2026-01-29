@@ -439,15 +439,11 @@ export default function TeachersGuideLayout() {
                                     </select>
                                 </div>
 
-                                {selectedGrade && selectedSubject && selectedStrand && (
-                                    <div className="mt-4 text-center text-white/70 text-sm font-medium">
-                                        Grade {selectedGrade} • {selectedSubject} • {selectedStrand}
-                                    </div>
-                                )}
+
                             </div>
 
                             {/* Scrollable Content Area - Matching student classroom styling */}
-                            <div className="flex-1 overflow-y-auto px-2 pt-1 pb-2 sm:p-2 scrollbar-hide">
+                            <div className="flex-1 overflow-y-auto px-2 pt-0 pb-2 sm:px-2 sm:pb-2 sm:pt-0 scrollbar-hide">
                                 {loading ? (
                                     <div className="flex items-center justify-center h-full">
                                         <div className="text-white/60 animate-pulse text-lg">Loading your guide...</div>
@@ -483,9 +479,6 @@ export default function TeachersGuideLayout() {
                                 ) : (
                                     <div className="flex flex-col items-center justify-center h-full text-center px-8">
                                         <div className="text-8xl mb-6 opacity-30">📖</div>
-                                        <h2 className="text-2xl font-bold text-white mb-3">
-                                            Welcome to AI Teacher's Guide
-                                        </h2>
                                         <p className="text-white/60 text-lg max-w-md">
                                             Select a grade, subject, and strand above to view the teaching guide and get real-time AI assistance.
                                         </p>

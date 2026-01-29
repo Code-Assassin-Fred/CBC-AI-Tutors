@@ -28,7 +28,7 @@ async function listModels() {
         try {
             const model = genAI.getGenerativeModel({ model: modelName });
             console.log(`Successfully initialized model: ${modelName}`);
-        } catch (e) {
+        } catch (e: any) {
             console.error(`Failed to initialize ${modelName}:`, e.message);
         }
 
@@ -36,7 +36,7 @@ async function listModels() {
         try {
             const m2 = genAI.getGenerativeModel({ model: model2 });
             console.log(`Successfully initialized model: ${model2}`);
-        } catch (e) {
+        } catch (e: any) {
             console.error(`Failed to initialize ${model2}:`, e.message);
         }
     } catch (error) {
