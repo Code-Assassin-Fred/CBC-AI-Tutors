@@ -262,7 +262,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
                   key={item.id}
                   href={item.href}
                   className={`flex flex-col items-center justify-center gap-1 py-2 px-4 min-w-[72px] rounded-xl transition-colors flex-shrink-0 ${isActive
-                    ? 'text-[#0ea5e9] bg-[#0ea5e9]/10'
+                    ? 'text-[#0ea5e9]'
                     : 'text-white/60 hover:text-white/90'
                     }`}
                   aria-label={item.label}
@@ -288,7 +288,7 @@ export default function SidebarNav({ active = 'Dashboard' }: SidebarNavProps) {
                   key={`${item.id}-dup`}
                   href={item.href}
                   className={`flex flex-col items-center justify-center gap-1 py-2 px-4 min-w-[72px] rounded-xl transition-colors flex-shrink-0 ${isActive
-                    ? 'text-[#0ea5e9] bg-[#0ea5e9]/10'
+                    ? 'text-[#0ea5e9]'
                     : 'text-white/60 hover:text-white/90'
                     }`}
                   aria-label={item.label}
