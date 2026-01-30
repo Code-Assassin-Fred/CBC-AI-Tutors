@@ -99,6 +99,26 @@ export default function AssessmentsPage() {
         }
     };
 
+    const handlePrint = () => {
+        if (!selectedAssessment) return;
+
+        // Save original title
+        const originalTitle = document.title;
+
+        // Set dynamic title for filename and browser header
+        const docTitle = viewMode === 'questions'
+            ? `${selectedAssessment.title} - Assessment`
+            : `${selectedAssessment.title} - Rubric`;
+
+        document.title = docTitle;
+
+        // Print
+        window.print();
+
+        // Restore original title
+        document.title = originalTitle;
+    };
+
     // Assessment Viewer
     const [viewMode, setViewMode] = useState<'questions' | 'rubric'>('questions');
 
@@ -151,7 +171,7 @@ export default function AssessmentsPage() {
                         </div>
 
                         <button
-                            onClick={() => window.print()}
+                            onClick={handlePrint}
                             className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-cyan-500 text-white hover:bg-cyan-400 transition-all font-bold text-[10px] sm:text-sm whitespace-nowrap"
                         >
                             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -175,24 +195,29 @@ export default function AssessmentsPage() {
                                 /* Show only the assessment document and its children */
                                 .assessment-printable, .assessment-printable * { visibility: visible; }
                                 
-                                /* Position the document at the top left */
+                                /* Position the document at the top left and remove browser margins */
                                 .assessment-printable { 
                                     position: absolute; 
                                     left: 0; 
                                     top: 0; 
                                     width: 100% !important;
                                     margin: 0 !important;
-                                    padding: 0 !important;
+                                    padding: 1.5cm !important;
+                                    box-shadow: none !important;
                                 }
 
                                 /* Ensure backgrounds are handled */
-                                body { background: white !important; }
+                                body { background: white !important; margin: 0 !important; }
                                 .bg-gray-50 { background: white !important; }
                                 
-                                /* Hide specific UI elements that might still linger */
+                                /* Hide specific UI elements */
                                 header, nav, aside, footer, .print-hidden, [role="navigation"] { display: none !important; }
                                 
-                                @page { margin: 1.5cm; }
+                                /* Remove browser-generated headers and footers by setting page margin to 0 */
+                                @page { 
+                                    margin: 0; 
+                                    size: auto;
+                                }
                             }
                         `}</style>
 
