@@ -108,7 +108,7 @@ export default function MaterialUploader({
                 className={`
                     relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300
                     ${isDragOver
-                        ? 'border-cyan-400 bg-cyan-500/10'
+                        ? 'border-cyan-400 bg-[#0d1117]'
                         : 'border-white/20 hover:border-white/40 bg-[#0b0f12]'
                     }
                     ${disabled || isUploading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
@@ -136,9 +136,9 @@ export default function MaterialUploader({
                             </svg>
                             <div className="w-48">
                                 <div className="text-white/60 text-sm mb-2">Uploading... {uploadProgress}%</div>
-                                <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                                <div className="w-full h-2 bg-[#1a1f24] rounded-full overflow-hidden">
                                     <div
-                                        className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300"
+                                        className="h-full bg-cyan-500 transition-all duration-300"
                                         style={{ width: `${uploadProgress}%` }}
                                     />
                                 </div>
@@ -187,7 +187,7 @@ export default function MaterialUploader({
                                 </div>
                                 <button
                                     onClick={() => onRemove(material.id)}
-                                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-white/40 hover:text-red-400 hover:bg-black transition-all"
                                     disabled={disabled}
                                 >
                                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

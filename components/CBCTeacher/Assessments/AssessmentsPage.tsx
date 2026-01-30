@@ -130,7 +130,7 @@ export default function AssessmentsPage() {
                     <div className="flex items-center gap-2 sm:gap-4">
                         <button
                             onClick={() => setSelectedAssessment(null)}
-                            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all font-medium text-xs sm:text-sm"
+                            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-2 rounded-lg text-white/60 hover:text-white hover:bg-[#1a1f24] transition-all font-medium text-xs sm:text-sm"
                         >
                             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -149,7 +149,7 @@ export default function AssessmentsPage() {
 
                     {/* View Toggle */}
                     <div className="flex items-center gap-2">
-                        <div className="flex bg-white/5 rounded-xl p-1">
+                        <div className="flex bg-[#0b0f12] border border-white/10 rounded-xl p-1">
                             <button
                                 onClick={() => setViewMode('questions')}
                                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'questions'
@@ -399,7 +399,7 @@ export default function AssessmentsPage() {
                                     <label className="block text-white/70 text-sm mb-3">Question Mix</label>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                                         {questionTypes.map((qt) => (
-                                            <div key={qt.type} className={`flex items-center justify-between p-3 rounded-xl border transition-colors ${qt.enabled ? 'border-cyan-500/30 bg-transparent' : 'border-white/5 bg-transparent'}`}>
+                                            <div key={qt.type} className={`flex items-center justify-between p-3 rounded-xl border transition-colors ${qt.enabled ? 'border-cyan-500 bg-[#0d1117]' : 'border-white/10 bg-[#0b0f12]'}`}>
                                                 <label className="flex items-center gap-2 cursor-pointer">
                                                     <input type="checkbox" checked={qt.enabled} onChange={() => handleQuestionTypeToggle(qt.type)} className="w-4 h-4 rounded text-cyan-500 bg-transparent border-white/20" disabled={isGenerating} />
                                                     <span className="text-sm text-white/80">{QUESTION_TYPE_LABELS[qt.type]}</span>
@@ -443,8 +443,8 @@ export default function AssessmentsPage() {
                                     onClick={handleGenerate}
                                     disabled={!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0}
                                     className={`px-4 sm:px-8 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0
-                                        ? 'bg-white/10 text-white/20'
-                                        : 'bg-cyan-500 text-white hover:bg-cyan-400 shadow-xl shadow-cyan-500/10'
+                                        ? 'bg-[#1a1f24] text-white/20'
+                                        : 'bg-cyan-500 text-white hover:bg-cyan-400'
                                         }`}
                                 >
                                     Start Intelligence Engine
@@ -501,9 +501,9 @@ export default function AssessmentsPage() {
                                             <span className="text-[10px] font-mono text-white/40">{Math.round(generationProgress.percentage)}%</span>
                                         </div>
                                         <div className="text-xs text-white/70 mb-3 line-clamp-1">{generationProgress.message}</div>
-                                        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                        <div className="h-1.5 bg-[#1a1f24] rounded-full overflow-hidden">
                                             <div
-                                                className="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+                                                className="h-full bg-cyan-500 transition-all duration-700 ease-out"
                                                 style={{ width: `${generationProgress.percentage}%` }}
                                             />
                                         </div>
@@ -520,7 +520,7 @@ export default function AssessmentsPage() {
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-base sm:text-xl font-bold text-white mb-4 sm:mb-6 flex items-center justify-between">
                         Assessment Library
-                        <span className="px-2 py-0.5 rounded-md bg-white/5 text-[10px] text-white/40 uppercase tracking-widest">{assessments.length} Available</span>
+                        <span className="px-2 py-0.5 rounded-md bg-[#0d1117] border border-white/10 text-[10px] text-white/40 uppercase tracking-widest">{assessments.length} Available</span>
                     </h2>
 
                     {isLoadingAssessments ? (
