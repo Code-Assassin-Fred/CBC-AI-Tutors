@@ -468,14 +468,18 @@ export default function AssessmentsPage() {
                                             0% { transform: rotate(0deg); }
                                             100% { transform: rotate(360deg); }
                                         }
+                                        @keyframes tracer-color-swap {
+                                            0%, 80% { color: #22d3ee; }
+                                            80.1%, 100% { color: #f97316; }
+                                        }
                                     `}</style>
 
                                     {/* Border Tracer (Conic Sweep) */}
-                                    <div className="absolute inset-[-100%] animate-[border-tracer_3s_linear_infinite]">
+                                    <div className="absolute inset-[-100%] animate-[border-tracer_3s_linear_infinite,tracer-color-swap_15s_step-end_infinite]">
                                         <div
                                             className="w-full h-full"
                                             style={{
-                                                background: 'conic-gradient(from 0deg, transparent 70%, #22d3ee 85%, #22d3ee 100%)'
+                                                background: 'conic-gradient(from 0deg, transparent 70%, currentColor 85%, currentColor 100%)'
                                             }}
                                         />
                                     </div>
