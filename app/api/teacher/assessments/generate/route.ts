@@ -98,7 +98,7 @@ Also provide a general assessment rubric explaining the overall evaluation crite
 QUESTION TYPE GUIDELINES:
 - multiple-choice: 4 options, one correct answer
 - true-false: Statement that is clearly true or false
-- short-answer: Requires 1-3 sentence response
+- short-answer: Requires 1-3 sentences OR a specific, factual, and very brief answer (one-word/definitions)
 - open-ended: Requires detailed explanation or analysis
 - fill-blank: Sentence with a key term blanked out
 

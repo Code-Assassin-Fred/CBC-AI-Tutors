@@ -131,9 +131,9 @@ export interface AssessmentGenerationEvent {
 // ============================================
 
 export const DEFAULT_QUESTION_TYPES: QuestionTypeConfig[] = [
-    { type: 'multiple-choice', count: 5, enabled: true },
-    { type: 'true-false', count: 3, enabled: true },
-    { type: 'short-answer', count: 2, enabled: true },
+    { type: 'multiple-choice', count: 5, enabled: false },
+    { type: 'true-false', count: 3, enabled: false },
+    { type: 'short-answer', count: 2, enabled: false },
     { type: 'open-ended', count: 2, enabled: false },
     { type: 'fill-blank', count: 3, enabled: false },
 ];
@@ -141,7 +141,7 @@ export const DEFAULT_QUESTION_TYPES: QuestionTypeConfig[] = [
 export const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
     'multiple-choice': 'Multiple Choice',
     'true-false': 'True/False',
-    'short-answer': 'Short Answer',
+    'short-answer': 'Short Answer / Closed Ended',
     'open-ended': 'Open Ended',
     'fill-blank': 'Fill in the Blank',
 };

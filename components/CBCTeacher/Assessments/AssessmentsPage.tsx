@@ -264,7 +264,7 @@ export default function AssessmentsPage() {
 
     // Default view: Form + List
     return (
-        <div className="flex flex-col h-full overflow-hidden">
+        <div className="flex flex-col flex-1 min-h-0 overflow-y-auto">
             {/* Form Section */}
             <div className={`border-b border-white/10 transition-all ${showForm ? 'p-4 sm:p-6' : 'p-2 sm:p-3'}`}>
                 <button
@@ -282,7 +282,7 @@ export default function AssessmentsPage() {
                         {/* Step 1: Upload */}
                         <div>
                             <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-                                <span className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm">1</span>
+                                <span className="text-cyan-400 font-bold">1.</span>
                                 Upload Materials
                             </h3>
                             <MaterialUploader
@@ -298,7 +298,7 @@ export default function AssessmentsPage() {
                         {/* Step 2: Config */}
                         <div>
                             <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
-                                <span className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm">2</span>
+                                <span className="text-cyan-400 font-bold">2.</span>
                                 Configure & Generate
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -317,13 +317,13 @@ export default function AssessmentsPage() {
                                     <label className="block text-white/70 text-sm mb-3">Question Mix</label>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                                         {questionTypes.map((qt) => (
-                                            <div key={qt.type} className={`flex items-center justify-between p-3 rounded-xl border ${qt.enabled ? 'border-cyan-500/30 bg-cyan-500/5' : 'border-white/5 bg-white/[0.02]'}`}>
+                                            <div key={qt.type} className={`flex items-center justify-between p-3 rounded-xl border transition-colors ${qt.enabled ? 'border-cyan-500/30 bg-transparent' : 'border-white/5 bg-transparent'}`}>
                                                 <label className="flex items-center gap-2 cursor-pointer">
                                                     <input type="checkbox" checked={qt.enabled} onChange={() => handleQuestionTypeToggle(qt.type)} className="w-4 h-4 rounded text-cyan-500 bg-transparent border-white/20" disabled={isGenerating} />
                                                     <span className="text-sm text-white/80">{QUESTION_TYPE_LABELS[qt.type]}</span>
                                                 </label>
                                                 {qt.enabled && (
-                                                    <input type="number" min="1" max="20" value={qt.count} onChange={(e) => handleQuestionCountChange(qt.type, parseInt(e.target.value) || 0)} className="w-12 h-8 rounded bg-black/40 border border-white/10 text-center text-sm text-white" disabled={isGenerating} />
+                                                    <input type="number" min="1" max="20" value={qt.count} onChange={(e) => handleQuestionCountChange(qt.type, parseInt(e.target.value) || 0)} className="w-12 h-8 rounded bg-black border border-white/10 text-center text-sm text-white" disabled={isGenerating} />
                                                 )}
                                             </div>
                                         ))}
@@ -336,8 +336,20 @@ export default function AssessmentsPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-white/70 text-sm mb-2">Extra Instructions</label>
-                                    <input type="text" value={specifications} onChange={(e) => setSpecifications(e.target.value)} placeholder="e.g. Focus on vocabulary" className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white outline-none" disabled={isGenerating} />
+                                    <label className="block text-white/70 text-sm mb-2">Extra Instructions <span className="text-white/30 text-xs font-normal">(Optional)</span></label>
+                                    <textarea
+                                        value={specifications}
+                                        onChange={(e) => setSpecifications(e.target.value)}
+                                        onInput={(e) => {
+                                            const target = e.target as HTMLTextAreaElement;
+                                            target.style.height = 'auto';
+                                            target.style.height = `${Math.min(target.scrollHeight, 160)}px`;
+                                        }}
+                                        placeholder="e.g. Focus on vocabulary, add real-world scenarios, or emphasize critical thinking..."
+                                        className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white outline-none resize-none min-h-[48px] max-h-[160px] overflow-y-auto transition-all"
+                                        rows={1}
+                                        disabled={isGenerating}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -366,7 +378,7 @@ export default function AssessmentsPage() {
             </div>
 
             {/* List Section */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 scrollbar-hide">
+            <div className="p-4 sm:p-6">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-base sm:text-xl font-bold text-white mb-4 sm:mb-6 flex items-center justify-between">
                         Assessment Library

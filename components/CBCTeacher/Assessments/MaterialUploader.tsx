@@ -109,7 +109,7 @@ export default function MaterialUploader({
                     relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-300
                     ${isDragOver
                         ? 'border-cyan-400 bg-cyan-500/10'
-                        : 'border-white/20 hover:border-white/40 bg-white/5'
+                        : 'border-white/20 hover:border-white/40 bg-[#0b0f12]'
                     }
                     ${disabled || isUploading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                 `}
@@ -172,7 +172,7 @@ export default function MaterialUploader({
                         {materials.map((material) => (
                             <div
                                 key={material.id}
-                                className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 group"
+                                className="flex items-center gap-3 p-3 rounded-xl bg-black border border-white/10 group"
                             >
                                 <div className={FILE_TYPE_COLORS[material.type] || FILE_TYPE_COLORS.other}>
                                     {FILE_TYPE_ICONS[material.type] || FILE_TYPE_ICONS.other}
