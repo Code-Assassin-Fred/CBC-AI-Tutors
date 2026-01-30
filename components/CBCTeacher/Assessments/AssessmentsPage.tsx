@@ -164,16 +164,35 @@ export default function AssessmentsPage() {
 
                 {/* Canvas Area */}
                 <div className="flex-1 overflow-y-auto p-4 sm:p-8 md:p-12 print:p-0 print:overflow-visible">
-                    <div className="max-w-[800px] mx-auto bg-white rounded-xl shadow-2xl overflow-hidden print:shadow-none print:rounded-none min-h-[1000px] flex flex-col text-black">
+                    <div className="max-w-[800px] mx-auto bg-white rounded-xl shadow-2xl overflow-hidden print:shadow-none print:rounded-none min-h-[1000px] flex flex-col text-black assessment-printable">
 
                         {/* Print Styles */}
                         <style jsx global>{`
                             @media print {
-                                body { background: white !important; color: black !important; }
-                                .DashboardLayout_main { padding: 0 !important; }
-                                header, aside, .print-hidden, .print\\:hidden { display: none !important; }
-                                .print-only { display: block !important; }
-                                @page { margin: 2cm; }
+                                /* Hide everything by default */
+                                body * { visibility: hidden; }
+                                
+                                /* Show only the assessment document and its children */
+                                .assessment-printable, .assessment-printable * { visibility: visible; }
+                                
+                                /* Position the document at the top left */
+                                .assessment-printable { 
+                                    position: absolute; 
+                                    left: 0; 
+                                    top: 0; 
+                                    width: 100% !important;
+                                    margin: 0 !important;
+                                    padding: 0 !important;
+                                }
+
+                                /* Ensure backgrounds are handled */
+                                body { background: white !important; }
+                                .bg-gray-50 { background: white !important; }
+                                
+                                /* Hide specific UI elements that might still linger */
+                                header, nav, aside, footer, .print-hidden, [role="navigation"] { display: none !important; }
+                                
+                                @page { margin: 1.5cm; }
                             }
                         `}</style>
 
