@@ -57,7 +57,7 @@ Analyze this topic and provide:
 3. Recommended number of chapters (3-5 for most topics)
 4. Estimated reading time for students
 
-IMPORTANT: All financial examples must use Kenyan Shillings (KES). Use Kenyan names, locations, and cultural contexts. 
+IMPORTANT: You MUST write everything in 100% ENGLISH. DO NOT use any Swahili words, even for titles or names (except for proper names of people and places). All financial examples must use Kenyan Shillings (KES). Use Kenyan names, locations, and cultural contexts. 
 
 Return JSON matching this structure:
 {
@@ -113,7 +113,7 @@ Create a structured outline with:
    - Estimated word count
 5. List of glossary terms to define
 
-IMPORTANT: Use KES for all monetary values. Use Kenyan examples and cultural references.
+IMPORTANT: You MUST write everything in 100% ENGLISH. DO NOT use Swahili words or phrases in the title or content. Use KES for all monetary values. Use Kenyan examples and cultural references.
 
 Return JSON matching this structure:
 {
@@ -179,6 +179,7 @@ Write engaging, educational content for this chapter. Include:
 4. 2-3 practice exercises at the end
 
 IMPORTANT:
+- You MUST write everything in 100% ENGLISH. DO NOT use any Swahili words or phrases.
 - USE KENYAN SHILLINGS (KES) for all monetary examples. DO NOT USE USD OR $.
 - Use Kenyan names (e.g., Atieno, Kamau, Mutua) and places (e.g., Nairobi, Mombasa, Kisumu).
 - Adhere to the Kenyan Competency Based Curriculum (CBC) values.
@@ -255,10 +256,10 @@ ${chapterSummaries}
 Terms to define: ${outline.glossaryTerms.join(', ')}
 
 Create:
-1. A concise summary paragraph (3-4 sentences) of what students learned (in the Kenyan CBC context)
-2. A glossary with clear, grade-appropriate definitions
+1. A concise summary paragraph (3-4 sentences) in ENGLISH of what students learned (in the Kenyan CBC context)
+2. A glossary with clear, grade-appropriate definitions in ENGLISH
 
-IMPORTANT: Use Kenyan Shillings (KES) for any monetary definitions. Use Kenyan examples.
+IMPORTANT: You MUST write everything in 100% ENGLISH. DO NOT use Swahili words or phrases. Use Kenyan Shillings (KES) for any monetary definitions. Use Kenyan examples.
 
 Return JSON:
 {

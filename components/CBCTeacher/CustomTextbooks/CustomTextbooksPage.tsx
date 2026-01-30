@@ -374,7 +374,7 @@ export default function CustomTextbooksPage() {
                         {(isGenerating || showSuccess) && (
                             <div className="mt-4">
                                 {showSuccess && (
-                                    <div className="mb-4 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-between">
+                                    <div className="mb-4 p-4 bg-transparent border border-emerald-500/50 rounded-xl flex items-center justify-between">
                                         <div className="flex items-center gap-3">
                                             <span className="text-xl">🎉</span>
                                             <div>

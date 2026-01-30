@@ -67,14 +67,24 @@ function AgentStep({
     };
 
     return (
-        <div className={`transition-all duration-300 ${isActive ? 'scale-[1.02]' : ''}`}>
-            <div className={`flex items-start gap-3 py-3 px-4 rounded-xl ${isActive
-                    ? 'bg-cyan-500/10 border border-cyan-500/30'
-                    : agent.state === 'complete'
-                        ? 'bg-emerald-500/5 border border-emerald-500/10'
-                        : 'bg-white/5 border border-white/5'
+        <div className={`relative p-[1px] rounded-xl overflow-hidden transition-all duration-300 ${isActive ? 'scale-[1.02]' : ''}`}>
+            {/* Border Tracer Effect */}
+            {isActive && (
+                <div
+                    className="absolute inset-[-100%] animate-[spin_3s_linear_infinite]"
+                    style={{
+                        background: 'conic-gradient(from 0deg, transparent 70%, #22d3ee 85%, #22d3ee 100%)'
+                    }}
+                />
+            )}
+
+            <div className={`relative flex items-start gap-3 py-3 px-4 rounded-[11px] transition-colors ${isActive
+                ? 'bg-[#0d1117] border border-cyan-500/20'
+                : agent.state === 'complete'
+                    ? 'bg-transparent border border-emerald-500/20'
+                    : 'bg-transparent border border-white/5'
                 }`}>
-                {/* Status Icon */}
+                {/* Status Indicator */}
                 <div className={`flex-shrink-0 text-lg ${isActive ? 'animate-spin' : ''}`}>
                     {isActive ? '🔄' : getStateIcon()}
                 </div>
@@ -82,19 +92,18 @@ function AgentStep({
                 {/* Agent Info */}
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                        <span className="text-lg">{agentInfo.icon}</span>
                         <span className={`font-semibold ${getStateColor()}`}>
                             {agentInfo.name}
                         </span>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${agent.state === 'complete'
-                                ? 'bg-emerald-500/20 text-emerald-400'
-                                : agent.state === 'running'
-                                    ? 'bg-cyan-500/20 text-cyan-400'
-                                    : agent.state === 'error'
-                                        ? 'bg-red-500/20 text-red-400'
-                                        : 'bg-white/10 text-white/40'
+                        <span className={`text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-md ${agent.state === 'complete'
+                            ? 'text-emerald-400 border border-emerald-400/20'
+                            : agent.state === 'running'
+                                ? 'text-cyan-400 border border-cyan-400/20'
+                                : agent.state === 'error'
+                                    ? 'text-red-400 border border-red-400/20'
+                                    : 'text-white/20 border border-white/5'
                             }`}>
-                            {agent.state === 'running' ? 'In Progress' :
+                            {agent.state === 'running' ? 'Active' :
                                 agent.state.charAt(0).toUpperCase() + agent.state.slice(1)}
                         </span>
                     </div>
@@ -109,15 +118,15 @@ function AgentStep({
                             {chapters.map((ch) => (
                                 <div key={ch.index} className="flex items-center gap-2 text-sm">
                                     <span className={`text-xs ${ch.state === 'complete' ? 'text-emerald-400' :
-                                            ch.state === 'writing' ? 'text-cyan-400 animate-pulse' :
-                                                'text-white/30'
+                                        ch.state === 'writing' ? 'text-cyan-400 animate-pulse' :
+                                            'text-white/30'
                                         }`}>
                                         {ch.state === 'complete' ? '✓' :
                                             ch.state === 'writing' ? '→' : '○'}
                                     </span>
                                     <span className={`${ch.state === 'complete' ? 'text-white/60' :
-                                            ch.state === 'writing' ? 'text-cyan-300' :
-                                                'text-white/30'
+                                        ch.state === 'writing' ? 'text-cyan-300' :
+                                            'text-white/30'
                                         }`}>
                                         Chapter {ch.index + 1}: {ch.title}
                                     </span>
@@ -131,39 +140,7 @@ function AgentStep({
                         </div>
                     )}
 
-                    {/* Image Progress for Illustration Agent */}
-                    {agent.type === 'illustration' && images && images.length > 0 && (
-                        <div className="mt-3 flex flex-wrap gap-2">
-                            {images.map((img) => (
-                                <div
-                                    key={img.index}
-                                    className={`w-10 h-10 rounded-lg border overflow-hidden ${img.state === 'complete'
-                                            ? 'border-emerald-500/30'
-                                            : img.state === 'generating'
-                                                ? 'border-cyan-500/50 animate-pulse'
-                                                : 'border-white/10'
-                                        }`}
-                                    title={img.description}
-                                >
-                                    {img.imageUrl ? (
-                                        <img
-                                            src={img.imageUrl}
-                                            alt={img.description}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : img.state === 'generating' ? (
-                                        <div className="w-full h-full bg-cyan-500/20 flex items-center justify-center">
-                                            <span className="text-xs">🎨</span>
-                                        </div>
-                                    ) : (
-                                        <div className="w-full h-full bg-white/5 flex items-center justify-center">
-                                            <span className="text-xs text-white/30">🖼️</span>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    )}
+
                 </div>
             </div>
         </div>
@@ -191,12 +168,6 @@ export default function AgentProgressPanel({
         <div className="bg-[#0d1117] border border-white/10 rounded-2xl p-5 shadow-2xl">
             {/* Header */}
             <div className="flex items-center gap-3 mb-4 pb-4 border-b border-white/10">
-                <div className="relative">
-                    <span className="text-2xl">⚡</span>
-                    {isGenerating && (
-                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-500 rounded-full animate-ping" />
-                    )}
-                </div>
                 <div>
                     <h3 className="text-lg font-bold text-white">
                         {isGenerating ? 'Generating Your Textbook' : 'Generation Complete'}
