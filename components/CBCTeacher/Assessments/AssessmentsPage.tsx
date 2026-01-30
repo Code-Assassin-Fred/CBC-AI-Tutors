@@ -46,7 +46,7 @@ export default function AssessmentsPage() {
     const [flickerText, setFlickerText] = useState(FLICKER_STATES[0]);
     useEffect(() => {
         if (!isGenerating) return;
-        const intervals = [300, 500, 800, 1200]; // Unequal frequencies
+        const intervals = [150, 300, 800, 1500, 3000, 5000, 6000]; // Small, medium, and large pauses
         let timeout: NodeJS.Timeout;
         const cycle = () => {
             setFlickerText(FLICKER_STATES[Math.floor(Math.random() * FLICKER_STATES.length)]);
@@ -372,33 +372,75 @@ export default function AssessmentsPage() {
 
                         {/* Action */}
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                            <button
-                                onClick={handleGenerate}
-                                disabled={!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0 || isGenerating}
-                                className={`px-4 sm:px-8 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0 || isGenerating
-                                    ? 'bg-white/10 text-white/20'
-                                    : 'bg-cyan-500 text-white hover:bg-cyan-400 shadow-xl shadow-cyan-500/10'
-                                    }`}
-                            >
-                                {isGenerating ? 'Generating...' : 'Start Intelligence Engine'}
-                            </button>
+                            {!isGenerating && (
+                                <button
+                                    onClick={handleGenerate}
+                                    disabled={!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0}
+                                    className={`px-4 sm:px-8 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${!title.trim() || uploadedMaterials.length === 0 || totalQuestions === 0
+                                        ? 'bg-white/10 text-white/20'
+                                        : 'bg-cyan-500 text-white hover:bg-cyan-400 shadow-xl shadow-cyan-500/10'
+                                        }`}
+                                >
+                                    Start Intelligence Engine
+                                </button>
+                            )}
                             {isGenerating && generationProgress && (
-                                <div className="flex-1 bg-white/5 border border-white/10 rounded-xl p-4">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-                                            <span className="text-[10px] uppercase tracking-widest text-cyan-400 font-bold">
-                                                {generationProgress.step.replace('-', ' ')}
-                                            </span>
-                                        </div>
-                                        <span className="text-[10px] font-mono text-white/40">{Math.round(generationProgress.percentage)}%</span>
-                                    </div>
-                                    <div className="text-xs text-white/70 mb-3 line-clamp-1">{generationProgress.message}</div>
-                                    <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                <div className="flex-1 relative rounded-xl overflow-hidden">
+                                    {/* Marching Ants + Border Tracer Effect */}
+                                    <style>{`
+                                        @keyframes marching-ants {
+                                            0% { background-position: 0 0, 0 100%, 0 0, 100% 0; }
+                                            100% { background-position: 40px 0, -40px 100%, 0 -40px, 100% 40px; }
+                                        }
+                                        @keyframes border-tracer {
+                                            0% { transform: rotate(0deg); }
+                                            100% { transform: rotate(360deg); }
+                                        }
+                                    `}</style>
+
+                                    {/* Border Tracer (Conic Sweep) */}
+                                    <div className="absolute inset-[-100%] animate-[border-tracer_3s_linear_infinite]">
                                         <div
-                                            className="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(34,211,238,0.5)]"
-                                            style={{ width: `${generationProgress.percentage}%` }}
+                                            className="w-full h-full"
+                                            style={{
+                                                background: 'conic-gradient(from 0deg, transparent 70%, #22d3ee 85%, #22d3ee 100%)'
+                                            }}
                                         />
+                                    </div>
+
+                                    {/* Marching Ants */}
+                                    <div
+                                        className="absolute inset-0 rounded-xl"
+                                        style={{
+                                            backgroundImage: `
+                                                linear-gradient(90deg, #22d3ee 50%, transparent 50%),
+                                                linear-gradient(90deg, #22d3ee 50%, transparent 50%),
+                                                linear-gradient(0deg, #22d3ee 50%, transparent 50%),
+                                                linear-gradient(0deg, #22d3ee 50%, transparent 50%)
+                                            `,
+                                            backgroundRepeat: 'repeat-x, repeat-x, repeat-y, repeat-y',
+                                            backgroundSize: '20px 1.5px, 20px 1.5px, 1.5px 20px, 1.5px 20px',
+                                            backgroundPosition: '0 0, 0 100%, 0 0, 100% 0',
+                                            animation: 'marching-ants 1s linear infinite',
+                                            opacity: 0.3
+                                        }}
+                                    />
+
+                                    {/* Content */}
+                                    <div className="relative bg-[#0d1117] m-[2px] rounded-xl p-4">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-[10px] uppercase tracking-widest text-cyan-400 font-bold">
+                                                {flickerText}
+                                            </span>
+                                            <span className="text-[10px] font-mono text-white/40">{Math.round(generationProgress.percentage)}%</span>
+                                        </div>
+                                        <div className="text-xs text-white/70 mb-3 line-clamp-1">{generationProgress.message}</div>
+                                        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+                                                style={{ width: `${generationProgress.percentage}%` }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             )}
