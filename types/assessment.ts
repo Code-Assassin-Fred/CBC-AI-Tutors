@@ -83,7 +83,8 @@ export interface Assessment {
     questions: Question[];
     materials: UploadedMaterial[];
     config: AssessmentConfig;
-    rubric?: string;                        // General assessment rubric
+    rubricId?: string;                      // Reference to rubric document in subcollection
+    rubric?: string;                        // General assessment rubric (kept for quick display)
     totalPoints: number;
     estimatedTimeMinutes: number;
     createdAt: Date;

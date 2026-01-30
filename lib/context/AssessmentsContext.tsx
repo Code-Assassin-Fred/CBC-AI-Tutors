@@ -193,23 +193,30 @@ export function AssessmentsProvider({ children }: { children: React.ReactNode })
                 for (const line of lines) {
                     if (line.startsWith('data: ')) {
                         try {
-                            const event: AssessmentGenerationEvent = JSON.parse(line.slice(6));
+                            const event = JSON.parse(line.slice(6));
 
-                            if (event.type === 'progress' && event.step && event.message && event.percentage !== undefined) {
+                            if (event.type === 'agent_start' || event.type === 'agent_step' || event.type === 'audit_cycle') {
+                                // Map agent events to legacy progress type for compatibility or local state
                                 setGenerationProgress({
-                                    step: event.step,
+                                    step: event.agent || 'generating-questions' as any,
                                     message: event.message,
-                                    percentage: event.percentage,
+                                    percentage: event.percentage || 50, // Default to 50 if no percentage
+                                });
+                            } else if (event.type === 'agent_complete') {
+                                setGenerationProgress({
+                                    step: event.agent as any,
+                                    message: event.message,
+                                    percentage: 100,
                                 });
                             } else if (event.type === 'done' && event.data) {
                                 assessment = event.data as Assessment;
                                 setAssessments(prev => [assessment!, ...prev]);
                                 clearMaterials();
                             } else if (event.type === 'error') {
-                                throw new Error(event.error || 'Generation failed');
+                                throw new Error(event.error || event.message || 'Generation failed');
                             }
-                        } catch {
-                            // Skip invalid JSON
+                        } catch (e) {
+                            console.error('Error parsing SSE event:', e);
                         }
                     }
                 }

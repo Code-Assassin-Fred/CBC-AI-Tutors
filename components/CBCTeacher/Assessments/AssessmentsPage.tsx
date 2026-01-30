@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAssessments } from '@/lib/context/AssessmentsContext';
 import MaterialUploader from './MaterialUploader';
 import AssessmentCard from './AssessmentCard';
@@ -13,6 +13,8 @@ import {
     DIFFICULTY_LABELS,
     Question,
 } from '@/types/assessment';
+
+const FLICKER_STATES = ['Thinking...', 'Working...', 'Generating...'];
 
 export default function AssessmentsPage() {
     const {
@@ -39,6 +41,20 @@ export default function AssessmentsPage() {
     const [difficulty, setDifficulty] = useState<DifficultyLevel>('medium');
     const [specifications, setSpecifications] = useState('');
     const [showForm, setShowForm] = useState(true);
+
+    // Flickering status indicator
+    const [flickerText, setFlickerText] = useState(FLICKER_STATES[0]);
+    useEffect(() => {
+        if (!isGenerating) return;
+        const intervals = [300, 500, 800, 1200]; // Unequal frequencies
+        let timeout: NodeJS.Timeout;
+        const cycle = () => {
+            setFlickerText(FLICKER_STATES[Math.floor(Math.random() * FLICKER_STATES.length)]);
+            timeout = setTimeout(cycle, intervals[Math.floor(Math.random() * intervals.length)]);
+        };
+        cycle();
+        return () => clearTimeout(timeout);
+    }, [isGenerating]);
 
     useEffect(() => {
         loadAssessments();
@@ -176,7 +192,7 @@ export default function AssessmentsPage() {
                             {/* Questions */}
                             <div className="space-y-16">
                                 {selectedAssessment.questions?.map((question: Question, index: number) => (
-                                    <div key={question.id} className="relative group">
+                                    <div key={question.id || `question-${index}`} className="relative group">
                                         <div className="flex items-start gap-6">
                                             <span className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gray-900 text-white flex items-center justify-center font-bold text-base sm:text-lg shadow-lg">
                                                 {index + 1}
@@ -367,9 +383,23 @@ export default function AssessmentsPage() {
                                 {isGenerating ? 'Generating...' : 'Start Intelligence Engine'}
                             </button>
                             {isGenerating && generationProgress && (
-                                <div className="flex-1">
-                                    <div className="text-[10px] uppercase tracking-widest text-white/40 mb-1">{generationProgress.message}</div>
-                                    <div className="h-1 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-cyan-500 transition-all duration-500" style={{ width: `${generationProgress.percentage}%` }} /></div>
+                                <div className="flex-1 bg-white/5 border border-white/10 rounded-xl p-4">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+                                            <span className="text-[10px] uppercase tracking-widest text-cyan-400 font-bold">
+                                                {generationProgress.step.replace('-', ' ')}
+                                            </span>
+                                        </div>
+                                        <span className="text-[10px] font-mono text-white/40">{Math.round(generationProgress.percentage)}%</span>
+                                    </div>
+                                    <div className="text-xs text-white/70 mb-3 line-clamp-1">{generationProgress.message}</div>
+                                    <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+                                            style={{ width: `${generationProgress.percentage}%` }}
+                                        />
+                                    </div>
                                 </div>
                             )}
                         </div>
