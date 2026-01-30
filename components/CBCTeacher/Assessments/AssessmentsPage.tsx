@@ -164,7 +164,7 @@ export default function AssessmentsPage() {
 
                 {/* Canvas Area */}
                 <div className="flex-1 overflow-y-auto p-4 sm:p-8 md:p-12 print:p-0 print:overflow-visible">
-                    <div className="max-w-[800px] mx-auto bg-white rounded-xl shadow-2xl overflow-hidden print:shadow-none print:rounded-none min-h-[1000px] flex flex-col text-gray-900">
+                    <div className="max-w-[800px] mx-auto bg-white rounded-xl shadow-2xl overflow-hidden print:shadow-none print:rounded-none min-h-[1000px] flex flex-col text-black">
 
                         {/* Print Styles */}
                         <style jsx global>{`
@@ -179,17 +179,17 @@ export default function AssessmentsPage() {
 
                         {/* Assessment Header */}
                         <div className="p-6 sm:p-10 border-b border-gray-200 bg-gray-50">
-                            <h2 className="text-xl sm:text-3xl font-serif font-bold text-gray-900 mb-4 sm:mb-2">{selectedAssessment.title}</h2>
-                            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 font-medium">
-                                <span className="text-gray-400 uppercase tracking-widest text-[10px] font-bold">Points</span>
-                                <span className="text-gray-900 font-bold">{selectedAssessment.totalPoints}</span>
+                            <h2 className="text-xl sm:text-3xl font-serif font-bold text-black mb-4 sm:mb-2">{selectedAssessment.title}</h2>
+                            <div className="flex items-center gap-2 text-xs sm:text-sm text-black font-medium">
+                                <span className="text-black uppercase tracking-widest text-[10px] font-bold">Points</span>
+                                <span className="text-black font-bold">{selectedAssessment.totalPoints}</span>
                             </div>
                         </div>
 
                         {/* Content */}
                         <div className="p-6 sm:p-10 space-y-8 sm:space-y-12 flex-1">
                             {selectedAssessment.description && viewMode === 'questions' && (
-                                <p className="text-gray-500 text-lg italic leading-relaxed font-serif">{selectedAssessment.description}</p>
+                                <p className="text-black text-lg italic leading-relaxed font-serif">{selectedAssessment.description}</p>
                             )}
 
                             {/* Questions View */}
@@ -203,7 +203,7 @@ export default function AssessmentsPage() {
                                                     <span className="font-bold mr-2">{index + 1}.</span>
                                                     {question.question}
                                                 </p>
-                                                <span className="text-sm text-gray-500 whitespace-nowrap">{question.points} pt{question.points !== 1 ? 's' : ''}</span>
+                                                <span className="text-sm text-black font-bold whitespace-nowrap">{question.points} pt{question.points !== 1 ? 's' : ''}</span>
                                             </div>
 
                                             {/* Multiple Choice Options */}
@@ -211,7 +211,7 @@ export default function AssessmentsPage() {
                                                 <div className="space-y-3">
                                                     {question.options.map((option, optIndex) => (
                                                         <div key={option.id} className="flex items-start gap-3 py-2">
-                                                            <span className="font-bold text-gray-900 w-6">{String.fromCharCode(65 + optIndex)}.</span>
+                                                            <span className="font-bold text-black w-6">{String.fromCharCode(65 + optIndex)}.</span>
                                                             <span className="text-black font-medium">{option.text}</span>
                                                         </div>
                                                     ))}
@@ -258,7 +258,7 @@ export default function AssessmentsPage() {
 
                                     {/* Question-Level Rubrics */}
                                     <div className="space-y-6">
-                                        <h3 className="text-gray-900 font-bold text-lg">Question Rubrics & Answers</h3>
+                                        <h3 className="text-black font-bold text-lg">Question Rubrics & Answers</h3>
                                         {selectedAssessment.questions?.map((question: Question, index: number) => (
                                             <div key={question.id || `rubric-${index}`} className="pb-6 border-b border-gray-100 last:border-0">
                                                 <div className="flex items-baseline gap-2 mb-3">
@@ -268,20 +268,20 @@ export default function AssessmentsPage() {
 
                                                 {(question.correctAnswer || question.sampleAnswer) && (
                                                     <div className="mb-3">
-                                                        <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Expected Answer</span>
-                                                        <p className="text-gray-800 text-sm mt-1">{question.correctAnswer || question.sampleAnswer}</p>
+                                                        <span className="text-[10px] font-black text-emerald-900 uppercase tracking-widest">Expected Answer</span>
+                                                        <p className="text-black text-sm mt-1 font-medium">{question.correctAnswer || question.sampleAnswer}</p>
                                                     </div>
                                                 )}
 
                                                 {question.rubric && (
                                                     <div>
-                                                        <span className="text-[10px] font-black text-gray-900 uppercase tracking-widest">Grading Criteria</span>
+                                                        <span className="text-[10px] font-black text-black uppercase tracking-widest">Grading Criteria</span>
                                                         <p className="text-black text-sm mt-1 font-medium">{question.rubric}</p>
                                                     </div>
                                                 )}
 
                                                 {!question.correctAnswer && !question.sampleAnswer && !question.rubric && (
-                                                    <p className="text-gray-400 text-sm italic">No rubric available for this question.</p>
+                                                    <p className="text-gray-700 text-sm italic">No rubric available for this question.</p>
                                                 )}
                                             </div>
                                         ))}
@@ -291,7 +291,7 @@ export default function AssessmentsPage() {
                         </div>
 
                         {/* Pagination Footer */}
-                        <div className="p-10 text-center border-t border-gray-50 bg-gray-50/30 text-[9px] text-gray-400 font-bold uppercase tracking-[0.3em] mt-auto">
+                        <div className="p-10 text-center border-t border-gray-100 bg-gray-50/10 text-[9px] text-black font-bold uppercase tracking-[0.3em] mt-auto">
                             Curio Academic Performance Assessment &copy; {new Date().getFullYear()} &bull; Professional Edition
                         </div>
                     </div>
