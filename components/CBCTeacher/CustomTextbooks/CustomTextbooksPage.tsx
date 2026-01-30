@@ -3,9 +3,45 @@
 import { useEffect, useState } from 'react';
 import { useCustomTextbooks } from '@/lib/context/CustomTextbooksContext';
 import CustomTextbookCard from './CustomTextbookCard';
+import AgentProgressPanel from './AgentProgressPanel';
+import ReactMarkdown from 'react-markdown';
 import { GRADE_SECTIONS } from '@/lib/utils/grade-hierarchy';
 
 const GRADE_OPTIONS = GRADE_SECTIONS.flatMap(s => s.grades.map(g => `Grade ${g}`));
+
+const stripRedundantTitle = (content: string, title: string) => {
+    if (!content) return '';
+    // Escape special characters in title for regex
+    const escapedTitle = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // Pattern to match common header formats at the very beginning
+    // 1. # Title
+    // 2. # Chapter 1: Title
+    // 3. ## Title
+    // 4. Chapter 1: Title
+    // 5. **Title**
+    const patterns = [
+        new RegExp(`^\\s*#+\\s*(Chapter\\s*\\d+:?\\s*)?${escapedTitle}\\s*(\\n|$)`, 'i'),
+        new RegExp(`^\\s*\\*\\*(Chapter\\s*\\d+:?\\s*)?${escapedTitle}\\*\\*\\s*(\\n|$)`, 'i'),
+        new RegExp(`^\\s*(Chapter\\s*\\d+:?\\s*)${escapedTitle}\\s*(\\n|$)`, 'i'),
+        new RegExp(`^\\s*Chapter\\s*\\d+:?\\s*${escapedTitle}\\s*(\\n|$)`, 'i'),
+        new RegExp(`^\\s*#+\\s*Chapter\\s*\\d+[:\\s]*(\\n|$)`, 'i'), // Just "# Chapter 1"
+    ];
+
+    let cleanContent = content;
+    let modified = true;
+    while (modified) {
+        modified = false;
+        for (const pattern of patterns) {
+            const newContent = cleanContent.replace(pattern, '');
+            if (newContent !== cleanContent) {
+                cleanContent = newContent;
+                modified = true;
+            }
+        }
+    }
+    return cleanContent.trim();
+};
 
 export default function CustomTextbooksPage() {
     const {
@@ -13,12 +49,18 @@ export default function CustomTextbooksPage() {
         isLoadingTextbooks,
         loadTextbooks,
         isGenerating,
-        generationProgress,
         generationError,
         generateTextbook,
         selectedTextbook,
         setSelectedTextbook,
         deleteTextbook,
+        // Agent state
+        currentAgent,
+        agents,
+        chapters,
+        images,
+        overallProgress,
+        currentMessage,
     } = useCustomTextbooks();
 
     const [topic, setTopic] = useState('');
@@ -49,7 +91,7 @@ export default function CustomTextbooksPage() {
     if (selectedTextbook) {
         const { content } = selectedTextbook;
         return (
-            <div className="flex flex-col h-full overflow-hidden">
+            <div className="flex flex-col min-h-full">
                 {/* Header Bar */}
                 <div className="p-3 sm:p-4 border-b border-white/10 bg-white/5 flex items-center gap-2 sm:gap-4 sticky top-0 z-10 backdrop-blur-md">
                     <button
@@ -72,11 +114,11 @@ export default function CustomTextbooksPage() {
                 </div>
 
                 {/* Content Area - Inline Viewer */}
-                <div className="flex-1 overflow-y-auto p-4 sm:p-8 max-w-5xl mx-auto space-y-8 sm:space-y-10 scrollbar-hide">
+                <div className="flex-1 p-4 sm:p-8 max-w-5xl mx-auto space-y-8 sm:space-y-10">
                     {/* Introduction */}
                     {content?.introduction && (
                         <section>
-                            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Introduction</h3>
+                            <h3 className="text-xl sm:text-2xl font-bold text-sky-400 mb-3 sm:mb-4 uppercase tracking-wide">Introduction</h3>
                             <p className="text-white/85 leading-relaxed text-base sm:text-lg">{content.introduction}</p>
                         </section>
                     )}
@@ -84,9 +126,9 @@ export default function CustomTextbooksPage() {
                     {/* Learning Objectives */}
                     {content?.learningObjectives && content.learningObjectives.length > 0 && (
                         <section className="my-6 sm:my-8">
-                            <h3 className="text-lg sm:text-xl font-bold text-cyan-400 mb-3 sm:mb-4">Learning Objectives</h3>
+                            <h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-3 sm:mb-4 uppercase tracking-wide">Learning Objectives</h3>
                             <ul className="space-y-2 sm:space-y-3">
-                                {content.learningObjectives.map((objective, index) => (
+                                {content.learningObjectives.map((objective: string, index: number) => (
                                     <li key={index} className="flex items-start gap-2 sm:gap-3 text-white/85 text-base sm:text-lg">
                                         <span className="flex-shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-400" />
                                         {objective}
@@ -99,21 +141,46 @@ export default function CustomTextbooksPage() {
                     {/* Chapters */}
                     {content?.chapters && content.chapters.length > 0 && (
                         <div className="space-y-8 sm:space-y-12">
-                            {content.chapters.map((chapter, index) => (
+                            {content.chapters.map((chapter: any, index: number) => (
                                 <section key={index} className="border-t border-white/10 pt-6 sm:pt-8 first:border-0 first:pt-0">
-                                    <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
-                                        <span className="text-cyan-400">{index + 1}.</span>
+                                    <h2 className="text-xl sm:text-2xl font-bold text-sky-400 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                                        <span>{index + 1}.</span>
                                         {chapter.title}
                                     </h2>
-                                    <div className="text-white/85 leading-relaxed text-base sm:text-lg space-y-4 whitespace-pre-wrap">
-                                        {chapter.content}
+
+                                    {/* Chapter Image */}
+                                    {(chapter as any).imageUrl && (
+                                        <div className="mb-6 rounded-xl overflow-hidden border border-white/10 w-fit max-w-full bg-white/5">
+                                            <img
+                                                src={(chapter as any).imageUrl}
+                                                alt={`Illustration for ${chapter.title}`}
+                                                className="max-h-80 w-auto object-contain block"
+                                            />
+                                        </div>
+                                    )}
+
+                                    <div className="text-white/85 leading-relaxed text-base sm:text-lg space-y-4">
+                                        <ReactMarkdown
+                                            components={{
+                                                h1: ({ children }) => <h1 className="text-2xl font-bold text-sky-400 mt-8 mb-4">{children}</h1>,
+                                                h2: ({ children }) => <h2 className="text-xl font-bold text-sky-400 mt-6 mb-3">{children}</h2>,
+                                                h3: ({ children }) => <h3 className="text-lg font-bold text-white mt-4 mb-2">{children}</h3>,
+                                                p: ({ children }) => <p className="mb-4 last:mb-0 leading-[1.7]">{children}</p>,
+                                                ul: ({ children }) => <ul className="list-disc pl-5 mb-4 space-y-2">{children}</ul>,
+                                                ol: ({ children }) => <ol className="list-decimal pl-5 mb-4 space-y-2">{children}</ol>,
+                                                li: ({ children }) => <li className="mb-1">{children}</li>,
+                                                strong: ({ children }) => <strong className="font-bold text-white">{children}</strong>,
+                                            }}
+                                        >
+                                            {stripRedundantTitle(chapter.content, chapter.title)}
+                                        </ReactMarkdown>
                                     </div>
 
                                     {chapter.keyPoints && chapter.keyPoints.length > 0 && (
                                         <div className="mt-6 mb-8 pl-0">
-                                            <h4 className="text-cyan-400 font-semibold mb-3">Key Points</h4>
+                                            <h4 className="text-white font-bold mb-3 uppercase text-sm tracking-wider">Key Points</h4>
                                             <ul className="space-y-2">
-                                                {chapter.keyPoints.map((point, i) => (
+                                                {chapter.keyPoints.map((point: string, i: number) => (
                                                     <li key={i} className="text-white/80">
                                                         • {point}
                                                     </li>
@@ -124,9 +191,9 @@ export default function CustomTextbooksPage() {
 
                                     {chapter.exercises && chapter.exercises.length > 0 && (
                                         <div className="mt-8">
-                                            <h4 className="text-lg font-semibold text-white/90 mb-4">Exercises</h4>
+                                            <h4 className="text-lg font-bold text-white mb-4">Exercises</h4>
                                             <div className="space-y-4 pl-0">
-                                                {chapter.exercises.map((exercise, i) => (
+                                                {chapter.exercises.map((exercise: any, i: number) => (
                                                     <div key={i} className="flex items-start gap-3 text-white/80">
                                                         <span className="font-bold text-white/40">{i + 1}.</span>
                                                         <p>{exercise.question}</p>
@@ -143,9 +210,9 @@ export default function CustomTextbooksPage() {
                     {/* Practice Questions */}
                     {content?.practiceQuestions && content.practiceQuestions.length > 0 && (
                         <section className="border-t border-white/10 pt-8">
-                            <h3 className="text-xl font-bold text-cyan-400 mb-6">Practice Questions</h3>
+                            <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-wide">Practice Questions</h3>
                             <div className="space-y-6">
-                                {content.practiceQuestions.map((pq, index) => (
+                                {content.practiceQuestions.map((pq: any, index: number) => (
                                     <div key={index} className="pl-0">
                                         <p className="text-white/90 font-medium mb-2 text-lg">
                                             <span className="text-cyan-400 mr-2">Q{index + 1}.</span>
@@ -176,9 +243,9 @@ export default function CustomTextbooksPage() {
                     {/* Glossary */}
                     {content?.glossary && content.glossary.length > 0 && (
                         <section className="border-t border-white/10 pt-8 pb-12">
-                            <h3 className="text-xl font-bold text-cyan-400 mb-6">Glossary</h3>
+                            <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-wide">Glossary</h3>
                             <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-                                {content.glossary.map((item, index) => (
+                                {content.glossary.map((item: any, index: number) => (
                                     <div key={index}>
                                         <dt className="text-white font-semibold mb-1">{item.term}</dt>
                                         <dd className="text-white/60 text-sm leading-relaxed">{item.definition}</dd>
@@ -194,7 +261,7 @@ export default function CustomTextbooksPage() {
 
     // Default view: Form + Textbook List
     return (
-        <div className="flex flex-col h-full overflow-hidden">
+        <div className="flex flex-col min-h-full">
             {/* Collapsible Form Section */}
             <div className={`border-b border-white/10 transition-all ${showForm ? 'p-4 sm:p-6' : 'p-2 sm:p-3'}`}>
                 <button
@@ -288,20 +355,22 @@ export default function CustomTextbooksPage() {
                                     </>
                                 )}
                             </button>
-
-                            {/* Progress */}
-                            {isGenerating && generationProgress && (
-                                <div className="flex-1">
-                                    <div className="text-white/60 text-xs sm:text-sm mb-1">{generationProgress.message}</div>
-                                    <div className="w-full h-1.5 sm:h-2 bg-white/10 rounded-full overflow-hidden">
-                                        <div
-                                            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300"
-                                            style={{ width: `${generationProgress.percentage}%` }}
-                                        />
-                                    </div>
-                                </div>
-                            )}
                         </div>
+
+                        {/* Agent Progress Panel */}
+                        {isGenerating && (
+                            <div className="mt-4">
+                                <AgentProgressPanel
+                                    isGenerating={isGenerating}
+                                    currentAgent={currentAgent}
+                                    agents={agents}
+                                    chapters={chapters}
+                                    images={images}
+                                    overallProgress={overallProgress}
+                                    currentMessage={currentMessage}
+                                />
+                            </div>
+                        )}
 
                         {/* Error */}
                         {generationError && (
@@ -314,7 +383,7 @@ export default function CustomTextbooksPage() {
             </div>
 
             {/* Textbooks List */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 scrollbar-hide">
+            <div className="flex-1 p-4 sm:p-6">
                 <h2 className="text-base sm:text-lg font-bold text-cyan-400 mb-4 sm:mb-6 flex items-center justify-between">
                     Your Library
                     <span className="text-[10px] sm:text-xs font-medium text-white/30 uppercase tracking-widest">{textbooks.length} Items</span>
@@ -336,7 +405,7 @@ export default function CustomTextbooksPage() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {textbooks.map((textbook) => (
+                        {textbooks.map((textbook: any) => (
                             <CustomTextbookCard
                                 key={textbook.id}
                                 textbook={textbook}

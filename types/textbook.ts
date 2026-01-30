@@ -31,7 +31,7 @@ export type SectionType =
     | "practical_activity";     // Home Science specific
 
 export type ImageType = "diagram" | "photograph" | "illustration" | "chart";
-export type ImagePosition = "inline" | "full-width" | "float-right" | "float-left";
+export type ImagePosition = "inline" | "full-width" | "float-right" | "float-left" | "cover";
 
 /**
  * Image category determines if image should have text labels
