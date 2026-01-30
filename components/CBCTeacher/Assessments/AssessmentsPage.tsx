@@ -100,11 +100,13 @@ export default function AssessmentsPage() {
     };
 
     // Assessment Viewer
+    const [viewMode, setViewMode] = useState<'questions' | 'rubric'>('questions');
+
     if (selectedAssessment) {
         return (
             <div className="flex flex-col h-full overflow-hidden bg-[#0a0f14]">
                 {/* Header - Hidden on print */}
-                <div className="p-3 sm:p-4 border-b border-white/10 bg-white/5 flex items-center justify-between gap-2 sm:gap-4 sticky top-0 z-10 backdrop-blur-md print:hidden">
+                <div className="p-3 sm:p-4 border-b border-white/10 bg-[#0d1117] flex items-center justify-between gap-2 sm:gap-4 sticky top-0 z-10 print:hidden">
                     <div className="flex items-center gap-2 sm:gap-4">
                         <button
                             onClick={() => setSelectedAssessment(null)}
@@ -125,15 +127,39 @@ export default function AssessmentsPage() {
                         </div>
                     </div>
 
-                    <button
-                        onClick={() => window.print()}
-                        className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-cyan-500 text-white hover:bg-cyan-400 transition-all shadow-lg shadow-cyan-500/20 font-bold text-[10px] sm:text-sm whitespace-nowrap"
-                    >
-                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                        </svg>
-                        Print
-                    </button>
+                    {/* View Toggle */}
+                    <div className="flex items-center gap-2">
+                        <div className="flex bg-white/5 rounded-xl p-1">
+                            <button
+                                onClick={() => setViewMode('questions')}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'questions'
+                                    ? 'bg-cyan-500 text-white'
+                                    : 'text-white/50 hover:text-white'
+                                    }`}
+                            >
+                                Questions
+                            </button>
+                            <button
+                                onClick={() => setViewMode('rubric')}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'rubric'
+                                    ? 'bg-amber-500 text-white'
+                                    : 'text-white/50 hover:text-white'
+                                    }`}
+                            >
+                                Rubric
+                            </button>
+                        </div>
+
+                        <button
+                            onClick={() => window.print()}
+                            className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl bg-cyan-500 text-white hover:bg-cyan-400 transition-all font-bold text-[10px] sm:text-sm whitespace-nowrap"
+                        >
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                            </svg>
+                            Print
+                        </button>
+                    </div>
                 </div>
 
                 {/* Canvas Area */}
@@ -152,120 +178,116 @@ export default function AssessmentsPage() {
                         `}</style>
 
                         {/* Assessment Header */}
-                        <div className="p-6 sm:p-10 border-b border-gray-100 bg-gray-50/80">
+                        <div className="p-6 sm:p-10 border-b border-gray-200 bg-gray-50">
                             <h2 className="text-xl sm:text-3xl font-serif font-bold text-gray-900 mb-4 sm:mb-2">{selectedAssessment.title}</h2>
-                            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-4 sm:gap-6 text-xs sm:text-sm text-gray-500 font-medium">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-gray-400 uppercase tracking-widest text-[10px] font-bold">Points</span>
-                                    <span className="text-gray-900 font-bold underline decoration-cyan-500/30 underline-offset-4">{selectedAssessment.totalPoints}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-gray-400 uppercase tracking-widest text-[10px] font-bold">Duration</span>
-                                    <span className="text-gray-900 font-bold underline decoration-cyan-500/30 underline-offset-4">{selectedAssessment.estimatedTimeMinutes} min</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-gray-400 uppercase tracking-widest text-[10px] font-bold">Student Name</span>
-                                    <div className="w-48 h-6 border-b-2 border-gray-200"></div>
-                                </div>
+                            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 font-medium">
+                                <span className="text-gray-400 uppercase tracking-widest text-[10px] font-bold">Points</span>
+                                <span className="text-gray-900 font-bold">{selectedAssessment.totalPoints}</span>
                             </div>
                         </div>
 
                         {/* Content */}
                         <div className="p-6 sm:p-10 space-y-8 sm:space-y-12 flex-1">
-                            {/* General Rubric (Teacher Only View) */}
-                            {selectedAssessment.rubric && (
-                                <section className="print:hidden rounded-2xl bg-cyan-50 border border-cyan-100 p-6 shadow-sm">
-                                    <h3 className="text-cyan-800 font-bold mb-2 flex items-center gap-2 text-sm uppercase tracking-wider">
-                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                        Assessment Rubric
-                                    </h3>
-                                    <p className="text-cyan-700 text-sm leading-relaxed whitespace-pre-wrap">{selectedAssessment.rubric}</p>
-                                </section>
-                            )}
-
-                            {selectedAssessment.description && (
+                            {selectedAssessment.description && viewMode === 'questions' && (
                                 <p className="text-gray-500 text-lg italic leading-relaxed font-serif">{selectedAssessment.description}</p>
                             )}
 
-                            {/* Questions */}
-                            <div className="space-y-16">
-                                {selectedAssessment.questions?.map((question: Question, index: number) => (
-                                    <div key={question.id || `question-${index}`} className="relative group">
-                                        <div className="flex items-start gap-6">
-                                            <span className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gray-900 text-white flex items-center justify-center font-bold text-base sm:text-lg shadow-lg">
-                                                {index + 1}
-                                            </span>
-                                            <div className="flex-1 space-y-3 sm:space-y-4">
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-[10px] uppercase tracking-[0.2em] font-black text-gray-400">{QUESTION_TYPE_LABELS[question.type]}</span>
-                                                    <span className="text-[10px] sm:text-sm font-bold text-gray-400">Score: ____ / {question.points}</span>
-                                                </div>
-                                                <p className="text-xl sm:text-2xl text-gray-900 font-serif leading-snug font-medium">{question.question}</p>
-
-                                                {/* Multiple Choice Options */}
-                                                {question.type === 'multiple-choice' && question.options && (
-                                                    <div className="grid grid-cols-1 gap-3 mt-6">
-                                                        {question.options.map((option) => (
-                                                            <div key={option.id} className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${option.isCorrect ? 'border-emerald-100 bg-emerald-50/30' : 'border-gray-50 bg-gray-50/20'
-                                                                }`}>
-                                                                <div className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center text-sm font-black ${option.isCorrect ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-gray-200 text-gray-400'
-                                                                    }`}>
-                                                                    {option.id.toUpperCase()}
-                                                                </div>
-                                                                <span className={`text-lg ${option.isCorrect ? 'text-emerald-900 font-semibold' : 'text-gray-800'}`}>{option.text}</span>
-                                                                {option.isCorrect && (
-                                                                    <span className="ml-auto text-[10px] uppercase tracking-widest font-bold text-emerald-600 print:hidden">Correct</span>
-                                                                )}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-
-                                                {/* Open Response Lines */}
-                                                {(question.type === 'short-answer' || question.type === 'open-ended' || question.type === 'fill-blank') && (
-                                                    <div className="mt-6 space-y-4">
-                                                        {Array.from({ length: question.type === 'open-ended' ? 10 : question.type === 'short-answer' ? 4 : 1 }).map((_, i) => (
-                                                            <div key={i} className="h-10 border-b-2 border-gray-100 w-full mb-1"></div>
-                                                        ))}
-                                                    </div>
-                                                )}
-
-                                                {/* True/False Options */}
-                                                {question.type === 'true-false' && (
-                                                    <div className="flex gap-12 mt-6">
-                                                        <div className="flex items-center gap-3 group/opt cursor-pointer">
-                                                            <div className="w-8 h-8 rounded-xl border-2 border-gray-200 flex items-center justify-center font-black text-gray-200 group-hover/opt:border-cyan-500 group-hover/opt:text-cyan-500 transition-all">T</div>
-                                                            <span className="text-gray-700 font-bold text-lg">TRUE</span>
-                                                        </div>
-                                                        <div className="flex items-center gap-3 group/opt cursor-pointer">
-                                                            <div className="w-8 h-8 rounded-xl border-2 border-gray-200 flex items-center justify-center font-black text-gray-200 group-hover/opt:border-cyan-500 group-hover/opt:text-cyan-500 transition-all">F</div>
-                                                            <span className="text-gray-700 font-bold text-lg">FALSE</span>
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                {/* Rubric/Explanation - Teacher Only */}
-                                                <div className="print:hidden space-y-3 pt-6 mt-6 border-t border-gray-100">
-                                                    {(question.correctAnswer || question.sampleAnswer) && (
-                                                        <div className="rounded-xl bg-emerald-50/80 p-4 border border-emerald-100">
-                                                            <span className="text-[10px] font-black text-emerald-800 uppercase tracking-widest block mb-1">Expected Answer:</span>
-                                                            <p className="text-emerald-900 text-sm font-medium">{question.correctAnswer || question.sampleAnswer}</p>
-                                                        </div>
-                                                    )}
-                                                    {question.rubric && (
-                                                        <div className="rounded-xl bg-amber-50/80 p-4 border border-amber-100">
-                                                            <span className="text-[10px] font-black text-amber-800 uppercase tracking-widest block mb-1">Grading Rubric:</span>
-                                                            <p className="text-amber-900 text-sm italic">{question.rubric}</p>
-                                                        </div>
-                                                    )}
-                                                </div>
+                            {/* Questions View */}
+                            {viewMode === 'questions' && (
+                                <div className="space-y-10">
+                                    {selectedAssessment.questions?.map((question: Question, index: number) => (
+                                        <div key={question.id || `question-${index}`} className="pb-8 border-b border-gray-100 last:border-0">
+                                            {/* Question with number inline */}
+                                            <div className="flex items-baseline justify-between gap-4 mb-6">
+                                                <p className="text-lg sm:text-xl text-gray-900 leading-relaxed">
+                                                    <span className="font-bold mr-2">{index + 1}.</span>
+                                                    {question.question}
+                                                </p>
+                                                <span className="text-sm text-gray-400 whitespace-nowrap">{question.points} pt{question.points !== 1 ? 's' : ''}</span>
                                             </div>
+
+                                            {/* Multiple Choice Options */}
+                                            {question.type === 'multiple-choice' && question.options && (
+                                                <div className="space-y-3">
+                                                    {question.options.map((option, optIndex) => (
+                                                        <div key={option.id} className="flex items-start gap-3 py-2">
+                                                            <span className="font-bold text-gray-500 w-6">{String.fromCharCode(65 + optIndex)}.</span>
+                                                            <span className="text-gray-800">{option.text}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+
+                                            {/* Open Response Lines - only for open-ended and fill-blank */}
+                                            {(question.type === 'open-ended' || question.type === 'fill-blank') && (
+                                                <div className="space-y-3">
+                                                    {Array.from({ length: question.type === 'open-ended' ? 8 : 1 }).map((_, i) => (
+                                                        <div key={i} className="border-b border-gray-200 h-8"></div>
+                                                    ))}
+                                                </div>
+                                            )}
+
+                                            {/* True/False Options */}
+                                            {question.type === 'true-false' && (
+                                                <div className="flex gap-8">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-5 h-5 border-2 border-gray-300 rounded"></div>
+                                                        <span className="font-medium text-gray-700">True</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-5 h-5 border-2 border-gray-300 rounded"></div>
+                                                        <span className="font-medium text-gray-700">False</span>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Rubric View */}
+                            {viewMode === 'rubric' && (
+                                <div className="space-y-8">
+                                    {/* Overall Rubric */}
+                                    {selectedAssessment.rubric && (
+                                        <section className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+                                            <h3 className="text-amber-800 font-bold mb-3 text-sm uppercase tracking-wider">Overall Assessment Rubric</h3>
+                                            <p className="text-amber-900 leading-relaxed whitespace-pre-wrap">{selectedAssessment.rubric}</p>
+                                        </section>
+                                    )}
+
+                                    {/* Question-Level Rubrics */}
+                                    <div className="space-y-6">
+                                        <h3 className="text-gray-900 font-bold text-lg">Question Rubrics & Answers</h3>
+                                        {selectedAssessment.questions?.map((question: Question, index: number) => (
+                                            <div key={question.id || `rubric-${index}`} className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+                                                <div className="flex items-baseline gap-2 mb-3">
+                                                    <span className="font-bold text-gray-900">Q{index + 1}:</span>
+                                                    <span className="text-gray-600 text-sm line-clamp-1">{question.question}</span>
+                                                </div>
+
+                                                {(question.correctAnswer || question.sampleAnswer) && (
+                                                    <div className="mb-3">
+                                                        <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Expected Answer</span>
+                                                        <p className="text-emerald-800 text-sm mt-1">{question.correctAnswer || question.sampleAnswer}</p>
+                                                    </div>
+                                                )}
+
+                                                {question.rubric && (
+                                                    <div>
+                                                        <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Grading Criteria</span>
+                                                        <p className="text-amber-800 text-sm mt-1 italic">{question.rubric}</p>
+                                                    </div>
+                                                )}
+
+                                                {!question.correctAnswer && !question.sampleAnswer && !question.rubric && (
+                                                    <p className="text-gray-400 text-sm italic">No rubric available for this question.</p>
+                                                )}
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Pagination Footer */}
