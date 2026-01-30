@@ -77,6 +77,7 @@ export default function CustomTextbooksPage() {
     const handleGenerate = async () => {
         if (!topic.trim()) return;
         setShowSuccess(false);
+
         const textbook = await generateTextbook(topic.trim(), audienceAge, specifications.trim() || undefined);
         if (textbook) {
             setTopic('');
@@ -328,47 +329,37 @@ export default function CustomTextbooksPage() {
                             </div>
 
                             {/* Specifications */}
-                            <div>
-                                <label className="block text-white/70 text-sm mb-2">Specifications (optional)</label>
-                                <input
-                                    type="text"
+                            <div className="md:col-span-2">
+                                <label className="block text-white/70 text-sm mb-2 font-medium">Specifications & Requirements (optional)</label>
+                                <textarea
                                     value={specifications}
                                     onChange={(e) => setSpecifications(e.target.value)}
-                                    placeholder="e.g., Include diagrams, focus on practical examples"
-                                    className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all"
+                                    placeholder="Examples:&#10;• Include 5 practical experiments&#10;• Focus on Kenyan geography and local culture&#10;• Use simple, conversational English"
+                                    rows={4}
+                                    className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/20 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all resize-none leading-relaxed text-sm"
                                     disabled={isGenerating}
                                 />
+                                <p className="mt-2 text-[10px] text-white/30 italic">
+                                    Tip: You can paste multiple paragraphs or requirements here.
+                                </p>
                             </div>
                         </div>
 
-                        {/* Generate Button */}
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                            <button
-                                onClick={handleGenerate}
-                                disabled={!topic.trim() || isGenerating}
-                                className={`px-4 sm:px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${!topic.trim() || isGenerating
-                                    ? 'bg-white/10 text-white/30 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/25'
-                                    }`}
-                            >
-                                {isGenerating ? (
-                                    <>
-                                        <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                                        </svg>
-                                        Generating...
-                                    </>
-                                ) : (
-                                    <>
-                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                        </svg>
-                                        Generate Textbook
-                                    </>
-                                )}
-                            </button>
-                        </div>
+                        {/* Generate Button - Hidden during generation */}
+                        {!isGenerating && (
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={handleGenerate}
+                                    disabled={!topic.trim() || isGenerating}
+                                    className={`px-8 sm:px-10 py-3 rounded-xl font-bold transition-all text-sm sm:text-base ${!topic.trim() || isGenerating
+                                        ? 'bg-white/10 text-white/30 cursor-not-allowed'
+                                        : 'bg-cyan-600 text-white hover:bg-cyan-500'
+                                        }`}
+                                >
+                                    Generate Textbook
+                                </button>
+                            </div>
+                        )}
 
                         {/* Agent Progress Panel */}
                         {(isGenerating || showSuccess) && (

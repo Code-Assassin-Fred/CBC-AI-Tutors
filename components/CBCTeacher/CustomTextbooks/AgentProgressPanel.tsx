@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
     TextbookAgentType,
     TEXTBOOK_AGENTS,
@@ -38,6 +38,14 @@ function AgentStep({
     chapters?: ChapterProgress[];
     images?: ImageProgress[];
 }) {
+    const stepRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (isActive && stepRef.current) {
+            stepRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }, [isActive]);
+
     const agentInfo = TEXTBOOK_AGENTS[agent.type];
 
     const getStateIcon = () => {
@@ -67,19 +75,56 @@ function AgentStep({
     };
 
     return (
-        <div className={`relative p-[1px] rounded-xl overflow-hidden transition-all duration-300 ${isActive ? 'scale-[1.02]' : ''}`}>
-            {/* Border Tracer Effect */}
+        <div
+            ref={stepRef}
+            className={`relative rounded-xl overflow-hidden transition-all duration-300 ${isActive ? 'scale-[1.02]' : ''}`}
+        >
+            {/* Active Agent effects: Marching Ants + Border Tracer */}
             {isActive && (
-                <div
-                    className="absolute inset-[-100%] animate-[spin_3s_linear_infinite]"
-                    style={{
-                        background: 'conic-gradient(from 0deg, transparent 70%, #22d3ee 85%, #22d3ee 100%)'
-                    }}
-                />
+                <>
+                    <style>{`
+                        @keyframes marching-ants {
+                            0% { background-position: 0 0, 0 100%, 0 0, 100% 0; }
+                            100% { background-position: 40px 0, -40px 100%, 0 -40px, 100% 40px; }
+                        }
+                        @keyframes border-tracer {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    `}</style>
+
+                    {/* 1. Border Tracer (Sharp Conic Sweep) */}
+                    <div className="absolute inset-[-100%] animate-[border-tracer_3s_linear_infinite]">
+                        <div
+                            className="w-full h-full"
+                            style={{
+                                background: 'conic-gradient(from 0deg, transparent 70%, #22d3ee 85%, #22d3ee 100%)'
+                            }}
+                        />
+                    </div>
+
+                    {/* 2. Marching Ants (Animated Dashed Border) */}
+                    <div
+                        className="absolute inset-0 rounded-xl"
+                        style={{
+                            backgroundImage: `
+                                linear-gradient(90deg, #22d3ee 50%, transparent 50%),
+                                linear-gradient(90deg, #22d3ee 50%, transparent 50%),
+                                linear-gradient(0deg, #22d3ee 50%, transparent 50%),
+                                linear-gradient(0deg, #22d3ee 50%, transparent 50%)
+                            `,
+                            backgroundRepeat: 'repeat-x, repeat-x, repeat-y, repeat-y',
+                            backgroundSize: '20px 1.5px, 20px 1.5px, 1.5px 20px, 1.5px 20px',
+                            backgroundPosition: '0 0, 0 100%, 0 0, 100% 0',
+                            animation: 'marching-ants 1s linear infinite',
+                            opacity: 0.3
+                        }}
+                    />
+                </>
             )}
 
-            <div className={`relative flex items-start gap-3 py-3 px-4 rounded-[11px] transition-colors ${isActive
-                ? 'bg-[#0d1117] border border-cyan-500/20'
+            <div className={`relative flex items-start gap-3 py-3 px-4 rounded-xl transition-colors m-[2px] ${isActive
+                ? 'bg-[#0d1117]'
                 : agent.state === 'complete'
                     ? 'bg-transparent border border-emerald-500/20'
                     : 'bg-transparent border border-white/5'
@@ -114,7 +159,7 @@ function AgentStep({
 
                     {/* Chapter Progress for Content Agent */}
                     {agent.type === 'content' && chapters && chapters.length > 0 && (
-                        <div className="mt-3 space-y-1.5 pl-2 border-l-2 border-white/10">
+                        <div className="mt-3 space-y-1.5">
                             {chapters.map((ch) => (
                                 <div key={ch.index} className="flex items-center gap-2 text-sm">
                                     <span className={`text-xs ${ch.state === 'complete' ? 'text-emerald-400' :
@@ -199,7 +244,7 @@ export default function AgentProgressPanel({
                 </div>
                 <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
                     <div
-                        className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500 transition-all duration-500 ease-out"
+                        className="h-full bg-cyan-400 transition-all duration-500 ease-out"
                         style={{ width: `${overallProgress}%` }}
                     />
                 </div>
