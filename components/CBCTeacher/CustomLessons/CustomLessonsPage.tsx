@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useCustomLessons } from '@/lib/context/CustomLessonsContext';
 import CustomLessonCard from './CustomLessonCard';
 import CustomLessonViewer from './CustomLessonViewer';
+import LessonAgentProgressPanel from './LessonAgentProgressPanel';
 import { GRADE_SECTIONS } from '@/lib/utils/grade-hierarchy';
 
 const GRADE_OPTIONS = GRADE_SECTIONS.flatMap(s => s.grades.map(g => `Grade ${g}`));
@@ -14,12 +15,18 @@ export default function CustomLessonsPage() {
         isLoadingLessons,
         loadLessons,
         isGenerating,
-        generationProgress,
         generationError,
         generateLesson,
         selectedLesson,
         setSelectedLesson,
         deleteLesson,
+        // Agent state (NEW)
+        currentAgent,
+        agents,
+        sections,
+        activities,
+        overallProgress,
+        currentMessage,
     } = useCustomLessons();
 
     const [topic, setTopic] = useState('');
@@ -140,41 +147,47 @@ export default function CustomLessonsPage() {
 
                         {/* Generate Button Container - Moved to right */}
                         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-4">
-                            {/* Progress */}
-                            {isGenerating && generationProgress && (
-                                <div className="flex-1 max-w-md hidden sm:block">
-                                    <div className="text-white/60 text-xs mb-1">{generationProgress.message}</div>
-                                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                        <div
-                                            className="h-full bg-cyan-400 transition-all duration-300"
-                                            style={{ width: `${generationProgress.percentage}%` }}
-                                        />
-                                    </div>
+                            {/* Progress - New Agent View */}
+                            {isGenerating && (
+                                <div className="flex-1 max-w-2xl hidden md:block">
+                                    <LessonAgentProgressPanel
+                                        isGenerating={isGenerating}
+                                        currentAgent={currentAgent}
+                                        agents={agents}
+                                        sections={sections}
+                                        activities={activities}
+                                        overallProgress={overallProgress}
+                                        currentMessage={currentMessage}
+                                    />
                                 </div>
                             )}
 
-                            <button
-                                onClick={handleGenerate}
-                                disabled={!topic.trim() || !lessonTime.trim() || isGenerating}
-                                className={`px-8 sm:px-10 py-3 rounded-xl font-bold transition-all text-sm sm:text-base ${!topic.trim() || !lessonTime.trim() || isGenerating
-                                    ? 'bg-white/10 text-white/30 cursor-not-allowed'
-                                    : 'bg-cyan-600 text-white hover:bg-cyan-500'
-                                    }`}
-                            >
-                                {isGenerating ? 'Generating...' : 'Generate Lesson'}
-                            </button>
+                            {!isGenerating && (
+                                <button
+                                    onClick={handleGenerate}
+                                    disabled={!topic.trim() || !lessonTime.trim()}
+                                    className={`px-8 sm:px-10 py-3 rounded-xl font-bold transition-all text-sm sm:text-base ${!topic.trim() || !lessonTime.trim()
+                                        ? 'bg-white/10 text-white/30 cursor-not-allowed'
+                                        : 'bg-cyan-600 text-white hover:bg-cyan-500'
+                                        }`}
+                                >
+                                    Generate Lesson
+                                </button>
+                            )}
                         </div>
 
-                        {/* Mobile Progress */}
-                        {isGenerating && generationProgress && (
-                            <div className="mt-4 sm:hidden">
-                                <div className="text-white/60 text-xs mb-1">{generationProgress.message}</div>
-                                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                    <div
-                                        className="h-full bg-cyan-400 transition-all duration-300"
-                                        style={{ width: `${generationProgress.percentage}%` }}
-                                    />
-                                </div>
+                        {/* Mobile Progress - New Agent View */}
+                        {isGenerating && (
+                            <div className="mt-4 md:hidden">
+                                <LessonAgentProgressPanel
+                                    isGenerating={isGenerating}
+                                    currentAgent={currentAgent}
+                                    agents={agents}
+                                    sections={sections}
+                                    activities={activities}
+                                    overallProgress={overallProgress}
+                                    currentMessage={currentMessage}
+                                />
                             </div>
                         )}
 
