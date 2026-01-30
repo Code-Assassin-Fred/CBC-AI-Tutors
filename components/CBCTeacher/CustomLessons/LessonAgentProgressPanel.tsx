@@ -77,7 +77,7 @@ function AgentStep({
     return (
         <div
             ref={stepRef}
-            className={`relative rounded-xl overflow-hidden transition-all duration-300 ${isActive ? 'scale-[1.02]' : ''}`}
+            className={`relative rounded-xl overflow-hidden transition-all duration-300 ${isActive ? 'scale-[1.02] z-10 shadow-2xl shadow-cyan-500/10' : 'z-0'}`}
         >
             {/* Active Agent effects: Marching Ants + Border Tracer */}
             {isActive && (
@@ -105,7 +105,7 @@ function AgentStep({
 
                     {/* 2. Marching Ants (Animated Dashed Border) */}
                     <div
-                        className="absolute inset-0 rounded-xl"
+                        className="absolute inset-[0.5px] rounded-xl"
                         style={{
                             backgroundImage: `
                                 linear-gradient(90deg, #22d3ee 50%, transparent 50%),
@@ -123,11 +123,11 @@ function AgentStep({
                 </>
             )}
 
-            <div className={`relative flex items-start gap-3 py-3 px-4 rounded-xl transition-colors m-[2px] ${isActive
-                ? 'bg-[#0d1117]'
+            <div className={`relative flex items-start gap-3 py-3 px-4 rounded-xl transition-colors ${isActive
+                ? 'bg-[#0d1117] m-[3px]'
                 : agent.state === 'complete'
-                    ? 'bg-transparent border border-emerald-500/20'
-                    : 'bg-transparent border border-white/5'
+                    ? 'bg-transparent border border-emerald-500/20 m-[2px]'
+                    : 'bg-transparent border border-white/5 m-[2px]'
                 }`}>
                 {/* Status Indicator */}
                 <div className={`flex-shrink-0 text-lg ${isActive ? 'animate-spin' : ''}`}>
@@ -226,7 +226,7 @@ export default function LessonAgentProgressPanel({
     }
 
     return (
-        <div className="bg-[#0b0f12] border border-white/10 rounded-2xl p-5 shadow-2xl overflow-hidden">
+        <div className="bg-[#0b0f12] border border-white/10 rounded-2xl p-5 shadow-2xl">
             {/* Header */}
             <div className="flex items-center gap-3 mb-4 pb-4 border-b border-white/10">
                 <div className="p-2 rounded-lg bg-cyan-500/10">
@@ -245,7 +245,7 @@ export default function LessonAgentProgressPanel({
             </div>
 
             {/* Agent Timeline */}
-            <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <div className="space-y-4 max-h-[450px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                 {agents.map((agent) => (
                     <AgentStep
                         key={agent.type}
