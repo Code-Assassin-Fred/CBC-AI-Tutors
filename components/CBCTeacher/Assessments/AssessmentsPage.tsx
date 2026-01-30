@@ -345,7 +345,7 @@ export default function AssessmentsPage() {
                                             target.style.height = 'auto';
                                             target.style.height = `${Math.min(target.scrollHeight, 160)}px`;
                                         }}
-                                        placeholder="e.g. Focus on vocabulary, add real-world scenarios, or emphasize critical thinking..."
+                                        placeholder="e.g. Focus on vocabulary..."
                                         className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white outline-none resize-none min-h-[48px] max-h-[160px] overflow-y-auto transition-all"
                                         rows={1}
                                         disabled={isGenerating}
