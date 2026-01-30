@@ -212,7 +212,7 @@ export function NoteBox({
     title?: string;
 }) {
     return (
-        <div className="note-box my-6 p-5 rounded-xl bg-cyan-900/30 border-l-4 border-cyan-500 backdrop-blur-sm">
+        <div className="note-box my-6 p-5 rounded-xl bg-cyan-900/10 border border-cyan-500/20 backdrop-blur-sm">
             <div className="flex items-start gap-3">
                 <span className="text-cyan-400"><NoteIcon /></span>
                 <div>
@@ -235,7 +235,7 @@ export function TipBox({
     title?: string;
 }) {
     return (
-        <div className="tip-box my-6 p-5 rounded-xl bg-emerald-900/30 border-l-4 border-emerald-500 backdrop-blur-sm">
+        <div className="tip-box my-6 p-5 rounded-xl bg-emerald-900/10 border border-emerald-500/20 backdrop-blur-sm">
             <div className="flex items-start gap-3">
                 <span className="text-emerald-400"><TipIcon /></span>
                 <div>
@@ -258,7 +258,7 @@ export function WarningBox({
     title?: string;
 }) {
     return (
-        <div className="warning-box my-6 p-5 rounded-xl bg-red-900/30 border-l-4 border-red-500 backdrop-blur-sm">
+        <div className="warning-box my-6 p-5 rounded-xl bg-red-900/10 border border-red-500/20 backdrop-blur-sm">
             <div className="flex items-start gap-3">
                 <span className="text-red-400"><WarningIcon /></span>
                 <div>

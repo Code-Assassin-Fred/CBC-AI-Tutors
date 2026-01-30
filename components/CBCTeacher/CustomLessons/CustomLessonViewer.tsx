@@ -96,7 +96,7 @@ export default function CustomLessonViewer({ lesson, onClose }: CustomLessonView
                             <h3 className="text-lg font-semibold text-cyan-400 mb-4">Activities</h3>
                             <div className="space-y-4">
                                 {content.activities.map((activity, index) => (
-                                    <div key={index} className="bg-white/5 rounded-xl p-4 border-l-4 border-green-500">
+                                    <div key={index} className="bg-white/5 rounded-xl p-4">
                                         <div className="flex items-center justify-between mb-2">
                                             <h4 className="text-white font-medium">{activity.title}</h4>
                                             {activity.duration && (

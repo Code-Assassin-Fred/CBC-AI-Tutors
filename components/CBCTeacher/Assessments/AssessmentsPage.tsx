@@ -170,7 +170,7 @@ export default function AssessmentsPage() {
                             )}
 
                             {selectedAssessment.description && (
-                                <p className="text-gray-500 text-lg italic leading-relaxed font-serif border-l-4 border-cyan-500/10 pl-6">{selectedAssessment.description}</p>
+                                <p className="text-gray-500 text-lg italic leading-relaxed font-serif">{selectedAssessment.description}</p>
                             )}
 
                             {/* Questions */}

@@ -193,7 +193,7 @@ export default function TextbookRenderer({
 
     // Safety precautions - simple left border
     container.querySelectorAll("section.safety-precautions, .safety-precautions").forEach((section) => {
-      section.className = "safety-section my-5 p-4 border-l-4 border-red-500 bg-white/[0.02]";
+      section.className = "safety-section my-5 p-4 border border-red-500/20 rounded-lg bg-red-500/[0.02]";
 
       const heading = section.querySelector("h3, h4, strong");
       if (heading) {
@@ -203,22 +203,22 @@ export default function TextbookRenderer({
 
     // Note boxes - simple left border
     container.querySelectorAll(".note-box, section.note").forEach((section) => {
-      section.className = "note-section my-5 p-4 border-l-4 border-cyan-500 bg-white/[0.02]";
+      section.className = "note-section my-5 p-4 border border-cyan-500/20 rounded-lg bg-cyan-500/[0.02]";
     });
 
     // Tip boxes
     container.querySelectorAll(".tip-box, section.tip").forEach((section) => {
-      section.className = "tip-section my-5 p-4 border-l-4 border-emerald-500 bg-white/[0.02]";
+      section.className = "tip-section my-5 p-4 border border-emerald-500/20 rounded-lg bg-emerald-500/[0.02]";
     });
 
     // Warning boxes
     container.querySelectorAll(".warning-box, section.warning").forEach((section) => {
-      section.className = "warning-section my-5 p-4 border-l-4 border-red-500 bg-white/[0.02]";
+      section.className = "warning-section my-5 p-4 border border-red-500/20 rounded-lg bg-red-500/[0.02]";
     });
 
     // Example boxes
     container.querySelectorAll(".example-box, section.examples").forEach((section) => {
-      section.className = "example-section my-5 p-4 border-l-4 border-blue-500 bg-white/[0.02]";
+      section.className = "example-section my-5 p-4 border border-blue-500/20 rounded-lg bg-blue-500/[0.02]";
     });
 
     // Learning outcomes
