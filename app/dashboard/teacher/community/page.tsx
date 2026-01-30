@@ -4,7 +4,6 @@ import DashboardLayout from '@/components/CBCTeacher/layout/DashboardLayout';
 import { CommunityProvider, useCommunity } from '@/lib/context/CommunityContext';
 import TeacherCommunityFeed from '@/components/CBCTeacher/Community/TeacherCommunityFeed';
 import PostDetail from '@/components/CBCStudent/Community/PostDetail';
-import TeacherCommunitySidebar from '@/components/CBCTeacher/Community/TeacherCommunitySidebar';
 import CreatePostModal from '@/components/CBCStudent/Community/CreatePostModal';
 import { useDashboardProtection } from '@/hooks/useDashboardProtection';
 
@@ -14,7 +13,7 @@ function CommunityContent() {
     return (
         <div className="max-w-7xl mx-auto space-y-6 lg:space-y-0 h-full pb-20 lg:pb-0">
             {/* Main layout with independent scrolling */}
-            <div className="flex flex-col lg:flex-row gap-6 h-auto lg:h-[calc(100vh-140px)]">
+            <div className="flex flex-col h-auto lg:h-[calc(100vh-140px)]">
                 {/* Main content - scrolls independently on desktop */}
                 <div className="flex-1 min-w-0 lg:overflow-y-auto lg:pr-2 custom-scrollbar">
                     {activePost ? (
@@ -22,11 +21,6 @@ function CommunityContent() {
                     ) : (
                         <TeacherCommunityFeed />
                     )}
-                </div>
-
-                {/* Sidebar - scrolls independently on desktop */}
-                <div className="w-full lg:w-80 flex-shrink-0 lg:overflow-y-auto lg:pl-2 pb-8 lg:pb-0">
-                    <TeacherCommunitySidebar />
                 </div>
             </div>
 
