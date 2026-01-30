@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { useCustomTextbooks } from '@/lib/context/CustomTextbooksContext';
+import { useCustomTextbooks } from '../../../lib/context/CustomTextbooksContext';
 import CustomTextbookCard from './CustomTextbookCard';
 import AgentProgressPanel from './AgentProgressPanel';
 import ReactMarkdown from 'react-markdown';
@@ -105,11 +105,6 @@ export default function CustomTextbooksPage() {
                     </button>
                     <div className="flex-1 min-w-0">
                         <h1 className="text-sm sm:text-lg font-bold text-white truncate">{selectedTextbook.title}</h1>
-                        <div className="flex items-center gap-3 text-[10px] sm:text-sm text-white/50">
-                            {selectedTextbook.estimatedReadingTime && (
-                                <span className="truncate">{selectedTextbook.estimatedReadingTime}</span>
-                            )}
-                        </div>
                     </div>
                 </div>
 
@@ -118,7 +113,7 @@ export default function CustomTextbooksPage() {
                     {/* Introduction */}
                     {content?.introduction && (
                         <section>
-                            <h3 className="text-xl sm:text-2xl font-bold text-sky-400 mb-3 sm:mb-4 uppercase tracking-wide">Introduction</h3>
+                            <h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-2 sm:mb-3 uppercase tracking-wide">Introduction</h3>
                             <p className="text-white/85 leading-relaxed text-base sm:text-lg">{content.introduction}</p>
                         </section>
                     )}
@@ -143,7 +138,7 @@ export default function CustomTextbooksPage() {
                         <div className="space-y-8 sm:space-y-12">
                             {content.chapters.map((chapter: any, index: number) => (
                                 <section key={index} className="border-t border-white/10 pt-6 sm:pt-8 first:border-0 first:pt-0">
-                                    <h2 className="text-xl sm:text-2xl font-bold text-sky-400 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                                    <h2 className="text-lg sm:text-xl font-bold text-sky-400 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
                                         <span>{index + 1}.</span>
                                         {chapter.title}
                                     </h2>
@@ -162,8 +157,8 @@ export default function CustomTextbooksPage() {
                                     <div className="text-white/85 leading-relaxed text-base sm:text-lg space-y-4">
                                         <ReactMarkdown
                                             components={{
-                                                h1: ({ children }) => <h1 className="text-2xl font-bold text-sky-400 mt-8 mb-4">{children}</h1>,
-                                                h2: ({ children }) => <h2 className="text-xl font-bold text-sky-400 mt-6 mb-3">{children}</h2>,
+                                                h1: ({ children }) => <h1 className="text-lg sm:text-xl font-bold text-sky-400 mt-8 mb-4">{children}</h1>,
+                                                h2: ({ children }) => <h2 className="text-base sm:text-lg font-bold text-sky-400 mt-6 mb-3">{children}</h2>,
                                                 h3: ({ children }) => <h3 className="text-lg font-bold text-white mt-4 mb-2">{children}</h3>,
                                                 p: ({ children }) => <p className="mb-4 last:mb-0 leading-[1.7]">{children}</p>,
                                                 ul: ({ children }) => <ul className="list-disc pl-5 mb-4 space-y-2">{children}</ul>,
