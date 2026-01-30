@@ -199,11 +199,11 @@ export default function AssessmentsPage() {
                                         <div key={question.id || `question-${index}`} className="pb-8 border-b border-gray-100 last:border-0">
                                             {/* Question with number inline */}
                                             <div className="flex items-baseline justify-between gap-4 mb-6">
-                                                <p className="text-lg sm:text-xl text-gray-900 leading-relaxed">
+                                                <p className="text-lg sm:text-xl text-black leading-relaxed">
                                                     <span className="font-bold mr-2">{index + 1}.</span>
                                                     {question.question}
                                                 </p>
-                                                <span className="text-sm text-gray-400 whitespace-nowrap">{question.points} pt{question.points !== 1 ? 's' : ''}</span>
+                                                <span className="text-sm text-gray-500 whitespace-nowrap">{question.points} pt{question.points !== 1 ? 's' : ''}</span>
                                             </div>
 
                                             {/* Multiple Choice Options */}
@@ -211,8 +211,8 @@ export default function AssessmentsPage() {
                                                 <div className="space-y-3">
                                                     {question.options.map((option, optIndex) => (
                                                         <div key={option.id} className="flex items-start gap-3 py-2">
-                                                            <span className="font-bold text-gray-500 w-6">{String.fromCharCode(65 + optIndex)}.</span>
-                                                            <span className="text-gray-800">{option.text}</span>
+                                                            <span className="font-bold text-gray-900 w-6">{String.fromCharCode(65 + optIndex)}.</span>
+                                                            <span className="text-black font-medium">{option.text}</span>
                                                         </div>
                                                     ))}
                                                 </div>
@@ -231,12 +231,12 @@ export default function AssessmentsPage() {
                                             {question.type === 'true-false' && (
                                                 <div className="flex gap-8">
                                                     <div className="flex items-center gap-2">
-                                                        <div className="w-5 h-5 border-2 border-gray-300 rounded"></div>
-                                                        <span className="font-medium text-gray-700">True</span>
+                                                        <div className="w-5 h-5 border-2 border-black rounded"></div>
+                                                        <span className="font-bold text-black">True</span>
                                                     </div>
                                                     <div className="flex items-center gap-2">
-                                                        <div className="w-5 h-5 border-2 border-gray-300 rounded"></div>
-                                                        <span className="font-medium text-gray-700">False</span>
+                                                        <div className="w-5 h-5 border-2 border-black rounded"></div>
+                                                        <span className="font-bold text-black">False</span>
                                                     </div>
                                                 </div>
                                             )}
@@ -250,9 +250,9 @@ export default function AssessmentsPage() {
                                 <div className="space-y-8">
                                     {/* Overall Rubric */}
                                     {selectedAssessment.rubric && (
-                                        <section className="bg-amber-50 border border-amber-200 rounded-xl p-6">
-                                            <h3 className="text-amber-800 font-bold mb-3 text-sm uppercase tracking-wider">Overall Assessment Rubric</h3>
-                                            <p className="text-amber-900 leading-relaxed whitespace-pre-wrap">{selectedAssessment.rubric}</p>
+                                        <section className="pb-6 border-b border-gray-300">
+                                            <h3 className="text-black font-black mb-3 text-sm uppercase tracking-wider">Overall Assessment Rubric</h3>
+                                            <p className="text-black leading-relaxed whitespace-pre-wrap font-medium">{selectedAssessment.rubric}</p>
                                         </section>
                                     )}
 
@@ -260,23 +260,23 @@ export default function AssessmentsPage() {
                                     <div className="space-y-6">
                                         <h3 className="text-gray-900 font-bold text-lg">Question Rubrics & Answers</h3>
                                         {selectedAssessment.questions?.map((question: Question, index: number) => (
-                                            <div key={question.id || `rubric-${index}`} className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+                                            <div key={question.id || `rubric-${index}`} className="pb-6 border-b border-gray-100 last:border-0">
                                                 <div className="flex items-baseline gap-2 mb-3">
-                                                    <span className="font-bold text-gray-900">Q{index + 1}:</span>
-                                                    <span className="text-gray-600 text-sm line-clamp-1">{question.question}</span>
+                                                    <span className="font-black text-black">Q{index + 1}:</span>
+                                                    <span className="text-black font-bold text-sm">{question.question}</span>
                                                 </div>
 
                                                 {(question.correctAnswer || question.sampleAnswer) && (
                                                     <div className="mb-3">
                                                         <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Expected Answer</span>
-                                                        <p className="text-emerald-800 text-sm mt-1">{question.correctAnswer || question.sampleAnswer}</p>
+                                                        <p className="text-gray-800 text-sm mt-1">{question.correctAnswer || question.sampleAnswer}</p>
                                                     </div>
                                                 )}
 
                                                 {question.rubric && (
                                                     <div>
-                                                        <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Grading Criteria</span>
-                                                        <p className="text-amber-800 text-sm mt-1 italic">{question.rubric}</p>
+                                                        <span className="text-[10px] font-black text-gray-900 uppercase tracking-widest">Grading Criteria</span>
+                                                        <p className="text-black text-sm mt-1 font-medium">{question.rubric}</p>
                                                     </div>
                                                 )}
 
