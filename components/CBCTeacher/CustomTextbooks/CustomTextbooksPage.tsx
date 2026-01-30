@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useCustomTextbooks } from '../../../lib/context/CustomTextbooksContext';
 import CustomTextbookCard from './CustomTextbookCard';
 import AgentProgressPanel from './AgentProgressPanel';
+import ConfirmDeleteModal from '@/components/shared/ConfirmDeleteModal';
 import ReactMarkdown from 'react-markdown';
 import confetti from 'canvas-confetti';
 import { GRADE_SECTIONS } from '@/lib/utils/grade-hierarchy';
@@ -69,6 +70,8 @@ export default function CustomTextbooksPage() {
     const [specifications, setSpecifications] = useState('');
     const [showForm, setShowForm] = useState(true);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [textbookToDelete, setTextbookToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         loadTextbooks();
@@ -100,9 +103,18 @@ export default function CustomTextbooksPage() {
         }
     };
 
-    const handleDelete = async (textbookId: string) => {
-        if (confirm('Are you sure you want to delete this textbook?')) {
-            await deleteTextbook(textbookId);
+    const handleDelete = (textbookId: string) => {
+        setTextbookToDelete(textbookId);
+    };
+
+    const confirmDelete = async () => {
+        if (!textbookToDelete) return;
+        setIsDeleting(true);
+        try {
+            await deleteTextbook(textbookToDelete);
+        } finally {
+            setIsDeleting(false);
+            setTextbookToDelete(null);
         }
     };
 
@@ -431,6 +443,15 @@ export default function CustomTextbooksPage() {
                     </div>
                 )}
             </div>
+            {/* Delete Confirmation Modal */}
+            <ConfirmDeleteModal
+                isOpen={!!textbookToDelete}
+                title="Delete Textbook"
+                message="Are you sure you want to delete this textbook? This action cannot be undone."
+                onConfirm={confirmDelete}
+                onCancel={() => setTextbookToDelete(null)}
+                isLoading={isDeleting}
+            />
         </div>
     );
 }

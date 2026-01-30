@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useCustomLessons } from '@/lib/context/CustomLessonsContext';
 import CustomLessonCard from './CustomLessonCard';
 import LessonAgentProgressPanel from './LessonAgentProgressPanel';
+import ConfirmDeleteModal from '@/components/shared/ConfirmDeleteModal';
 import ReactMarkdown from 'react-markdown';
 import confetti from 'canvas-confetti';
 import { GRADE_SECTIONS } from '@/lib/utils/grade-hierarchy';
@@ -36,6 +37,8 @@ export default function CustomLessonsPage() {
     const [lessonTime, setLessonTime] = useState('');
     const [showForm, setShowForm] = useState(true);
     const [showSuccess, setShowSuccess] = useState(false);
+    const [lessonToDelete, setLessonToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         loadLessons();
@@ -74,12 +77,21 @@ export default function CustomLessonsPage() {
         }
     };
 
-    const handleDelete = async (lessonId: string) => {
-        if (confirm('Are you sure you want to delete this lesson?')) {
-            await deleteLesson(lessonId);
-            if (selectedLesson?.id === lessonId) {
+    const handleDelete = (lessonId: string) => {
+        setLessonToDelete(lessonId);
+    };
+
+    const confirmDelete = async () => {
+        if (!lessonToDelete) return;
+        setIsDeleting(true);
+        try {
+            await deleteLesson(lessonToDelete);
+            if (selectedLesson?.id === lessonToDelete) {
                 setSelectedLesson(null);
             }
+        } finally {
+            setIsDeleting(false);
+            setLessonToDelete(null);
         }
     };
 
@@ -410,6 +422,15 @@ export default function CustomLessonsPage() {
                     </div>
                 )}
             </div>
+            {/* Delete Confirmation Modal */}
+            <ConfirmDeleteModal
+                isOpen={!!lessonToDelete}
+                title="Delete Lesson"
+                message="Are you sure you want to delete this lesson? This action cannot be undone."
+                onConfirm={confirmDelete}
+                onCancel={() => setLessonToDelete(null)}
+                isLoading={isDeleting}
+            />
         </div>
     );
 }

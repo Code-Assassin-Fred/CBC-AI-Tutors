@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useAssessments } from '@/lib/context/AssessmentsContext';
 import MaterialUploader from './MaterialUploader';
 import AssessmentCard from './AssessmentCard';
+import ConfirmDeleteModal from '@/components/shared/ConfirmDeleteModal';
 import {
     AssessmentConfig,
     QuestionTypeConfig,
@@ -41,6 +42,8 @@ export default function AssessmentsPage() {
     const [difficulty, setDifficulty] = useState<DifficultyLevel>('medium');
     const [specifications, setSpecifications] = useState('');
     const [showForm, setShowForm] = useState(true);
+    const [assessmentToDelete, setAssessmentToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     // Flickering status indicator
     const [flickerText, setFlickerText] = useState(FLICKER_STATES[0]);
@@ -93,9 +96,18 @@ export default function AssessmentsPage() {
         }
     };
 
-    const handleDelete = async (assessmentId: string) => {
-        if (confirm('Are you sure you want to delete this assessment?')) {
-            await deleteAssessment(assessmentId);
+    const handleDelete = (assessmentId: string) => {
+        setAssessmentToDelete(assessmentId);
+    };
+
+    const confirmDelete = async () => {
+        if (!assessmentToDelete) return;
+        setIsDeleting(true);
+        try {
+            await deleteAssessment(assessmentToDelete);
+        } finally {
+            setIsDeleting(false);
+            setAssessmentToDelete(null);
         }
     };
 
@@ -536,6 +548,15 @@ export default function AssessmentsPage() {
                     )}
                 </div>
             </div>
+            {/* Delete Confirmation Modal */}
+            <ConfirmDeleteModal
+                isOpen={!!assessmentToDelete}
+                title="Delete Assessment"
+                message="Are you sure you want to delete this assessment? This action cannot be undone."
+                onConfirm={confirmDelete}
+                onCancel={() => setAssessmentToDelete(null)}
+                isLoading={isDeleting}
+            />
         </div>
     );
 }
