@@ -1,6 +1,7 @@
 "use client";
 
 import { CustomLesson } from '@/types/customLesson';
+import ReactMarkdown from 'react-markdown';
 
 interface CustomLessonViewerProps {
     lesson: CustomLesson;
@@ -39,23 +40,44 @@ export default function CustomLessonViewer({ lesson, onClose }: CustomLessonView
                     {/* Introduction */}
                     {content?.introduction && (
                         <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-3">Introduction</h3>
-                            <p className="text-white/80 leading-relaxed">{content.introduction}</p>
+                            <h3 className="text-sm font-bold text-sky-400 mb-2 uppercase tracking-wide">Introduction</h3>
+                            <div className="text-white/85 leading-[1.7]">
+                                <ReactMarkdown
+                                    components={{
+                                        p: ({ children }) => <p className="mb-4 last:mb-0 leading-[1.7]">{children}</p>,
+                                        strong: ({ children }) => <strong className="font-bold text-white tracking-wide">{children}</strong>,
+                                    }}
+                                >
+                                    {content.introduction}
+                                </ReactMarkdown>
+                            </div>
                         </section>
                     )}
 
                     {/* Sections */}
                     {content?.sections && content.sections.length > 0 && (
                         <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-4">Lesson Content</h3>
+                            <h3 className="text-sm font-bold text-sky-400 mb-4 uppercase tracking-wide">Lesson Content</h3>
                             <div className="space-y-6">
                                 {content.sections.map((section, index) => (
                                     <div key={index} className="bg-white/5 rounded-xl p-4">
-                                        <h4 className="text-white font-medium mb-2">{section.title}</h4>
-                                        <p className="text-white/70 mb-3">{section.content}</p>
+                                        <h4 className="text-white font-bold mb-3">{section.title}</h4>
+                                        <div className="text-white/85 leading-[1.7]">
+                                            <ReactMarkdown
+                                                components={{
+                                                    p: ({ children }) => <p className="mb-4 last:mb-0 leading-[1.7]">{children}</p>,
+                                                    ul: ({ children }) => <ul className="list-disc pl-5 mb-4 space-y-2">{children}</ul>,
+                                                    ol: ({ children }) => <ol className="list-decimal pl-5 mb-4 space-y-2">{children}</ol>,
+                                                    li: ({ children }) => <li className="mb-1">{children}</li>,
+                                                    strong: ({ children }) => <strong className="font-bold text-white tracking-wide">{children}</strong>,
+                                                }}
+                                            >
+                                                {section.content}
+                                            </ReactMarkdown>
+                                        </div>
                                         {section.keyPoints && section.keyPoints.length > 0 && (
-                                            <div className="mt-3 pt-3 border-t border-white/10">
-                                                <p className="text-white/50 text-sm mb-2">Key Points:</p>
+                                            <div className="mt-4 pt-4 border-t border-white/10">
+                                                <p className="text-white font-bold mb-2 uppercase text-[10px] tracking-widest opacity-40">Key Points</p>
                                                 <ul className="space-y-1">
                                                     {section.keyPoints.map((point, i) => (
                                                         <li key={i} className="flex items-start gap-2 text-white/60 text-sm">
@@ -75,12 +97,21 @@ export default function CustomLessonViewer({ lesson, onClose }: CustomLessonView
                     {/* Examples */}
                     {content?.examples && content.examples.length > 0 && (
                         <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-4">Examples</h3>
+                            <h3 className="text-sm font-bold text-sky-400 mb-4 uppercase tracking-wide">Examples</h3>
                             <div className="space-y-4">
                                 {content.examples.map((example, index) => (
                                     <div key={index} className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-xl p-4 border border-cyan-500/20">
-                                        <h4 className="text-white font-medium mb-2">{example.title}</h4>
-                                        <p className="text-white/70 text-sm mb-2">{example.description}</p>
+                                        <h4 className="text-white font-bold mb-2">{example.title}</h4>
+                                        <div className="text-white/85 text-sm mb-2 leading-[1.7]">
+                                            <ReactMarkdown
+                                                components={{
+                                                    p: ({ children }) => <p className="mb-2 last:mb-0 leading-[1.7]">{children}</p>,
+                                                    strong: ({ children }) => <strong className="font-bold text-white tracking-wide">{children}</strong>,
+                                                }}
+                                            >
+                                                {example.description}
+                                            </ReactMarkdown>
+                                        </div>
                                         {example.explanation && (
                                             <p className="text-white/60 text-sm italic">{example.explanation}</p>
                                         )}
@@ -93,17 +124,26 @@ export default function CustomLessonViewer({ lesson, onClose }: CustomLessonView
                     {/* Activities */}
                     {content?.activities && content.activities.length > 0 && (
                         <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-4">Activities</h3>
+                            <h3 className="text-sm font-bold text-sky-400 mb-4 uppercase tracking-wide">Activities</h3>
                             <div className="space-y-4">
                                 {content.activities.map((activity, index) => (
                                     <div key={index} className="bg-white/5 rounded-xl p-4">
                                         <div className="flex items-center justify-between mb-2">
-                                            <h4 className="text-white font-medium">{activity.title}</h4>
+                                            <h4 className="text-white font-bold">{activity.title}</h4>
                                             {activity.duration && (
                                                 <span className="text-white/40 text-sm">{activity.duration}</span>
                                             )}
                                         </div>
-                                        <p className="text-white/70 text-sm">{activity.description}</p>
+                                        <div className="text-white/85 text-sm leading-[1.7]">
+                                            <ReactMarkdown
+                                                components={{
+                                                    p: ({ children }) => <p className="mb-2 last:mb-0 leading-[1.7]">{children}</p>,
+                                                    strong: ({ children }) => <strong className="font-bold text-white tracking-wide">{children}</strong>,
+                                                }}
+                                            >
+                                                {activity.description}
+                                            </ReactMarkdown>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -113,9 +153,18 @@ export default function CustomLessonViewer({ lesson, onClose }: CustomLessonView
                     {/* Summary */}
                     {content?.summary && (
                         <section>
-                            <h3 className="text-lg font-semibold text-cyan-400 mb-3">Summary</h3>
+                            <h3 className="text-sm font-bold text-sky-400 mb-3 uppercase tracking-wide">Summary</h3>
                             <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl p-4 border border-purple-500/20">
-                                <p className="text-white/80 leading-relaxed">{content.summary}</p>
+                                <div className="text-white/85 leading-[1.7]">
+                                    <ReactMarkdown
+                                        components={{
+                                            p: ({ children }) => <p className="mb-2 last:mb-0 leading-[1.7]">{children}</p>,
+                                            strong: ({ children }) => <strong className="font-bold text-white tracking-wide">{children}</strong>,
+                                        }}
+                                    >
+                                        {content.summary}
+                                    </ReactMarkdown>
+                                </div>
                             </div>
                         </section>
                     )}

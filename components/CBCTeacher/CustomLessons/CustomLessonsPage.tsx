@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useCustomLessons } from '@/lib/context/CustomLessonsContext';
 import CustomLessonCard from './CustomLessonCard';
 import LessonAgentProgressPanel from './LessonAgentProgressPanel';
+import ReactMarkdown from 'react-markdown';
 import confetti from 'canvas-confetti';
 import { GRADE_SECTIONS } from '@/lib/utils/grade-hierarchy';
 
@@ -108,7 +109,16 @@ export default function CustomLessonsPage() {
                     {selectedLesson.content?.introduction && (
                         <section>
                             <h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-2 sm:mb-3 uppercase tracking-wide">Introduction</h3>
-                            <p className="text-white/85 leading-[1.7] text-base sm:text-lg mb-6">{selectedLesson.content.introduction}</p>
+                            <div className="text-white/85 leading-[1.7] text-base sm:text-lg mb-6">
+                                <ReactMarkdown
+                                    components={{
+                                        p: ({ children }) => <p className="mb-4 last:mb-0 leading-[1.7]">{children}</p>,
+                                        strong: ({ children }) => <strong className="font-bold text-white tracking-wide">{children}</strong>,
+                                    }}
+                                >
+                                    {selectedLesson.content.introduction}
+                                </ReactMarkdown>
+                            </div>
                         </section>
                     )}
 
@@ -121,9 +131,19 @@ export default function CustomLessonsPage() {
                                         <span>{index + 1}.</span>
                                         {section.title}
                                     </h3>
-                                    <p className="text-white/85 leading-[1.7] text-base sm:text-lg whitespace-pre-wrap mb-6">
-                                        {section.content}
-                                    </p>
+                                    <div className="text-white/85 leading-[1.7] text-base sm:text-lg mb-6">
+                                        <ReactMarkdown
+                                            components={{
+                                                p: ({ children }) => <p className="mb-4 last:mb-0 leading-[1.7]">{children}</p>,
+                                                ul: ({ children }) => <ul className="list-disc pl-5 mb-4 space-y-2">{children}</ul>,
+                                                ol: ({ children }) => <ol className="list-decimal pl-5 mb-4 space-y-2">{children}</ol>,
+                                                li: ({ children }) => <li className="mb-1">{children}</li>,
+                                                strong: ({ children }) => <strong className="font-bold text-white tracking-wide">{children}</strong>,
+                                            }}
+                                        >
+                                            {section.content}
+                                        </ReactMarkdown>
+                                    </div>
 
                                     {section.keyPoints && section.keyPoints.length > 0 && (
                                         <div className="mt-6 pl-0">
@@ -151,7 +171,16 @@ export default function CustomLessonsPage() {
                                 {selectedLesson.content.examples.map((example, index) => (
                                     <div key={index} className="pl-0">
                                         <h4 className="text-lg font-bold text-white mb-2">{example.title}</h4>
-                                        <p className="text-white/85 text-lg mb-2 leading-[1.7]">{example.description}</p>
+                                        <div className="text-white/85 text-lg mb-2 leading-[1.7]">
+                                            <ReactMarkdown
+                                                components={{
+                                                    p: ({ children }) => <p className="mb-2 last:mb-0 leading-[1.7]">{children}</p>,
+                                                    strong: ({ children }) => <strong className="font-bold text-white tracking-wide">{children}</strong>,
+                                                }}
+                                            >
+                                                {example.description}
+                                            </ReactMarkdown>
+                                        </div>
                                         {example.explanation && (
                                             <p className="text-white/60 italic">{example.explanation}</p>
                                         )}
@@ -174,7 +203,16 @@ export default function CustomLessonsPage() {
                                                 <span className="text-white/40 text-sm">{activity.duration}</span>
                                             )}
                                         </div>
-                                        <p className="text-white/85 text-lg leading-[1.7]">{activity.description}</p>
+                                        <div className="text-white/85 text-lg leading-[1.7]">
+                                            <ReactMarkdown
+                                                components={{
+                                                    p: ({ children }) => <p className="mb-2 last:mb-0 leading-[1.7]">{children}</p>,
+                                                    strong: ({ children }) => <strong className="font-bold text-white tracking-wide">{children}</strong>,
+                                                }}
+                                            >
+                                                {activity.description}
+                                            </ReactMarkdown>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -186,7 +224,14 @@ export default function CustomLessonsPage() {
                         <section className="border-t border-white/10 pt-8">
                             <h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-4 uppercase tracking-wide">Summary</h3>
                             <div className="text-white/85 leading-[1.7] text-lg">
-                                {selectedLesson.content.summary}
+                                <ReactMarkdown
+                                    components={{
+                                        p: ({ children }) => <p className="mb-4 last:mb-0 leading-[1.7]">{children}</p>,
+                                        strong: ({ children }) => <strong className="font-bold text-white tracking-wide">{children}</strong>,
+                                    }}
+                                >
+                                    {selectedLesson.content.summary}
+                                </ReactMarkdown>
                             </div>
                         </section>
                     )}
