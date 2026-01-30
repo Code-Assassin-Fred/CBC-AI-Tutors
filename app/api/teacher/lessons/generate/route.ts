@@ -24,7 +24,7 @@ const MODEL = MODELS.flash;
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
-        const { topic, audienceAge, specifications, teacherId } = body as CustomLessonRequest;
+        const { topic, audienceAge, specifications, lessonTime, teacherId } = body as CustomLessonRequest;
 
         if (!topic || !audienceAge || !teacherId) {
             return NextResponse.json(
@@ -62,9 +62,10 @@ export async function POST(request: NextRequest) {
 
 Topic: ${topic}
 Target Audience Age: ${audienceAge}
+${lessonTime ? `Desired Lesson Duration: ${lessonTime}` : ''}
 ${specifications ? `Additional Specifications: ${specifications}` : ''}
 
-Create a comprehensive lesson plan with the following structure:
+Create a comprehensive lesson plan that fits the desired duration (${lessonTime || 'flexible duration'}) with the following structure:
 1. An engaging introduction that hooks the audience
 2. 3-4 main sections covering key concepts
 3. 2-3 practical examples with explanations
@@ -74,7 +75,7 @@ Create a comprehensive lesson plan with the following structure:
 Format your response as JSON matching this structure:
 {
     "title": "Lesson title",
-    "estimatedDuration": "e.g., 45 minutes",
+    "estimatedDuration": "${lessonTime || 'e.g., 45 minutes'}",
     "introduction": "Engaging intro paragraph",
     "sections": [
         {
@@ -135,8 +136,9 @@ Format your response as JSON matching this structure:
                         topic,
                         audienceAge,
                         specifications,
+                        lessonTime,
                         content,
-                        estimatedDuration: lessonData.estimatedDuration || '45 minutes',
+                        estimatedDuration: lessonData.estimatedDuration || lessonTime || '45 minutes',
                         createdAt: new Date(),
                     };
 

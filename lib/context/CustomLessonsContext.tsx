@@ -23,7 +23,7 @@ interface CustomLessonsContextType {
     isGenerating: boolean;
     generationProgress: CustomLessonGenerationProgress | null;
     generationError: string | null;
-    generateLesson: (topic: string, audienceAge: string, specifications?: string) => Promise<CustomLesson | null>;
+    generateLesson: (topic: string, audienceAge: string, specifications?: string, lessonTime?: string) => Promise<CustomLesson | null>;
     cancelGeneration: () => void;
 
     // UI State
@@ -111,7 +111,8 @@ export function CustomLessonsProvider({ children }: CustomLessonsProviderProps) 
     const generateLesson = useCallback(async (
         topic: string,
         audienceAge: string,
-        specifications?: string
+        specifications?: string,
+        lessonTime?: string
     ): Promise<CustomLesson | null> => {
         if (!user) {
             setGenerationError('Please sign in to generate lessons');
@@ -137,6 +138,7 @@ export function CustomLessonsProvider({ children }: CustomLessonsProviderProps) 
                     topic,
                     audienceAge,
                     specifications,
+                    lessonTime,
                     teacherId: user.uid,
                 }),
                 signal: controller.signal,

@@ -25,6 +25,7 @@ export default function CustomLessonsPage() {
     const [topic, setTopic] = useState('');
     const [audienceAge, setAudienceAge] = useState(GRADE_OPTIONS[0]); // Default to first grade
     const [specifications, setSpecifications] = useState('');
+    const [lessonTime, setLessonTime] = useState('');
     const [isFormCollapsed, setIsFormCollapsed] = useState(false);
 
     useEffect(() => {
@@ -32,11 +33,17 @@ export default function CustomLessonsPage() {
     }, [loadLessons]);
 
     const handleGenerate = async () => {
-        if (!topic.trim()) return;
-        const lesson = await generateLesson(topic.trim(), audienceAge, specifications.trim() || undefined);
+        if (!topic.trim() || !lessonTime.trim()) return;
+        const lesson = await generateLesson(
+            topic.trim(),
+            audienceAge,
+            specifications.trim() || undefined,
+            lessonTime.trim() || undefined
+        );
         if (lesson) {
             setTopic('');
             setSpecifications('');
+            setLessonTime('');
             setIsFormCollapsed(true); // Auto-collapse after generation
         }
     };
@@ -85,7 +92,7 @@ export default function CustomLessonsPage() {
                                 />
                             </div>
 
-                            {/* Audience Grade - previously Age */}
+                            {/* Audience Grade */}
                             <div>
                                 <label className="block text-white/70 text-sm mb-2">Target Grade *</label>
                                 <select
@@ -104,61 +111,72 @@ export default function CustomLessonsPage() {
                                 </select>
                             </div>
 
-                            {/* Specifications */}
+                            {/* Lesson Time */}
                             <div>
-                                <label className="block text-white/70 text-sm mb-2">Specifications (optional)</label>
+                                <label className="block text-white/70 text-sm mb-2">Lesson Duration *</label>
                                 <input
                                     type="text"
+                                    value={lessonTime}
+                                    onChange={(e) => setLessonTime(e.target.value)}
+                                    placeholder="e.g., 40 mins, 1 hour"
+                                    className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all font-medium"
+                                    disabled={isGenerating}
+                                />
+                            </div>
+
+                            {/* Specifications */}
+                            <div className="md:col-span-2">
+                                <label className="block text-white/70 text-sm mb-2 font-medium">Specifications & Requirements (optional)</label>
+                                <textarea
                                     value={specifications}
                                     onChange={(e) => setSpecifications(e.target.value)}
-                                    placeholder="e.g., Focus on hands-on activities"
-                                    className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all"
+                                    placeholder="Examples:&#10;• Focus on hands-on practical activities&#10;• Use Kenyan local context and examples&#10;• Include 3 assessment questions"
+                                    rows={4}
+                                    className="w-full px-4 py-3 rounded-xl bg-[#0b0f12] border border-white/10 text-white placeholder-white/20 focus:outline-none focus:border-sky-500/50 focus:ring-2 focus:ring-sky-500/20 transition-all resize-none leading-relaxed text-sm"
                                     disabled={isGenerating}
                                 />
                             </div>
                         </div>
 
-                        {/* Generate Button */}
-                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                            <button
-                                onClick={handleGenerate}
-                                disabled={!topic.trim() || isGenerating}
-                                className={`px-4 sm:px-6 py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2 text-sm sm:text-base ${!topic.trim() || isGenerating
-                                    ? 'bg-white/10 text-white/30 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:shadow-lg hover:shadow-cyan-500/25'
-                                    }`}
-                            >
-                                {isGenerating ? (
-                                    <>
-                                        <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                                        </svg>
-                                        Generating...
-                                    </>
-                                ) : (
-                                    <>
-                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                        </svg>
-                                        Generate Lesson
-                                    </>
-                                )}
-                            </button>
-
+                        {/* Generate Button Container - Moved to right */}
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-4">
                             {/* Progress */}
                             {isGenerating && generationProgress && (
-                                <div className="flex-1">
-                                    <div className="text-white/60 text-xs sm:text-sm mb-1">{generationProgress.message}</div>
-                                    <div className="w-full h-1.5 sm:h-2 bg-white/10 rounded-full overflow-hidden">
+                                <div className="flex-1 max-w-md hidden sm:block">
+                                    <div className="text-white/60 text-xs mb-1">{generationProgress.message}</div>
+                                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300"
+                                            className="h-full bg-cyan-400 transition-all duration-300"
                                             style={{ width: `${generationProgress.percentage}%` }}
                                         />
                                     </div>
                                 </div>
                             )}
+
+                            <button
+                                onClick={handleGenerate}
+                                disabled={!topic.trim() || !lessonTime.trim() || isGenerating}
+                                className={`px-8 sm:px-10 py-3 rounded-xl font-bold transition-all text-sm sm:text-base ${!topic.trim() || !lessonTime.trim() || isGenerating
+                                    ? 'bg-white/10 text-white/30 cursor-not-allowed'
+                                    : 'bg-cyan-600 text-white hover:bg-cyan-500'
+                                    }`}
+                            >
+                                {isGenerating ? 'Generating...' : 'Generate Lesson'}
+                            </button>
                         </div>
+
+                        {/* Mobile Progress */}
+                        {isGenerating && generationProgress && (
+                            <div className="mt-4 sm:hidden">
+                                <div className="text-white/60 text-xs mb-1">{generationProgress.message}</div>
+                                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-cyan-400 transition-all duration-300"
+                                        style={{ width: `${generationProgress.percentage}%` }}
+                                    />
+                                </div>
+                            </div>
+                        )}
 
                         {/* Error */}
                         {generationError && (

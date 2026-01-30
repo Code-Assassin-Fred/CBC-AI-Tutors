@@ -38,6 +38,7 @@ export interface CustomLesson {
     topic: string;
     audienceAge: string;
     specifications?: string;
+    lessonTime?: string;
     content: CustomLessonContent;
     estimatedDuration?: string;
     createdAt: Date;
@@ -52,6 +53,7 @@ export interface CustomLessonRequest {
     topic: string;
     audienceAge: string;
     specifications?: string;
+    lessonTime?: string;
     teacherId: string;
 }
 
