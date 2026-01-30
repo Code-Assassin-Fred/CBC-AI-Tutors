@@ -152,9 +152,7 @@ export default function AssessmentsPage() {
                         <div className="min-w-0">
                             <h1 className="text-sm sm:text-lg font-bold text-white truncate">{selectedAssessment.title}</h1>
                             <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-sm text-white/50">
-                                <span>{selectedAssessment.questions?.length || 0} Qs</span>
-                                <span>•</span>
-                                <span>{selectedAssessment.totalPoints} Pts</span>
+                                <span>{selectedAssessment.questions?.length || 0} Questions</span>
                             </div>
                         </div>
                     </div>
@@ -236,10 +234,7 @@ export default function AssessmentsPage() {
                         {/* Assessment Header */}
                         <div className="p-6 sm:p-10 border-b border-gray-200 bg-gray-50">
                             <h2 className="text-xl sm:text-3xl font-serif font-bold text-black mb-4 sm:mb-2">{selectedAssessment.title}</h2>
-                            <div className="flex items-center gap-2 text-xs sm:text-sm text-black font-medium">
-                                <span className="text-black uppercase tracking-widest text-[10px] font-bold">Points</span>
-                                <span className="text-black font-bold">{selectedAssessment.totalPoints}</span>
-                            </div>
+                            {/* Points removed at user request */}
                         </div>
 
                         {/* Content */}
@@ -259,7 +254,6 @@ export default function AssessmentsPage() {
                                                     <span className="font-bold mr-2">{index + 1}.</span>
                                                     {question.question}
                                                 </p>
-                                                <span className="text-sm text-black font-bold whitespace-nowrap">{question.points} pt{question.points !== 1 ? 's' : ''}</span>
                                             </div>
 
                                             {/* Multiple Choice Options */}

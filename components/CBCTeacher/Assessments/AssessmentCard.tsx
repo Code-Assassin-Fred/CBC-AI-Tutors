@@ -48,7 +48,6 @@ export default function AssessmentCard({ assessment, onClick, onDelete }: Assess
             {/* Meta */}
             <div className="flex flex-wrap items-center gap-4 text-[10px] uppercase tracking-widest font-bold text-white/40 mb-3">
                 <span>{questionCount} Questions</span>
-                <span>{assessment.totalPoints} pts</span>
             </div>
 
             {/* Footer */}

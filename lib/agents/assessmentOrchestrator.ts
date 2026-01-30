@@ -90,7 +90,7 @@ export async function runAssessmentOrchestrator(
 
         // 4. CREATOR
         sendStart('creator', 'Generating draft questions...');
-        let questions = await runCreatorAgent(blueprint, knowledge, config.totalQuestions || 10);
+        let questions = await runCreatorAgent(blueprint, knowledge, config.questionTypes);
         sendComplete('creator', `Generated ${questions.length} draft questions.`);
 
         // 5. CRITIC & EDITOR (Audit Loop)

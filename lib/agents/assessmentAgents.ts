@@ -11,7 +11,7 @@ import {
     ProcessedMaterials,
     AssessmentCritique
 } from '@/types/assessment-agent.types';
-import { AssessmentConfig, Question, DifficultyLevel } from '@/types/assessment';
+import { AssessmentConfig, Question, DifficultyLevel, QuestionTypeConfig } from '@/types/assessment';
 
 const MODEL = MODELS.flash;
 
@@ -116,10 +116,13 @@ Respond with ONLY a JSON object:
 {
     "title": "Refined Title",
     "difficultyDistribution": { "easy": number, "medium": number, "hard": number },
-    "typeDistribution": { "multiple-choice": number, "etc": number },
+    "typeDistribution": { "multiple-choice": number, "short-answer": number, "true-false": number, "fill-blank": number, "open-ended": number },
     "topicFocus": ["Topic 1", "Topic 2"],
     "targetGrade": "Standardized grade level inferred"
-}`;
+}
+
+Ensure the typeDistribution matches the user's requested counts for enabled types:
+${config.questionTypes.filter(qt => qt.enabled).map(qt => `- ${qt.type}: ${qt.count}`).join('\n')}`;
 
     return await generateGeminiJSON<AssessmentBlueprint>(prompt, MODEL);
 }
@@ -134,8 +137,10 @@ Respond with ONLY a JSON object:
 export async function runCreatorAgent(
     blueprint: AssessmentBlueprint,
     knowledge: ExtractedKnowledge,
-    questionsToGenerate: number
+    questionTypes: QuestionTypeConfig[]
 ): Promise<Question[]> {
+    const enabledTypes = questionTypes.filter(qt => qt.enabled);
+    const questionsToGenerate = enabledTypes.reduce((sum, qt) => sum + qt.count, 0);
     // To handle large numbers of questions, we could call this in batches
     const prompt = `You are a Creator Agent. Your goal is to draft high-quality assessment questions.
     
@@ -147,13 +152,15 @@ ${knowledge.facts.join('\n')}
 ${knowledge.concepts.map(c => `${c.name}: ${c.description}`).join('\n')}
 
 TASK:
-Generate ${questionsToGenerate} questions. 
-Follow the difficulty and type distribution from the blueprint.
+Generate EXACTLY ${questionsToGenerate} questions based on this specific distribution:
+${enabledTypes.map(qt => `- ${qt.type}: ${qt.count} questions`).join('\n')}
+
 Each question MUST include:
 - Appropriate options (for MCQ)
 - Correct answer
 - Detailed explanation
 - Pedagogically sound phrasing
+- DO NOT mention points, "1 pt", or any scoring information in the question text.
 
 Respond with ONLY a JSON object:
 {
@@ -265,6 +272,7 @@ Questions: ${questions.map(q => q.question).join('\n---\n')}
 TASK:
 1. Generate a detailed rubric for EVERY question (especially open-ended or short-answer).
 2. Create an overall assessment rubric summarizing the grading philosophy.
+3. DO NOT mention specific point values in the rubrics; focus on criteria and quality of response.
 
 Respond with ONLY a JSON object:
 {
@@ -280,7 +288,7 @@ Respond with ONLY a JSON object:
         const rubricMatch = result.questions.find(r => r.questionIndex === i);
         return {
             ...q,
-            rubric: rubricMatch?.rubric || 'Standard points assigned for correct answer.'
+            rubric: rubricMatch?.rubric || 'Standard credit awarded for correct answer.'
         };
     });
 
