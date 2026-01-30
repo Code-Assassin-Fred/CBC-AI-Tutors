@@ -5,6 +5,7 @@ import { useCustomTextbooks } from '../../../lib/context/CustomTextbooksContext'
 import CustomTextbookCard from './CustomTextbookCard';
 import AgentProgressPanel from './AgentProgressPanel';
 import ReactMarkdown from 'react-markdown';
+import confetti from 'canvas-confetti';
 import { GRADE_SECTIONS } from '@/lib/utils/grade-hierarchy';
 
 const GRADE_OPTIONS = GRADE_SECTIONS.flatMap(s => s.grades.map(g => `Grade ${g}`));
@@ -67,6 +68,7 @@ export default function CustomTextbooksPage() {
     const [audienceAge, setAudienceAge] = useState(GRADE_OPTIONS[0]);
     const [specifications, setSpecifications] = useState('');
     const [showForm, setShowForm] = useState(true);
+    const [showSuccess, setShowSuccess] = useState(false);
 
     useEffect(() => {
         loadTextbooks();
@@ -74,10 +76,26 @@ export default function CustomTextbooksPage() {
 
     const handleGenerate = async () => {
         if (!topic.trim()) return;
+        setShowSuccess(false);
         const textbook = await generateTextbook(topic.trim(), audienceAge, specifications.trim() || undefined);
         if (textbook) {
             setTopic('');
             setSpecifications('');
+            setShowSuccess(true);
+
+            // Trigger confetti for a premium feel
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#06b6d4', '#3b82f6', '#10b981']
+            });
+
+            // Delay closing the form and panels to show success state
+            setTimeout(() => {
+                setShowSuccess(false);
+                setShowForm(false);
+            }, 5000);
         }
     };
 
@@ -353,8 +371,19 @@ export default function CustomTextbooksPage() {
                         </div>
 
                         {/* Agent Progress Panel */}
-                        {isGenerating && (
+                        {(isGenerating || showSuccess) && (
                             <div className="mt-4">
+                                {showSuccess && (
+                                    <div className="mb-4 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-xl">🎉</span>
+                                            <div>
+                                                <p className="text-emerald-400 font-bold">Textbook Generated & Saved!</p>
+                                                <p className="text-emerald-400/70 text-sm">Your new resource is now in your library.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                                 <AgentProgressPanel
                                     isGenerating={isGenerating}
                                     currentAgent={currentAgent}
@@ -362,7 +391,7 @@ export default function CustomTextbooksPage() {
                                     chapters={chapters}
                                     images={images}
                                     overallProgress={overallProgress}
-                                    currentMessage={currentMessage}
+                                    currentMessage={showSuccess ? "Textbook successfully added to library!" : currentMessage}
                                 />
                             </div>
                         )}
