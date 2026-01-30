@@ -33,7 +33,7 @@ export default function CustomTextbookCard({ textbook, onClick, onDelete }: Cust
                         e.stopPropagation();
                         onDelete();
                     }}
-                    className="p-1.5 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
+                    className="p-1.5 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/10 transition-all"
                     title="Delete textbook"
                 >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
