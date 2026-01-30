@@ -23,9 +23,9 @@ export default function ConfirmDeleteModal({
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            {/* Backdrop - Solid Dark */}
+            {/* Backdrop - High Transparency Overlay */}
             <div
-                className="absolute inset-0 bg-[#05070a]/95 backdrop-blur-sm"
+                className="absolute inset-0 bg-[#05070a]/40 backdrop-blur-sm"
                 onClick={onCancel}
             />
 
